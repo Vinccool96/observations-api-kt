@@ -25,6 +25,6 @@ interface SortableList<E> : MutableList<E> {
      * comparator.
      * @throws UnsupportedOperationException if the specified list's list-iterator does not support the `set` operation.
      */
-    fun sort(comparator: Comparator<in E>)
+    fun sortWith(comparator: Comparator<in E>)
 
 }

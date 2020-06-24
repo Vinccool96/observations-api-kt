@@ -13,8 +13,8 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * Base class that provides most of the functionality needed to implement a [Binding] of a `boolean` value.
  *
  * `BooleanBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
- * [bindBB]. If one of the registered dependencies becomes invalid, this `BooleanBinding` is marked as invalid. With
- * [unbindBB] listening to dependencies can be stopped.
+ * [bind]. If one of the registered dependencies becomes invalid, this `BooleanBinding` is marked as invalid. With
+ * [unbind] listening to dependencies can be stopped.
  *
  * To provide a concrete implementation of this class, the method [computeValue] has to be implemented to calculate the
  * value of this binding based on the current state of the dependencies. It is called when [get] is called for an
@@ -77,7 +77,7 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
      * @param dependencies
      *         the dependencies to observe
      */
-    protected fun bindBB(vararg dependencies: Observable) {
+    protected fun bind(vararg dependencies: Observable) {
         if (dependencies.isNotEmpty()) {
             if (this.observer == null) {
                 this.observer = BindingHelperObserver(this)
@@ -94,7 +94,7 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
      * @param dependencies
      *         the dependencies to stop observing
      */
-    protected fun unbindBB(vararg dependencies: Observable) {
+    protected fun unbind(vararg dependencies: Observable) {
         if (this.observer != null) {
             for (dep in dependencies) {
                 dep.removeListener(this.observer!!)

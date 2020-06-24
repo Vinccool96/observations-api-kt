@@ -13,15 +13,14 @@ import kotlin.collections.ArrayList
 @Suppress("UNCHECKED_CAST")
 abstract class StringFormatter : StringBinding() {
 
-    private class ConvertStringBinding(private val observableValue: ObservableValue<*>) :
-            StringBinding() {
+    private class ConvertStringBinding(private val observableValue: ObservableValue<*>) : StringBinding() {
 
         init {
-            bindSB(observableValue)
+            bind(observableValue)
         }
 
         override fun dispose() {
-            unbindSB(observableValue)
+            unbind(observableValue)
         }
 
         override fun computeValue(): String? {
@@ -39,11 +38,11 @@ abstract class StringFormatter : StringBinding() {
             StringFormatter() {
 
         init {
-            super.bindSB(*dep)
+            super.bind(*dep)
         }
 
         override fun dispose() {
-            super.unbindSB(*dep)
+            super.unbind(*dep)
         }
 
         override fun computeValue(): String? {
@@ -66,11 +65,11 @@ abstract class StringFormatter : StringBinding() {
             private val locale: Locale, private val format: String) : StringFormatter() {
 
         init {
-            super.bindSB(*extractDependencies(*args))
+            super.bind(*extractDependencies(*args))
         }
 
         override fun dispose() {
-            super.unbindSB(*dep)
+            super.unbind(*dep)
         }
 
         override fun computeValue(): String? {
@@ -111,7 +110,7 @@ abstract class StringFormatter : StringBinding() {
             return dependencies.toTypedArray()
         }
 
-        fun convert(observableValue: ObservableValue<*>): StringExpression? {
+        fun convert(observableValue: ObservableValue<*>): StringExpression {
             return if (observableValue is StringExpression) {
                 observableValue
             } else {
@@ -119,7 +118,7 @@ abstract class StringFormatter : StringBinding() {
             }
         }
 
-        fun concat(vararg args: Any): StringExpression? {
+        fun concat(vararg args: Any): StringExpression {
             if (args.isEmpty()) {
                 return StringConstant.valueOf("")
             }
@@ -156,7 +155,7 @@ abstract class StringFormatter : StringBinding() {
             val dep = extractDependencies(*args)
             val formatter: StringFormatter = object : StringFormatter() {
                 override fun dispose() {
-                    super.unbindSB(*extractDependencies(*args))
+                    super.unbind(*extractDependencies(*args))
                 }
 
                 override fun computeValue(): String? {
@@ -172,7 +171,7 @@ abstract class StringFormatter : StringBinding() {
                     }
 
                 init {
-                    super.bindSB(*extractDependencies(*args))
+                    super.bind(*extractDependencies(*args))
                 }
             }
             // Force calculation to check format

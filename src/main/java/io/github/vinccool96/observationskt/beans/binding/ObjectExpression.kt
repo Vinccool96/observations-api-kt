@@ -99,11 +99,11 @@ abstract class ObjectExpression<T> : ObservableObjectValue<T> {
             return if (value is ObjectExpression) value else object : ObjectBinding<T>() {
 
                 init {
-                    super.bindOB(value)
+                    super.bind(value)
                 }
 
                 override fun dispose() {
-                    super.unbindOB(value)
+                    super.unbind(value)
                 }
 
                 override fun computeValue(): T {

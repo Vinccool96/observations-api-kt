@@ -43,7 +43,7 @@ class SortedList<E> : TransformationList<E, E> {
      * @param comparator a comparator to use or `null` for unordered List
      */
     constructor(@NamedArg("source") source: ObservableList<E>,
-            @NamedArg("comparator") comparator: Comparator<in E?>?) : super(source) {
+            @NamedArg("comparator") comparator: Comparator<in E>?) : super(source) {
         this.sorted = arrayOfNulls<Element<E>?>(source.size * 3 / 2 + 1)
         this.perm = IntArray(sorted.size)
         this.sizeState = source.size
@@ -63,14 +63,15 @@ class SortedList<E> : TransformationList<E, E> {
      */
     constructor(@NamedArg("source") source: ObservableList<E>) : this(source, null)
 
+    @Suppress("CascadeIf")
     override fun sourceChanged(
             c: ListChangeListener.Change<out E>) {
         if (this.elementComparator != null) {
             beginChange()
             while (c.next()) {
-                if (c.permutated) {
+                if (c.wasPermutated) {
                     updatePermutationIndexes(c)
-                } else if (c.updated) {
+                } else if (c.wasUpdated) {
                     update(c)
                 } else {
                     addRemove(c)
@@ -83,37 +84,34 @@ class SortedList<E> : TransformationList<E, E> {
         }
     }
 
+    private val baseComparator: Comparator<in E> = Comparator {_, _ -> 0}
+
     /**
      * The comparator that denotes the order of this SortedList. Null for unordered SortedList.
      */
-    private var comparatorObjectProperty: ObjectProperty<Comparator<in E?>?>? = null
+    private var comparatorObjectProperty: ObjectProperty<Comparator<in E>> =
+            object : ObjectPropertyBase<Comparator<in E>>(this@SortedList.baseComparator) {
 
-    val comparatorProperty: ObjectProperty<Comparator<in E?>?>
-        get() {
-            if (this.comparatorObjectProperty == null) {
-                this.comparatorObjectProperty =
-                        object : ObjectPropertyBase<Comparator<in E?>?>(
-                                Comparator {o1, o2 -> if (o1 === o2) 0 else -1}) {
-                            override fun invalidated() {
-                                val current: Comparator<in E>? = this.get()
-                                this@SortedList.elementComparator = if (current != null) ElementComparator(
-                                        current) as Comparator<Element<E>?> else null
-                                doSortWithPermutationChange()
-                            }
+                override fun invalidated() {
+                    val current: Comparator<in E> = this.get()
+                    this@SortedList.elementComparator = ElementComparator(current) as Comparator<Element<E>?>
+                    doSortWithPermutationChange()
+                }
 
-                            override val bean: Any?
-                                get() = this@SortedList
+                override val bean: Any?
+                    get() = this@SortedList
 
-                            override val name: String
-                                get() = "comparator"
-                        }
+                override val name: String
+                    get() = "comparator"
+
             }
-            return this.comparatorObjectProperty!!
-        }
 
-    var comparator: Comparator<in E?>?
-        get() = this.comparatorObjectProperty?.get()
-        set(value) = this.comparatorProperty.set(value)
+    val comparatorProperty: ObjectProperty<Comparator<in E>>
+        get() = this.comparatorObjectProperty
+
+    var comparator: Comparator<in E>?
+        get() = this.comparatorObjectProperty.get()
+        set(value) = this.comparatorProperty.set(value ?: this.baseComparator)
 
     /**
      * Returns the element at the specified position in this list.
@@ -191,7 +189,7 @@ class SortedList<E> : TransformationList<E, E> {
     private fun updateUnsorted(
             c: ListChangeListener.Change<out E>) {
         while (c.next()) {
-            if (c.permutated) {
+            if (c.wasPermutated) {
                 val sortedTmp = arrayOfNulls<Element<E>?>(this.sorted.size)
                 for (i in this.indices) {
                     if (i >= c.from && i < c.to) {
@@ -205,7 +203,7 @@ class SortedList<E> : TransformationList<E, E> {
                 }
                 this.sorted = sortedTmp
             }
-            if (c.removed) {
+            if (c.wasRemoved) {
                 val removedTo = c.from + c.removedSize
 //              copyInto(destination: Array<T>, destinationOffset: Int = 0, startIndex: Int = 0, endIndex: Int = size)
 //              System.arraycopy(this, startIndex, destination, destinationOffset, endIndex - startIndex)
@@ -214,7 +212,7 @@ class SortedList<E> : TransformationList<E, E> {
                 this.sizeState -= c.removedSize
                 updateIndices(removedTo, removedTo, -c.removedSize)
             }
-            if (c.added) {
+            if (c.wasAdded) {
                 ensureSize(size + c.addedSize)
                 updateIndices(c.from, c.from, c.addedSize)
                 this.sorted.copyInto(this.sorted, c.to, c.from)
@@ -330,7 +328,7 @@ class SortedList<E> : TransformationList<E, E> {
             var i = 0
             val sz = c.removedSize
             while (i < sz) {
-                removeFromMapping(c.from, c.removedElements[i])
+                removeFromMapping(c.from, c.removed[i])
                 ++i
             }
         }

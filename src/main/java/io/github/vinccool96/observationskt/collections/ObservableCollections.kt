@@ -1,11 +1,10 @@
 package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
+import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.collections.ObservableCollections.emptyObservableList
-import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
-import io.github.vinccool96.observationskt.sun.collections.ObservableSequentialListWrapper
-import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
-import io.github.vinccool96.observationskt.sun.collections.SourceAdapterChange
+import io.github.vinccool96.observationskt.sun.collections.*
+import io.github.vinccool96.observationskt.util.Callback
 import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.collections.ArrayList
@@ -44,6 +43,33 @@ object ObservableCollections {
     }
 
     /**
+     * Constructs an ObservableList that is backed by the specified list. Mutation operations on the ObservableList
+     * instance will be reported to observers that have registered on that instance.
+     *
+     * Note that mutation operations made directly to the underlying list are *not* reported to observers of any
+     * ObservableList that wraps it.
+     *
+     * This list also reports mutations of the elements in it by using `extractor`. Observable objects returned by
+     * `extractor` (applied to each list element) are listened for changes and transformed into "update" change of
+     * ListChangeListener.
+     *
+     * @param E
+     *         the list element type
+     * @param list
+     *         a concrete List that backs this ObservableList
+     * @param extractor
+     *         element to Observable[] convertor
+     *
+     * @return a newly created ObservableList
+     *
+     * @since JavaFX 2.1
+     */
+    fun <E> observableList(list: MutableList<E>, extractor: Callback<E, Array<Observable>>): ObservableList<E> {
+        return if (list is RandomAccess) ObservableListWrapper(list, extractor)
+        else ObservableSequentialListWrapper(list, extractor)
+    }
+
+    /**
      * Creates a new empty observable list that is backed by an arraylist.
      *
      * @param E
@@ -55,6 +81,25 @@ object ObservableCollections {
      */
     fun <E> observableArrayList(): ObservableList<E> {
         return observableList(ArrayList())
+    }
+
+    /**
+     * Creates a new empty observable list backed by an arraylist.
+     *
+     * This list reports element updates.
+     *
+     * @param E
+     *         the list element type
+     * @param extractor
+     *         element to Observable[] convertor. Observable objects are listened for changes on the element.
+     *
+     * @return a newly created ObservableList
+     *
+     * @see observableList
+     * @since JavaFX 2.1
+     */
+    fun <E> observableArrayList(extractor: Callback<E, Array<Observable>>): ObservableList<E> {
+        return observableList(ArrayList(), extractor)
     }
 
     /**
@@ -118,6 +163,29 @@ object ObservableCollections {
     @ReturnsUnmodifiableCollection
     fun <E> singletonObservableList(e: E): ObservableList<E> {
         return SingletonObservableList(e)
+    }
+
+    /**
+     * Sorts the provided observable list using the c comparator. Fires only **one** change notification on the list.
+     *
+     * @param T
+     *         the list element type
+     * @param list
+     *         the list to sort
+     * @param c
+     *         comparator used for sorting. Null if natural ordering is required.
+     *
+     * @see Collections.sort
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T> sort(list: ObservableList<T>, c: Comparator<in T>) {
+        if (list is SortableList<*>) {
+            (list as SortableList<T>).sortWith(c)
+        } else {
+            val newContent: MutableList<T> = ArrayList(list)
+            newContent.sortWith(c)
+            list.setAll(newContent)
+        }
     }
 
     private class EmptyObservableList<E> : AbstractMutableList<E>(), ObservableList<E> {

@@ -29,10 +29,8 @@ class FilteredList<E> : TransformationList<E, E> {
      * the source list that will be visible. If the predicate is `null`, all elements will be matched and the list is
      * equal to the source list.
      *
-     * @param source
-     *         the source list
-     * @param predicate
-     *         the predicate to match the elements or `null` to match all elements.
+     * @param source the source list
+     * @param predicate the predicate to match the elements or `null` to match all elements.
      */
     constructor(@NamedArg("source") source: ObservableList<E>,
             @NamedArg("predicate") predicate: Predicate<in E>?) : super(source) {
@@ -52,57 +50,50 @@ class FilteredList<E> : TransformationList<E, E> {
      * Constructs a new FilteredList wrapper around the source list. This list has an "always true" predicate,
      * containing all the elements of the source list.
      *
-     * This constructor might be useful if you want to bind [predicateProperty] of this list.
+     * This constructor might be useful if you want to bind [predicateObjectProperty] of this list.
      *
-     * @param source
-     *         the source list
+     * @param source the source list
      */
     constructor(@NamedArg("source") source: ObservableList<E>) : this(source, null)
+
+    private val basePredicate: Predicate<in E> = Predicate {true}
 
     /**
      * The predicate that will match the elements that will be in this FilteredList. Elements not matching the predicate
      * will be filtered-out. Null predicate means "always true" predicate, all elements will be matched.
      */
-    private var predicateObjectProperty: ObjectProperty<Predicate<in E>?>? = null
+    private var predicateObjectProperty: ObjectProperty<Predicate<in E>> =
+            object : ObjectPropertyBase<Predicate<in E>>(this@FilteredList.basePredicate) {
 
-    val predicateProperty: ObjectProperty<Predicate<in E>?>
-        get() {
-            if (this.predicateObjectProperty == null) {
-                this.predicateObjectProperty = object : ObjectPropertyBase<Predicate<in E>?>(null) {
-
-                    override fun invalidated() {
-                        refilter()
-                    }
-
-                    override val bean: Any?
-                        get() = this@FilteredList
-
-                    override val name: String
-                        get() = "predicate"
-
+                override fun invalidated() {
+                    refilter()
                 }
+
+                override val bean: Any?
+                    get() = this@FilteredList
+
+                override val name: String
+                    get() = "predicate"
+
             }
-            return this.predicateObjectProperty!!
-        }
+
+    val predicateProperty: ObjectProperty<Predicate<in E>>
+        get() = this.predicateObjectProperty
 
     var predicate: Predicate<in E>?
-        get() = this.predicateObjectProperty?.get()
-        set(value) = this.predicateProperty.set(value)
+        get() = this.predicateObjectProperty.get()
+        set(value) = this.predicateObjectProperty.set(value ?: this.basePredicate)
 
     private val predicateImpl: Predicate<in E>
-        get() {
-            if (this.predicate != null) {
-                return this.predicate!!
-            }
-            return Predicate {true}
-        }
+        get() = this.predicate!!
 
+    @Suppress("CascadeIf")
     override fun sourceChanged(c: Change<out E>) {
         beginChange()
         while (c.next()) {
-            if (c.permutated) {
+            if (c.wasPermutated) {
                 permutate(c)
-            } else if (c.updated) {
+            } else if (c.wasUpdated) {
                 update(c)
             } else {
                 addRemove(c)
@@ -157,7 +148,7 @@ class FilteredList<E> : TransformationList<E, E> {
         if (p == 0) {
             return 0
         }
-        var pos = this.filtered.binarySearch(p)
+        var pos = this.filtered.binarySearch(p, 0, this.sizeState)
         if (pos < 0) {
             pos = pos.inv()
         }
@@ -195,11 +186,11 @@ class FilteredList<E> : TransformationList<E, E> {
         val pred = this.predicateImpl
         ensureSize(this.source.size)
         val from: Int = findPosition(c.from)
-        val to: Int = findPosition(c.to)
+        val to: Int = findPosition(c.from + c.removedSize)
 
         // Mark the nodes that are going to be removed
         for (i in from until to) {
-            nextRemove(from, c.removedElements[this.filtered[i] - c.from])
+            nextRemove(from, c.removed[this.filtered[i] - c.from])
         }
 
         // Update indexes of the sublist following the last element that was removed
@@ -226,7 +217,7 @@ class FilteredList<E> : TransformationList<E, E> {
             // Add the remaining elements
             while (it.nextIndex() < c.to) {
                 if (pred.test(it.next())) {
-                    this.filtered.copyInto(this.filtered, fpos + 1, fpos)
+                    this.filtered.copyInto(filtered, fpos + 1, fpos, size)
                     this.filtered[fpos] = it.previousIndex()
                     nextAdd(fpos, fpos + 1)
                     ++fpos
@@ -251,7 +242,7 @@ class FilteredList<E> : TransformationList<E, E> {
             if (pos < this.sizeState && this.filtered[pos] == sourceFrom) {
                 if (!pred.test(el)) {
                     nextRemove(pos, el)
-                    this.filtered.copyInto(this.filtered, pos, pos + 1, this.sizeState - 1)
+                    this.filtered.copyInto(this.filtered, pos, pos + 1, this.sizeState)
                     --this.sizeState
                     --filterTo
                 } else {
@@ -261,7 +252,7 @@ class FilteredList<E> : TransformationList<E, E> {
             } else {
                 if (pred.test(el)) {
                     nextAdd(pos, pos + 1)
-                    this.filtered.copyInto(this.filtered, pos + 1, pos)
+                    this.filtered.copyInto(this.filtered, pos + 1, pos, this.sizeState)
                     this.filtered[pos] = sourceFrom
                     ++this.sizeState
                     ++pos

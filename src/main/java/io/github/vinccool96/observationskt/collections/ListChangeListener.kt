@@ -18,12 +18,12 @@ interface ListChangeListener<E> {
      *
      * Each change must be one of the following:
      *
-     * * **Permutation change** : [permutated] returns `true` in this case. The permutation happened at range between
+     * * **Permutation change** : [wasPermutated] returns `true` in this case. The permutation happened at range between
      * [from]\(inclusive\) and [to]\(exclusive\) and can be queried by calling [getPermutation] method.
-     * * **Add or remove change** : In this case, at least one of the [added], [removed] returns `true`. If both methods
-     * return `true`, [replaced] will also return `true`.
+     * * **Add or remove change** : In this case, at least one of the [wasAdded], [wasRemoved] returns `true`. If both
+     * methods return `true`, [wasReplaced] will also return `true`.
      *
-     * The [removed] value returns a list of elements that have been replaced or removed from the list.
+     * The [wasRemoved] value returns a list of elements that have been replaced or removed from the list.
      *
      * The range between [from]\(inclusive\) and [to]\(exclusive\) denotes the sublist of the list that contain new
      * elements. Note that this is a half-open interval, so if no elements were added, `from` is equal to `to`.
@@ -32,7 +32,7 @@ interface ListChangeListener<E> {
      *
      * Note that in order to maintain correct indexes of the separate add/remove changes, these changes **must** be
      * sorted by their `from` index.
-     * * **Update change** : [updated] return true on an update change. All elements between [from]\(inclusive\) and
+     * * **Update change** : [wasUpdated] return true on an update change. All elements between [from]\(inclusive\) and
      * [to]\(exclusive\) were updated.
      *
      * **Important:** It's necessary to call [next] method before calling any other method of `Change`. The same applies
@@ -48,14 +48,14 @@ interface ListChangeListener<E> {
      * theList.addListener(object : ListChangeListener<Item> {
      *     override fun onChanged(c: ListChangeListener.Change<out Item>) {
      *         while (c.next()) {
-     *             if (c.permutated) {
+     *             if (c.wasPermutated) {
      *                 for (i in c.from until c.to) {
      *                     // permutate
      *                 }
-     *             } else if (c.updated) {
+     *             } else if (c.wasUpdated) {
      *                 // update item
      *             } else {
-     *                 for (remitem in c.removedElements) {
+     *                 for (remitem in c.removed) {
      *                     remitem.remove(this@Outer)
      *                 }
      *                 for (additem in c.addedSubList) {
@@ -138,7 +138,7 @@ interface ListChangeListener<E> {
          * @throws IllegalStateException
          * if this Change is in initial state
          */
-        abstract val removedElements: MutableList<E>
+        abstract val removed: MutableList<E>
 
         /**
          * Indicates if the change was only a permutation.
@@ -148,9 +148,8 @@ interface ListChangeListener<E> {
          * @throws IllegalStateException
          * if this Change is in initial state
          */
-        val permutated: Boolean by lazy {
-            this.permutation.isNotEmpty()
-        }
+        val wasPermutated: Boolean
+            get() = this.permutation.isNotEmpty()
 
         /**
          * Indicates if elements were added during this change
@@ -160,22 +159,20 @@ interface ListChangeListener<E> {
          * @throws IllegalStateException
          * if this Change is in initial state
          */
-        val added: Boolean by lazy {
-            !this.permutated && !this.updated && this.from < this.to
-        }
+        val wasAdded: Boolean
+            get() = !this.wasPermutated && !this.wasUpdated && this.from < this.to
 
         /**
          * Indicates if elements were removed during this change. Note that using set will also produce a change with
-         * `removed` returning `true`. See [replaced].
+         * `wasRemoved` returning `true`. See [wasReplaced].
          *
          * @return `true` if something was removed from the list
          *
          * @throws IllegalStateException
          * if this Change is in initial state
          */
-        open val removed: Boolean by lazy {
-            this.removedElements.isEmpty()
-        }
+        open val wasRemoved: Boolean
+            get() = this.removed.isNotEmpty()
 
         /**
          * Indicates if elements were replaced during this change. This is usually true when set is called on the list.
@@ -189,9 +186,8 @@ interface ListChangeListener<E> {
          * @throws IllegalStateException
          * if this Change is in initial state
          */
-        val replaced: Boolean by lazy {
-            this.added && this.removed
-        }
+        val wasReplaced: Boolean
+            get() = this.wasAdded && this.wasRemoved
 
         /**
          * Indicates that the elements between getFrom() (inclusive) to getTo() exclusive has changed. This is the only
@@ -201,7 +197,8 @@ interface ListChangeListener<E> {
          *
          * @since JavaFX 2.1
          */
-        open val updated: Boolean get() = false
+        open val wasUpdated: Boolean
+            get() = false
 
         /**
          * To get a subList view of the list that contains only the elements added, use getAddedSubList() method. This
@@ -220,7 +217,7 @@ interface ListChangeListener<E> {
          */
         val addedSubList: List<E>
             get() {
-                return if (this.added) this.list.subList(this.from, this.to) else emptyList()
+                return if (this.wasAdded) this.list.subList(this.from, this.to) else emptyList()
             }
 
         /**
@@ -233,7 +230,7 @@ interface ListChangeListener<E> {
          */
         val removedSize: Int
             get() {
-                return this.removedElements.size
+                return this.removed.size
             }
 
         /**
@@ -246,14 +243,14 @@ interface ListChangeListener<E> {
          */
         val addedSize: Int
             get() {
-                return if (this.added) this.to - this.from else 0
+                return if (this.wasAdded) this.to - this.from else 0
             }
 
         /**
          * If this change is an permutation, it returns an integer array that describes the permutation. This array maps
          * directly from the previous indexes to the new ones. This method is not publicly accessible and therefore can
          * return an array safely. The 0 index of the array corresponds to index [from] of the list. The
-         * same applies for the last index and [to]. The method is used by [permutated] and
+         * same applies for the last index and [to]. The method is used by [wasPermutated] and
          * [getPermutation] methods.
          *
          * @return empty array if this is not permutation or an integer array containing the permutation
@@ -284,7 +281,7 @@ interface ListChangeListener<E> {
          * if this is not a permutation change
          */
         fun getPermutation(i: Int): Int {
-            check(this.permutated) {"Not a permutation change"}
+            check(this.wasPermutated) {"Not a permutation change"}
             return this.permutation[i - this.from]
         }
     }

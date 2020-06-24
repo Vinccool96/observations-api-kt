@@ -11,7 +11,9 @@ import java.util.*
 /**
  * A List wrapper class that implements observability.
  */
-class ObservableListWrapper<E> : ModifiableObservableListBase<E>, ObservableList<E>, SortableList<E>, RandomAccess {
+@Suppress("DuplicatedCode")
+open class ObservableListWrapper<E> : ModifiableObservableListBase<E>, ObservableList<E>, SortableList<E>,
+        RandomAccess {
 
     private val backingList: MutableList<E>
 
@@ -150,7 +152,7 @@ class ObservableListWrapper<E> : ModifiableObservableListBase<E>, ObservableList
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun sort(comparator: Comparator<in E>) {
+    override fun sortWith(comparator: Comparator<in E>) {
         if (this.backingList.isNotEmpty()) {
             val perm: IntArray = this.sortHelper.sort(this.backingList as MutableList<Comparable<Any?>>,
                     comparator as Comparator<in Comparable<Any?>>)
