@@ -113,9 +113,8 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
     private fun compress(list: MutableList<SubChange<E>?>): Int {
         var removed = 0
         var prev = list[0]
-        var i = 1
         val sz = list.size
-        while (i < sz) {
+        for (i in 1 until sz) {
             val cur = list[i]
             if (prev!!.to == cur!!.from) {
                 prev.to = cur.to
@@ -130,7 +129,6 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
             } else {
                 prev = cur
             }
-            ++i
         }
         return removed
     }
@@ -458,8 +456,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 if (updateNotEmpty) {
                     val sz = updateChanges.size
                     for (i in 0 until sz) {
-                        val change =
-                                updateChanges[i]
+                        val change = updateChanges[i]
                         if (change != null) {
                             array[ptr++] = change
                         }
@@ -516,7 +513,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 return this.change.to
             }
 
-        override val removedElements: MutableList<E>
+        override val removed: MutableList<E>
             get() {
                 checkState()
                 return this.change.removed ?: ArrayList()
@@ -528,7 +525,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 return this.change.perm
             }
 
-        override val updated: Boolean
+        override val wasUpdated: Boolean
             get() {
                 checkState()
                 return this.change.updated
@@ -541,7 +538,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
         }
 
         override fun toString(): String {
-            val ret: String = if (change.perm.size != 0) {
+            val ret: String = if (change.perm.isNotEmpty()) {
                 permChangeToString(change.perm)
             } else if (change.updated) {
                 updateChangeToString(change.from, change.to)
@@ -582,7 +579,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 return changes[cursor].to
             }
 
-        override val removedElements: MutableList<E>
+        override val removed: MutableList<E>
             get() {
                 checkState()
                 return changes[cursor].removed ?: ArrayList()
@@ -594,10 +591,11 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 return changes[cursor].perm
             }
 
-        fun wasUpdated(): Boolean {
-            checkState()
-            return changes[cursor].updated
-        }
+        override val wasUpdated: Boolean
+            get() {
+                checkState()
+                return changes[cursor].updated
+            }
 
         private fun checkState() {
             check(cursor != -1) {"Invalid Change state: next() must be called before inspecting the Change."}
@@ -608,7 +606,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
             val b = StringBuilder()
             b.append("{ ")
             while (c < changes.size) {
-                if (changes[c].perm.size != 0) {
+                if (changes[c].perm.isNotEmpty()) {
                     b.append(permChangeToString(
                             changes[c].perm))
                 } else if (changes[c].updated) {

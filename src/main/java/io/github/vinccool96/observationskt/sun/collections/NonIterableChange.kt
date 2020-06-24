@@ -14,7 +14,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
     override val to: Int
         get() {
             checkState()
-            return this.f
+            return this.t
         }
 
     private var invalid: Boolean = true
@@ -47,12 +47,12 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
         val oldInvalid = this.invalid
         this.invalid = false
         val ret: String =
-                if (this.permutated) {
+                if (this.wasPermutated) {
                     ChangeHelper.permChangeToString(this.permutation)
-                } else if (this.updated) {
+                } else if (this.wasUpdated) {
                     ChangeHelper.updateChangeToString(this.f, this.t)
                 } else {
-                    ChangeHelper.addRemoveChangeToString(this.f, this.t, this.list, this.removedElements)
+                    ChangeHelper.addRemoveChangeToString(this.f, this.t, this.list, this.removed)
                 }
         this.invalid = oldInvalid
         return "{ $ret }"
@@ -61,7 +61,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
     class GenericAddRemoveChange<E>(f: Int, t: Int, private val removedList: MutableList<E>, list: ObservableList<E>) :
             NonIterableChange<E>(f, t, list) {
 
-        override val removedElements: MutableList<E>
+        override val removed: MutableList<E>
             get() {
                 checkState()
                 return this.removedList
@@ -71,13 +71,13 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
 
     class SimpleRemovedChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableChange<E>(f, t, list) {
 
-        override val removed: Boolean
+        override val wasRemoved: Boolean
             get() {
                 checkState()
                 return false
             }
 
-        override val removedElements: MutableList<E>
+        override val removed: MutableList<E>
             get() {
                 checkState()
                 return ArrayList()
@@ -87,13 +87,13 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
 
     class SimpleAddChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableChange<E>(f, t, list) {
 
-        override val removed: Boolean
+        override val wasRemoved: Boolean
             get() {
                 checkState()
                 return false
             }
 
-        override val removedElements: MutableList<E>
+        override val removed: MutableList<E>
             get() {
                 checkState()
                 return ArrayList()
@@ -104,7 +104,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
     class SimplePermutationChange<E>(f: Int, t: Int, private val perm: IntArray, list: ObservableList<E>) :
             NonIterableChange<E>(f, t, list) {
 
-        override val removedElements: MutableList<E>
+        override val removed: MutableList<E>
             get() {
                 checkState()
                 return ArrayList()
@@ -122,9 +122,9 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
 
         constructor(position: Int, list: ObservableList<E>) : this(position, position + 1, list)
 
-        override val removedElements: MutableList<E> = ArrayList()
+        override val removed: MutableList<E> = ArrayList()
 
-        override val updated: Boolean = true
+        override val wasUpdated: Boolean = true
 
     }
 

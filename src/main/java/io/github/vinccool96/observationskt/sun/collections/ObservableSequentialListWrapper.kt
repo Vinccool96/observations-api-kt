@@ -7,6 +7,7 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.NonIterableChange.SimplePermutationChange
 import io.github.vinccool96.observationskt.util.Callback
 
+@Suppress("DuplicatedCode")
 class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, ObservableList<E>, SortableList<E> {
 
     private val backingList: MutableList<E>
@@ -192,7 +193,8 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
         }
     }
 
-    override fun sort(comparator: Comparator<in E>) {
+    @Suppress("UNCHECKED_CAST")
+    override fun sortWith(comparator: Comparator<in E>) {
         if (this.backingList.isNotEmpty()) {
             val perm: IntArray = this.sortHelper.sort(this.backingList as MutableList<Comparable<Any?>>,
                     comparator as Comparator<in Comparable<Any?>>)

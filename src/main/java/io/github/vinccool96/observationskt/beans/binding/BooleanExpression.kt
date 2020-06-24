@@ -103,7 +103,7 @@ abstract class BooleanExpression() : ObservableBooleanValue {
     open fun asObject(): ObjectExpression<Boolean> {
         return object : ObjectBinding<Boolean>() {
             override fun dispose() {
-                unbindOB(this@BooleanExpression)
+                unbind(this@BooleanExpression)
             }
 
             override fun computeValue(): Boolean {
@@ -111,7 +111,7 @@ abstract class BooleanExpression() : ObservableBooleanValue {
             }
 
             init {
-                bindOB(this@BooleanExpression)
+                bind(this@BooleanExpression)
             }
         }
     }
@@ -133,7 +133,7 @@ abstract class BooleanExpression() : ObservableBooleanValue {
             }
             return if (value is BooleanExpression) value else object : BooleanBinding() {
                 override fun dispose() {
-                    super.unbindBB(value)
+                    super.unbind(value)
                 }
 
                 override fun computeValue(): Boolean {
@@ -145,7 +145,7 @@ abstract class BooleanExpression() : ObservableBooleanValue {
                     get() = ObservableCollections.singletonObservableList(value)
 
                 init {
-                    super.bindBB(value)
+                    super.bind(value)
                 }
             }
         }
@@ -170,7 +170,7 @@ abstract class BooleanExpression() : ObservableBooleanValue {
             }
             return if (value is BooleanExpression) value else object : BooleanBinding() {
                 override fun dispose() {
-                    super.unbindBB(value)
+                    super.unbind(value)
                 }
 
                 override fun computeValue(): Boolean {
@@ -182,7 +182,7 @@ abstract class BooleanExpression() : ObservableBooleanValue {
                     get() = ObservableCollections.singletonObservableList(value)
 
                 init {
-                    super.bindBB(value)
+                    super.bind(value)
                 }
             }
         }

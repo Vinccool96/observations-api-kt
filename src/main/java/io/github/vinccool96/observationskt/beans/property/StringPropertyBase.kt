@@ -8,32 +8,34 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 import java.lang.ref.WeakReference
 
 /**
- * The class `ObjectPropertyBase` is the base class for a property wrapping an arbitrary `Object`.
+ * The class `StringPropertyBase` is the base class for a property wrapping a `String` value.
  *
  * It provides all the functionality required for a property except for the [bean] and [name] values, which must be
  * implemented by extending classes.
  *
- * @param T the type of the wrapped value
+ * @see StringProperty
+ * @since JavaFX 2.0
  *
- * @see ObjectProperty
- * @since JavaFX 2.
- *
- * @constructor The constructor of the `ObjectPropertyBase`.
- *
- * @param initialValue the initial value of the wrapped `Object`
+ * @constructor The constructor of the `StringPropertyBase`.
+ * @param initialValue the initial value of the wrapped `String`
  */
 @Suppress("DuplicatedCode")
-abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
+abstract class StringPropertyBase(initialValue: String?) : StringProperty() {
 
-    private var valueState: T = initialValue
+    private var valueState: String? = initialValue
 
-    private var observable: ObservableValue<out T>? = null
+    private var observable: ObservableValue<out String?>? = null
 
     private var listener: InvalidationListener? = null
 
     private var valid: Boolean = true
 
-    private var helper: ExpressionHelper<T>? = null
+    private var helper: ExpressionHelper<String?>? = null
+
+    /**
+     * The constructor of the `StringPropertyBase`.
+     */
+    constructor() : this(null)
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
@@ -52,19 +54,19 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in T>) {
+    override fun addListener(listener: ChangeListener<in String?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in T>) {
+    override fun removeListener(listener: ChangeListener<in String?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in T>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in String?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -73,8 +75,8 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
      * Sends notifications to all attached [InvalidationListeners][InvalidationListener] and
      * [ChangeListeners][ChangeListener].
      *
-     * This method is called when the value is changed, either manually by calling [set] or in case of a bound
-     * property, if the binding becomes invalid.
+     * This method is called when the value is changed, either manually by calling [set] or in case of a bound property,
+     * if the binding becomes invalid.
      */
     protected open fun fireValueChangedEvent() {
         ExpressionHelper.fireValueChangedEvent(this.helper)
@@ -97,20 +99,19 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
     protected open fun invalidated() {
     }
 
-    override fun get(): T {
+    override fun get(): String? {
         this.valid = true
-        return this.observable?.value ?: this.valueState
+        return if (this.observable == null) this.valueState else this.observable!!.value
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun set(value: T) {
+    override fun set(value: String?) {
         if (this.bound) {
             val curBean = this.bean
             throw RuntimeException(
                     (if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
                             "A bound value cannot be set.")
         }
-        if (this.valueState !== value) {
+        if (this.valueState != value) {
             this.valueState = value
             markInvalid()
         }
@@ -119,7 +120,7 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out T>) {
+    override fun bind(observable: ObservableValue<out String?>) {
         if (observable != this.observable) {
             unbind()
             this.observable = observable
@@ -140,14 +141,14 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
     }
 
     /**
-     * Returns a string representation of this `ObjectPropertyBase` object.
+     * Returns a string representation of this `StringPropertyBase` object.
      *
-     * @return a string representation of this `ObjectPropertyBase` object.
+     * @return a string representation of this `StringPropertyBase` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("ObjectProperty [")
+        val result = StringBuilder("StringProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -168,12 +169,12 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
         return result.toString()
     }
 
-    private class Listener<T>(ref: ObjectPropertyBase<T>) : InvalidationListener {
+    private class Listener(ref: StringPropertyBase) : InvalidationListener {
 
-        private val wref: WeakReference<ObjectPropertyBase<T>> = WeakReference(ref)
+        private val wref: WeakReference<StringPropertyBase> = WeakReference(ref)
 
         override fun invalidated(observable: Observable) {
-            val ref = this.wref.get()
+            val ref: StringPropertyBase? = this.wref.get()
             if (ref == null) {
                 observable.removeListener(this)
             } else {

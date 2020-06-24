@@ -1,6 +1,8 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.value.ObservableStringValue
+import io.github.vinccool96.observationskt.beans.value.ObservableValue
+import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 
 /**
  * A {@code StringExpression} is a {@link ObservableStringValue} plus additional convenience methods to generate
@@ -25,5 +27,23 @@ abstract class StringExpression : ObservableStringValue {
      */
     val valueSafe: String
         get() = this.get() ?: ""
+
+    companion object {
+
+        /**
+         * Returns a {@code StringExpression} that wraps a {@link ObservableValue}. If the {@code ObservableValue} is
+         * already a {@code StringExpression}, it will be returned. Otherwise a new {@link StringBinding} is created that
+         * holds the value of the {@code ObservableValue} converted to a {@code String}.
+         *
+         * @param value
+         *         The source {@code ObservableValue}
+         *
+         * @return A {@code StringExpression} that wraps the {@code ObservableValue} if necessary
+         */
+        fun stringExpression(value: ObservableValue<*>): StringExpression {
+            return StringFormatter.convert(value)
+        }
+
+    }
 
 }

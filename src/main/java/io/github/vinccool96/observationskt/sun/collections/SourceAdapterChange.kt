@@ -20,19 +20,19 @@ class SourceAdapterChange<E>(list: ObservableList<E>, private val change: Change
         get() = this.change.to
 
     @Suppress("UNCHECKED_CAST")
-    override val removedElements: MutableList<E>
-        get() = this.change.removedElements as MutableList<E>
+    override val removed: MutableList<E>
+        get() = this.change.removed as MutableList<E>
 
     override val from: Int
         get() = this.change.from
 
-    override val updated: Boolean
-        get() = this.change.updated
+    override val wasUpdated: Boolean
+        get() = this.change.wasUpdated
 
     override val permutation: IntArray
         get() {
             if (this.perm == null) {
-                if (this.change.permutated) {
+                if (this.change.wasPermutated) {
                     val from: Int = this.change.from
                     val n: Int = this.change.to - from
                     this.perm = IntArray(n) {i: Int -> this.change.getPermutation(from + i)}
