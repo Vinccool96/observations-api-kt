@@ -21,6 +21,18 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.add(this, other)
     }
 
+    override fun minus(other: ObservableNumberValue): NumberBinding {
+        return Bindings.subtract(this, other)
+    }
+
+    override fun times(other: ObservableNumberValue): NumberBinding {
+        return Bindings.multiply(this, other)
+    }
+
+    override fun div(other: ObservableNumberValue): NumberBinding {
+        return Bindings.divide(this, other)
+    }
+
     companion object {
 
         /**

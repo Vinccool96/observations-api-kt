@@ -47,6 +47,66 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
         return Bindings.add(this, other) as DoubleBinding
     }
 
+    override fun minus(other: ObservableNumberValue): DoubleBinding {
+        return Bindings.subtract(this, other) as DoubleBinding
+    }
+
+    override fun minus(other: Double): DoubleBinding {
+        return Bindings.subtract(this, other)
+    }
+
+    override fun minus(other: Float): DoubleBinding {
+        return Bindings.subtract(this, other) as DoubleBinding
+    }
+
+    override fun minus(other: Long): DoubleBinding {
+        return Bindings.subtract(this, other) as DoubleBinding
+    }
+
+    override fun minus(other: Int): DoubleBinding {
+        return Bindings.subtract(this, other) as DoubleBinding
+    }
+
+    override fun times(other: ObservableNumberValue): DoubleBinding {
+        return Bindings.multiply(this, other) as DoubleBinding
+    }
+
+    override fun times(other: Double): DoubleBinding {
+        return Bindings.multiply(this, other)
+    }
+
+    override fun times(other: Float): DoubleBinding {
+        return Bindings.multiply(this, other) as DoubleBinding
+    }
+
+    override fun times(other: Long): DoubleBinding {
+        return Bindings.multiply(this, other) as DoubleBinding
+    }
+
+    override fun times(other: Int): DoubleBinding {
+        return Bindings.multiply(this, other) as DoubleBinding
+    }
+
+    override fun div(other: ObservableNumberValue): DoubleBinding {
+        return Bindings.divide(this, other) as DoubleBinding
+    }
+
+    override fun div(other: Double): DoubleBinding {
+        return Bindings.divide(this, other)
+    }
+
+    override fun div(other: Float): DoubleBinding {
+        return Bindings.divide(this, other) as DoubleBinding
+    }
+
+    override fun div(other: Long): DoubleBinding {
+        return Bindings.divide(this, other) as DoubleBinding
+    }
+
+    override fun div(other: Int): DoubleBinding {
+        return Bindings.divide(this, other) as DoubleBinding
+    }
+
     companion object {
 
         fun doubleExpression(value: ObservableDoubleValue): DoubleExpression {
