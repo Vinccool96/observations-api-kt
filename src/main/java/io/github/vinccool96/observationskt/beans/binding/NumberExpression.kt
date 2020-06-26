@@ -39,55 +39,55 @@ interface NumberExpression : ObservableNumberValue {
      */
     fun negate(): NumberBinding
 
-//    // ===============================================================
-//    // Plus
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun plus(other: ObservableNumberValue): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun plus(other: Double): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun plus(other: Float): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun plus(other: Long): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun plus(other: Int): NumberBinding
-//
+    // ===============================================================
+    // Plus
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun plus(other: ObservableNumberValue): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun plus(other: Double): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun plus(other: Float): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun plus(other: Long): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun plus(other: Int): NumberBinding
+
 //    // ===============================================================
 //    // Minus
 //

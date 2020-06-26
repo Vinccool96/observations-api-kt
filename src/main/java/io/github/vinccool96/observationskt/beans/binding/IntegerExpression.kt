@@ -35,6 +35,22 @@ abstract class IntegerExpression : NumberExpressionBase(), ObservableIntegerValu
         return Bindings.negate(this) as IntegerBinding
     }
 
+    override fun plus(other: Double): DoubleBinding {
+        return Bindings.add(this, other)
+    }
+
+    override fun plus(other: Float): FloatBinding {
+        return Bindings.add(this, other) as FloatBinding
+    }
+
+    override fun plus(other: Long): LongBinding {
+        return Bindings.add(this, other) as LongBinding
+    }
+
+    override fun plus(other: Int): IntegerBinding {
+        return Bindings.add(this, other) as IntegerBinding
+    }
+
     companion object {
 
         /**

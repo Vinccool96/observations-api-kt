@@ -1,6 +1,7 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.value.ObservableDoubleValue
+import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
@@ -24,6 +25,26 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
 
     override fun negate(): DoubleBinding {
         return Bindings.negate(this) as DoubleBinding
+    }
+
+    override fun plus(other: ObservableNumberValue): DoubleBinding {
+        return Bindings.add(this, other) as DoubleBinding
+    }
+
+    override fun plus(other: Double): DoubleBinding {
+        return Bindings.add(this, other)
+    }
+
+    override fun plus(other: Float): DoubleBinding {
+        return Bindings.add(this, other) as DoubleBinding
+    }
+
+    override fun plus(other: Long): DoubleBinding {
+        return Bindings.add(this, other) as DoubleBinding
+    }
+
+    override fun plus(other: Int): DoubleBinding {
+        return Bindings.add(this, other) as DoubleBinding
     }
 
     companion object {
