@@ -25,7 +25,7 @@ interface ObservableNumberValue : ObservableValue<Number> {
      *
      * @return The value of this `ObservableNumberValue` as an `int`
      */
-    fun intValue(): Int
+    val intValue: Int
 
     /**
      * Returns the value of this `ObservableNumberValue` as a `long` . If the value is not a `long`, a standard cast is
@@ -33,7 +33,7 @@ interface ObservableNumberValue : ObservableValue<Number> {
      *
      * @return The value of this `ObservableNumberValue` as a `long`
      */
-    fun longValue(): Long
+    val longValue: Long
 
     /**
      * Returns the value of this `ObservableNumberValue` as a `float`. If the value is not a `float`, a standard cast is
@@ -41,7 +41,7 @@ interface ObservableNumberValue : ObservableValue<Number> {
      *
      * @return The value of this `ObservableNumberValue` as a `float`
      */
-    fun floatValue(): Float
+    val floatValue: Float
 
     /**
      * Returns the value of this `ObservableNumberValue` as a `double`. If the value is not a `double`, a standard cast
@@ -49,5 +49,5 @@ interface ObservableNumberValue : ObservableValue<Number> {
      *
      * @return The value of this `ObservableNumberValue` as a `double`
      */
-    fun doubleValue(): Double
+    val doubleValue: Double
 }

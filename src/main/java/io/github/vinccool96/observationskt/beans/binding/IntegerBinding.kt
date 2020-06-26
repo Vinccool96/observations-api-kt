@@ -10,10 +10,10 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 
 /**
- * Base class that provides most of the functionality needed to implement a [Binding] of an `Object`.
+ * Base class that provides most of the functionality needed to implement a [Binding] of an `Int` value.
  *
- * `ObjectBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
- * [bind]. If one of the registered dependencies becomes invalid, this `ObjectBinding` is marked as invalid. With
+ * `IntegerBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
+ * [bind]. If one of the registered dependencies becomes invalid, this `IntegerBinding` is marked as invalid. With
  * [unbind] listening to dependencies can be stopped.
  *
  * To provide a concrete implementation of this class, the method [computeValue] has to be implemented to calculate the
@@ -22,21 +22,20 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * See [DoubleBinding] for an example how this base class can be extended.
  *
- * @param T the type of the wrapped `Object`
- *
  * @see Binding
- * @see ObjectExpression
+ * @see NumberBinding
+ * @see IntegerExpression
  * @since JavaFX 2.0
  */
-abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
+abstract class IntegerBinding : IntegerExpression(), NumberBinding {
 
-    private var valueState: T? = null
+    private var valueState: Int = 0
 
     private var validState: Boolean = false
 
     private var observer: BindingHelperObserver? = null
 
-    private var helper: ExpressionHelper<T>? = null
+    private var helper: ExpressionHelper<Number>? = null
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
@@ -55,19 +54,19 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in T>) {
+    override fun addListener(listener: ChangeListener<in Number>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in T>) {
+    override fun removeListener(listener: ChangeListener<in Number>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in T>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -113,12 +112,18 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     override val dependencies: ObservableList<*>
         get() = ObservableCollections.emptyObservableList<Observable>()
 
-    final override fun get(): T {
+    /**
+     * Returns the result of [computeValue]. The method `computeValue()` is only called if the binding is invalid. The
+     * result is cached and returned if the binding did not become invalid since the last call of `get()`.
+     *
+     * @return the current value
+     */
+    final override fun get(): Int {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
         }
-        return this.valueState!!
+        return this.valueState
     }
 
     /**
@@ -142,19 +147,19 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     /**
      * Calculates the current value of this binding.
      *
-     * Classes extending `ObjectBinding` have to provide an implementation of `computeValue`.
+     * Classes extending `IntegerBinding` have to provide an implementation of `computeValue`.
      *
      * @return the current value
      */
-    protected abstract fun computeValue(): T
+    protected abstract fun computeValue(): Int
 
     /**
-     * Returns a string representation of this `ObjectBinding` object.
+     * Returns a string representation of this `IntegerBinding` object.
      *
-     * @return a string representation of this `ObjectBinding` object.
+     * @return a string representation of this `IntegerBinding` object.
      */
     override fun toString(): String {
-        return if (this.validState) "ObjectBinding [value: ${get()}]" else "ObjectBinding [invalid]"
+        return if (this.validState) "IntegerBinding [value: ${get()}]" else "IntegerBinding [invalid]"
     }
 
 }

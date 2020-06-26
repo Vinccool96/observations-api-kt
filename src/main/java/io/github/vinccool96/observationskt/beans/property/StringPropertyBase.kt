@@ -99,7 +99,7 @@ abstract class StringPropertyBase(initialValue: String?) : StringProperty() {
     protected open fun invalidated() {
     }
 
-    override fun get(): String? {
+    final override fun get(): String? {
         this.valid = true
         return if (this.observable == null) this.valueState else this.observable!!.value
     }

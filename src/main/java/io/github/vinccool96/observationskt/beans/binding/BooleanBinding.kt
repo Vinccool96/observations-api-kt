@@ -124,7 +124,7 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
      *
      * @return the current value
      */
-    override fun get(): Boolean {
+    final override fun get(): Boolean {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
