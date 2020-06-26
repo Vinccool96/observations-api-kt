@@ -6,10 +6,7 @@ import io.github.vinccool96.observationskt.beans.property.Property
 import io.github.vinccool96.observationskt.beans.value.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
-import io.github.vinccool96.observationskt.sun.binding.ObjectConstant
-import io.github.vinccool96.observationskt.sun.binding.StringConstant
-import io.github.vinccool96.observationskt.sun.binding.StringFormatter
+import io.github.vinccool96.observationskt.sun.binding.*
 import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 import java.lang.ref.WeakReference
@@ -72,11 +69,11 @@ object Bindings {
     // Negation
 
     /**
-     * Creates a new {@link NumberBinding} that calculates the negation of a {@link ObservableNumberValue}.
+     * Creates a new [NumberBinding] that calculates the negation of a [ObservableNumberValue].
      *
      * @param value the operand
      *
-     * @return the new {@code NumberBinding}
+     * @return the new `NumberBinding`
      */
     fun negate(value: ObservableNumberValue): NumberBinding {
         return when (value) {
@@ -249,9 +246,140 @@ object Bindings {
         }
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the values of two instances of [ObservableNumberValue].
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `NumberBinding`
+     */
     fun add(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
         return add(op1, op2, op1, op2)
     }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun add(op1: ObservableNumberValue, op2: Double): DoubleBinding {
+        return add(op1, DoubleConstant.valueOf(op2), op1) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun add(op1: Double, op2: ObservableNumberValue): DoubleBinding {
+        return add(DoubleConstant.valueOf(op1), op2, op2) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: ObservableNumberValue, op2: Float): NumberBinding {
+        return add(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: Float, op2: ObservableNumberValue): NumberBinding {
+        return add(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: ObservableNumberValue, op2: Long): NumberBinding {
+        return add(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: Long, op2: ObservableNumberValue): NumberBinding {
+        return add(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: ObservableNumberValue, op2: Int): NumberBinding {
+        return add(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: Int, op2: ObservableNumberValue): NumberBinding {
+        return add(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Diff
 
     // boolean
     // =================================================================================================================

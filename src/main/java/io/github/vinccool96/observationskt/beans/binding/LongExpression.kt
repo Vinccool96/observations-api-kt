@@ -26,6 +26,22 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
         return Bindings.negate(this) as LongBinding
     }
 
+    override fun plus(other: Double): DoubleBinding {
+        return Bindings.add(this, other)
+    }
+
+    override fun plus(other: Float): FloatBinding {
+        return Bindings.add(this, other) as FloatBinding
+    }
+
+    override fun plus(other: Long): LongBinding {
+        return Bindings.add(this, other) as LongBinding
+    }
+
+    override fun plus(other: Int): LongBinding {
+        return Bindings.add(this, other) as LongBinding
+    }
+
     companion object {
 
         fun longExpression(value: ObservableLongValue): LongExpression {

@@ -17,6 +17,10 @@ import io.github.vinccool96.observationskt.beans.value.*
  */
 abstract class NumberExpressionBase : NumberExpression {
 
+    override fun plus(other: ObservableNumberValue): NumberBinding {
+        return Bindings.add(this, other)
+    }
+
     companion object {
 
         /**
