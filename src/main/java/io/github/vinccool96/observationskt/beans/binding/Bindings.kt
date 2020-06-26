@@ -381,6 +381,672 @@ object Bindings {
     // =================================================================================================================
     // Diff
 
+    private fun subtract(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): NumberBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Double {
+                    return op1.doubleValue - op2.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Float {
+                    return op1.floatValue - op2.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Long {
+                    return op1.longValue - op2.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : IntegerBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Int {
+                    return op1.intValue - op2.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the values of two instances of
+     * [ObservableNumberValue].
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
+        return subtract(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: Double): DoubleBinding {
+        return subtract(op1, DoubleConstant.valueOf(op2), op1) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun subtract(op1: Double, op2: ObservableNumberValue): DoubleBinding {
+        return subtract(DoubleConstant.valueOf(op1), op2, op2) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: Float): NumberBinding {
+        return subtract(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: Float, op2: ObservableNumberValue): NumberBinding {
+        return subtract(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: Long): NumberBinding {
+        return subtract(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: Long, op2: ObservableNumberValue): NumberBinding {
+        return subtract(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: Int): NumberBinding {
+        return subtract(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: Int, op2: ObservableNumberValue): NumberBinding {
+        return subtract(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Multiply
+
+    private fun multiply(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): NumberBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Double {
+                    return op1.doubleValue * op2.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Float {
+                    return op1.floatValue * op2.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Long {
+                    return op1.longValue * op2.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : IntegerBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Int {
+                    return op1.intValue * op2.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the values of two instances of
+     * [ObservableNumberValue].
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
+        return multiply(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: Double): DoubleBinding {
+        return multiply(op1, DoubleConstant.valueOf(op2), op1) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun multiply(op1: Double, op2: ObservableNumberValue): DoubleBinding {
+        return multiply(DoubleConstant.valueOf(op1), op2, op2) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: Float): NumberBinding {
+        return multiply(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: Float, op2: ObservableNumberValue): NumberBinding {
+        return multiply(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: Long): NumberBinding {
+        return multiply(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: Long, op2: ObservableNumberValue): NumberBinding {
+        return multiply(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: Int): NumberBinding {
+        return multiply(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: Int, op2: ObservableNumberValue): NumberBinding {
+        return multiply(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Divide
+
+    private fun divide(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): NumberBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Double {
+                    return op1.doubleValue * op2.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Float {
+                    return op1.floatValue * op2.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Long {
+                    return op1.longValue * op2.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : IntegerBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Int {
+                    return op1.intValue * op2.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the values of two instances of
+     * [ObservableNumberValue].
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
+        return divide(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: Double): DoubleBinding {
+        return divide(op1, DoubleConstant.valueOf(op2), op1) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun divide(op1: Double, op2: ObservableNumberValue): DoubleBinding {
+        return divide(DoubleConstant.valueOf(op1), op2, op2) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: Float): NumberBinding {
+        return divide(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: Float, op2: ObservableNumberValue): NumberBinding {
+        return divide(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: Long): NumberBinding {
+        return divide(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: Long, op2: ObservableNumberValue): NumberBinding {
+        return divide(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: Int): NumberBinding {
+        return divide(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: Int, op2: ObservableNumberValue): NumberBinding {
+        return divide(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
     // boolean
     // =================================================================================================================
 

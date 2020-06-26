@@ -42,6 +42,54 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
         return Bindings.add(this, other) as FloatBinding
     }
 
+    override fun minus(other: Double): DoubleBinding {
+        return Bindings.subtract(this, other)
+    }
+
+    override fun minus(other: Float): FloatBinding {
+        return Bindings.subtract(this, other) as FloatBinding
+    }
+
+    override fun minus(other: Long): FloatBinding {
+        return Bindings.subtract(this, other) as FloatBinding
+    }
+
+    override fun minus(other: Int): FloatBinding {
+        return Bindings.subtract(this, other) as FloatBinding
+    }
+
+    override fun times(other: Double): DoubleBinding {
+        return Bindings.multiply(this, other)
+    }
+
+    override fun times(other: Float): FloatBinding {
+        return Bindings.multiply(this, other) as FloatBinding
+    }
+
+    override fun times(other: Long): FloatBinding {
+        return Bindings.multiply(this, other) as FloatBinding
+    }
+
+    override fun times(other: Int): FloatBinding {
+        return Bindings.multiply(this, other) as FloatBinding
+    }
+
+    override fun div(other: Double): DoubleBinding {
+        return Bindings.divide(this, other)
+    }
+
+    override fun div(other: Float): FloatBinding {
+        return Bindings.divide(this, other) as FloatBinding
+    }
+
+    override fun div(other: Long): FloatBinding {
+        return Bindings.divide(this, other) as FloatBinding
+    }
+
+    override fun div(other: Int): FloatBinding {
+        return Bindings.divide(this, other) as FloatBinding
+    }
+
     companion object {
 
         fun floatExpression(value: ObservableFloatValue): FloatExpression {

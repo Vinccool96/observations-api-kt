@@ -51,6 +51,54 @@ abstract class IntegerExpression : NumberExpressionBase(), ObservableIntegerValu
         return Bindings.add(this, other) as IntegerBinding
     }
 
+    override fun minus(other: Double): DoubleBinding {
+        return Bindings.subtract(this, other)
+    }
+
+    override fun minus(other: Float): FloatBinding {
+        return Bindings.subtract(this, other) as FloatBinding
+    }
+
+    override fun minus(other: Long): LongBinding {
+        return Bindings.subtract(this, other) as LongBinding
+    }
+
+    override fun minus(other: Int): IntegerBinding {
+        return Bindings.subtract(this, other) as IntegerBinding
+    }
+
+    override fun times(other: Double): DoubleBinding {
+        return Bindings.multiply(this, other)
+    }
+
+    override fun times(other: Float): FloatBinding {
+        return Bindings.multiply(this, other) as FloatBinding
+    }
+
+    override fun times(other: Long): LongBinding {
+        return Bindings.multiply(this, other) as LongBinding
+    }
+
+    override fun times(other: Int): IntegerBinding {
+        return Bindings.multiply(this, other) as IntegerBinding
+    }
+
+    override fun div(other: Double): DoubleBinding {
+        return Bindings.divide(this, other)
+    }
+
+    override fun div(other: Float): FloatBinding {
+        return Bindings.divide(this, other) as FloatBinding
+    }
+
+    override fun div(other: Long): LongBinding {
+        return Bindings.divide(this, other) as LongBinding
+    }
+
+    override fun div(other: Int): IntegerBinding {
+        return Bindings.divide(this, other) as IntegerBinding
+    }
+
     companion object {
 
         /**

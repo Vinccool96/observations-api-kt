@@ -24,7 +24,6 @@ import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
  * is the responsibility of the developer to call the correct getter ([intValue], etc.). If the internal representation
  * does not match the type of the getter, a standard cast is done.
  *
- * @
  * @since JavaFX 2.0
  */
 interface NumberExpression : ObservableNumberValue {
@@ -88,156 +87,156 @@ interface NumberExpression : ObservableNumberValue {
      */
     operator fun plus(other: Int): NumberBinding
 
-//    // ===============================================================
-//    // Minus
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `NumberBinding`
-//     *
-//     * @throws NullPointerException
-//     * if the other `ObservableNumberValue` is `null`
-//     */
-//    operator fun minus(other: ObservableNumberValue): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun minus(other: Double): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun minus(other: Float): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun minus(other: Long): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun minus(other: Int): NumberBinding
-//
-//    // ===============================================================
-//    // Times
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun times(other: ObservableNumberValue): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun times(other: Double): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun times(other: Float): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun times(other: Long): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun times(other: Int): NumberBinding
-//
-//    // ===============================================================
-//    // DividedBy
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun div(other: ObservableNumberValue): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun div(other: Double): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun div(other: Float): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun div(other: Long): NumberBinding
-//
-//    /**
-//     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `NumberBinding`
-//     */
-//    operator fun div(other: Int): NumberBinding
-//
+    // ===============================================================
+    // Minus
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     *
+     * @throws NullPointerException
+     * if the other `ObservableNumberValue` is `null`
+     */
+    operator fun minus(other: ObservableNumberValue): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun minus(other: Double): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun minus(other: Float): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun minus(other: Long): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun minus(other: Int): NumberBinding
+
+    // ===============================================================
+    // Times
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun times(other: ObservableNumberValue): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun times(other: Double): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun times(other: Float): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun times(other: Long): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun times(other: Int): NumberBinding
+
+    // ===============================================================
+    // DividedBy
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun div(other: ObservableNumberValue): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun div(other: Double): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun div(other: Float): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun div(other: Long): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun div(other: Int): NumberBinding
+
 //    // ===============================================================
 //    // IsEqualTo
 //
