@@ -6,7 +6,7 @@ import io.github.vinccool96.observationskt.beans.value.ChangeListener
 
 class StringConstant private constructor(override val value: String?) : StringExpression() {
 
-    final override fun get(): String? {
+    override fun get(): String? {
         return this.value
     }
 
