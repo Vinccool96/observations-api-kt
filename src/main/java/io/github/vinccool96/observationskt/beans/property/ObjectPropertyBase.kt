@@ -97,7 +97,7 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
     protected open fun invalidated() {
     }
 
-    override fun get(): T {
+    final override fun get(): T {
         this.valid = true
         return this.observable?.value ?: this.valueState
     }

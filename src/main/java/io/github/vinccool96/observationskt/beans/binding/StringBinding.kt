@@ -122,7 +122,7 @@ abstract class StringBinding : StringExpression(), Binding<String?> {
      *
      * @return the current value
      */
-    override fun get(): String? {
+    final override fun get(): String? {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true

@@ -3,14 +3,12 @@ package io.github.vinccool96.observationskt.beans.binding
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.property.Property
-import io.github.vinccool96.observationskt.beans.value.ObservableBooleanValue
-import io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
-import io.github.vinccool96.observationskt.beans.value.ObservableStringValue
-import io.github.vinccool96.observationskt.beans.value.ObservableValue
+import io.github.vinccool96.observationskt.beans.value.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.ObjectConstant
+import io.github.vinccool96.observationskt.sun.binding.StringConstant
 import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
@@ -67,6 +65,194 @@ object Bindings {
         BidirectionalBinding.unbind(property1, property2)
     }
 
+    // Numbers
+    // =================================================================================================================
+
+    // =================================================================================================================
+    // Negation
+
+    /**
+     * Creates a new {@link NumberBinding} that calculates the negation of a {@link ObservableNumberValue}.
+     *
+     * @param value the operand
+     *
+     * @return the new {@code NumberBinding}
+     */
+    fun negate(value: ObservableNumberValue): NumberBinding {
+        return when (value) {
+            is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(value)
+                }
+
+                override fun dispose() {
+                    super.unbind(value)
+                }
+
+                override fun computeValue(): Double {
+                    return -value.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = ObservableCollections.singletonObservableList(value)
+
+            }
+            is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(value)
+                }
+
+                override fun dispose() {
+                    super.unbind(value)
+                }
+
+                override fun computeValue(): Float {
+                    return -value.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = ObservableCollections.singletonObservableList(value)
+
+            }
+            is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(value)
+                }
+
+                override fun dispose() {
+                    super.unbind(value)
+                }
+
+                override fun computeValue(): Long {
+                    return -value.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = ObservableCollections.singletonObservableList(value)
+
+            }
+            else -> object : IntegerBinding() {
+
+                init {
+                    super.bind(value)
+                }
+
+                override fun dispose() {
+                    super.unbind(value)
+                }
+
+                override fun computeValue(): Int {
+                    return -value.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = ObservableCollections.singletonObservableList(value)
+
+            }
+        }
+    }
+
+    // =================================================================================================================
+    // Sum
+
+    private fun add(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): NumberBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Double {
+                    return op1.doubleValue + op2.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Float {
+                    return op1.floatValue + op2.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Long {
+                    return op1.longValue + op2.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : IntegerBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Int {
+                    return op1.intValue + op2.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    fun add(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
+        return add(op1, op2, op1, op2)
+    }
+
     // boolean
     // =================================================================================================================
 
@@ -120,10 +306,8 @@ object Bindings {
      * Creates a [BooleanBinding] that calculates the conditional-AND operation on the value of two instance of
      * [ObservableBooleanValue].
      *
-     * @param op1
-     *         first `ObservableBooleanValue`
-     * @param op2
-     *         second `ObservableBooleanValue`
+     * @param op1 first `ObservableBooleanValue`
+     * @param op2 second `ObservableBooleanValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -181,10 +365,8 @@ object Bindings {
      * Creates a [BooleanBinding] that calculates the conditional-OR operation on the value of two instance of
      * [ObservableBooleanValue].
      *
-     * @param op1
-     *         first `ObservableBooleanValue`
-     * @param op2
-     *         second `ObservableBooleanValue`
+     * @param op1 first `ObservableBooleanValue`
+     * @param op2 second `ObservableBooleanValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -195,8 +377,7 @@ object Bindings {
     /**
      * Creates a [BooleanBinding] that calculates the inverse of the value of a [ObservableBooleanValue].
      *
-     * @param op
-     *         the `ObservableBooleanValue`
+     * @param op the `ObservableBooleanValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -226,10 +407,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableBooleanValue] are
      * equal.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -259,10 +438,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableBooleanValue] are
      * not equal.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -292,74 +469,66 @@ object Bindings {
     // =================================================================================================================
 
     /**
-     * Returns a {@link StringExpression} that wraps a {@link ObservableValue}. If the {@code ObservableValue} is
-     * already a {@code StringExpression}, it will be returned. Otherwise a new {@link StringBinding} is created that
-     * holds the value of the {@code ObservableValue} converted to a {@code String}.
+     * Returns a [StringExpression] that wraps a [ObservableValue]. If the `ObservableValue` is already a
+     * `StringExpression`, it will be returned. Otherwise a new [StringBinding] is created that holds the value of the
+     * `ObservableValue` converted to a `String`.
      *
-     * @param observableValue
-     *         The source {@code ObservableValue}
+     * @param observableValue The source `ObservableValue`
      *
-     * @return A {@code StringExpression} that wraps the {@code ObservableValue} if necessary
+     * @return A `StringExpression` that wraps the `ObservableValue` if necessary
      */
     fun convert(observableValue: ObservableValue<*>): StringExpression {
         return StringFormatter.convert(observableValue)
     }
 
     /**
-     * Returns a {@link StringExpression} that holds the value of the concatenation of multiple {@code Objects}.
+     * Returns a [StringExpression] that holds the value of the concatenation of multiple `Objects`.
      *
-     * If one of the arguments implements {@link ObservableValue} and the value of this {@code ObservableValue} changes,
-     * the change is automatically reflected in the {@code StringExpression}.
+     * If one of the arguments implements [ObservableValue] and the value of this `ObservableValue` changes, the change
+     * is automatically reflected in the `StringExpression`.
      *
-     * If {@code null} or an empty array is passed to this method, a {@code StringExpression} that contains an empty
-     * {@code String} is returned
+     * If `null` or an empty array is passed to this method, a `StringExpression` that contains an empty `String` is
+     * returned
      *
-     * @param args
-     *         the {@code Objects} that should be concatenated
+     * @param args the `Objects` that should be concatenated
      *
-     * @return the new {@code StringExpression}
+     * @return the new `StringExpression`
      */
     fun concat(vararg args: Any): StringExpression {
         return StringFormatter.concat(*args)
     }
 
     /**
-     * Creates a {@link StringExpression} that holds the value of multiple {@code Objects} formatted according to a
-     * format {@code String}.
-     * <p>
-     * If one of the arguments implements {@link ObservableValue} and the value of this {@code ObservableValue} changes,
-     * the change is automatically reflected in the {@code StringExpression}.
-     * <p>
-     * See {@link java.util.Formatter} for formatting rules.
+     * Creates a [StringExpression] that holds the value of multiple `Objects` formatted according to a format `String`.
      *
-     * @param format
-     *         the formatting {@code String}
-     * @param args
-     *         the {@code Objects} that should be inserted in the formatting {@code String}
+     * If one of the arguments implements [ObservableValue] and the value of this `ObservableValue` changes, the change
+     * is automatically reflected in the `StringExpression`.
      *
-     * @return the new {@code StringExpression}
+     * See [java.util.Formatter] for formatting rules.
+     *
+     * @param format the formatting `String`
+     * @param args the `Objects` that should be inserted in the formatting `String`
+     *
+     * @return the new `StringExpression`
      */
     fun format(format: String, vararg args: Any): StringExpression {
         return StringFormatter.format(format, *args)
     }
 
     /**
-     * Creates a {@link StringExpression} that holds the value of multiple {@code Objects} formatted according to a
-     * format {@code String} and a specified {@code Locale}
-     * <p>
-     * If one of the arguments implements {@link ObservableValue} and the value of this {@code ObservableValue} changes,
-     * the change is automatically reflected in the {@code StringExpression}.
-     * <p>
-     * See {@link java.util.Formatter} for formatting rules. See {@link Locale} for details on {@code Locale}.
+     * Creates a [StringExpression] that holds the value of multiple `Objects` formatted according to a format `String`
+     * and a specified `Locale`
      *
-     * @param locale
-     *         the {@code Locale} to use during formatting
-     * @param format
-     *         the formatting {@code String}
-     * @param args
-     *         the {@code Objects} that should be inserted in the formatting {@code String}
+     * If one of the arguments implements [ObservableValue] and the value of this `ObservableValue` changes, the change
+     * is automatically reflected in the `StringExpression`.
      *
-     * @return the new {@code StringExpression}
+     * See [java.util.Formatter] for formatting rules. See [Locale] for details on `Locale`.
+     *
+     * @param locale the `Locale` to use during formatting
+     * @param format the formatting `String`
+     * @param args the `Objects` that should be inserted in the formatting `String`
+     *
+     * @return the new `StringExpression`
      */
     fun format(locale: Locale, format: String, vararg args: Any): StringExpression {
         return StringFormatter.format(locale, format, *args)
@@ -398,20 +567,606 @@ object Bindings {
     }
 
     /**
-     * Creates a new {@link BooleanBinding} that holds {@code true} if the values of two instances of {@link
-     * ObservableStringValue} are equal.
-     * <p>
-     * Note: In this comparison a {@code String} that is {@code null} is considered equal to an empty {@code String}.
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableStringValue] are
+     * equal.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
      *
-     * @return the new {@code BooleanBinding}
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
      */
-    fun equals(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+    fun equal(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
         return equal(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is equal to a constant
+     * value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return equal(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is equal to a constant
+     * value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return equal(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun notEqual(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Boolean {
+                val s1: String = getStringSafe(op1.get())
+                val s2: String = getStringSafe(op2.get())
+                return s1 != s2
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0]) else
+                    ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableStringValue] are
+     * not equal.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return notEqual(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is not equal to a
+     * constant value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return notEqual(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is not equal to a
+     * constant value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return notEqual(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun equalIgnoreCase(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Boolean {
+                val s1: String = getStringSafe(op1.get())
+                val s2: String = getStringSafe(op2.get())
+                return s1.equals(s2, true)
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0]) else
+                    ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableStringValue] are
+     * equal ignoring case.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equalIgnoreCase(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return equalIgnoreCase(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is equal to a constant
+     * value ignoring case.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equalIgnoreCase(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return equalIgnoreCase(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is equal to a constant
+     * value ignoring case.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equalIgnoreCase(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return equalIgnoreCase(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun notEqualIgnoreCase(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Boolean {
+                val s1: String = getStringSafe(op1.get())
+                val s2: String = getStringSafe(op2.get())
+                return !s1.equals(s2, true)
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0]) else
+                    ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableStringValue] are
+     * not equal ignoring case.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqualIgnoreCase(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return notEqualIgnoreCase(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is not equal to a
+     * constant value ignoring case.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqualIgnoreCase(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return notEqualIgnoreCase(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is not equal to a
+     * constant value ignoring case.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqualIgnoreCase(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return notEqualIgnoreCase(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun greaterThan(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Boolean {
+                val s1: String = getStringSafe(op1.get())
+                val s2: String = getStringSafe(op2.get())
+                return s1 > s2
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0]) else
+                    ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableStringValue] is greater
+     * than the value of the second.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return greaterThan(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is greater than a
+     * constant value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return greaterThan(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a constant value is greater than the value of a
+     * [ObservableStringValue].
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return greaterThan(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun lessThan(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        return greaterThan(op2, op1, *dependencies)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableStringValue] is less than
+     * the value of the second.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return lessThan(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is less than a
+     * constant value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return lessThan(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a constant value is less than the value of a
+     * [ObservableStringValue].
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return lessThan(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun greaterThanOrEqual(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Boolean {
+                val s1: String = getStringSafe(op1.get())
+                val s2: String = getStringSafe(op2.get())
+                return s1 >= s2
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0]) else
+                    ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableStringValue] is greater
+     * than or equal to the value of the second.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return greaterThanOrEqual(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is greater than or
+     * equal to a constant value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return greaterThanOrEqual(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a constant value is greater than or equal to the
+     * value of a [ObservableStringValue].
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return greaterThanOrEqual(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    private fun lessThanOrEqual(op1: ObservableStringValue, op2: ObservableStringValue,
+            vararg dependencies: Observable): BooleanBinding {
+        return greaterThanOrEqual(op2, op1, *dependencies)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableStringValue] is less than
+     * or equal to the value of the second.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the first operand
+     * @param op2 the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
+        return lessThan(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is less than or equal
+     * to a constant value.
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the `ObservableStringValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableStringValue, op2: String?): BooleanBinding {
+        return lessThanOrEqual(op1, StringConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a constant value is less than or equal to the
+     * value of a [ObservableStringValue].
+     *
+     * Note: In this comparison a `String` that is `null` is considered equal to an empty `String`.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: String?, op2: ObservableStringValue): BooleanBinding {
+        return lessThanOrEqual(StringConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [IntegerBinding] that holds the length of a `ObservableStringValue`.
+     *
+     * Note: In this comparison a `String` that is `null` is considered to have a length of `0`
+     *
+     * @param op the `ObservableStringValue`
+     *
+     * @return the new `IntegerBinding`
+     *
+     * @since JavaFX 8.0
+     */
+    fun length(op: ObservableStringValue): IntegerBinding {
+        return object : IntegerBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                return getStringSafe(op.get()).length
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is empty.
+     *
+     * Note: In this comparison a `String` that is `null` is considered to be empty.
+     *
+     * @param op the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @since JavaFX 8.0
+     */
+    fun isEmpty(op: ObservableStringValue): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return getStringSafe(op.get()).isEmpty()
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableStringValue] is not empty.
+     *
+     * Note: In this comparison a `String` that is `null` is considered to be empty.
+     *
+     * @param op the `ObservableStringValue`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @since JavaFX 8.0
+     */
+    fun isNotEmpty(op: ObservableStringValue): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return getStringSafe(op.get()).isNotEmpty()
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
     }
 
     // Object
@@ -450,10 +1205,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableObjectValue] are
      * equal.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -465,10 +1218,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of an [ObservableObjectValue] is equal to a
      * constant value.
      *
-     * @param op1
-     *         the {@code ObservableCharacterValue}
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableCharacterValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -480,10 +1231,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of an [ObservableObjectValue] is equal to a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the {@code ObservableCharacterValue}
+     * @param op1 the constant value
+     * @param op2 the `ObservableCharacterValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -523,10 +1272,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableObjectValue] are
      * not equal.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -538,10 +1285,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of an [ObservableObjectValue] is not equal to a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableObjectValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableObjectValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -553,10 +1298,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of an [ObservableObjectValue] is not equal to a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableObjectValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableObjectValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -567,8 +1310,7 @@ object Bindings {
     /**
      * Creates a new [BooleanBinding] that holds `true` if the value of an [ObservableObjectValue] is `null`.
      *
-     * @param op
-     *         the `ObservableObjectValue`
+     * @param op the `ObservableObjectValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -597,8 +1339,7 @@ object Bindings {
     /**
      * Creates a new [BooleanBinding] that holds `true` if the value of an [ObservableObjectValue] is not `null`.
      *
-     * @param op
-     *         the `ObservableObjectValue`
+     * @param op the `ObservableObjectValue`
      *
      * @return the new `BooleanBinding`
      */
