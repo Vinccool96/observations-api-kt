@@ -33,6 +33,76 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.divide(this, other)
     }
 
+    // ===============================================================
+    // IsEqualTo
+
+    override fun isEqualTo(other: ObservableNumberValue): BooleanBinding {
+        return Bindings.equal(this, other)
+    }
+
+    override fun isEqualTo(other: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
+    override fun isEqualTo(other: Double, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
+    override fun isEqualTo(other: Float, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
+    override fun isEqualTo(other: Long): BooleanBinding {
+        return Bindings.equal(this, other)
+    }
+
+    override fun isEqualTo(other: Long, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
+    override fun isEqualTo(other: Int): BooleanBinding {
+        return Bindings.equal(this, other)
+    }
+
+    override fun isEqualTo(other: Int, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
+    // ===============================================================
+    // IsNotEqualTo
+
+    override fun isNotEqualTo(other: ObservableNumberValue): BooleanBinding {
+        return Bindings.notEqual(this, other)
+    }
+
+    override fun isNotEqualTo(other: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
+    override fun isNotEqualTo(other: Double, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
+    override fun isNotEqualTo(other: Float, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
+    override fun isNotEqualTo(other: Long): BooleanBinding {
+        return Bindings.notEqual(this, other)
+    }
+
+    override fun isNotEqualTo(other: Long, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
+    override fun isNotEqualTo(other: Int): BooleanBinding {
+        return Bindings.notEqual(this, other)
+    }
+
+    override fun isNotEqualTo(other: Int, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
     companion object {
 
         /**

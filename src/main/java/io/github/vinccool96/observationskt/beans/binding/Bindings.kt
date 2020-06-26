@@ -11,7 +11,9 @@ import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableLi
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.math.abs
 
+@Suppress("DuplicatedCode")
 object Bindings {
 
     // Bidirectional Bindings
@@ -842,7 +844,7 @@ object Bindings {
                 }
 
                 override fun computeValue(): Double {
-                    return op1.doubleValue * op2.doubleValue
+                    return op1.doubleValue / op2.doubleValue
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -862,7 +864,7 @@ object Bindings {
                 }
 
                 override fun computeValue(): Float {
-                    return op1.floatValue * op2.floatValue
+                    return op1.floatValue / op2.floatValue
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -882,7 +884,7 @@ object Bindings {
                 }
 
                 override fun computeValue(): Long {
-                    return op1.longValue * op2.longValue
+                    return op1.longValue / op2.longValue
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -902,7 +904,7 @@ object Bindings {
                 }
 
                 override fun computeValue(): Int {
-                    return op1.intValue * op2.intValue
+                    return op1.intValue / op2.intValue
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -1045,6 +1047,734 @@ object Bindings {
      */
     fun divide(op1: Int, op2: ObservableNumberValue): NumberBinding {
         return divide(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Equals
+
+    private fun equal(op1: ObservableNumberValue, op2: ObservableNumberValue, epsilon: Double,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.doubleValue - op2.doubleValue) <= epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.floatValue - op2.floatValue) <= epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.longValue - op2.longValue) <= epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.intValue - op2.intValue) <= epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableNumberValue] are
+     * equal (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(op1, op2, epsilon, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableNumberValue] are
+     * equal.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: ObservableNumberValue): BooleanBinding {
+        return equal(op1, op2, 0.0, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Double, epsilon: Double): BooleanBinding {
+        return equal(op1, DoubleConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Double, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(DoubleConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Float, epsilon: Double): BooleanBinding {
+        return equal(op1, FloatConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Float, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(FloatConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Long, epsilon: Double): BooleanBinding {
+        return equal(op1, LongConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Long, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(LongConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Long): BooleanBinding {
+        return equal(op1, LongConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Long, op2: ObservableNumberValue): BooleanBinding {
+        return equal(LongConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Int, epsilon: Double): BooleanBinding {
+        return equal(op1, IntegerConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Int, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(IntegerConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Int): BooleanBinding {
+        return equal(op1, IntegerConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Int, op2: ObservableNumberValue): BooleanBinding {
+        return equal(IntegerConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
+    // =================================================================================================================
+    // Not Equal
+
+    private fun notEqual(op1: ObservableNumberValue, op2: ObservableNumberValue, epsilon: Double,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.doubleValue - op2.doubleValue) > epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.floatValue - op2.floatValue) > epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.longValue - op2.longValue) > epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return abs(op1.intValue - op2.intValue) > epsilon
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableNumberValue] are
+     * not equal (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(op1, op2, epsilon, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the values of two instances of [ObservableNumberValue] are
+     * not equal.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: ObservableNumberValue): BooleanBinding {
+        return notEqual(op1, op2, 0.0, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Double, epsilon: Double): BooleanBinding {
+        return notEqual(op1, DoubleConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Double, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(DoubleConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Float, epsilon: Double): BooleanBinding {
+        return notEqual(op1, FloatConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Float, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(FloatConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Long, epsilon: Double): BooleanBinding {
+        return notEqual(op1, LongConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Long, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(LongConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Long): BooleanBinding {
+        return notEqual(op1, LongConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Long, op2: ObservableNumberValue): BooleanBinding {
+        return notEqual(LongConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Int, epsilon: Double): BooleanBinding {
+        return notEqual(op1, IntegerConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     * @param epsilon
+     *         the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Int, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(IntegerConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Int): BooleanBinding {
+        return notEqual(op1, IntegerConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Int, op2: ObservableNumberValue): BooleanBinding {
+        return notEqual(IntegerConstant.valueOf(op1), op2, 0.0, op2)
     }
 
     // boolean

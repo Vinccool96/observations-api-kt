@@ -237,236 +237,236 @@ interface NumberExpression : ObservableNumberValue {
      */
     operator fun div(other: Int): NumberBinding
 
-//    // ===============================================================
-//    // IsEqualTo
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are equal.
-//     *
-//     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
-//     * tolerance.
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: ObservableNumberValue): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are equal (with a
-//     * tolerance).
-//     *
-//     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     * @param epsilon the tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: ObservableNumberValue, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
-//     * tolerance).
-//     *
-//     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: Double, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
-//     * tolerance).
-//     *
-//     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: Float, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
-//     *
-//     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
-//     * tolerance.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: Long): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
-//     * tolerance).
-//     *
-//     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: Long, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
-//     *
-//     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
-//     * tolerance.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: Int): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
-//     * tolerance).
-//     *
-//     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isEqualTo(other: Int, epsilon: Double): BooleanBinding
-//
-//    // ===============================================================
-//    // IsNotEqualTo
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue]
-//     * are not equal.
-//     *
-//     *
-//     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
-//     * tolerance.
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: ObservableNumberValue): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are not equal (with a tolerance).
-//     *
-//     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: ObservableNumberValue, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
-//     * (with a tolerance).
-//     *
-//     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: Double, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
-//     * (with a tolerance).
-//     *
-//     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: Float, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value.
-//     *
-//     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
-//     * tolerance.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: Long): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
-//     * (with a tolerance).
-//     *
-//     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: Long, epsilon: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a
-//     * constant value.
-//     *
-//     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
-//     * tolerance.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: Int): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
-//     * (with a tolerance).
-//     *
-//     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
-//     *
-//     * Allowing a small tolerance is recommended when comparing floating-point numbers.
-//     *
-//     * @param other the constant value
-//     * @param epsilon the permitted tolerance
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun isNotEqualTo(other: Int, epsilon: Double): BooleanBinding
-//
+    // ===============================================================
+    // IsEqualTo
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are equal.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: ObservableNumberValue): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are equal (with a
+     * tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param other the second `ObservableNumberValue`
+     * @param epsilon the tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: ObservableNumberValue, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
+     * tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Double, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
+     * tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Float, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Long): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
+     * tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Long, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Int): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
+     * tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Int, epsilon: Double): BooleanBinding
+
+    // ===============================================================
+    // IsNotEqualTo
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue]
+     * are not equal.
+     *
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: ObservableNumberValue): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are not equal (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param other the second `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: ObservableNumberValue, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
+     * (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Double, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
+     * (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Float, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Long): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
+     * (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Long, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a
+     * constant value.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Int): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
+     * (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Int, epsilon: Double): BooleanBinding
+
 //    // ===============================================================
 //    // IsGreaterThan
 //
