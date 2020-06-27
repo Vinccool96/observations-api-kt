@@ -1777,6 +1777,742 @@ object Bindings {
         return notEqual(IntegerConstant.valueOf(op1), op2, 0.0, op2)
     }
 
+    // =================================================================================================================
+    // Greater Than
+
+    private fun greaterThan(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.doubleValue > op2.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.floatValue > op2.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.longValue > op2.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.intValue > op2.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is greater
+     * than the value of the second.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: Double): BooleanBinding {
+        return greaterThan(op1, DoubleConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: Double, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(DoubleConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: Float): BooleanBinding {
+        return greaterThan(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: Float, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: Long): BooleanBinding {
+        return greaterThan(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: Long, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: Int): BooleanBinding {
+        return greaterThan(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: Int, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Less Than
+
+    private fun lessThan(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): BooleanBinding {
+        return greaterThan(op2, op1, *dependencies)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is less than
+     * the value of the second.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: Double): BooleanBinding {
+        return lessThan(op1, DoubleConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: Double, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(DoubleConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: Float): BooleanBinding {
+        return lessThan(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: Float, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: Long): BooleanBinding {
+        return lessThan(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: Long, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: Int): BooleanBinding {
+        return lessThan(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: Int, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Greater Than or Equal
+
+    private fun greaterThanOrEqual(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): BooleanBinding {
+        require(dependencies.isNotEmpty())
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.doubleValue >= op2.doubleValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.floatValue >= op2.floatValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.longValue >= op2.longValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : BooleanBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Boolean {
+                    return op1.intValue >= op2.intValue
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is greater
+     * than or equal to the value of the second.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
+     * equal to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Double): BooleanBinding {
+        return greaterThanOrEqual(op1, DoubleConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: Double, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(DoubleConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
+     * equal to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Float): BooleanBinding {
+        return greaterThanOrEqual(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: Float, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
+     * equal to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Long): BooleanBinding {
+        return greaterThanOrEqual(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: Long, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
+     * equal to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Int): BooleanBinding {
+        return greaterThanOrEqual(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: Int, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Less Than or Equal
+
+    private fun lessThanOrEqual(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): BooleanBinding {
+        return greaterThanOrEqual(op2, op1, *dependencies)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is less than
+     * or equal to the value of the second.
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
+     * to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: Double): BooleanBinding {
+        return lessThanOrEqual(op1, DoubleConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: Double, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(DoubleConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
+     * to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: Float): BooleanBinding {
+        return lessThanOrEqual(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: Float, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
+     * to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: Long): BooleanBinding {
+        return lessThanOrEqual(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: Long, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
+     * to a constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: Int): BooleanBinding {
+        return lessThanOrEqual(op1, IntegerConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: Int, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(IntegerConstant.valueOf(op1), op2, op2)
+    }
+
     // boolean
     // =================================================================================================================
 
