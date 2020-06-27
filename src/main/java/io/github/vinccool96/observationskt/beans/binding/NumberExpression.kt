@@ -1,6 +1,7 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
+import java.util.*
 
 /**
  * A `NumberExpression` is a [ObservableNumberValue] plus additional convenience methods to generate bindings in a
@@ -682,47 +683,47 @@ interface NumberExpression : ObservableNumberValue {
      */
     fun lessThanOrEqualTo(other: Int): BooleanBinding
 
-//    // ===============================================================
-//    // String conversions
-//
-//    /**
-//     * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
-//     * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
-//     *
-//     *
-//     * The conversion is done without any formatting applied.
-//     *
-//     * @return the new `StringBinding`
-//     */
-//    fun asString(): StringBinding
-//
-//    /**
-//     * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
-//     * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
-//     *
-//     * The result is formatted according to the formatting `String`. See [java.util.Formatter] for formatting rules.
-//     *
-//     * @param format
-//     * the formatting `String`
-//     *
-//     * @return the new `StringBinding`
-//     */
-//    fun asString(format: String): StringBinding
-//
-//    /**
-//     * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
-//     * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
-//     *
-//     * The result is formatted according to the formatting `String` and the passed in `Locale`. See
-//     * [java.util.Formatter] for formatting rules. See [Locale] for details on `Locale`.
-//     *
-//     * @param locale the Locale
-//     * @param format the formatting `String`
-//     *
-//     * @return the new `StringBinding`
-//     *
-//     * @see Locale
-//     */
-//    fun asString(locale: Locale, format: String): StringBinding
+    // ===============================================================
+    // String conversions
+
+    /**
+     * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
+     * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
+     *
+     *
+     * The conversion is done without any formatting applied.
+     *
+     * @return the new `StringBinding`
+     */
+    fun asString(): StringBinding
+
+    /**
+     * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
+     * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
+     *
+     * The result is formatted according to the formatting `String`. See [java.util.Formatter] for formatting rules.
+     *
+     * @param format
+     * the formatting `String`
+     *
+     * @return the new `StringBinding`
+     */
+    fun asString(format: String): StringBinding
+
+    /**
+     * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
+     * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
+     *
+     * The result is formatted according to the formatting `String` and the passed in `Locale`. See
+     * [java.util.Formatter] for formatting rules. See [Locale] for details on `Locale`.
+     *
+     * @param locale the Locale
+     * @param format the formatting `String`
+     *
+     * @return the new `StringBinding`
+     *
+     * @see Locale
+     */
+    fun asString(locale: Locale, format: String): StringBinding
 
 }

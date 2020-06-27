@@ -1,16 +1,17 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.value.ObservableIntegerValue
+import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 
 /**
- * A {@code IntegerExpression} is a {@link ObservableIntegerValue} plus additional convenience methods to generate
- * bindings in a fluent style.
+ * A `IntegerExpression` is a [ObservableIntegerValue] plus additional convenience methods to generate bindings in a
+ * fluent style.
  *
- * A concrete sub-class of {@code IntegerExpression} has to implement the method [get],
- * which provides the actual value of this expression.
+ * A concrete sub-class of `IntegerExpression` has to implement the method [get], which provides the actual value of
+ * this expression.
  *
  * @since JavaFX 2.0
  */
@@ -99,16 +100,42 @@ abstract class IntegerExpression : NumberExpressionBase(), ObservableIntegerValu
         return Bindings.divide(this, other) as IntegerBinding
     }
 
+    /**
+     * Creates an [ObjectExpression] that holds the value of this `IntegerExpression`. If the value of this
+     * `IntegerExpression` changes, the value of the `ObjectExpression` will be updated automatically.
+     *
+     * @return the new `ObjectExpression`
+     *
+     * @since JavaFX 8.0
+     */
+    fun asObject(): ObjectExpression<Int> {
+        return object : ObjectBinding<Int>() {
+
+            init {
+                super.bind(this@IntegerExpression)
+            }
+
+            override fun dispose() {
+                super.unbind(this@IntegerExpression)
+            }
+
+            override fun computeValue(): Int {
+                return this@IntegerExpression.value
+            }
+
+        }
+    }
+
     companion object {
 
         /**
-         * Returns a {@code IntegerExpression} that wraps a {@link ObservableIntegerValue}. If the {@code
-         * ObservableIntegerValue} is already a {@code IntegerExpression}, it will be returned. Otherwise a new {@link
-         * IntegerBinding} is created that is bound to the {@code ObservableIntegerValue}.
+         * Returns a `IntegerExpression` that wraps a [ObservableIntegerValue]. If the `ObservableIntegerValue` is
+         * already a `IntegerExpression`, it will be returned. Otherwise a new [IntegerBinding] is created that is bound
+         * to the `ObservableIntegerValue`.
          *
-         * @param value The source {@code ObservableIntegerValue}
+         * @param value The source `ObservableIntegerValue`
          *
-         * @return A {@code IntegerExpression} that wraps the {@code ObservableIntegerValue} if necessary
+         * @return A `IntegerExpression` that wraps the `ObservableIntegerValue` if necessary
          */
         fun integerExpression(value: ObservableIntegerValue): IntegerExpression {
             return if (value is IntegerExpression) value else object : IntegerBinding() {
@@ -127,6 +154,55 @@ abstract class IntegerExpression : NumberExpressionBase(), ObservableIntegerValu
 
                 @get:ReturnsUnmodifiableCollection
                 override val dependencies: ObservableList<*>
+                    get() = ObservableCollections.singletonObservableList(value)
+
+            }
+        }
+
+        /**
+         * Returns an `IntegerExpression` that wraps an [ObservableValue]. If the `ObservableValue` is already an
+         * `IntegerExpression`, it will be returned. Otherwise a new [IntegerBinding] is created that is bound to the
+         * `ObservableValue`.
+         *
+         * Note: this method can be used to convert an [ObjectExpression] or
+         * [io.github.vinccool96.observationskt.beans.property.ObjectProperty] of specific number type to
+         * `IntegerExpression`, which is essentially an `ObservableValue<Number>`. See sample below.
+         *
+         * ```
+         * val intProperty: IntegerProperty = SimpleIntegerProperty(1)
+         * val objectProperty: ObjectProperty<Int> = new SimpleObjectProperty(2)
+         * val binding: BooleanBinding = intProperty.greaterThan(IntegerExpression.integerExpression(objectProperty))
+         * ```
+         *
+         * Note: null values will be interpreted as `0`
+         *
+         * @param value
+         *         The source `ObservableValue`
+         * @param T
+         *         The type of the wrapped number
+         *
+         * @return An `IntegerExpression` that wraps the `ObservableValue` if necessary
+         *
+         * @since JavaFX 8.0
+         */
+        fun <T : Number?> integerExpression(value: ObservableValue<T>): IntegerExpression {
+            return if (value is IntegerExpression) value else object : IntegerBinding() {
+
+                init {
+                    super.bind(value)
+                }
+
+                override fun dispose() {
+                    super.unbind(value)
+                }
+
+                override fun computeValue(): Int {
+                    val v: T = value.value
+                    return v?.toInt() ?: 0
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<ObservableValue<T>>
                     get() = ObservableCollections.singletonObservableList(value)
 
             }
