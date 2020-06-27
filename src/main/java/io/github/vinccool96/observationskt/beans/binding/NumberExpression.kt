@@ -467,221 +467,221 @@ interface NumberExpression : ObservableNumberValue {
      */
     fun isNotEqualTo(other: Int, epsilon: Double): BooleanBinding
 
-//    // ===============================================================
-//    // IsGreaterThan
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `BooleanBinding`
-//     *
-//     * @throws NullPointerException
-//     * if the other `ObservableNumberValue` is `null`
-//     */
-//    fun greaterThan(other: ObservableNumberValue): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThan(other: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThan(other: Float): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThan(other: Long): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThan(other: Int): BooleanBinding
-//
-//    // ===============================================================
-//    // IsLesserThan
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than another [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `BooleanBinding`
-//     *
-//     * @throws NullPointerException
-//     * if the other `ObservableNumberValue` is `null`
-//     */
-//    fun lessThan(other: ObservableNumberValue): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThan(other: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThan(other: Float): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThan(other: Long): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThan(other: Int): BooleanBinding
-//
-//    // ===============================================================
-//    // IsGreaterThanOrEqualTo
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `BooleanBinding`
-//     *
-//     * @throws NullPointerException
-//     * if the other `ObservableNumberValue` is `null`
-//     */
-//    fun greaterThanOrEqualTo(other: ObservableNumberValue): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
-//     * constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThanOrEqualTo(other: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
-//     * constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThanOrEqualTo(other: Float): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
-//     * constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThanOrEqualTo(other: Long): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
-//     * constant value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun greaterThanOrEqualTo(other: Int): BooleanBinding
-//
-//    // ===============================================================
-//    // IsLessThanOrEqualTo
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to another
-//     * [ObservableNumberValue].
-//     *
-//     * @param other the second `ObservableNumberValue`
-//     *
-//     * @return the new `BooleanBinding`
-//     *
-//     * @throws NullPointerException
-//     * if the other `ObservableNumberValue` is `null`
-//     */
-//    fun lessThanOrEqualTo(other: ObservableNumberValue): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
-//     * value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThanOrEqualTo(other: Double): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
-//     * value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThanOrEqualTo(other: Float): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
-//     * value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThanOrEqualTo(other: Long): BooleanBinding
-//
-//    /**
-//     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
-//     * value.
-//     *
-//     * @param other the constant value
-//     *
-//     * @return the new `BooleanBinding`
-//     */
-//    fun lessThanOrEqualTo(other: Int): BooleanBinding
-//
+    // ===============================================================
+    // IsGreaterThan
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @throws NullPointerException
+     * if the other `ObservableNumberValue` is `null`
+     */
+    fun greaterThan(other: ObservableNumberValue): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(other: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(other: Float): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(other: Long): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(other: Int): BooleanBinding
+
+    // ===============================================================
+    // IsLesserThan
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than another [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @throws NullPointerException
+     * if the other `ObservableNumberValue` is `null`
+     */
+    fun lessThan(other: ObservableNumberValue): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(other: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(other: Float): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(other: Long): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(other: Int): BooleanBinding
+
+    // ===============================================================
+    // IsGreaterThanOrEqualTo
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @throws NullPointerException
+     * if the other `ObservableNumberValue` is `null`
+     */
+    fun greaterThanOrEqualTo(other: ObservableNumberValue): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
+     * constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqualTo(other: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
+     * constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqualTo(other: Float): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
+     * constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqualTo(other: Long): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
+     * constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqualTo(other: Int): BooleanBinding
+
+    // ===============================================================
+    // IsLessThanOrEqualTo
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to another
+     * [ObservableNumberValue].
+     *
+     * @param other the second `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @throws NullPointerException
+     * if the other `ObservableNumberValue` is `null`
+     */
+    fun lessThanOrEqualTo(other: ObservableNumberValue): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
+     * value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqualTo(other: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
+     * value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqualTo(other: Float): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
+     * value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqualTo(other: Long): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
+     * value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqualTo(other: Int): BooleanBinding
+
 //    // ===============================================================
 //    // String conversions
 //

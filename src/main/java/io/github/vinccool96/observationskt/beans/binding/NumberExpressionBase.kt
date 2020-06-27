@@ -103,6 +103,98 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.notEqual(this, other, epsilon)
     }
 
+    // ===============================================================
+    // IsGreaterThan
+
+    override fun greaterThan(other: ObservableNumberValue): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    override fun greaterThan(other: Double): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    override fun greaterThan(other: Float): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    override fun greaterThan(other: Long): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    override fun greaterThan(other: Int): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    // ===============================================================
+    // IsLessThan
+
+    override fun lessThan(other: ObservableNumberValue): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
+    override fun lessThan(other: Double): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
+    override fun lessThan(other: Float): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
+    override fun lessThan(other: Long): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
+    override fun lessThan(other: Int): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
+    // ===============================================================
+    // IsGreaterThanOrEqualTo
+
+    override fun greaterThanOrEqualTo(other: ObservableNumberValue): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
+    override fun greaterThanOrEqualTo(other: Double): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
+    override fun greaterThanOrEqualTo(other: Float): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
+    override fun greaterThanOrEqualTo(other: Long): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
+    override fun greaterThanOrEqualTo(other: Int): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
+    // ===============================================================
+    // IsLessThanOrEqualTo
+
+    override fun lessThanOrEqualTo(other: ObservableNumberValue): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
+    override fun lessThanOrEqualTo(other: Double): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
+    override fun lessThanOrEqualTo(other: Float): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
+    override fun lessThanOrEqualTo(other: Long): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
+    override fun lessThanOrEqualTo(other: Int): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
     companion object {
 
         /**
