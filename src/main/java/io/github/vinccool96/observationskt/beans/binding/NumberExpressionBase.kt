@@ -1,6 +1,8 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.value.*
+import io.github.vinccool96.observationskt.sun.binding.StringFormatter
+import java.util.*
 
 /**
  * A {@code NumberExpressionBase} contains convenience methods to generate bindings in a fluent style, that are common
@@ -193,6 +195,21 @@ abstract class NumberExpressionBase : NumberExpression {
 
     override fun lessThanOrEqualTo(other: Int): BooleanBinding {
         return Bindings.lessThanOrEqual(this, other)
+    }
+
+    // ===============================================================
+    // String conversions
+
+    override fun asString(): StringBinding {
+        return StringFormatter.convert(this) as StringBinding
+    }
+
+    override fun asString(format: String): StringBinding {
+        return Bindings.format(format, this) as StringBinding
+    }
+
+    override fun asString(locale: Locale, format: String): StringBinding {
+        return Bindings.format(locale, format, this) as StringBinding
     }
 
     companion object {
