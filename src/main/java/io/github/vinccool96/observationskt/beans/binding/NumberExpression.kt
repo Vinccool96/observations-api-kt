@@ -370,7 +370,8 @@ interface NumberExpression : ObservableNumberValue {
     fun isNotEqualTo(other: ObservableNumberValue): BooleanBinding
 
     /**
-     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are not equal (with a tolerance).
+     * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are not equal (with
+     * a tolerance).
      *
      * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
      *
@@ -524,7 +525,8 @@ interface NumberExpression : ObservableNumberValue {
     // IsLesserThan
 
     /**
-     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than another [ObservableNumberValue].
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than another
+     * [ObservableNumberValue].
      *
      * @param other the second `ObservableNumberValue`
      *
