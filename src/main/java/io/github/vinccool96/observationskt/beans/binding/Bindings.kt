@@ -64,6 +64,10 @@ object Bindings {
         BidirectionalBinding.unbind(property1, property2)
     }
 
+    fun unbindBidirectional(property1: Any, property2: Any) {
+        BidirectionalBinding.unbind(property1, property2)
+    }
+
     // Numbers
     // =================================================================================================================
 

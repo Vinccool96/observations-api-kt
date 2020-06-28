@@ -29,7 +29,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Float
+    override val value: Number
         get() = this.get()
 
     override fun negate(): FloatBinding {
@@ -108,7 +108,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
      *
      * @since JavaFX 8.0
      */
-    fun asObject(): ObjectBinding<Float> {
+    open fun asObject(): ObjectExpression<Float> {
         return object : ObjectBinding<Float>() {
 
             init {
@@ -120,7 +120,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
             }
 
             override fun computeValue(): Float {
-                return this@FloatExpression.value
+                return this@FloatExpression.floatValue
             }
 
         }

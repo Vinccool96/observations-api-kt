@@ -30,7 +30,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
     override val doubleValue: Double
         get() = this.get()
 
-    override val value: Double
+    override val value: Number
         get() = this.get()
 
     override fun negate(): DoubleBinding {
@@ -125,7 +125,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
      *
      * @since JavaFX 8.0
      */
-    fun asObject(): ObjectExpression<Double> {
+    open fun asObject(): ObjectExpression<Double> {
         return object : ObjectBinding<Double>() {
 
             init {
@@ -137,7 +137,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
             }
 
             override fun computeValue(): Double {
-                return this@DoubleExpression.value
+                return this@DoubleExpression.doubleValue
             }
 
         }

@@ -20,7 +20,7 @@ abstract class ReadOnlyStringProperty : StringExpression(), ReadOnlyProperty<Str
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("ReadOnlyObjectProperty [")
+        val result = StringBuilder("ReadOnlyStringProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -28,7 +28,7 @@ abstract class ReadOnlyStringProperty : StringExpression(), ReadOnlyProperty<Str
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
-        return super.toString()
+        return result.toString()
     }
 
 }

@@ -29,7 +29,7 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Long
+    override val value: Number
         get() = this.get()
 
     override fun negate(): LongBinding {
@@ -108,7 +108,7 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
      *
      * @since JavaFX 8.0
      */
-    fun asObject(): ObjectExpression<Long> {
+    open fun asObject(): ObjectExpression<Long> {
         return object : ObjectBinding<Long>() {
 
             init {
@@ -120,7 +120,7 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
             }
 
             override fun computeValue(): Long {
-                return this@LongExpression.value
+                return this@LongExpression.longValue
             }
 
         }
