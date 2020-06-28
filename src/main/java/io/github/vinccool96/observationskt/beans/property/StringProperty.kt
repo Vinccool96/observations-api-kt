@@ -43,7 +43,7 @@ abstract class StringProperty : ReadOnlyStringProperty(), Property<String?>, Wri
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("ObjectProperty [")
+        val result = StringBuilder("StringProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -51,7 +51,7 @@ abstract class StringProperty : ReadOnlyStringProperty(), Property<String?>, Wri
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
-        return super.toString()
+        return result.toString()
     }
 
 }

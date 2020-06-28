@@ -57,7 +57,7 @@ abstract class ObjectProperty<T> : ReadOnlyObjectProperty<T>(), Property<T>, Wri
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
-        return super.toString()
+        return result.toString()
     }
 
 }

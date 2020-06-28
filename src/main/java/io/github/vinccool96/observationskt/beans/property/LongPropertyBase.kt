@@ -2,38 +2,42 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
+import io.github.vinccool96.observationskt.beans.binding.LongBinding
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
+import io.github.vinccool96.observationskt.beans.value.ObservableLongValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 import java.lang.ref.WeakReference
 
 /**
- * The class `ObjectPropertyBase` is the base class for a property wrapping an arbitrary `Object`.
+ * The class `LongPropertyBase` is the base class for a property wrapping a `Long` value.
  *
  * It provides all the functionality required for a property except for the [bean] and [name] values, which must be
  * implemented by extending classes.
  *
- * @param T the type of the wrapped value
+ * @see LongProperty
+ * @since JavaFX 2.0
  *
- * @see ObjectProperty
- * @since JavaFX 2.
+ * @constructor The constructor of the `LongPropertyBase` that sets an initial value.
  *
- * @constructor The constructor of the `ObjectPropertyBase`.
- *
- * @param initialValue the initial value of the wrapped `Object`
+ * @param initialValue the initial value of the wrapped value
  */
-@Suppress("DuplicatedCode")
-abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
+abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
 
-    private var valueState: T = initialValue
+    private var valueState: Long = initialValue
 
-    private var observable: ObservableValue<out T>? = null
+    private var observable: ObservableLongValue? = null
 
     private var listener: InvalidationListener? = null
 
     private var valid: Boolean = true
 
-    private var helper: ExpressionHelper<T>? = null
+    private var helper: ExpressionHelper<Number>? = null
+
+    /**
+     * The constructor of the `LongPropertyBase`. The initial value is `0L`
+     */
+    constructor() : this(0L)
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
@@ -52,19 +56,19 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in T>) {
+    override fun addListener(listener: ChangeListener<in Number>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in T>) {
+    override fun removeListener(listener: ChangeListener<in Number>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in T>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -73,8 +77,8 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
      * Sends notifications to all attached [InvalidationListeners][InvalidationListener] and
      * [ChangeListeners][ChangeListener].
      *
-     * This method is called when the value is changed, either manually by calling [set] or in case of a bound
-     * property, if the binding becomes invalid.
+     * This method is called when the value is changed, either manually by calling [set] or in case of a bound property,
+     * if the binding becomes invalid.
      */
     protected open fun fireValueChangedEvent() {
         ExpressionHelper.fireValueChangedEvent(this.helper)
@@ -97,19 +101,18 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
     protected open fun invalidated() {
     }
 
-    final override fun get(): T {
+    override fun get(): Long {
         this.valid = true
-        return this.observable?.value ?: this.valueState
+        return this.observable?.get() ?: this.valueState
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun set(value: T) {
+    override fun set(value: Long) {
         if (this.bound) {
             val curBean = this.bean
             throw RuntimeException((if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
                     "A bound value cannot be set.")
         }
-        if (this.valueState !== value) {
+        if (this.valueState != value) {
             this.valueState = value
             markInvalid()
         }
@@ -118,35 +121,49 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out T>) {
-        if (observable != this.observable) {
+    override fun bind(observable: ObservableValue<out Number>) {
+        val newObservable: ObservableLongValue = if (observable is ObservableLongValue) observable
+        else object : LongBinding() {
+
+            init {
+                super.bind(observable)
+            }
+
+            override fun computeValue(): Long {
+                return observable.value.toLong()
+            }
+
+        }
+
+        if (newObservable != observable) {
             unbind()
-            this.observable = observable
+            this.observable = newObservable
             if (this.listener == null) {
                 this.listener = Listener(this)
             }
             this.observable!!.addListener(this.listener!!)
             markInvalid()
         }
+
     }
 
     override fun unbind() {
         if (this.observable != null) {
-            this.valueState = this.observable!!.value
+            this.valueState = this.observable!!.value.toLong()
             this.observable!!.removeListener(this.listener!!)
             this.observable = null
         }
     }
 
     /**
-     * Returns a string representation of this `ObjectPropertyBase` object.
+     * Returns a string representation of this `LongPropertyBase` object.
      *
-     * @return a string representation of this `ObjectPropertyBase` object.
+     * @return a string representation of this `LongPropertyBase` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("ObjectProperty [")
+        val result = StringBuilder("LongProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -167,12 +184,12 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
         return result.toString()
     }
 
-    private class Listener<T>(ref: ObjectPropertyBase<T>) : InvalidationListener {
+    private class Listener(ref: LongPropertyBase) : InvalidationListener {
 
-        private val wref: WeakReference<ObjectPropertyBase<T>> = WeakReference(ref)
+        private val wref: WeakReference<LongPropertyBase> = WeakReference(ref)
 
         override fun invalidated(observable: Observable) {
-            val ref = this.wref.get()
+            val ref: LongPropertyBase? = this.wref.get()
             if (ref == null) {
                 observable.removeListener(this)
             } else {

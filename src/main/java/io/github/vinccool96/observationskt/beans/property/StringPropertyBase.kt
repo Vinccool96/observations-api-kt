@@ -33,7 +33,7 @@ abstract class StringPropertyBase(initialValue: String?) : StringProperty() {
     private var helper: ExpressionHelper<String?>? = null
 
     /**
-     * The constructor of the `StringPropertyBase`.
+     * The constructor of the `StringPropertyBase`. The initial value is `null`.
      */
     constructor() : this(null)
 
@@ -107,9 +107,8 @@ abstract class StringPropertyBase(initialValue: String?) : StringProperty() {
     override fun set(value: String?) {
         if (this.bound) {
             val curBean = this.bean
-            throw RuntimeException(
-                    (if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
-                            "A bound value cannot be set.")
+            throw RuntimeException((if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
+                    "A bound value cannot be set.")
         }
         if (this.valueState != value) {
             this.valueState = value

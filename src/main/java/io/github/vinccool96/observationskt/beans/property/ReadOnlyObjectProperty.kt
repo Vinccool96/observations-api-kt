@@ -39,7 +39,7 @@ abstract class ReadOnlyObjectProperty<T> : ObjectExpression<T>(), ReadOnlyProper
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
-        return super.toString()
+        return result.toString()
     }
 
 }
