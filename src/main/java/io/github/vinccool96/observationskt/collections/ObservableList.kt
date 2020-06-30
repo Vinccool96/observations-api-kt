@@ -141,7 +141,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *
      * @since JavaFX 8.0
      */
-    fun sorted(comparator: Comparator<E?>): SortedList<E> {
+    fun sorted(comparator: Comparator<E>): SortedList<E> {
         return SortedList(this, comparator)
     }
 
@@ -154,7 +154,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
      */
     @Suppress("UNCHECKED_CAST")
     fun sorted(): SortedList<E> {
-        val naturalOrder: Comparator<E?> = Comparator {o1, o2 ->
+        val naturalOrder: Comparator<E> = Comparator {o1, o2 ->
             return@Comparator if (o1 == null && o2 == null) {
                 0
             } else if (o1 == null) {

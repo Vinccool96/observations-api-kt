@@ -95,10 +95,21 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
     companion object {
 
         /**
-         * Returns a `DoubleProperty` that wraps a [Property]. If the `Property` is already a `DoubleProperty`, it
-         * will be returned. Otherwise a new `DoubleProperty` is created that is bound to the `Property`.
+         * Returns a `DoubleProperty` that wraps a [Property]. If the `Property` is already a `DoubleProperty`, it will
+         * be returned. Otherwise a new `DoubleProperty` is created that is bound to the `Property`.
          *
-         * Note: null values in the source property will be interpreted as `false`
+         * This is very useful when bidirectionally binding an ObjectProperty<Double> and a DoubleProperty.
+         * ```
+         * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1.0)
+         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0)
+         *
+         * // Need to keep the reference as bidirectional binding uses weak references
+         * val objectAsDouble: DoubleProperty = DoubleProperty.doubleProperty(objectProperty)
+         *
+         * doubleProperty.bindBidirectional(objectAsDouble)
+         * ```
+         *
+         * Another approach is to convert the DoubleProperty to ObjectProperty using [asObject] method.
          *
          * @param property
          *         The source `Property`

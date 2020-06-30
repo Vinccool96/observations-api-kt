@@ -96,10 +96,21 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
     companion object {
 
         /**
-         * Returns a `LongProperty` that wraps a [Property]. If the `Property` is already a `LongProperty`, it
-         * will be returned. Otherwise a new `LongProperty` is created that is bound to the `Property`.
+         * Returns a `LongProperty` that wraps a [Property]. If the `Property` is already a `LongProperty`, it will be
+         * returned. Otherwise a new `LongProperty` is created that is bound to the `Property`.
          *
-         * Note: null values in the source property will be interpreted as `false`
+         * This is very useful when bidirectionally binding an ObjectProperty<Long> and a LongProperty.
+         * ```
+         * val longProperty: LongProperty = SimpleLongProperty(1L)
+         * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(2L)
+         *
+         * // Need to keep the reference as bidirectional binding uses weak references
+         * val objectAsLong: LongProperty = LongProperty.longProperty(objectProperty)
+         *
+         * longProperty.bindBidirectional(objectAsLong)
+         * ```
+         *
+         * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
          *
          * @param property
          *         The source `Property`
@@ -108,7 +119,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
          *
          * @since JavaFX 8.0
          */
-        fun doubleProperty(property: Property<Number>): LongProperty {
+        fun longProperty(property: Property<Number>): LongProperty {
             return if (property is LongProperty) property else object : LongPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()

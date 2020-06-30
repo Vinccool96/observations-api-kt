@@ -402,8 +402,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
     fun nextUpdate(idx: Int) {
         checkState()
         if (updateChanges == null) {
-            updateChanges =
-                    java.util.ArrayList()
+            updateChanges = ArrayList()
         }
         val last = if (updateChanges.isEmpty()) null else updateChanges[updateChanges.size - 1]
         if (last != null && last.to == idx) {
@@ -420,13 +419,13 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
             var totalSize = updateChanges.size + addRemoveChanges.size + if (permutationChange != null) 1 else 0
             if (totalSize == 1) {
                 if (addRemoveNotEmpty) {
-                    list.fireChange(SingleChange(finalizeSubChange(addRemoveChanges[0])!!, list))
+                    list.fireChanges(SingleChange(finalizeSubChange(addRemoveChanges[0])!!, list))
                     addRemoveChanges.clear()
                 } else if (updateNotEmpty) {
-                    list.fireChange(SingleChange(finalizeSubChange(updateChanges[0])!!, list))
+                    list.fireChanges(SingleChange(finalizeSubChange(updateChanges[0])!!, list))
                     updateChanges.clear()
                 } else {
-                    list.fireChange(SingleChange(finalizeSubChange(permutationChange!!)!!, list))
+                    list.fireChanges(SingleChange(finalizeSubChange(permutationChange!!)!!, list))
                     permutationChange = null
                 }
             } else {
@@ -462,7 +461,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                         }
                     }
                 }
-                list.fireChange(
+                list.fireChanges(
                         IterableChange(finalizeSubChangeArray(array as Array<SubChange<E>>) as Array<SubChange<E>>,
                                 list))
                 addRemoveChanges.clear()

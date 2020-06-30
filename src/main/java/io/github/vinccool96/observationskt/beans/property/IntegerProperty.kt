@@ -99,7 +99,18 @@ abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, Wr
          * Returns a `IntegerProperty` that wraps a [Property]. If the `Property` is already a `IntegerProperty`, it
          * will be returned. Otherwise a new `IntegerProperty` is created that is bound to the `Property`.
          *
-         * Note: null values in the source property will be interpreted as `false`
+         * This is very useful when bidirectionally binding an ObjectProperty<Int> and an IntegerProperty.
+         * ```
+         * val integerProperty: IntegerProperty = SimpleIntegerProperty(1)
+         * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(2)
+         *
+         * // Need to keep the reference as bidirectional binding uses weak references
+         * val objectAsInt: IntegerProperty = IntegerProperty.integerProperty(objectProperty)
+         *
+         * integerProperty.bindBidirectional(objectAsInt)
+         * ```
+         *
+         * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
          *
          * @param property
          *         The source `Property`
@@ -108,13 +119,13 @@ abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, Wr
          *
          * @since JavaFX 8.0
          */
-        fun doubleProperty(property: Property<Number>): IntegerProperty {
+        fun doubleProperty(property: Property<Int>): IntegerProperty {
             return if (property is IntegerProperty) property else object : IntegerPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property)
+                    BidirectionalBinding.bind(this, property as Property<Number>)
                 }
 
                 override val bean: Any?

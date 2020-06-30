@@ -99,7 +99,7 @@ abstract class ObjectPropertyBase<T>(initialValue: T) : ObjectProperty<T>() {
 
     final override fun get(): T {
         this.valid = true
-        return this.observable?.value ?: this.valueState
+        return if (this.observable == null) this.valueState else this.observable!!.value
     }
 
     @Suppress("UNCHECKED_CAST")
