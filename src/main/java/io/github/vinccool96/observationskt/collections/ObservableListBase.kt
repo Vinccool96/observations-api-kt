@@ -244,7 +244,14 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
         return curHelper != null && curHelper.listChangeListeners.contains(listener)
     }
 
-    internal fun fireChange(change: ListChangeListener.Change<out E>) {
+    internal fun fireChanges(change: ListChangeListener.Change<out E>) {
+        fireChange(change)
+    }
+
+    /**
+     * You surely also want an `internal` method to access this method
+     */
+    protected fun fireChange(change: ListChangeListener.Change<out E>) {
         ListListenerHelper.fireValueChangedEvent(this.helper, change)
     }
 

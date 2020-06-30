@@ -22,7 +22,7 @@ import io.github.vinccool96.observationskt.sun.collections.SourceAdapterChange
 @Suppress("UNCHECKED_CAST")
 class SortedList<E> : TransformationList<E, E> {
 
-    private var elementComparator: Comparator<Element<E>?>? = null
+    private var elementComparator: Comparator<Element<E>>? = null
 
     private var sorted: Array<Element<E>?>
 
@@ -33,7 +33,7 @@ class SortedList<E> : TransformationList<E, E> {
     private val helper =
             SortHelper()
 
-    private val tempElement = Element<E>(null, -1)
+    private lateinit var tempElement: Element<E>
 
     /**
      * Creates a new SortedList wrapped around the source list. The source list will be sorted using the comparator
@@ -89,12 +89,13 @@ class SortedList<E> : TransformationList<E, E> {
     /**
      * The comparator that denotes the order of this SortedList. Null for unordered SortedList.
      */
-    private var comparatorObjectProperty: ObjectProperty<Comparator<in E>> =
-            object : ObjectPropertyBase<Comparator<in E>>(this@SortedList.baseComparator) {
+    private var comparatorObjectProperty: ObjectProperty<Comparator<in E>?> =
+            object : ObjectPropertyBase<Comparator<in E>?>(this@SortedList.baseComparator) {
 
                 override fun invalidated() {
-                    val current: Comparator<in E> = this.get()
-                    this@SortedList.elementComparator = ElementComparator(current) as Comparator<Element<E>?>
+                    val current: Comparator<in E>? = this.get()
+                    this@SortedList.elementComparator =
+                            if (current != null) ElementComparator(current) as Comparator<Element<E>> else null
                     doSortWithPermutationChange()
                 }
 
@@ -106,12 +107,12 @@ class SortedList<E> : TransformationList<E, E> {
 
             }
 
-    val comparatorProperty: ObjectProperty<Comparator<in E>>
+    val comparatorProperty: ObjectProperty<Comparator<in E>?>
         get() = this.comparatorObjectProperty
 
     var comparator: Comparator<in E>?
-        get() = this.comparatorObjectProperty.get()
-        set(value) = this.comparatorProperty.set(value ?: this.baseComparator)
+        get() = this.comparatorObjectProperty.get() ?: this.baseComparator
+        set(value) = this.comparatorProperty.set(value)
 
     /**
      * Returns the element at the specified position in this list.
@@ -122,13 +123,13 @@ class SortedList<E> : TransformationList<E, E> {
      * @return the element at the specified position in this list
      *
      * @throws IndexOutOfBoundsException
-     * if the index is out of range (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     * if the index is out of range (`index < 0 || index >= size()`)
      */
     override fun get(index: Int): E {
         if (index >= this.sizeState) {
             throw IndexOutOfBoundsException()
         }
-        return this.sorted[index]!!.e!!
+        return this.sorted[index]!!.e
     }
 
     override val size: Int
@@ -136,7 +137,7 @@ class SortedList<E> : TransformationList<E, E> {
 
     private fun doSortWithPermutationChange() {
         if (elementComparator != null) {
-            val perm = helper.sort(this.sorted, 0, this.sizeState, this.elementComparator)
+            val perm = helper.sort(this.sorted, 0, this.sizeState, this.elementComparator as Comparator<in Element<E>?>)
             for (i in this.indices) {
                 this.perm[this.sorted[i]!!.index] = i
             }
@@ -205,18 +206,16 @@ class SortedList<E> : TransformationList<E, E> {
             }
             if (c.wasRemoved) {
                 val removedTo = c.from + c.removedSize
-//              copyInto(destination: Array<T>, destinationOffset: Int = 0, startIndex: Int = 0, endIndex: Int = size)
-//              System.arraycopy(this, startIndex, destination, destinationOffset, endIndex - startIndex)
-                this.sorted.copyInto(this.sorted, c.from, removedTo)
-                this.perm.copyInto(this.perm, c.from, removedTo)
+                this.sorted.copyInto(this.sorted, c.from, removedTo, this.sizeState)
+                this.perm.copyInto(this.perm, c.from, removedTo, this.sizeState)
                 this.sizeState -= c.removedSize
                 updateIndices(removedTo, removedTo, -c.removedSize)
             }
             if (c.wasAdded) {
                 ensureSize(size + c.addedSize)
                 updateIndices(c.from, c.from, c.addedSize)
-                this.sorted.copyInto(this.sorted, c.to, c.from)
-                this.perm.copyInto(this.perm, c.to, c.from)
+                this.sorted.copyInto(this.sorted, c.to, c.from, this.sizeState)
+                this.perm.copyInto(this.perm, c.to, c.from, this.sizeState)
                 this.sizeState += c.addedSize
                 for (i in c.from until c.to) {
                     this.sorted[i] = Element(c.list[i], i)
@@ -226,12 +225,12 @@ class SortedList<E> : TransformationList<E, E> {
         }
     }
 
-    private class Element<E>(var e: E?, var index: Int)
+    private class Element<E>(var e: E, var index: Int)
 
-    private class ElementComparator<E>(internal val comparator: Comparator<E>) : Comparator<Element<E>?> {
+    private class ElementComparator<E>(internal val comparator: Comparator<E>) : Comparator<Element<E>> {
 
-        override fun compare(o1: Element<E>?, o2: Element<E>?): Int {
-            return this.comparator.compare(o1?.e, o2?.e)
+        override fun compare(o1: Element<E>, o2: Element<E>): Int {
+            return this.comparator.compare(o1.e, o2.e)
         }
 
     }
@@ -258,8 +257,9 @@ class SortedList<E> : TransformationList<E, E> {
         if (this.sorted.isEmpty()) {
             return 0
         }
-        this.tempElement.e = e
-        return this.sorted.binarySearch(this.tempElement, this.elementComparator!!)
+        this.tempElement = if (!this::tempElement.isInitialized) Element(e, -1) else Element(e, this.tempElement.index)
+        return this.sorted.binarySearch(this.tempElement, this.elementComparator!! as Comparator<in Element<E>?>, 0,
+                this.sizeState)
     }
 
     private fun insertToMapping(e: E, idx: Int) {
@@ -269,9 +269,9 @@ class SortedList<E> : TransformationList<E, E> {
         }
         ensureSize(this.sizeState + 1)
         updateIndices(idx, pos, 1)
-        this.sorted.copyInto(this.sorted, pos + 1, pos)
+        this.sorted.copyInto(this.sorted, pos + 1, pos, this.sizeState)
         this.sorted[pos] = Element(e, idx)
-        this.perm.copyInto(this.perm, idx + 1, idx)
+        this.perm.copyInto(this.perm, idx + 1, idx, this.sizeState)
         this.perm[idx] = pos
         ++this.sizeState
         nextAdd(pos, pos + 1)
@@ -283,7 +283,8 @@ class SortedList<E> : TransformationList<E, E> {
         for (i in 0 until to) {
             this.sorted[i] = Element(list[i], i)
         }
-        val perm = this.helper.sort(this.sorted, 0, this.sizeState, this.elementComparator)
+        val perm =
+                this.helper.sort(this.sorted, 0, this.sizeState, this.elementComparator as Comparator<in Element<E>?>)
         perm.copyInto(this.perm)
         nextAdd(0, this.sizeState)
     }
@@ -308,7 +309,7 @@ class SortedList<E> : TransformationList<E, E> {
     }
 
     private fun update(c: ListChangeListener.Change<out E>) {
-        val perm = helper.sort(this.sorted, 0, size, this.elementComparator)
+        val perm = helper.sort(this.sorted, 0, size, this.elementComparator as Comparator<in Element<E>?>)
         for (i in this.indices) {
             this.perm[this.sorted[i]!!.index] = i
         }

@@ -166,6 +166,26 @@ object ObservableCollections {
     }
 
     /**
+     * Sorts the provided observable list. Fires only **one** change notification on the list.
+     *
+     * @param T
+     *         the list element type
+     * @param list
+     *         the list to be sorted
+     *
+     * @see Collections#sort(List)
+     */
+    fun <T : Comparable<T>> sort(list: ObservableList<T>) {
+        if (list is SortableList<*>) {
+            list.sort()
+        } else {
+            val newContent: MutableList<T> = ArrayList(list)
+            newContent.sort()
+            list.setAll(newContent)
+        }
+    }
+
+    /**
      * Sorts the provided observable list using the c comparator. Fires only **one** change notification on the list.
      *
      * @param T

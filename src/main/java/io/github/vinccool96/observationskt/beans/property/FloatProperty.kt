@@ -96,10 +96,21 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
     companion object {
 
         /**
-         * Returns a `FloatProperty` that wraps a [Property]. If the `Property` is already a `FloatProperty`, it
-         * will be returned. Otherwise a new `FloatProperty` is created that is bound to the `Property`.
+         * Returns a `FloatProperty` that wraps a [Property]. If the `Property` is already a `FloatProperty`, it will be
+         * returned. Otherwise a new `FloatProperty` is created that is bound to the `Property`.
          *
-         * Note: null values in the source property will be interpreted as `false`
+         * This is very useful when bidirectionally binding an ObjectProperty<Float> and a FloatProperty.
+         * ```
+         * val floatProperty: FloatProperty = SimpleFloatProperty(1.0F)
+         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0F)
+         *
+         * // Need to keep the reference as bidirectional binding uses weak references
+         * val objectAsFloat: FloatProperty = FloatProperty.floatProperty(objectProperty)
+         *
+         * doubleProperty.bindBidirectional(objectAsFloat)
+         * ```
+         *
+         * Another approach is to convert the FloatProperty to ObjectProperty using [asObject] method.
          *
          * @param property
          *         The source `Property`
@@ -108,13 +119,13 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
          *
          * @since JavaFX 8.0
          */
-        fun doubleProperty(property: Property<Number>): FloatProperty {
+        fun floatProperty(property: Property<Float>): FloatProperty {
             return if (property is FloatProperty) property else object : FloatPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property)
+                    BidirectionalBinding.bind(this, property as Property<Number>)
                 }
 
                 override val bean: Any?

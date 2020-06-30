@@ -237,14 +237,15 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
 
             try {
                 this.locked = true
-                for (i in 0..curInvalidationSize) {
+                for (i in 0 until curInvalidationSize) {
                     try {
                         curInvalidationList[i]?.invalidated(change.list)
                     } catch (e: Exception) {
                         Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), e)
                     }
                 }
-                for (i in 0..curListChangeSize) {
+                for (i in 0 until curListChangeSize) {
+                    change.reset()
                     try {
                         curListChangeList[i]?.onChanged(change)
                     } catch (e: Exception) {
