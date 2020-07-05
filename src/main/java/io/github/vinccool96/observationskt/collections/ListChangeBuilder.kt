@@ -8,6 +8,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+@Suppress("SENSELESS_COMPARISON", "NAME_SHADOWING", "CascadeIf", "UNCHECKED_CAST",
+        "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 internal class ListChangeBuilder<E> internal constructor(private val list: ObservableListBase<E>) {
 
     private var changeLock: Int = 0
@@ -155,7 +157,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
         } else {
             insertRemoved(idx, removed)
         }
-        if (updateChanges != null && !updateChanges.isEmpty()) {
+        if (updateChanges != null && updateChanges.isNotEmpty()) {
             var uPos = findSubChange(idx, updateChanges)
             if (uPos < 0) {
                 uPos = uPos.inv()
@@ -185,8 +187,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
 
     fun nextAdd(from: Int, to: Int) {
         checkState()
-        val last =
-                if (addRemoveChanges.isEmpty()) null else addRemoveChanges[addRemoveChanges.size - 1]
+        val last = if (addRemoveChanges.isEmpty()) null else addRemoveChanges[addRemoveChanges.size - 1]
         val numberOfAdded = to - from
         if (last != null && last.to == from) {
             last.to = to
@@ -195,18 +196,14 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
         } else {
             insertAdd(from, to)
         }
-        if (updateChanges != null && !updateChanges.isEmpty()) {
+        if (updateChanges != null && updateChanges.isNotEmpty()) {
             var uPos = findSubChange(from, updateChanges)
             if (uPos < 0) {
                 uPos = uPos.inv()
             } else {
                 // We have to split the change into 2
-                val change =
-                        updateChanges[uPos]
-                updateChanges.add(uPos + 1,
-                        SubChange(to,
-                                change.to + to - from, null,
-                                EMPTY_PERM, true))
+                val change = updateChanges[uPos]
+                updateChanges.add(uPos + 1, SubChange(to, change.to + to - from, null, EMPTY_PERM, true))
                 change.to = from
                 uPos += 2 // skip those 2 for the update
             }
@@ -222,7 +219,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
         var prePermFrom = from
         var prePermTo = to
         var prePerm = perm
-        if (addRemoveChanges != null && !addRemoveChanges.isEmpty()) {
+        if (addRemoveChanges != null && addRemoveChanges.isNotEmpty()) {
             //Because there were already some changes to the list, we need
             // to "reconstruct" the original list and create a permutation
             // as-if there were no changes to the list. We can then
@@ -242,8 +239,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 var i = 0
                 val sz = addRemoveChanges.size
                 while (i < sz) {
-                    val change =
-                            addRemoveChanges[i]
+                    val change = addRemoveChanges[i]
                     for (j in last until change.from) {
                         mapToOriginal[if (j < from || j >= to) j else perm[j - from]] = j + offset
                     }
@@ -291,8 +287,8 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                     permutationChange!!.perm[i] = prePerm[permutationChange!!.perm[i] - prePermFrom]
                 }
             } else {
-                val newTo = Math.max(permutationChange!!.to, prePermTo)
-                val newFrom = Math.min(permutationChange!!.from, prePermFrom)
+                val newTo = permutationChange!!.to.coerceAtLeast(prePermTo)
+                val newFrom = permutationChange!!.from.coerceAtMost(prePermFrom)
                 val newPerm = IntArray(newTo - newFrom)
                 for (i in newFrom until newTo) {
                     if (i < permutationChange!!.from || i >= permutationChange!!.to) {
@@ -361,7 +357,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 addRemoveChanges.add(idx.inv(), SubChange(at, at, value, IntArray(0), false))
             }
         }
-        if (updateChanges != null && !updateChanges.isEmpty()) {
+        if (updateChanges != null && updateChanges.isNotEmpty()) {
             val newUpdated: MutableSet<Int> = TreeSet()
             var i = 0
             val sz = updateChanges.size
@@ -488,11 +484,11 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
         private var onChange: Boolean = false
 
         override fun next(): Boolean {
-            if (this.onChange) {
-                return false
+            return if (this.onChange) {
+                false
             } else {
                 this.onChange = true
-                return true
+                true
             }
         }
 

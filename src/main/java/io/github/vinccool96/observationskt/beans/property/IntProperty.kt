@@ -1,7 +1,7 @@
 package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.binding.Bindings
-import io.github.vinccool96.observationskt.beans.value.WritableIntegerValue
+import io.github.vinccool96.observationskt.beans.value.WritableIntValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import java.security.AccessControlContext
 import java.security.AccessController
@@ -10,21 +10,21 @@ import java.security.PrivilegedAction
 /**
  * This class defines a [Property] wrapping a `Int` value.
  *
- * The value of a `IntegerProperty` can be get and set with [get], [set], and [value].
+ * The value of a `IntProperty` can be get and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].
  *
  * The context of a `ObjectProperty` can be read with [bean] and [name].
  *
- * @see io.github.vinccool96.observationskt.beans.value.ObservableIntegerValue
- * @see WritableIntegerValue
- * @see ReadOnlyIntegerProperty
+ * @see io.github.vinccool96.observationskt.beans.value.ObservableIntValue
+ * @see WritableIntValue
+ * @see ReadOnlyIntProperty
  * @see Property
  * @since JavaFX 2.0
  */
 @Suppress("UNCHECKED_CAST")
-abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, WritableIntegerValue {
+abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIntValue {
 
     override var value: Number
         get() = this.get()
@@ -39,14 +39,14 @@ abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, Wr
     }
 
     /**
-     * Returns a string representation of this `IntegerProperty` object.
+     * Returns a string representation of this `IntProperty` object.
      *
-     * @return a string representation of this `IntegerProperty` object.
+     * @return a string representation of this `IntProperty` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("IntegerProperty [")
+        val result = StringBuilder("IntProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -58,33 +58,42 @@ abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, Wr
     }
 
     /**
-     * Creates an [ObjectProperty] that holds the value of this `IntegerProperty`. If the value of this
-     * `IntegerProperty` changes, the value of the `ObjectProperty` will be updated automatically.
+     * Creates an [ObjectProperty] that bidirectionally bound to this `IntProperty`. If the value of this
+     * `IntProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
+     *
+     * Can be used for binding an ObjectProperty to IntProperty.
+     *
+     * ```
+     * val intProperty: IntProperty = SimpleIntProperty(1)
+     * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(2)
+     *
+     * objectProperty.bind(intProperty.asObject())
+     * ```
      *
      * @return the new `ObjectProperty`
      *
      * @since JavaFX 8.0
      */
     override fun asObject(): ObjectProperty<Int> {
-        return object : ObjectPropertyBase<Int>(this@IntegerProperty.intValue) {
+        return object : ObjectPropertyBase<Int>(this@IntProperty.intValue) {
 
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this as Property<Number>, this@IntegerProperty)
+                BidirectionalBinding.bind(this as Property<Number>, this@IntProperty)
             }
 
             override val bean: Any?
                 get() = null // Virtual property, does not exist on a bean
 
             override val name: String
-                get() = this@IntegerProperty.name
+                get() = this@IntProperty.name
 
             @Throws(Throwable::class)
             protected fun finalize() {
                 try {
                     AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@IntegerProperty)
+                        BidirectionalBinding.unbind(this, this@IntProperty)
                     }, this.acc)
                 } finally {
                 }
@@ -96,18 +105,18 @@ abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, Wr
     companion object {
 
         /**
-         * Returns a `IntegerProperty` that wraps a [Property]. If the `Property` is already a `IntegerProperty`, it
-         * will be returned. Otherwise a new `IntegerProperty` is created that is bound to the `Property`.
+         * Returns a `IntProperty` that wraps a [Property]. If the `Property` is already a `IntProperty`, it
+         * will be returned. Otherwise a new `IntProperty` is created that is bound to the `Property`.
          *
-         * This is very useful when bidirectionally binding an ObjectProperty<Int> and an IntegerProperty.
+         * This is very useful when bidirectionally binding an ObjectProperty<Int> and an IntProperty.
          * ```
-         * val integerProperty: IntegerProperty = SimpleIntegerProperty(1)
+         * val intProperty: IntProperty = SimpleIntProperty(1)
          * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(2)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
-         * val objectAsInt: IntegerProperty = IntegerProperty.integerProperty(objectProperty)
+         * val objectAsInt: IntProperty = IntProperty.intProperty(objectProperty)
          *
-         * integerProperty.bindBidirectional(objectAsInt)
+         * intProperty.bindBidirectional(objectAsInt)
          * ```
          *
          * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
@@ -115,12 +124,12 @@ abstract class IntegerProperty : ReadOnlyIntegerProperty(), Property<Number>, Wr
          * @param property
          *         The source `Property`
          *
-         * @return A `IntegerProperty` that wraps the `Property` if necessary
+         * @return A `IntProperty` that wraps the `Property` if necessary
          *
          * @since JavaFX 8.0
          */
-        fun doubleProperty(property: Property<Int>): IntegerProperty {
-            return if (property is IntegerProperty) property else object : IntegerPropertyBase() {
+        fun doubleProperty(property: Property<Int>): IntProperty {
+            return if (property is IntProperty) property else object : IntPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 

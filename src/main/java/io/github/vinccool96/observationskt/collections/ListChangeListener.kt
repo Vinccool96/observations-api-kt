@@ -247,13 +247,13 @@ interface ListChangeListener<E> {
             }
 
         /**
-         * If this change is an permutation, it returns an integer array that describes the permutation. This array maps
+         * If this change is an permutation, it returns an int array that describes the permutation. This array maps
          * directly from the previous indexes to the new ones. This method is not publicly accessible and therefore can
          * return an array safely. The 0 index of the array corresponds to index [from] of the list. The
          * same applies for the last index and [to]. The method is used by [wasPermutated] and
          * [getPermutation] methods.
          *
-         * @return empty array if this is not permutation or an integer array containing the permutation
+         * @return empty array if this is not permutation or an int array containing the permutation
          *
          * @throws IllegalStateException
          * if this Change is in initial state

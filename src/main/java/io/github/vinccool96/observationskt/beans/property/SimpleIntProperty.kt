@@ -15,8 +15,8 @@ package io.github.vinccool96.observationskt.beans.property
  * @param initialValue
  *         the initial value of the wrapped value
  */
-class SimpleIntegerProperty(override val bean: Any?, override val name: String, initialValue: Int) :
-        IntegerPropertyBase(initialValue) {
+class SimpleIntProperty(override val bean: Any?, override val name: String, initialValue: Int) :
+        IntPropertyBase(initialValue) {
 
     /**
      * The constructor of `IntProperty`

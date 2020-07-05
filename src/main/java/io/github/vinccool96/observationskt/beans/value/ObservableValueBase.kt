@@ -52,4 +52,15 @@ abstract class ObservableValueBase<T> : ObservableValue<T> {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
+
+    /**
+     * Notify the currently registered observers of a value change.
+     *
+     * This implementation will ignore all adds and removes of observers that are done while a notification is
+     * processed. The changes take effect in the following call to fireValueChangedEvent.
+     */
+    protected open fun fireValueChangedEvent() {
+        ExpressionHelper.fireValueChangedEvent(this.helper)
+    }
+
 }

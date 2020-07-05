@@ -267,15 +267,15 @@ abstract class StringExpression : ObservableStringValue {
     }
 
     /**
-     * Creates a new [IntegerBinding] that holds the length of this `StringExpression`.
+     * Creates a new [IntBinding] that holds the length of this `StringExpression`.
      *
      * Note: If the value of this `StringExpression` is `null`, the length is considered to be `0`.
      *
-     * @return the new `IntegerBinding`
+     * @return the new `IntBinding`
      *
      * @since JavaFX 8.0
      */
-    fun length(): IntegerBinding? {
+    fun length(): IntBinding? {
         return Bindings.length(this)
     }
 

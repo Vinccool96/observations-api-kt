@@ -35,7 +35,7 @@ import io.github.vinccool96.observationskt.beans.Observable
  * @see ObservableBooleanValue
  * @see ObservableDoubleValue
  * @see ObservableFloatValue
- * @see ObservableIntegerValue
+ * @see ObservableIntValue
  * @see ObservableLongValue
  * @see ObservableNumberValue
  * @see ObservableObjectValue

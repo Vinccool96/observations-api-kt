@@ -152,7 +152,6 @@ abstract class StringFormatter : StringBinding() {
             if (extractDependencies(*args).isEmpty()) {
                 return StringConstant.valueOf(String.format(format, *args))
             }
-            val dep = extractDependencies(*args)
             val formatter: StringFormatter = object : StringFormatter() {
                 override fun dispose() {
                     super.unbind(*extractDependencies(*args))
@@ -167,7 +166,7 @@ abstract class StringFormatter : StringBinding() {
                 override val dependencies: ObservableList<*>
                     get() {
                         return ObservableCollections.unmodifiableObservableList(
-                                ObservableCollections.observableArrayList(extractDependencies(*args)))
+                                ObservableCollections.observableArrayList(*extractDependencies(*args)))
                     }
 
                 init {

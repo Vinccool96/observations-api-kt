@@ -3,27 +3,27 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.WeakInvalidationListener
-import io.github.vinccool96.observationskt.beans.binding.IntegerExpression
+import io.github.vinccool96.observationskt.beans.binding.IntExpression
 
 /**
- * Super class for all readonly properties wrapping a `Integer`.
+ * Super class for all readonly properties wrapping a `Int`.
  *
- * @see io.github.vinccool96.observationskt.beans.value.ObservableIntegerValue
- * @see IntegerExpression
+ * @see io.github.vinccool96.observationskt.beans.value.ObservableIntValue
+ * @see IntExpression
  * @see ReadOnlyProperty
  * @since JavaFX 2.0
  */
-abstract class ReadOnlyIntegerProperty : IntegerExpression(), ReadOnlyProperty<Number> {
+abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number> {
 
     /**
-     * Returns a string representation of this `ReadOnlyIntegerProperty` object.
+     * Returns a string representation of this `ReadOnlyIntProperty` object.
      *
-     * @return a string representation of this `ReadOnlyIntegerProperty` object.
+     * @return a string representation of this `ReadOnlyIntProperty` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("ReadOnlyIntegerProperty [")
+        val result = StringBuilder("ReadOnlyIntProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -35,8 +35,8 @@ abstract class ReadOnlyIntegerProperty : IntegerExpression(), ReadOnlyProperty<N
     }
 
     /**
-     * Creates a [ReadOnlyObjectProperty] that holds the value of this `ReadOnlyIntegerProperty`. If the value of this
-     * `ReadOnlyIntegerProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
+     * Creates a [ReadOnlyObjectProperty] that holds the value of this `ReadOnlyIntProperty`. If the value of this
+     * `ReadOnlyIntProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
      *
      * @return the new `ReadOnlyObjectProperty`
      *
@@ -59,17 +59,17 @@ abstract class ReadOnlyIntegerProperty : IntegerExpression(), ReadOnlyProperty<N
             }
 
             init {
-                this@ReadOnlyIntegerProperty.addListener(WeakInvalidationListener(this.listener))
+                this@ReadOnlyIntProperty.addListener(WeakInvalidationListener(this.listener))
             }
 
             override val bean: Any?
                 get() = null // Virtual property, does not exist on a bean
 
             override val name: String
-                get() = this@ReadOnlyIntegerProperty.name
+                get() = this@ReadOnlyIntProperty.name
 
             override fun get(): Int {
-                return this@ReadOnlyIntegerProperty.get()
+                return this@ReadOnlyIntProperty.get()
             }
 
         }
@@ -78,8 +78,8 @@ abstract class ReadOnlyIntegerProperty : IntegerExpression(), ReadOnlyProperty<N
     companion object {
 
         /**
-         * Returns a `ReadOnlyIntegerProperty` that wraps a [ReadOnlyProperty]. If the `ReadOnlyProperty` is already a
-         * `ReadOnlyIntegerProperty`, it will be returned. Otherwise a new `ReadOnlyIntegerProperty` is created that is
+         * Returns a `ReadOnlyIntProperty` that wraps a [ReadOnlyProperty]. If the `ReadOnlyProperty` is already a
+         * `ReadOnlyIntProperty`, it will be returned. Otherwise a new `ReadOnlyIntProperty` is created that is
          * bound to the `ReadOnlyProperty`.
          *
          * Note: null values will be interpreted as `0`
@@ -89,12 +89,12 @@ abstract class ReadOnlyIntegerProperty : IntegerExpression(), ReadOnlyProperty<N
          * @param T
          *         The type of the wrapped number
          *
-         * @return A `ReadOnlyIntegerProperty` that wraps the `ReadOnlyProperty` if necessary
+         * @return A `ReadOnlyIntProperty` that wraps the `ReadOnlyProperty` if necessary
          *
          * @since JavaFX 8.0
          */
-        fun <T : Number?> readOnlyIntegerProperty(property: ReadOnlyProperty<T>): ReadOnlyIntegerProperty {
-            return if (property is ReadOnlyIntegerProperty) property else object : ReadOnlyIntegerPropertyBase() {
+        fun <T : Number?> readOnlyIntProperty(property: ReadOnlyProperty<T>): ReadOnlyIntProperty {
+            return if (property is ReadOnlyIntProperty) property else object : ReadOnlyIntPropertyBase() {
 
                 private var valid: Boolean = true
 

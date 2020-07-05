@@ -11,10 +11,273 @@ import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableLi
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.Callable
 import kotlin.math.abs
 
 @Suppress("DuplicatedCode")
 object Bindings {
+
+    // =================================================================================================================
+    // Helper functions to create custom bindings
+
+    /**
+     * Helper function to create a custom [BooleanBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createBooleanBinding(func: Callable<Boolean>, vararg dependencies: Observable): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Boolean {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    false
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [DoubleBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createDoubleBinding(func: Callable<Double>, vararg dependencies: Observable): DoubleBinding {
+        return object : DoubleBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Double {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    0.0
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [FloatBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createFloatBinding(func: Callable<Float>, vararg dependencies: Observable): FloatBinding {
+        return object : FloatBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Float {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    0.0f
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [IntBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createIntBinding(func: Callable<Int>, vararg dependencies: Observable): IntBinding {
+        return object : IntBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Int {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    0
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [LongBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createLongBinding(func: Callable<Long>, vararg dependencies: Observable): LongBinding {
+        return object : LongBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Long {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    0L
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [ObjectBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun <T> createObjectBinding(func: Callable<T>, vararg dependencies: Observable): ObjectBinding<T> {
+        return object : ObjectBinding<T>() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): T? {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    null
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [StringBinding].
+     *
+     * @param func
+     *         The function that calculates the value of this binding
+     * @param dependencies
+     *         The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createStringBinding(func: Callable<String?>, vararg dependencies: Observable): StringBinding {
+        return object : StringBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): String? {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    ""
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
 
     // Bidirectional Bindings
     // =================================================================================================================
@@ -140,7 +403,7 @@ object Bindings {
                     get() = ObservableCollections.singletonObservableList(value)
 
             }
-            else -> object : IntegerBinding() {
+            else -> object : IntBinding() {
 
                 init {
                     super.bind(value)
@@ -229,7 +492,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : IntegerBinding() {
+            else -> object : IntBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -366,7 +629,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun add(op1: ObservableNumberValue, op2: Int): NumberBinding {
-        return add(op1, IntegerConstant.valueOf(op2), op1)
+        return add(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -381,7 +644,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun add(op1: Int, op2: ObservableNumberValue): NumberBinding {
-        return add(IntegerConstant.valueOf(op1), op2, op2)
+        return add(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -451,7 +714,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : IntegerBinding() {
+            else -> object : IntBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -589,7 +852,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun subtract(op1: ObservableNumberValue, op2: Int): NumberBinding {
-        return subtract(op1, IntegerConstant.valueOf(op2), op1)
+        return subtract(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -604,7 +867,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun subtract(op1: Int, op2: ObservableNumberValue): NumberBinding {
-        return subtract(IntegerConstant.valueOf(op1), op2, op2)
+        return subtract(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -674,7 +937,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : IntegerBinding() {
+            else -> object : IntBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -812,7 +1075,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun multiply(op1: ObservableNumberValue, op2: Int): NumberBinding {
-        return multiply(op1, IntegerConstant.valueOf(op2), op1)
+        return multiply(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -827,7 +1090,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun multiply(op1: Int, op2: ObservableNumberValue): NumberBinding {
-        return multiply(IntegerConstant.valueOf(op1), op2, op2)
+        return multiply(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -897,7 +1160,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : IntegerBinding() {
+            else -> object : IntBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -1035,7 +1298,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun divide(op1: ObservableNumberValue, op2: Int): NumberBinding {
-        return divide(op1, IntegerConstant.valueOf(op2), op1)
+        return divide(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -1050,7 +1313,7 @@ object Bindings {
      * @return the new `NumberBinding`
      */
     fun divide(op1: Int, op2: ObservableNumberValue): NumberBinding {
-        return divide(IntegerConstant.valueOf(op1), op2, op2)
+        return divide(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -1359,7 +1622,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun equal(op1: ObservableNumberValue, op2: Int, epsilon: Double): BooleanBinding {
-        return equal(op1, IntegerConstant.valueOf(op2), epsilon, op1)
+        return equal(op1, IntConstant.valueOf(op2), epsilon, op1)
     }
 
     /**
@@ -1380,7 +1643,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun equal(op1: Int, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
-        return equal(IntegerConstant.valueOf(op1), op2, epsilon, op2)
+        return equal(IntConstant.valueOf(op1), op2, epsilon, op2)
     }
 
     /**
@@ -1397,7 +1660,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun equal(op1: ObservableNumberValue, op2: Int): BooleanBinding {
-        return equal(op1, IntegerConstant.valueOf(op2), 0.0, op1)
+        return equal(op1, IntConstant.valueOf(op2), 0.0, op1)
     }
 
     /**
@@ -1414,7 +1677,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun equal(op1: Int, op2: ObservableNumberValue): BooleanBinding {
-        return equal(IntegerConstant.valueOf(op1), op2, 0.0, op2)
+        return equal(IntConstant.valueOf(op1), op2, 0.0, op2)
     }
 
     // =================================================================================================================
@@ -1723,7 +1986,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun notEqual(op1: ObservableNumberValue, op2: Int, epsilon: Double): BooleanBinding {
-        return notEqual(op1, IntegerConstant.valueOf(op2), epsilon, op1)
+        return notEqual(op1, IntConstant.valueOf(op2), epsilon, op1)
     }
 
     /**
@@ -1744,7 +2007,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun notEqual(op1: Int, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
-        return notEqual(IntegerConstant.valueOf(op1), op2, epsilon, op2)
+        return notEqual(IntConstant.valueOf(op1), op2, epsilon, op2)
     }
 
     /**
@@ -1761,7 +2024,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun notEqual(op1: ObservableNumberValue, op2: Int): BooleanBinding {
-        return notEqual(op1, IntegerConstant.valueOf(op2), 0.0, op1)
+        return notEqual(op1, IntConstant.valueOf(op2), 0.0, op1)
     }
 
     /**
@@ -1778,7 +2041,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun notEqual(op1: Int, op2: ObservableNumberValue): BooleanBinding {
-        return notEqual(IntegerConstant.valueOf(op1), op2, 0.0, op2)
+        return notEqual(IntConstant.valueOf(op1), op2, 0.0, op2)
     }
 
     // =================================================================================================================
@@ -1988,7 +2251,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun greaterThan(op1: ObservableNumberValue, op2: Int): BooleanBinding {
-        return greaterThan(op1, IntegerConstant.valueOf(op2), op1)
+        return greaterThan(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -2003,7 +2266,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun greaterThan(op1: Int, op2: ObservableNumberValue): BooleanBinding {
-        return greaterThan(IntegerConstant.valueOf(op1), op2, op2)
+        return greaterThan(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -2131,7 +2394,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun lessThan(op1: ObservableNumberValue, op2: Int): BooleanBinding {
-        return lessThan(op1, IntegerConstant.valueOf(op2), op1)
+        return lessThan(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -2146,7 +2409,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun lessThan(op1: Int, op2: ObservableNumberValue): BooleanBinding {
-        return lessThan(IntegerConstant.valueOf(op1), op2, op2)
+        return lessThan(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -2356,7 +2619,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Int): BooleanBinding {
-        return greaterThanOrEqual(op1, IntegerConstant.valueOf(op2), op1)
+        return greaterThanOrEqual(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -2371,7 +2634,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun greaterThanOrEqual(op1: Int, op2: ObservableNumberValue): BooleanBinding {
-        return greaterThanOrEqual(IntegerConstant.valueOf(op1), op2, op2)
+        return greaterThanOrEqual(IntConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -2499,7 +2762,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun lessThanOrEqual(op1: ObservableNumberValue, op2: Int): BooleanBinding {
-        return lessThanOrEqual(op1, IntegerConstant.valueOf(op2), op1)
+        return lessThanOrEqual(op1, IntConstant.valueOf(op2), op1)
     }
 
     /**
@@ -2514,7 +2777,463 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun lessThanOrEqual(op1: Int, op2: ObservableNumberValue): BooleanBinding {
-        return lessThanOrEqual(IntegerConstant.valueOf(op1), op2, op2)
+        return lessThanOrEqual(IntConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Minimum
+
+    private fun min(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): NumberBinding {
+
+        require(dependencies.isNotEmpty())
+
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Double {
+                    return kotlin.math.min(op1.doubleValue, op2.doubleValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Float {
+                    return kotlin.math.min(op1.floatValue, op2.floatValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Long {
+                    return kotlin.math.min(op1.longValue, op2.longValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : IntBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Int {
+                    return kotlin.math.min(op1.intValue, op2.intValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the values of two instances of
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
+        return min(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: Double): DoubleBinding {
+        return min(op1, DoubleConstant.valueOf(op2), op1) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun min(op1: Double, op2: ObservableNumberValue): DoubleBinding {
+        return min(DoubleConstant.valueOf(op1), op2, op2) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: Float): NumberBinding {
+        return min(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: Float, op2: ObservableNumberValue): NumberBinding {
+        return min(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: Long): NumberBinding {
+        return min(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: Long, op2: ObservableNumberValue): NumberBinding {
+        return min(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: Int): NumberBinding {
+        return min(op1, IntConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: Int, op2: ObservableNumberValue): NumberBinding {
+        return min(IntConstant.valueOf(op1), op2, op2)
+    }
+
+    // =================================================================================================================
+    // Maximum
+
+    private fun max(op1: ObservableNumberValue, op2: ObservableNumberValue,
+            vararg dependencies: Observable): NumberBinding {
+
+        require(dependencies.isNotEmpty())
+
+        return when {
+            op1 is ObservableDoubleValue || op2 is ObservableDoubleValue -> object : DoubleBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Double {
+                    return kotlin.math.max(op1.doubleValue, op2.doubleValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableFloatValue || op2 is ObservableFloatValue -> object : FloatBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Float {
+                    return kotlin.math.max(op1.floatValue, op2.floatValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            op1 is ObservableLongValue || op2 is ObservableLongValue -> object : LongBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Long {
+                    return kotlin.math.max(op1.longValue, op2.longValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : IntBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Int {
+                    return kotlin.math.max(op1.intValue, op2.intValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+        }
+
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the values of two instances of
+     * [ObservableNumberValue].
+     *
+     * @param op1
+     *         the first operand
+     * @param op2
+     *         the second operand
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: ObservableNumberValue): NumberBinding {
+        return max(op1, op2, op1, op2)
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: Double): DoubleBinding {
+        return max(op1, DoubleConstant.valueOf(op2), op1) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun max(op1: Double, op2: ObservableNumberValue): DoubleBinding {
+        return max(DoubleConstant.valueOf(op1), op2, op2) as DoubleBinding
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: Float): NumberBinding {
+        return max(op1, FloatConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: Float, op2: ObservableNumberValue): NumberBinding {
+        return max(FloatConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: Long): NumberBinding {
+        return max(op1, LongConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: Long, op2: ObservableNumberValue): NumberBinding {
+        return max(LongConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the `ObservableNumberValue`
+     * @param op2
+     *         the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: Int): NumberBinding {
+        return max(op1, IntConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: Int, op2: ObservableNumberValue): NumberBinding {
+        return max(IntConstant.valueOf(op1), op2, op2)
     }
 
     // boolean
@@ -3302,7 +4021,7 @@ object Bindings {
      * @return the new `BooleanBinding`
      */
     fun lessThanOrEqual(op1: ObservableStringValue, op2: ObservableStringValue): BooleanBinding {
-        return lessThan(op1, op2, op1, op2)
+        return lessThanOrEqual(op1, op2, op1, op2)
     }
 
     /**
@@ -3336,18 +4055,18 @@ object Bindings {
     }
 
     /**
-     * Creates a new [IntegerBinding] that holds the length of a `ObservableStringValue`.
+     * Creates a new [IntBinding] that holds the length of a `ObservableStringValue`.
      *
      * Note: In this comparison a `String` that is `null` is considered to have a length of `0`
      *
      * @param op the `ObservableStringValue`
      *
-     * @return the new `IntegerBinding`
+     * @return the new `IntBinding`
      *
      * @since JavaFX 8.0
      */
-    fun length(op: ObservableStringValue): IntegerBinding {
-        return object : IntegerBinding() {
+    fun length(op: ObservableStringValue): IntBinding {
+        return object : IntBinding() {
 
             init {
                 super.bind(op)

@@ -1,10 +1,11 @@
-package io.github.vinccool96.observationskt.sun.binding
+package io.github.vinccool96.observationskt.sun.collections
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.collections.ListChangeListener
+import io.github.vinccool96.observationskt.sun.binding.ExpressionHelperBase
 import io.github.vinccool96.observationskt.util.ArrayUtils
 
-@Suppress("DuplicatedCode")
+@Suppress("DuplicatedCode", "UNCHECKED_CAST")
 abstract class ListListenerHelper<E> : ExpressionHelperBase() {
 
     protected abstract fun addListener(listener: InvalidationListener): ListListenerHelper<E>
@@ -24,7 +25,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
     private class SingleInvalidation<E>(private val listener: InvalidationListener) : ListListenerHelper<E>() {
 
         override fun addListener(listener: InvalidationListener): ListListenerHelper<E> {
-            return Generic(this.listener, listener)
+            return Generic(
+                    this.listener, listener)
         }
 
         override fun removeListener(listener: InvalidationListener): ListListenerHelper<E>? {
@@ -32,7 +34,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
         }
 
         override fun addListener(listener: ListChangeListener<in E>): ListListenerHelper<E> {
-            return Generic(this.listener, listener)
+            return Generic(
+                    this.listener, listener)
         }
 
         override fun removeListener(listener: ListChangeListener<in E>): ListListenerHelper<E>? {
@@ -58,7 +61,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
     private class SingleListChange<E>(private val listener: ListChangeListener<in E>) : ListListenerHelper<E>() {
 
         override fun addListener(listener: InvalidationListener): ListListenerHelper<E> {
-            return Generic(listener, this.listener)
+            return Generic(
+                    listener, this.listener)
         }
 
         override fun removeListener(listener: InvalidationListener): ListListenerHelper<E>? {
@@ -66,7 +70,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
         }
 
         override fun addListener(listener: ListChangeListener<in E>): ListListenerHelper<E> {
-            return Generic(this.listener, listener)
+            return Generic(
+                    this.listener, listener)
         }
 
         override fun removeListener(listener: ListChangeListener<in E>): ListListenerHelper<E>? {
@@ -89,7 +94,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
 
     }
 
-    private class Generic<E> : ListListenerHelper<E> {
+    private class Generic<E> :
+            ListListenerHelper<E> {
 
         private var invalidationListenerArray: Array<InvalidationListener?>
 
@@ -133,7 +139,9 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
                     val newSize = if (this.invalidationSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
                     this.invalidationListenerArray = this.invalidationListenerArray.copyOf(newSize)
                 } else if (this.invalidationSize == oldSize) {
-                    this.invalidationSize = trim(this.invalidationSize, this.invalidationListenerArray as Array<Any?>)
+                    this.invalidationSize =
+                            trim(
+                                    this.invalidationSize, this.invalidationListenerArray as Array<Any?>)
                     if (this.invalidationSize == oldSize) {
                         val newSize = if (this.invalidationSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
                         this.invalidationListenerArray = this.invalidationListenerArray.copyOf(newSize)
@@ -149,12 +157,14 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
                 if (listener == this.invalidationListenerArray[index]) {
                     if (this.invalidationSize == 1) {
                         if (this.listChangeSize == 1) {
-                            return SingleListChange(this.listChangeListeners[0])
+                            return SingleListChange(
+                                    this.listChangeListeners[0])
                         }
                         this.invalidationListenerArray = emptyArray()
                         this.invalidationSize = 0
                     } else if (this.invalidationSize == 2 && this.listChangeSize == 0) {
-                        return SingleInvalidation(this.invalidationListeners[1 - index])
+                        return SingleInvalidation(
+                                this.invalidationListeners[1 - index])
                     } else {
                         val numMoved = this.invalidationSize - index - 1
                         val oldListeners = this.invalidationListenerArray
@@ -186,7 +196,9 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
                     val newSize = if (this.listChangeSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
                     this.listChangeListenerArray = this.listChangeListenerArray.copyOf(newSize)
                 } else if (this.listChangeSize == oldSize) {
-                    this.listChangeSize = trim(this.listChangeSize, this.listChangeListenerArray as Array<Any?>)
+                    this.listChangeSize =
+                            trim(
+                                    this.listChangeSize, this.listChangeListenerArray as Array<Any?>)
                     if (this.listChangeSize == oldSize) {
                         val newSize = if (this.listChangeSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
                         this.listChangeListenerArray = this.listChangeListenerArray.copyOf(newSize)
@@ -202,12 +214,14 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
                 if (listener == this.listChangeListenerArray[index]) {
                     if (this.listChangeSize == 1) {
                         if (this.invalidationSize == 1) {
-                            return SingleInvalidation(this.invalidationListeners[0])
+                            return SingleInvalidation(
+                                    this.invalidationListeners[0])
                         }
                         this.listChangeListenerArray = emptyArray()
                         this.listChangeSize = 0
                     } else if (this.listChangeSize == 2 && this.invalidationSize == 0) {
-                        return SingleListChange(this.listChangeListeners[1 - index])
+                        return SingleListChange(
+                                this.listChangeListeners[1 - index])
                     } else {
                         val numMoved = this.listChangeSize - index - 1
                         val oldListeners = this.listChangeListenerArray
@@ -267,7 +281,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
 
     companion object {
         fun <E> addListener(helper: ListListenerHelper<E>?, listener: InvalidationListener): ListListenerHelper<E> {
-            return helper?.addListener(listener) ?: SingleInvalidation(listener)
+            return helper?.addListener(listener) ?: SingleInvalidation(
+                    listener)
         }
 
         fun <E> removeListener(helper: ListListenerHelper<E>?, listener: InvalidationListener): ListListenerHelper<E>? {
@@ -275,7 +290,8 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
         }
 
         fun <E> addListener(helper: ListListenerHelper<E>?, listener: ListChangeListener<in E>): ListListenerHelper<E> {
-            return helper?.addListener(listener) ?: SingleListChange(listener)
+            return helper?.addListener(listener) ?: SingleListChange(
+                    listener)
         }
 
         fun <E> removeListener(helper: ListListenerHelper<E>?,

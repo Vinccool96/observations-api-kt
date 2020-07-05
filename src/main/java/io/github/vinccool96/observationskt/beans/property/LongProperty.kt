@@ -58,8 +58,17 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
     }
 
     /**
-     * Creates an [ObjectProperty] that holds the value of this `LongProperty`. If the value of this
-     * `LongProperty` changes, the value of the `ObjectProperty` will be updated automatically.
+     * Creates an [ObjectProperty] that bidirectionally bound to this `LongProperty`. If the value of this
+     * `LongProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
+     *
+     * Can be used for binding an ObjectProperty to LongProperty.
+     *
+     * ```
+     * val longProperty: LongProperty = SimpleLongProperty(1L)
+     * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(2L)
+     *
+     * objectProperty.bind(longProperty.asObject())
+     * ```
      *
      * @return the new `ObjectProperty`
      *
