@@ -113,12 +113,12 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     override val dependencies: ObservableList<*>
         get() = ObservableCollections.emptyObservableList<Observable>()
 
-    final override fun get(): T {
+    final override fun get(): T? {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
         }
-        return this.valueState!!
+        return this.valueState
     }
 
     /**
@@ -146,7 +146,7 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
      *
      * @return the current value
      */
-    protected abstract fun computeValue(): T
+    protected abstract fun computeValue(): T?
 
     /**
      * Returns a string representation of this `ObjectBinding` object.

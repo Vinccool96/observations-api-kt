@@ -2,31 +2,31 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
-import io.github.vinccool96.observationskt.beans.binding.IntegerBinding
+import io.github.vinccool96.observationskt.beans.binding.IntBinding
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
-import io.github.vinccool96.observationskt.beans.value.ObservableIntegerValue
+import io.github.vinccool96.observationskt.beans.value.ObservableIntValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 import java.lang.ref.WeakReference
 
 /**
- * The class `IntegerPropertyBase` is the base class for a property wrapping a `Integer` value.
+ * The class `IntPropertyBase` is the base class for a property wrapping a `Int` value.
  *
  * It provides all the functionality required for a property except for the [bean] and [name] values, which must be
  * implemented by extending classes.
  *
- * @see IntegerProperty
+ * @see IntProperty
  * @since JavaFX 2.0
  *
- * @constructor The constructor of the `IntegerPropertyBase` that sets an initial value.
+ * @constructor The constructor of the `IntPropertyBase` that sets an initial value.
  *
  * @param initialValue the initial value of the wrapped value
  */
-abstract class IntegerPropertyBase(initialValue: Int) : IntegerProperty() {
+abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
 
     private var valueState: Int = initialValue
 
-    private var observable: ObservableIntegerValue? = null
+    private var observable: ObservableIntValue? = null
 
     private var listener: InvalidationListener? = null
 
@@ -35,7 +35,7 @@ abstract class IntegerPropertyBase(initialValue: Int) : IntegerProperty() {
     private var helper: ExpressionHelper<Number>? = null
 
     /**
-     * The constructor of the `IntegerPropertyBase`. The initial value is `0`
+     * The constructor of the `IntPropertyBase`. The initial value is `0`
      */
     constructor() : this(0)
 
@@ -122,8 +122,8 @@ abstract class IntegerPropertyBase(initialValue: Int) : IntegerProperty() {
         get() = this.observable != null
 
     override fun bind(observable: ObservableValue<out Number>) {
-        val newObservable: ObservableIntegerValue = if (observable is ObservableIntegerValue) observable
-        else object : IntegerBinding() {
+        val newObservable: ObservableIntValue = if (observable is ObservableIntValue) observable
+        else object : IntBinding() {
 
             init {
                 super.bind(observable)
@@ -156,14 +156,14 @@ abstract class IntegerPropertyBase(initialValue: Int) : IntegerProperty() {
     }
 
     /**
-     * Returns a string representation of this `IntegerPropertyBase` object.
+     * Returns a string representation of this `IntPropertyBase` object.
      *
-     * @return a string representation of this `IntegerPropertyBase` object.
+     * @return a string representation of this `IntPropertyBase` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("IntegerProperty [")
+        val result = StringBuilder("IntProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -184,12 +184,12 @@ abstract class IntegerPropertyBase(initialValue: Int) : IntegerProperty() {
         return result.toString()
     }
 
-    private class Listener(ref: IntegerPropertyBase) : InvalidationListener {
+    private class Listener(ref: IntPropertyBase) : InvalidationListener {
 
-        private val wref: WeakReference<IntegerPropertyBase> = WeakReference(ref)
+        private val wref: WeakReference<IntPropertyBase> = WeakReference(ref)
 
         override fun invalidated(observable: Observable) {
-            val ref: IntegerPropertyBase? = this.wref.get()
+            val ref: IntPropertyBase? = this.wref.get()
             if (ref == null) {
                 observable.removeListener(this)
             } else {

@@ -2,9 +2,9 @@ package io.github.vinccool96.observationskt.sun.binding
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
-import io.github.vinccool96.observationskt.beans.value.ObservableIntegerValue
+import io.github.vinccool96.observationskt.beans.value.ObservableIntValue
 
-class IntegerConstant private constructor(override val value: Int) : ObservableIntegerValue {
+class IntConstant private constructor(override val value: Int) : ObservableIntValue {
 
     override fun get(): Int {
         return this.value
@@ -50,8 +50,8 @@ class IntegerConstant private constructor(override val value: Int) : ObservableI
 
     companion object {
 
-        fun valueOf(value: Int): IntegerConstant {
-            return IntegerConstant(value)
+        fun valueOf(value: Int): IntConstant {
+            return IntConstant(value)
         }
 
     }

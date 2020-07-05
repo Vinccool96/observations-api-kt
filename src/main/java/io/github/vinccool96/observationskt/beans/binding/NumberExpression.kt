@@ -13,11 +13,11 @@ import java.util.*
  * 1. If one of the operands is a double, the result is a double.
  * 2. If not and one of the operands is a float, the result is a float.
  * 3. If not and one of the operands is a long, the result is a long.
- * 4. The result is an integer otherwise.
+ * 4. The result is an int otherwise.
  *
  * To be able to deal with an unspecified return type, two interfaces `NumberExpression` and its counterpart
  * [NumberBinding] were introduced. That means if the return type is specified as `NumberBinding`, the method will
- * either return a [DoubleBinding], [FloatBinding], [LongBinding] or [IntegerBinding], depending on the types of the
+ * either return a [DoubleBinding], [FloatBinding], [LongBinding] or [IntBinding], depending on the types of the
  * operands.
  *
  * The API tries to do its best in determining the correct return type, e.g. combining a [ObservableNumberValue] with a

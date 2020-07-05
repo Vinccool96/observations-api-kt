@@ -12,8 +12,8 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
 /**
  * Base class that provides most of the functionality needed to implement a [Binding] of an `Int` value.
  *
- * `IntegerBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
- * [bind]. If one of the registered dependencies becomes invalid, this `IntegerBinding` is marked as invalid. With
+ * `IntBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
+ * [bind]. If one of the registered dependencies becomes invalid, this `IntBinding` is marked as invalid. With
  * [unbind] listening to dependencies can be stopped.
  *
  * To provide a concrete implementation of this class, the method [computeValue] has to be implemented to calculate the
@@ -24,10 +24,10 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * @see Binding
  * @see NumberBinding
- * @see IntegerExpression
+ * @see IntExpression
  * @since JavaFX 2.0
  */
-abstract class IntegerBinding : IntegerExpression(), NumberBinding {
+abstract class IntBinding : IntExpression(), NumberBinding {
 
     private var valueState: Int = 0
 
@@ -147,19 +147,19 @@ abstract class IntegerBinding : IntegerExpression(), NumberBinding {
     /**
      * Calculates the current value of this binding.
      *
-     * Classes extending `IntegerBinding` have to provide an implementation of `computeValue`.
+     * Classes extending `IntBinding` have to provide an implementation of `computeValue`.
      *
      * @return the current value
      */
     protected abstract fun computeValue(): Int
 
     /**
-     * Returns a string representation of this `IntegerBinding` object.
+     * Returns a string representation of this `IntBinding` object.
      *
-     * @return a string representation of this `IntegerBinding` object.
+     * @return a string representation of this `IntBinding` object.
      */
     override fun toString(): String {
-        return if (this.validState) "IntegerBinding [value: ${get()}]" else "IntegerBinding [invalid]"
+        return if (this.validState) "IntBinding [value: ${get()}]" else "IntBinding [invalid]"
     }
 
 }

@@ -8,10 +8,10 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  * Base class for all readonly properties wrapping an `Int`. This class provides a default implementation to attach
  * listener.
  *
- * @see ReadOnlyIntegerProperty
+ * @see ReadOnlyIntProperty
  * @since JavaFX 2.0
  */
-abstract class ReadOnlyIntegerPropertyBase : ReadOnlyIntegerProperty() {
+abstract class ReadOnlyIntPropertyBase : ReadOnlyIntProperty() {
 
     private var helper: ExpressionHelper<Number>? = null
 

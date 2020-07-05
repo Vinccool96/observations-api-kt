@@ -58,8 +58,17 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
     }
 
     /**
-     * Creates an [ObjectProperty] that holds the value of this `FloatProperty`. If the value of this
-     * `FloatProperty` changes, the value of the `ObjectProperty` will be updated automatically.
+     * Creates an [ObjectProperty] that bidirectionally bound to this `FloatProperty`. If the value of this
+     * `FloatProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
+     *
+     * Can be used for binding an ObjectProperty to FloatProperty.
+     *
+     * ```
+     * val floatProperty: FloatProperty = SimpleFloatProperty(1.0F)
+     * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2.0F)
+     *
+     * objectProperty.bind(floatProperty.asObject())
+     * ```
      *
      * @return the new `ObjectProperty`
      *

@@ -112,11 +112,27 @@ object ObservableCollections {
      *
      * @return a newly created observableArrayList
      *
-     * @see #observableArrayList()
+     * @see observableArrayList
      */
     fun <E> observableArrayList(vararg items: E): ObservableList<E> {
         val list: ObservableList<E> = observableArrayList()
         list.addAll(*items)
+        return list
+    }
+
+    /**
+     * Creates a new observable array list and adds a content of collection `col` to it.
+     *
+     * @param E
+     *         the list element type
+     * @param col
+     *         a collection which content should be added to the observableArrayList
+     *
+     * @return a newly created observableArrayList
+     */
+    fun <E> observableArrayList(col: Collection<E>): ObservableList<E> {
+        val list: ObservableList<E> = observableArrayList()
+        list.addAll(col)
         return list
     }
 

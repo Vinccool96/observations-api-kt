@@ -10,7 +10,7 @@ package io.github.vinccool96.observationskt.beans.value
  * @see WritableBooleanValue
  * @see WritableDoubleValue
  * @see WritableFloatValue
- * @see WritableIntegerValue
+ * @see WritableIntValue
  * @see WritableLongValue
  * @see WritableNumberValue
  * @see WritableObjectValue

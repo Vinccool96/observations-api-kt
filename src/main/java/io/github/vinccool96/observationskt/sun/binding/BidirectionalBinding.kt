@@ -260,12 +260,12 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
     }
 
-    private class BidirectionalIntegerBinding(property1: IntegerProperty, property2: IntegerProperty) :
+    private class BidirectionalIntBinding(property1: IntProperty, property2: IntProperty) :
             BidirectionalBinding<Number>(property1, property2) {
 
-        private val propertyRef1: WeakReference<IntegerProperty> = WeakReference(property1)
+        private val propertyRef1: WeakReference<IntProperty> = WeakReference(property1)
 
-        private val propertyRef2: WeakReference<IntegerProperty> = WeakReference(property2)
+        private val propertyRef2: WeakReference<IntProperty> = WeakReference(property2)
 
         private var updating: Boolean = false
 
@@ -277,8 +277,8 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
             if (!this.updating) {
-                val property1: IntegerProperty? = this.propertyRef1.get()
-                val property2: IntegerProperty? = this.propertyRef2.get()
+                val property1: IntProperty? = this.propertyRef1.get()
+                val property2: IntProperty? = this.propertyRef2.get()
                 if (property1 != null && property2 != null) {
                     try {
                         this.updating = true
@@ -537,7 +537,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                         property2)
                 property1 is LongProperty && property2 is LongProperty -> BidirectionalLongBinding(property1,
                         property2)
-                property1 is IntegerProperty && property2 is IntegerProperty -> BidirectionalIntegerBinding(property1,
+                property1 is IntProperty && property2 is IntProperty -> BidirectionalIntBinding(property1,
                         property2)
                 property1 is DoubleProperty && property2 is DoubleProperty -> BidirectionalDoubleBinding(property1,
                         property2)

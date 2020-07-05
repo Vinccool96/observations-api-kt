@@ -1,7 +1,7 @@
 package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
-import io.github.vinccool96.observationskt.sun.binding.ListListenerHelper
+import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
 
 /**
  * Abstract class that serves as a base class for [ObservableList] implementations. The base class provides two

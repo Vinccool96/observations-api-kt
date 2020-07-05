@@ -23,6 +23,7 @@ import java.security.PrivilegedAction
  * @see Property
  * @since JavaFX 2.0
  */
+@Suppress("UNCHECKED_CAST")
 abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, WritableDoubleValue {
 
     override var value: Number
@@ -57,8 +58,17 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
     }
 
     /**
-     * Creates an [ObjectProperty] that holds the value of this `DoubleProperty`. If the value of this
-     * `DoubleProperty` changes, the value of the `ObjectProperty` will be updated automatically.
+     * Creates an [ObjectProperty] that bidirectionally bound to this `DoubleProperty`. If the value of this
+     * `DoubleProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
+     *
+     * Can be used for binding an ObjectProperty to DoubleProperty.
+     *
+     * ```
+     * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1.0)
+     * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0)
+     *
+     * objectProperty.bind(doubleProperty.asObject())
+     * ```
      *
      * @return the new `ObjectProperty`
      *

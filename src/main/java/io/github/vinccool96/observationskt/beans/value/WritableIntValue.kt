@@ -7,7 +7,7 @@ package io.github.vinccool96.observationskt.beans.value
  * @see WritableNumberValue
  * @since JavaFX 2.0
  */
-interface WritableIntegerValue : WritableNumberValue {
+interface WritableIntValue : WritableNumberValue {
 
     /**
      * Get the wrapped value. Unlike [value], this method returns primitive `int`. Needs to be
@@ -18,7 +18,7 @@ interface WritableIntegerValue : WritableNumberValue {
     fun get(): Int
 
     /**
-     * Set the wrapped value. Unlike [WritableIntegerValue.value], this method uses primitive `int`.
+     * Set the wrapped value. Unlike [WritableIntValue.value], this method uses primitive `int`.
      *
      * @param value
      *         The new value

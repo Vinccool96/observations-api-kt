@@ -11,7 +11,7 @@ import java.util.*
  * NumberExpressionBase serves as a place for common code of specific NumberExpression subclasses for the specific
  * number type.
  *
- * @see IntegerExpression
+ * @see IntExpression
  * @see LongExpression
  * @see FloatExpression
  * @see DoubleExpression
@@ -226,7 +226,7 @@ abstract class NumberExpressionBase : NumberExpression {
         fun numberExpression(value: ObservableNumberValue): NumberExpressionBase {
             return when (value) {
                 is NumberExpressionBase -> value
-                is ObservableIntegerValue -> IntegerExpression.integerExpression(value)
+                is ObservableIntValue -> IntExpression.intExpression(value)
                 is ObservableDoubleValue -> DoubleExpression.doubleExpression(value)
                 is ObservableFloatValue -> FloatExpression.floatExpression(value)
                 is ObservableLongValue -> LongExpression.longExpression(value)
