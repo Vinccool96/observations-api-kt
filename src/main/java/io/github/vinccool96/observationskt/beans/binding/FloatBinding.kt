@@ -25,7 +25,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * @see Binding
  * @see NumberBinding
  * @see FloatExpression
- * @since JavaFX 2.0
  */
 abstract class FloatBinding : FloatExpression(), NumberBinding {
 

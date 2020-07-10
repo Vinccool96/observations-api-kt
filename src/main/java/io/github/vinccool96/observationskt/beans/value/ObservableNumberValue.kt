@@ -14,8 +14,6 @@ package io.github.vinccool96.observationskt.beans.value
  * @see ObservableIntValue
  *
  * @see ObservableLongValue
- *
- * @since JavaFX 2.0
  */
 interface ObservableNumberValue : ObservableValue<Number> {
 

@@ -24,7 +24,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * @see Binding
  * @see StringExpression
- * @since JavaFX 2.0
  */
 abstract class StringBinding : StringExpression(), Binding<String?> {
 

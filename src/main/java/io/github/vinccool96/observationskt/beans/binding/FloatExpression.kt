@@ -12,8 +12,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * A concrete sub-class of `FloatExpression` has to implement the method [get], which provides the actual value of this
  * expression.
- *
- * @since JavaFX 2.0
  */
 abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
 
@@ -105,8 +103,6 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
      * `FloatExpression` changes, the value of the `ObjectExpression` will be updated automatically.
      *
      * @return the new `ObjectExpression`
-     *
-     * @since JavaFX 8.0
      */
     open fun asObject(): ObjectExpression<Float> {
         return object : ObjectBinding<Float>() {
@@ -183,8 +179,6 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
          *         The type of the wrapped number
          *
          * @return A `FloatExpression` that wraps the `ObservableValue` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> floatExpression(value: ObservableValue<T>): FloatExpression {
             return if (value is FloatExpression) value else object : FloatBinding() {

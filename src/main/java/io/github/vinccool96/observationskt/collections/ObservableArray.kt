@@ -15,7 +15,6 @@ import io.github.vinccool96.observationskt.beans.Observable
  *         actual array instance type
  *
  * @see ArrayChangeListener
- * @since JavaFX 8.0
  */
 interface ObservableArray<T : ObservableArray<T>> : Observable {
 

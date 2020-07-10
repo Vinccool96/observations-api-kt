@@ -6,8 +6,8 @@ import kotlin.annotation.AnnotationTarget.TYPE
 
 /**
  * Specifies a property to which child elements will be added or set when an explicit property is not given.
+ *
  * @param value The name of the default property.
- * @since JavaFX 2.0
  */
 @Inherited
 @MustBeDocumented

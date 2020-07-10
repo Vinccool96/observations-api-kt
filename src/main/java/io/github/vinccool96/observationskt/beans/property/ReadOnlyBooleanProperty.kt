@@ -11,7 +11,6 @@ import io.github.vinccool96.observationskt.beans.binding.BooleanExpression
  * @see io.github.vinccool96.observationskt.beans.value.ObservableBooleanValue
  * @see BooleanExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<Boolean> {
 
@@ -39,8 +38,6 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
      * `ReadOnlyBooleanProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
      *
      * @return the new `ReadOnlyObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ReadOnlyObjectProperty<Boolean> {
         return object : ReadOnlyObjectPropertyBase<Boolean>() {
@@ -88,8 +85,6 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
          *         The source `ReadOnlyProperty`
          *
          * @return A `ReadOnlyBooleanProperty` that wraps the `ReadOnlyProperty` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun readOnlyBooleanProperty(property: ReadOnlyObjectProperty<Boolean?>): ReadOnlyBooleanProperty {
             return if (property is ReadOnlyBooleanProperty) property else object : ReadOnlyBooleanPropertyBase() {

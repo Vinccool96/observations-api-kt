@@ -7,7 +7,6 @@ package io.github.vinccool96.observationskt.collections
  *         the list element type
  *
  * @see Change
- * @since JavaFX 2.0
  */
 @FunctionalInterface
 interface ListChangeListener<E> {
@@ -84,8 +83,6 @@ interface ListChangeListener<E> {
      *
      * @param E
      *         the list element type
-     *
-     * @since JavaFX 2.0
      *
      * @constructor Constructs a new change done to a list.
      *
@@ -194,8 +191,6 @@ interface ListChangeListener<E> {
          * optional event type and may not be fired by all ObservableLists.
          *
          * @return `true` if the current change is an update change.
-         *
-         * @since JavaFX 2.1
          */
         open val wasUpdated: Boolean
             get() = false

@@ -13,8 +13,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * the actual value of this expression.
  *
  * @param T The type of the wrapped value
- *
- * @since JavaFX 2.0
  */
 abstract class ObjectExpression<T> : ObservableObjectValue<T> {
 

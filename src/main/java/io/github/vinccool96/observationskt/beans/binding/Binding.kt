@@ -20,7 +20,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * binding, because these classes already provide most of the needed functionality. See [DoubleBinding] for an example.
  *
  * @see DoubleBinding
- * @since JavaFX 2.0
  */
 interface Binding<T> : ObservableValue<T> {
 

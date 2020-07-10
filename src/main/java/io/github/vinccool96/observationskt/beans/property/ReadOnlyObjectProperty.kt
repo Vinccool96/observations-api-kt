@@ -17,7 +17,6 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
  * @see io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
  * @see ObjectExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  *
  * @constructor The constructor of `ReadOnlyObjectProperty`.
  */

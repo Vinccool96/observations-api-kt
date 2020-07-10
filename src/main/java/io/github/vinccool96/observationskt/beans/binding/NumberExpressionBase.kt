@@ -15,7 +15,6 @@ import java.util.*
  * @see LongExpression
  * @see FloatExpression
  * @see DoubleExpression
- * @since JavaFX 2.0
  */
 abstract class NumberExpressionBase : NumberExpression {
 

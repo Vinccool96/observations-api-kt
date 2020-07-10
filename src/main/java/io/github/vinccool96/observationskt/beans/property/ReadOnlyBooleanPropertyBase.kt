@@ -9,7 +9,6 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  * listener.
  *
  * @see ReadOnlyBooleanProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyBooleanPropertyBase : ReadOnlyBooleanProperty() {
 

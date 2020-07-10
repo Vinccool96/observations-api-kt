@@ -4062,8 +4062,6 @@ object Bindings {
      * @param op the `ObservableStringValue`
      *
      * @return the new `IntBinding`
-     *
-     * @since JavaFX 8.0
      */
     fun length(op: ObservableStringValue): IntBinding {
         return object : IntBinding() {
@@ -4095,8 +4093,6 @@ object Bindings {
      * @param op the `ObservableStringValue`
      *
      * @return the new `BooleanBinding`
-     *
-     * @since JavaFX 8.0
      */
     fun isEmpty(op: ObservableStringValue): BooleanBinding {
         return object : BooleanBinding() {
@@ -4128,8 +4124,6 @@ object Bindings {
      * @param op the `ObservableStringValue`
      *
      * @return the new `BooleanBinding`
-     *
-     * @since JavaFX 8.0
      */
     fun isNotEmpty(op: ObservableStringValue): BooleanBinding {
         return object : BooleanBinding() {

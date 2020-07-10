@@ -21,7 +21,6 @@ import java.security.PrivilegedAction
  * @see WritableDoubleValue
  * @see ReadOnlyDoubleProperty
  * @see Property
- * @since JavaFX 2.0
  */
 @Suppress("UNCHECKED_CAST")
 abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, WritableDoubleValue {
@@ -71,8 +70,6 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
      * ```
      *
      * @return the new `ObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ObjectProperty<Double> {
         return object : ObjectPropertyBase<Double>(this@DoubleProperty.doubleValue) {
@@ -125,8 +122,6 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
          *         The source `Property`
          *
          * @return A `DoubleProperty` that wraps the `Property` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun doubleProperty(property: Property<Double>): DoubleProperty {
             return if (property is DoubleProperty) property else object : DoublePropertyBase() {

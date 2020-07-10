@@ -69,7 +69,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * @see Binding
  * @see NumberBinding
  * @see DoubleExpression
- * @since JavaFX 2.0
  */
 abstract class DoubleBinding : DoubleExpression(), NumberBinding {
 

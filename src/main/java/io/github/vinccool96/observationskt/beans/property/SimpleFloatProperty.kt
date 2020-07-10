@@ -4,7 +4,6 @@ package io.github.vinccool96.observationskt.beans.property
  * This class provides a full implementation of a [Property] wrapping a `Float` value.
  *
  * @see FloatPropertyBase
- * @since JavaFX 2.0
  *
  * @constructor The constructor of `FloatProperty`
  *

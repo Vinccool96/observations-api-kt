@@ -19,8 +19,6 @@ import kotlin.collections.ArrayList
  * The utility methods are here mainly for performance reasons. All methods are optimized in a way that they yield only
  * limited number of notifications. On the other hand, `Collections` methods might call "modification methods" on an
  * `ObservableList` multiple times, resulting in a number of notifications.
- *
- * @since JavaFX 2.0
  */
 object ObservableCollections {
 
@@ -61,8 +59,6 @@ object ObservableCollections {
      *         element to Observable[] convertor
      *
      * @return a newly created ObservableList
-     *
-     * @since JavaFX 2.1
      */
     fun <E> observableList(list: MutableList<E>, extractor: Callback<E, Array<Observable>>): ObservableList<E> {
         return if (list is RandomAccess) ObservableListWrapper(list, extractor)
@@ -96,7 +92,6 @@ object ObservableCollections {
      * @return a newly created ObservableList
      *
      * @see observableList
-     * @since JavaFX 2.1
      */
     fun <E> observableArrayList(extractor: Callback<E, Array<Observable>>): ObservableList<E> {
         return observableList(ArrayList(), extractor)

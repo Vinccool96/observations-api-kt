@@ -7,8 +7,6 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
  *
  * @param T
  *         the type of the wrapped value
- *
- * @since JavaFX 2.0
  */
 interface ReadOnlyProperty<T> : ObservableValue<T> {
 

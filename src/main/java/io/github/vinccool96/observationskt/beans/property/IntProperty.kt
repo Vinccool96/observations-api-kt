@@ -21,7 +21,6 @@ import java.security.PrivilegedAction
  * @see WritableIntValue
  * @see ReadOnlyIntProperty
  * @see Property
- * @since JavaFX 2.0
  */
 @Suppress("UNCHECKED_CAST")
 abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIntValue {
@@ -71,8 +70,6 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIn
      * ```
      *
      * @return the new `ObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ObjectProperty<Int> {
         return object : ObjectPropertyBase<Int>(this@IntProperty.intValue) {
@@ -125,8 +122,6 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIn
          *         The source `Property`
          *
          * @return A `IntProperty` that wraps the `Property` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun doubleProperty(property: Property<Int>): IntProperty {
             return if (property is IntProperty) property else object : IntPropertyBase() {

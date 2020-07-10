@@ -21,7 +21,6 @@ import java.security.PrivilegedAction
  * @see WritableLongValue
  * @see ReadOnlyLongProperty
  * @see Property
- * @since JavaFX 2.0
  */
 @Suppress("UNCHECKED_CAST")
 abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, WritableLongValue {
@@ -71,8 +70,6 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
      * ```
      *
      * @return the new `ObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ObjectProperty<Long> {
         return object : ObjectPropertyBase<Long>(this@LongProperty.longValue) {
@@ -125,8 +122,6 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
          *         The source `Property`
          *
          * @return A `LongProperty` that wraps the `Property` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun longProperty(property: Property<Number>): LongProperty {
             return if (property is LongProperty) property else object : LongPropertyBase() {

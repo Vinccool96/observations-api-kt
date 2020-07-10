@@ -8,7 +8,6 @@ import io.github.vinccool96.observationskt.beans.binding.StringExpression
  * @see io.github.vinccool96.observationskt.beans.value.ObservableStringValue
  * @see StringExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyStringProperty : StringExpression(), ReadOnlyProperty<String?> {
 

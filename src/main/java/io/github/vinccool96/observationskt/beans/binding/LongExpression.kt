@@ -12,8 +12,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * A concrete sub-class of `LongExpression` has to implement the method [get], which provides the actual value of this
  * expression.
- *
- * @since JavaFX 2.0
  */
 abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
 
@@ -105,8 +103,6 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
      * `LongExpression` changes, the value of the `ObjectExpression` will be updated automatically.
      *
      * @return the new `ObjectExpression`
-     *
-     * @since JavaFX 8.0
      */
     open fun asObject(): ObjectExpression<Long> {
         return object : ObjectBinding<Long>() {
@@ -182,8 +178,6 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
          *         The type of the wrapped number
          *
          * @return An `LongExpression` that wraps the `ObservableValue` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> longExpression(value: ObservableValue<T>): LongExpression {
             return if (value is LongExpression) value else object : LongBinding() {

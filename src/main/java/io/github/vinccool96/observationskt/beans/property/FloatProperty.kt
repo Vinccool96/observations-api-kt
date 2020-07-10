@@ -21,7 +21,6 @@ import java.security.PrivilegedAction
  * @see WritableFloatValue
  * @see ReadOnlyFloatProperty
  * @see Property
- * @since JavaFX 2.0
  */
 @Suppress("UNCHECKED_CAST")
 abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, WritableFloatValue {
@@ -71,8 +70,6 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
      * ```
      *
      * @return the new `ObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ObjectProperty<Float> {
         return object : ObjectPropertyBase<Float>(this@FloatProperty.floatValue) {
@@ -125,8 +122,6 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
          *         The source `Property`
          *
          * @return A `FloatProperty` that wraps the `Property` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun floatProperty(property: Property<Float>): FloatProperty {
             return if (property is FloatProperty) property else object : FloatPropertyBase() {

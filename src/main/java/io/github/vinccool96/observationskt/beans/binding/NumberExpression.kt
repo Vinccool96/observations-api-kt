@@ -24,8 +24,6 @@ import java.util.*
  * primitive double will always result in a [DoubleBinding]. In cases where the return type is not known by the API, it
  * is the responsibility of the developer to call the correct getter ([intValue], etc.). If the internal representation
  * does not match the type of the getter, a standard cast is done.
- *
- * @since JavaFX 2.0
  */
 interface NumberExpression : ObservableNumberValue {
 

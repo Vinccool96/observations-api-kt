@@ -25,7 +25,6 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
  * @see WritableObjectValue
  * @see ReadOnlyObjectProperty
  * @see Property
- * @since JavaFX 2.0
  */
 abstract class ObjectProperty<T> : ReadOnlyObjectProperty<T>(), Property<T>, WritableObjectValue<T> {
 

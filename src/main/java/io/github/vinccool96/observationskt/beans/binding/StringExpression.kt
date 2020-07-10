@@ -13,8 +13,6 @@ import io.github.vinccool96.observationskt.sun.binding.StringFormatter
  *
  * Note: all implementation of [BooleanBinding] returned by the comparisons in this class consider a `String` that is
  * `null` equal to an empty `String`.
- *
- * @since JavaFX 2.0
  */
 abstract class StringExpression : ObservableStringValue {
 
@@ -272,8 +270,6 @@ abstract class StringExpression : ObservableStringValue {
      * Note: If the value of this `StringExpression` is `null`, the length is considered to be `0`.
      *
      * @return the new `IntBinding`
-     *
-     * @since JavaFX 8.0
      */
     fun length(): IntBinding? {
         return Bindings.length(this)
@@ -285,8 +281,6 @@ abstract class StringExpression : ObservableStringValue {
      * Note: If the value of this `StringExpression` is `null`, it is considered to be empty.
      *
      * @return the new `BooleanBinding`
-     *
-     * @since JavaFX 8.0
      */
     fun isEmpty(): BooleanBinding {
         return Bindings.isEmpty(this)
@@ -298,8 +292,6 @@ abstract class StringExpression : ObservableStringValue {
      * Note: If the value of this `StringExpression` is `null`, it is considered to be empty.
      *
      * @return the new `BooleanBinding`
-     *
-     * @since JavaFX 8.0
      */
     fun isNotEmpty(): BooleanBinding {
         return Bindings.isNotEmpty(this)

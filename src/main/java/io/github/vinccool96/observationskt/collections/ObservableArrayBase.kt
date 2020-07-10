@@ -13,7 +13,6 @@ import io.github.vinccool96.observationskt.sun.collections.ArrayListenerHelper
  *
  * @see ObservableArray
  * @see ArrayChangeListener
- * @since JavaFX 8.0
  */
 @Suppress("UNCHECKED_CAST")
 abstract class ObservableArrayBase<T : ObservableArray<T>> : ObservableArray<T> {

@@ -54,7 +54,6 @@ import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
  * @see ObservableList
  * @see ListChangeListener.Change
  * @see ModifiableObservableListBase
- * @since JavaFX 8.0
  */
 abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<E> {
 

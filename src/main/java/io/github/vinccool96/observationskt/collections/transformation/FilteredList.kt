@@ -14,7 +14,6 @@ import java.util.function.Predicate
  * propagated immediately to the FilteredList.
  *
  * @see TransformationList
- * @since JavaFX 8.0
  */
 class FilteredList<E> : TransformationList<E, E> {
 

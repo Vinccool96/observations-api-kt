@@ -10,7 +10,6 @@ package io.github.vinccool96.observationskt.beans.value
  * The same instance of `ChangeListener` can be registered to listen to multiple `ObservableValues`.
  *
  * @see ObservableValue
- * @since JavaFX 2.0
  */
 @FunctionalInterface
 interface ChangeListener<T> {

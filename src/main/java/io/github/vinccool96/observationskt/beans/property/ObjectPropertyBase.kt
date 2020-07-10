@@ -16,7 +16,6 @@ import java.lang.ref.WeakReference
  * @param T the type of the wrapped value
  *
  * @see ObjectProperty
- * @since JavaFX 2.
  *
  * @constructor The constructor of the `ObjectPropertyBase`.
  *

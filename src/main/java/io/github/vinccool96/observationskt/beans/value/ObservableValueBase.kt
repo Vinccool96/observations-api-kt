@@ -12,8 +12,6 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  *
  * @param T
  *         The type of the wrapped value.
- *
- * @since JavaFX 2.0
  */
 abstract class ObservableValueBase<T> : ObservableValue<T> {
 

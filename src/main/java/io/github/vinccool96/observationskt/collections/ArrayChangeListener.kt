@@ -7,7 +7,6 @@ package io.github.vinccool96.observationskt.collections
  *         The type of the `ObservableArray`
  *
  * @see ObservableArray
- * @since JavaFX 8.0
  */
 interface ArrayChangeListener<T : ObservableArray<T>> {
 

@@ -11,8 +11,6 @@ package io.github.vinccool96.observationskt.util
  *         The type of the argument provided to the `call` method.
  * @param R
  *         The type of the return type of the `call` method.
- *
- * @since JavaFX 2.0
  */
 @FunctionalInterface
 interface Callback<P, R> {
