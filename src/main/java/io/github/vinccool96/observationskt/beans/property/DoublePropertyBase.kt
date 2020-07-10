@@ -16,7 +16,6 @@ import java.lang.ref.WeakReference
  * implemented by extending classes.
  *
  * @see DoubleProperty
- * @since JavaFX 2.0
  *
  * @constructor The constructor of the `DoublePropertyBase` that sets an initial value.
  *

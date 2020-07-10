@@ -18,8 +18,6 @@ import io.github.vinccool96.observationskt.collections.WeakListChangeListener
  * @param F
  *         the upper bound of the type of the source list
  *
- * @since JavaFX 8.0
- *
  * @constructor Creates a new Transformation list wrapped around the source list.
  *
  * @param source

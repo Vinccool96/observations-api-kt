@@ -21,7 +21,6 @@ import java.security.PrivilegedAction
  * @see WritableBooleanValue
  * @see ReadOnlyBooleanProperty
  * @see Property
- * @since JavaFX 2.0
  */
 abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, WritableBooleanValue {
 
@@ -61,8 +60,6 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, W
      * `BooleanProperty` changes, the value of the `ObjectProperty` will be updated automatically.
      *
      * @return the new `ObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ObjectProperty<Boolean> {
         return object : ObjectPropertyBase<Boolean>(this@BooleanProperty.value) {
@@ -104,8 +101,6 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, W
          *         The source `Property`
          *
          * @return A `BooleanProperty` that wraps the `Property` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun booleanProperty(property: Property<Boolean>): BooleanProperty {
             return if (property is BooleanProperty) property else object : BooleanPropertyBase() {

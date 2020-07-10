@@ -13,6 +13,5 @@ import io.github.vinccool96.observationskt.collections.ObservableMap
  * @see ObservableMap
  * @see ObservableObjectValue
  * @see ObservableValue
- * @since JavaFX 2.1
  */
 interface ObservableMapValue<K, V> : ObservableObjectValue<ObservableMap<K, V>>, ObservableMap<K, V>

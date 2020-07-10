@@ -5,8 +5,6 @@ package io.github.vinccool96.observationskt.collections
  *
  * @param E
  *         the element type
- *
- * @since JavaFX 2.1
  */
 @FunctionalInterface
 interface SetChangeListener<E> {
@@ -18,7 +16,6 @@ interface SetChangeListener<E> {
      *
      * @param E
      *         element type
-     * @since JavaFX 2.1
      * @constructor Constructs a change associated with a set.
      * @param set the source of the change
      */

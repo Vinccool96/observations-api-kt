@@ -11,6 +11,5 @@ import io.github.vinccool96.observationskt.collections.ObservableList
  * @see ObservableList
  * @see WritableObjectValue
  * @see WritableListValue
- * @since JavaFX 2.1
  */
 interface WritableListValue<E> : WritableObjectValue<ObservableList<E>>, ObservableList<E>

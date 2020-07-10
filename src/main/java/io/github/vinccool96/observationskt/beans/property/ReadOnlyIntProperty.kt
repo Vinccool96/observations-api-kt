@@ -11,7 +11,6 @@ import io.github.vinccool96.observationskt.beans.binding.IntExpression
  * @see io.github.vinccool96.observationskt.beans.value.ObservableIntValue
  * @see IntExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number> {
 
@@ -39,8 +38,6 @@ abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number> {
      * `ReadOnlyIntProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
      *
      * @return the new `ReadOnlyObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ReadOnlyObjectProperty<Int> {
         return object : ReadOnlyObjectPropertyBase<Int>() {
@@ -90,8 +87,6 @@ abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number> {
          *         The type of the wrapped number
          *
          * @return A `ReadOnlyIntProperty` that wraps the `ReadOnlyProperty` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> readOnlyIntProperty(property: ReadOnlyProperty<T>): ReadOnlyIntProperty {
             return if (property is ReadOnlyIntProperty) property else object : ReadOnlyIntPropertyBase() {

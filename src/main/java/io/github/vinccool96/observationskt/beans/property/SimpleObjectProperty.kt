@@ -6,7 +6,6 @@ package io.github.vinccool96.observationskt.beans.property
  * @param T the type of the wrapped `Object`
  *
  * @see ObjectPropertyBase
- * @since JavaFX 2.0
  *
  * @constructor The constructor of `ObjectProperty`
  *

@@ -7,8 +7,6 @@ package io.github.vinccool96.observationskt.collections
  *         the key element type
  * @param V
  *         the value element type
- *
- * @since JavaFX 2.0
  */
 @FunctionalInterface
 interface MapChangeListener<K, V> {
@@ -22,8 +20,6 @@ interface MapChangeListener<K, V> {
      *         key type
      * @param V
      *         value type
-     *
-     * @since JavaFX 2.0
      *
      * @constructor Constructs a change associated with a map.
      *

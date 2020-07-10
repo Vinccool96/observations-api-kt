@@ -13,8 +13,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * A concrete sub-class of `DoubleExpression` has to implement the method [get], which provides the actual value of this
  * expression.
- *
- * @since JavaFX 2.0
  */
 abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue {
 
@@ -122,8 +120,6 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
      * `DoubleExpression` changes, the value of the `ObjectExpression` will be updated automatically.
      *
      * @return the new `ObjectExpression`
-     *
-     * @since JavaFX 8.0
      */
     open fun asObject(): ObjectExpression<Double> {
         return object : ObjectBinding<Double>() {
@@ -200,8 +196,6 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
          *         The type of the wrapped number
          *
          * @return A `DoubleExpression` that wraps the `ObservableValue` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> doubleExpression(value: ObservableValue<T>): DoubleExpression {
             return if (value is DoubleExpression) value else object : DoubleBinding() {

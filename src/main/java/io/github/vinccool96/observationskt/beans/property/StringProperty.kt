@@ -19,7 +19,6 @@ import io.github.vinccool96.observationskt.beans.value.WritableStringValue
  * @see WritableStringValue
  * @see ReadOnlyStringProperty
  * @see Property
- * @since JavaFX 2.0
  */
 abstract class StringProperty : ReadOnlyStringProperty(), Property<String?>, WritableStringValue {
 

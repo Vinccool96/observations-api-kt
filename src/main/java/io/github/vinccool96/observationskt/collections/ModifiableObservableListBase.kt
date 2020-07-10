@@ -47,7 +47,6 @@ package io.github.vinccool96.observationskt.collections
  * @param E the type of the elements contained in the List
  *
  * @see ObservableListBase
- * @since JavaFX 8.0
  */
 abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
 

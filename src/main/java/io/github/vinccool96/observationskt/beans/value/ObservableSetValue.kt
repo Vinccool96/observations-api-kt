@@ -11,6 +11,5 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
  * @see ObservableSet
  * @see ObservableObjectValue
  * @see ObservableValue
- * @since JavaFX 2.1
  */
 interface ObservableSetValue<E> : ObservableObjectValue<ObservableSet<E>>, ObservableSet<E>

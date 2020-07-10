@@ -26,7 +26,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * @see Binding
  * @see ObjectExpression
- * @since JavaFX 2.0
  */
 abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
 

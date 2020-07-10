@@ -17,7 +17,6 @@ import io.github.vinccool96.observationskt.sun.collections.SourceAdapterChange
  * valid again.
  *
  * @see TransformationList
- * @since JavaFX 8.0
  */
 @Suppress("UNCHECKED_CAST")
 class SortedList<E> : TransformationList<E, E> {

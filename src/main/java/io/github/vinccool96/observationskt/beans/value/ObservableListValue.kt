@@ -11,6 +11,5 @@ import io.github.vinccool96.observationskt.collections.ObservableList
  * @see ObservableList
  * @see ObservableObjectValue
  * @see ObservableValue
- * @since JavaFX 2.1
  */
 interface ObservableListValue<E> : ObservableObjectValue<ObservableList<E>>, ObservableList<E>

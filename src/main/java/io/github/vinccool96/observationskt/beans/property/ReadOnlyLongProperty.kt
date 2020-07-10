@@ -11,7 +11,6 @@ import io.github.vinccool96.observationskt.beans.binding.LongExpression
  * @see io.github.vinccool96.observationskt.beans.value.ObservableLongValue
  * @see LongExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number> {
 
@@ -39,8 +38,6 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number>
      * `ReadOnlyLongProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
      *
      * @return the new `ReadOnlyObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ReadOnlyObjectProperty<Long> {
         return object : ReadOnlyObjectPropertyBase<Long>() {
@@ -90,8 +87,6 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number>
          *         The type of the wrapped number
          *
          * @return A `ReadOnlyLongProperty` that wraps the `ReadOnlyProperty` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> readOnlyLongProperty(property: ReadOnlyProperty<T>): ReadOnlyLongProperty {
             return if (property is ReadOnlyLongProperty) property else object : ReadOnlyLongPropertyBase() {

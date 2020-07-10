@@ -12,7 +12,6 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  *         the type of the wrapped `Object`
  *
  * @see ReadOnlyObjectProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyObjectPropertyBase<T> : ReadOnlyObjectProperty<T>() {
 

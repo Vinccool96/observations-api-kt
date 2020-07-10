@@ -14,7 +14,6 @@ import java.lang.ref.WeakReference
  * implemented by extending classes.
  *
  * @see StringProperty
- * @since JavaFX 2.0
  *
  * @constructor The constructor of the `StringPropertyBase`.
  * @param initialValue the initial value of the wrapped `String`

@@ -15,7 +15,6 @@ package io.github.vinccool96.observationskt.beans.value
  * @see WritableNumberValue
  * @see WritableObjectValue
  * @see WritableStringValue
- * @since JavaFX 2.0
  */
 interface WritableValue<T> {
 

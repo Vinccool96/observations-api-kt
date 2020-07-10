@@ -14,11 +14,9 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * A concrete sub-class of `BooleanExpression` has to implement the method [ObservableBooleanValue.get],
  * which provides the actual value of this expression.
  *
- * @since JavaFX 2.0
- *
  * @constructor Sole constructor
  */
-abstract class BooleanExpression() : ObservableBooleanValue {
+abstract class BooleanExpression : ObservableBooleanValue {
 
     override val value: Boolean
         get() = this.get()
@@ -97,8 +95,6 @@ abstract class BooleanExpression() : ObservableBooleanValue {
      * `BooleanExpression` changes, the value of the `ObjectExpression` will be updated automatically.
      *
      * @return the new `ObjectExpression`
-     *
-     * @since JavaFX 8.0
      */
     open fun asObject(): ObjectExpression<Boolean> {
         return object : ObjectBinding<Boolean>() {
@@ -160,9 +156,6 @@ abstract class BooleanExpression() : ObservableBooleanValue {
          * @param value The source `ObservableValue`
          *
          * @return A `BooleanExpression` that wraps the `ObservableValue` if necessary
-         *
-         * @throws NullPointerException if `value` is `null`
-         * @since JavaFX 8.0
          */
         fun booleanExpression(value: ObservableValue<Boolean>?): BooleanExpression {
             if (value == null) {

@@ -14,7 +14,6 @@ import java.util.function.Predicate
  *
  * @see ListChangeListener
  * @see ListChangeListener.Change
- * @since JavaFX 2.0
  */
 interface ObservableList<E> : MutableList<E>, Observable {
 
@@ -124,8 +123,6 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *         the predicate to use
      *
      * @return new `FilteredList`
-     *
-     * @since JavaFX 8.0
      */
     fun filtered(predicate: Predicate<E>): FilteredList<E> {
         return FilteredList(this, predicate)
@@ -138,8 +135,6 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *         the comparator to use or null for unordered List
      *
      * @return new `SortedList`
-     *
-     * @since JavaFX 8.0
      */
     fun sorted(comparator: Comparator<E>): SortedList<E> {
         return SortedList(this, comparator)
@@ -149,8 +144,6 @@ interface ObservableList<E> : MutableList<E>, Observable {
      * Creates a [SortedList] wrapper of this list with the natural ordering.
      *
      * @return new `SortedList`
-     *
-     * @since JavaFX 8.0
      */
     @Suppress("UNCHECKED_CAST")
     fun sorted(): SortedList<E> {

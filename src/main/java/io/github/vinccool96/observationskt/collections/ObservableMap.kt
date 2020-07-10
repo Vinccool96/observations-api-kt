@@ -12,7 +12,6 @@ import io.github.vinccool96.observationskt.beans.Observable
  *
  * @see MapChangeListener
  * @see MapChangeListener.Change
- * @since JavaFX 2.0
  */
 interface ObservableMap<K, V> : MutableMap<K, V>, Observable {
 

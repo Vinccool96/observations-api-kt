@@ -10,7 +10,6 @@ import io.github.vinccool96.observationskt.beans.Observable
  *
  * @see SetChangeListener
  * @see SetChangeListener.Change
- * @since JavaFX 2.1
  */
 interface ObservableSet<E> : MutableSet<E>, Observable {
 

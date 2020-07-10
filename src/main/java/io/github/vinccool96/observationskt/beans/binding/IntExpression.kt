@@ -12,8 +12,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * A concrete sub-class of `IntExpression` has to implement the method [get], which provides the actual value of
  * this expression.
- *
- * @since JavaFX 2.0
  */
 abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
 
@@ -105,8 +103,6 @@ abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
      * `IntExpression` changes, the value of the `ObjectExpression` will be updated automatically.
      *
      * @return the new `ObjectExpression`
-     *
-     * @since JavaFX 8.0
      */
     open fun asObject(): ObjectExpression<Int> {
         return object : ObjectBinding<Int>() {
@@ -182,8 +178,6 @@ abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
          *         The type of the wrapped number
          *
          * @return An `IntExpression` that wraps the `ObservableValue` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> intExpression(value: ObservableValue<T>): IntExpression {
             return if (value is IntExpression) value else object : IntBinding() {

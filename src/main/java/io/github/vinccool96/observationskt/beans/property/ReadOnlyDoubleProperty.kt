@@ -11,7 +11,6 @@ import io.github.vinccool96.observationskt.beans.binding.DoubleExpression
  * @see io.github.vinccool96.observationskt.beans.value.ObservableDoubleValue
  * @see DoubleExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Number> {
 
@@ -39,8 +38,6 @@ abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Num
      * `ReadOnlyDoubleProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
      *
      * @return the new `ReadOnlyObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ReadOnlyObjectProperty<Double> {
         return object : ReadOnlyObjectPropertyBase<Double>() {
@@ -90,8 +87,6 @@ abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Num
          *         The type of the wrapped number
          *
          * @return A `ReadOnlyDoubleProperty` that wraps the `ReadOnlyProperty` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> readOnlyDoubleProperty(property: ReadOnlyProperty<T>): ReadOnlyDoubleProperty {
             return if (property is ReadOnlyDoubleProperty) property else object : ReadOnlyDoublePropertyBase() {

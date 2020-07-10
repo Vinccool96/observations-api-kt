@@ -11,7 +11,6 @@ import io.github.vinccool96.observationskt.beans.binding.FloatExpression
  * @see io.github.vinccool96.observationskt.beans.value.ObservableFloatValue
  * @see FloatExpression
  * @see ReadOnlyProperty
- * @since JavaFX 2.0
  */
 abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Number> {
 
@@ -39,8 +38,6 @@ abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Numbe
      * `ReadOnlyFloatProperty` changes, the value of the `ReadOnlyObjectProperty` will be updated automatically.
      *
      * @return the new `ReadOnlyObjectProperty`
-     *
-     * @since JavaFX 8.0
      */
     override fun asObject(): ReadOnlyObjectProperty<Float> {
         return object : ReadOnlyObjectPropertyBase<Float>() {
@@ -90,8 +87,6 @@ abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Numbe
          *         The type of the wrapped number
          *
          * @return A `ReadOnlyFloatProperty` that wraps the `ReadOnlyProperty` if necessary
-         *
-         * @since JavaFX 8.0
          */
         fun <T : Number?> readOnlyFloatProperty(property: ReadOnlyProperty<T>): ReadOnlyFloatProperty {
             return if (property is ReadOnlyFloatProperty) property else object : ReadOnlyFloatPropertyBase() {

@@ -7,7 +7,6 @@ package io.github.vinccool96.observationskt.beans.value
  *         The type of the wrapped value
  *
  * @see WritableValue
- * @since JavaFX 2.0
  */
 interface WritableObjectValue<T> : WritableValue<T> {
 
