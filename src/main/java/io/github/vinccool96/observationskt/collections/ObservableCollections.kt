@@ -29,10 +29,8 @@ object ObservableCollections {
      * Note that mutation operations made directly to the underlying list are *not* reported to observers of any
      * ObservableList that wraps it.
      *
-     * @param E
-     *         the list element type
-     * @param list
-     *         a concrete List that backs this ObservableList
+     * @param E the list element type
+     * @param list a concrete List that backs this ObservableList
      *
      * @return a newly created ObservableList
      */
@@ -51,12 +49,9 @@ object ObservableCollections {
      * `extractor` (applied to each list element) are listened for changes and transformed into "update" change of
      * ListChangeListener.
      *
-     * @param E
-     *         the list element type
-     * @param list
-     *         a concrete List that backs this ObservableList
-     * @param extractor
-     *         element to Observable[] convertor
+     * @param E the list element type
+     * @param list a concrete List that backs this ObservableList
+     * @param extractor element to Observable[] convertor
      *
      * @return a newly created ObservableList
      */
@@ -68,8 +63,7 @@ object ObservableCollections {
     /**
      * Creates a new empty observable list that is backed by an arraylist.
      *
-     * @param E
-     *         the list element type
+     * @param E the list element type
      *
      * @return a newly created ObservableList
      *
@@ -84,10 +78,8 @@ object ObservableCollections {
      *
      * This list reports element updates.
      *
-     * @param E
-     *         the list element type
-     * @param extractor
-     *         element to Observable[] convertor. Observable objects are listened for changes on the element.
+     * @param E the list element type
+     * @param extractor element to Observable[] convertor. Observable objects are listened for changes on the element.
      *
      * @return a newly created ObservableList
      *
@@ -100,10 +92,8 @@ object ObservableCollections {
     /**
      * Creates a new observable array list with `items` added to it.
      *
-     * @param E
-     *         the list element type
-     * @param items
-     *         the items that will be in the new observable ArrayList
+     * @param E the list element type
+     * @param items the items that will be in the new observable ArrayList
      *
      * @return a newly created observableArrayList
      *
@@ -118,10 +108,8 @@ object ObservableCollections {
     /**
      * Creates a new observable array list and adds a content of collection `col` to it.
      *
-     * @param E
-     *         the list element type
-     * @param col
-     *         a collection which content should be added to the observableArrayList
+     * @param E the list element type
+     * @param col a collection which content should be added to the observableArrayList
      *
      * @return a newly created observableArrayList
      */
@@ -134,10 +122,8 @@ object ObservableCollections {
     /**
      * Creates and returns unmodifiable wrapper list on top of provided observable list.
      *
-     * @param E
-     *         the list element type
-     * @param list
-     *         an ObservableList that is to be wrapped
+     * @param E the list element type
+     * @param list an ObservableList that is to be wrapped
      *
      * @return an ObservableList wrapper that is unmodifiable
      *
@@ -179,10 +165,8 @@ object ObservableCollections {
     /**
      * Sorts the provided observable list. Fires only **one** change notification on the list.
      *
-     * @param T
-     *         the list element type
-     * @param list
-     *         the list to be sorted
+     * @param T the list element type
+     * @param list the list to be sorted
      *
      * @see Collections#sort(List)
      */
@@ -199,12 +183,9 @@ object ObservableCollections {
     /**
      * Sorts the provided observable list using the c comparator. Fires only **one** change notification on the list.
      *
-     * @param T
-     *         the list element type
-     * @param list
-     *         the list to sort
-     * @param c
-     *         comparator used for sorting. Null if natural ordering is required.
+     * @param T the list element type
+     * @param list the list to sort
+     * @param c comparator used for sorting. Null if natural ordering is required.
      *
      * @see Collections.sort
      */

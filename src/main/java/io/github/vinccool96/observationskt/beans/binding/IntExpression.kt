@@ -30,7 +30,7 @@ abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
     override val value: Number
         get() = this.get()
 
-    override fun negate(): IntBinding {
+    override fun unaryMinus(): IntBinding {
         return Bindings.negate(this) as IntBinding
     }
 
@@ -172,10 +172,8 @@ abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
          *
          * Note: null values will be interpreted as `0`
          *
-         * @param value
-         *         The source `ObservableValue`
-         * @param T
-         *         The type of the wrapped number
+         * @param value The source `ObservableValue`
+         * @param T The type of the wrapped number
          *
          * @return An `IntExpression` that wraps the `ObservableValue` if necessary
          */

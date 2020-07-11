@@ -81,10 +81,8 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number>
          *
          * Note: null values will be interpreted as `0L`
          *
-         * @param property
-         *         The source `ReadOnlyProperty`
-         * @param T
-         *         The type of the wrapped number
+         * @param property The source `ReadOnlyProperty`
+         * @param T The type of the wrapped number
          *
          * @return A `ReadOnlyLongProperty` that wraps the `ReadOnlyProperty` if necessary
          */

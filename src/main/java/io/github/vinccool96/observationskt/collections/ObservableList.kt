@@ -9,8 +9,7 @@ import java.util.function.Predicate
 /**
  * A list that allows listeners to track changes when they occur.
  *
- * @param E
- *         the list element type
+ * @param E the list element type
  *
  * @see ListChangeListener
  * @see ListChangeListener.Change
@@ -20,8 +19,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * Add a listener to this observable list.
      *
-     * @param listener
-     *         the listener for listening to the list changes
+     * @param listener the listener for listening to the list changes
      */
     fun addListener(listener: ListChangeListener<in E>)
 
@@ -29,16 +27,14 @@ interface ObservableList<E> : MutableList<E>, Observable {
      * Tries to removed a listener from this observable list. If the listener is not attached to this list, nothing
      * happens.
      *
-     * @param listener
-     *         a listener to remove
+     * @param listener a listener to remove
      */
     fun removeListener(listener: ListChangeListener<in E>)
 
     /**
      * Verify if a `ListChangeListener` already exist for this `ObservableList`.
      *
-     * @param listener
-     *         the `ListChangeListener` to verify
+     * @param listener the `ListChangeListener` to verify
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
@@ -49,8 +45,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * A convenient method for var-arg adding of elements.
      *
-     * @param elements
-     *         the elements to add
+     * @param elements the elements to add
      *
      * @return `true` (as specified by [MutableCollection.add])
      */
@@ -59,8 +54,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * Clears the ObservableList and add all the elements passed as var-args.
      *
-     * @param elements
-     *         the elements to set
+     * @param elements the elements to set
      *
      * @return true (as specified by [MutableCollection.add])
      *
@@ -72,8 +66,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * Clears the ObservableList and add all elements from the collection.
      *
-     * @param col
-     *         the collection with elements that will be added to this observableArrayList
+     * @param col the collection with elements that will be added to this observableArrayList
      *
      * @return true (as specified by [MutableCollection.add])
      *
@@ -85,8 +78,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * A convenient method for var-arg usage of removeAll method.
      *
-     * @param elements
-     *         the elements to be removed
+     * @param elements the elements to be removed
      *
      * @return true if list changed as a result of this call
      */
@@ -95,8 +87,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * A convenient method for var-arg usage of retain method.
      *
-     * @param elements
-     *         the elements to be retained
+     * @param elements the elements to be retained
      *
      * @return true if list changed as a result of this call
      */
@@ -106,10 +97,8 @@ interface ObservableList<E> : MutableList<E>, Observable {
      * Basically a shortcut to [subList(from, to)][subList].[clear()][clear] As this is a common operation,
      * ObservableList has this method for convenient usage.
      *
-     * @param from
-     *         the start of the range to remove (inclusive)
-     * @param to
-     *         the end of the range to remove (exclusive)
+     * @param from the start of the range to remove (inclusive)
+     * @param to the end of the range to remove (exclusive)
      *
      * @throws IndexOutOfBoundsException
      *         if an illegal range is provided
@@ -119,8 +108,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * Creates a [FilteredList] wrapper of this list using the specified predicate.
      *
-     * @param predicate
-     *         the predicate to use
+     * @param predicate the predicate to use
      *
      * @return new `FilteredList`
      */
@@ -131,8 +119,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     /**
      * Creates a [SortedList] wrapper of this list using the specified comparator.
      *
-     * @param comparator
-     *         the comparator to use or null for unordered List
+     * @param comparator the comparator to use or null for unordered List
      *
      * @return new `SortedList`
      */

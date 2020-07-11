@@ -11,8 +11,7 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
  * For specialized implementations for [ObservableList], [ObservableSet] and [ObservableMap] that also report changes
  * inside the collections, see [ReadOnlyListProperty], [ReadOnlySetProperty] and [ReadOnlyMapProperty], respectively.
  *
- * @param T
- *         the type of the wrapped `Object`
+ * @param T the type of the wrapped `Object`
  *
  * @see io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
  * @see ObjectExpression

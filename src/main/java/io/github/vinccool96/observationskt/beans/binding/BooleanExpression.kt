@@ -25,8 +25,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
      * Creates a new `BooleanExpression` that performs the conditional AND-operation on this `BooleanExpression` and a
      * [ObservableBooleanValue].
      *
-     * @param other
-     *         the other `ObservableBooleanValue`
+     * @param other the other `ObservableBooleanValue`
      *
      * @return the new `BooleanExpression`
      */
@@ -38,8 +37,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
      * Creates a new `BooleanExpression` that performs the conditional OR-operation on this `BooleanExpression` and a
      * [ObservableBooleanValue].
      *
-     * @param other
-     *         the other `ObservableBooleanValue`
+     * @param other the other `ObservableBooleanValue`
      *
      * @return the new `BooleanExpression`
      */
@@ -59,8 +57,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
     /**
      * Creates a new `BooleanExpression` that holds `true` if this and another [ObservableBooleanValue] are equal.
      *
-     * @param other
-     *         the other `ObservableBooleanValue`
+     * @param other the other `ObservableBooleanValue`
      *
      * @return the new `BooleanExpression`
      */
@@ -71,8 +68,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
     /**
      * Creates a new `BooleanExpression` that holds `true` if this and another [ObservableBooleanValue] are equal.
      *
-     * @param other
-     *         the other `ObservableBooleanValue`
+     * @param other the other `ObservableBooleanValue`
      *
      * @return the new `BooleanExpression`
      */
@@ -157,21 +153,18 @@ abstract class BooleanExpression : ObservableBooleanValue {
          *
          * @return A `BooleanExpression` that wraps the `ObservableValue` if necessary
          */
-        fun booleanExpression(value: ObservableValue<Boolean>?): BooleanExpression {
-            if (value == null) {
-                throw NullPointerException("Value must be specified.")
-            }
+        fun booleanExpression(value: ObservableValue<Boolean?>): BooleanExpression {
             return if (value is BooleanExpression) value else object : BooleanBinding() {
                 override fun dispose() {
                     super.unbind(value)
                 }
 
                 override fun computeValue(): Boolean {
-                    return value.value
+                    return value.value ?: false
                 }
 
                 @get:ReturnsUnmodifiableCollection
-                override val dependencies: ObservableList<ObservableValue<Boolean>>
+                override val dependencies: ObservableList<ObservableValue<Boolean?>>
                     get() = ObservableCollections.singletonObservableList(value)
 
                 init {

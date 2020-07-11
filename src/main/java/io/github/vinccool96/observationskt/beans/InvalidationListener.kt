@@ -23,8 +23,7 @@ interface InvalidationListener {
      *
      * In general is is considered bad practice to modify the observed value in this method.
      *
-     * @param observable
-     *         The `Observable` that became invalid
+     * @param observable The `Observable` that became invalid
      */
     fun invalidated(observable: Observable)
 

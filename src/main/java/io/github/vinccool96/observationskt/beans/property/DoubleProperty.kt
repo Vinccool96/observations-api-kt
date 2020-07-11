@@ -118,8 +118,7 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
          *
          * Another approach is to convert the DoubleProperty to ObjectProperty using [asObject] method.
          *
-         * @param property
-         *         The source `Property`
+         * @param property The source `Property`
          *
          * @return A `DoubleProperty` that wraps the `Property` if necessary
          */

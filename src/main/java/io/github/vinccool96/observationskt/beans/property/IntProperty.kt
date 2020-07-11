@@ -118,8 +118,7 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIn
          *
          * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
          *
-         * @param property
-         *         The source `Property`
+         * @param property The source `Property`
          *
          * @return A `IntProperty` that wraps the `Property` if necessary
          */

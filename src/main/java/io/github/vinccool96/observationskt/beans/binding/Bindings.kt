@@ -23,10 +23,8 @@ object Bindings {
     /**
      * Helper function to create a custom [BooleanBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -60,10 +58,8 @@ object Bindings {
     /**
      * Helper function to create a custom [DoubleBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -97,10 +93,8 @@ object Bindings {
     /**
      * Helper function to create a custom [FloatBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -134,10 +128,8 @@ object Bindings {
     /**
      * Helper function to create a custom [IntBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -171,10 +163,8 @@ object Bindings {
     /**
      * Helper function to create a custom [LongBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -208,10 +198,8 @@ object Bindings {
     /**
      * Helper function to create a custom [ObjectBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -245,10 +233,8 @@ object Bindings {
     /**
      * Helper function to create a custom [StringBinding].
      *
-     * @param func
-     *         The function that calculates the value of this binding
-     * @param dependencies
-     *         The dependencies of this binding
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
      */
@@ -296,12 +282,9 @@ object Bindings {
      * (usually bindings would throw an exception). Secondly bidirectional bindings are calculated eagerly, i.e. a bound
      * property is updated immediately.
      *
-     * @param T
-     *         the types of the properties
-     * @param property1
-     *         the first `Property<T>`
-     * @param property2
-     *         the second `Property<T>`
+     * @param T the types of the properties
+     * @param property1 the first `Property<T>`
+     * @param property2 the second `Property<T>`
      *
      * @throws IllegalArgumentException
      *         if both properties are equal
@@ -313,12 +296,9 @@ object Bindings {
     /**
      * Delete a bidirectional binding that was previously defined with [bindBidirectional].
      *
-     * @param T
-     *         the types of the properties
-     * @param property1
-     *         the first `Property<T>`
-     * @param property2
-     *         the second `Property<T>`
+     * @param T the types of the properties
+     * @param property1 the first `Property<T>`
+     * @param property2 the second `Property<T>`
      *
      * @throws IllegalArgumentException
      *         if both properties are equal
@@ -531,10 +511,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `DoubleBinding`
      */
@@ -546,10 +524,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `DoubleBinding`
      */
@@ -561,10 +537,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -576,10 +550,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -591,10 +563,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -606,10 +576,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -621,10 +589,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -636,10 +602,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
      * value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -754,10 +718,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `DoubleBinding`
      */
@@ -769,10 +731,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `DoubleBinding`
      */
@@ -784,10 +744,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -799,10 +757,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -814,10 +770,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -829,10 +783,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -844,10 +796,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -859,10 +809,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -977,10 +925,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `DoubleBinding`
      */
@@ -992,10 +938,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `DoubleBinding`
      */
@@ -1007,10 +951,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -1022,10 +964,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -1037,10 +977,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -1052,10 +990,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -1067,10 +1003,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -1082,10 +1016,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -1200,10 +1132,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `DoubleBinding`
      */
@@ -1215,10 +1145,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `DoubleBinding`
      */
@@ -1230,10 +1158,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -1245,10 +1171,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -1260,10 +1184,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -1275,10 +1197,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -1290,10 +1210,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -1305,10 +1223,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -1414,12 +1330,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the first operand
+     * @param op2 the second operand
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1433,10 +1346,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -1452,12 +1363,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1473,12 +1381,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1494,12 +1399,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1515,12 +1417,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1536,12 +1435,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1557,12 +1453,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -3477,7 +3370,7 @@ object Bindings {
      *
      * @return the new `StringExpression`
      */
-    fun concat(vararg args: Any): StringExpression {
+    fun concat(vararg args: Any?): StringExpression {
         return StringFormatter.concat(*args)
     }
 

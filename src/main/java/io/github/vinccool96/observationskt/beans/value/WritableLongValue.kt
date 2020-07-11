@@ -19,8 +19,7 @@ interface WritableLongValue : WritableNumberValue {
     /**
      * Set the wrapped value. Unlike [WritableLongValue.value], this method uses primitive `long`.
      *
-     * @param value
-     *         The new value
+     * @param value The new value
      */
     fun set(value: Long)
 

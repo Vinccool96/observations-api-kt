@@ -19,8 +19,7 @@ class SimpleObjectProperty<T>(override val bean: Any?, override val name: String
     /**
      * The constructor of `ObjectProperty`
      *
-     * @param initialValue
-     *         the initial value of the wrapped value
+     * @param initialValue the initial value of the wrapped value
      */
     constructor(initialValue: T) : this(DEFAULT_BEAN, DEFAULT_NAME, initialValue)
 

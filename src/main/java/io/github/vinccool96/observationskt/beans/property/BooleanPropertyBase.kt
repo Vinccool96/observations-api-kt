@@ -19,11 +19,11 @@ import java.lang.ref.WeakReference
  *
  * @constructor The constructor of the `BooleanPropertyBase` that sets an initial value.
  *
- * @param initialValue the initial value of the wrapped value
+ * @param initialValue the initial value of the wrapped value. If `null` is provided, the value is set to `false`
  */
-abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
+abstract class BooleanPropertyBase(initialValue: Boolean?) : BooleanProperty() {
 
-    private var valueState: Boolean = initialValue
+    private var valueState: Boolean = initialValue ?: false
 
     private var observable: ObservableBooleanValue? = null
 

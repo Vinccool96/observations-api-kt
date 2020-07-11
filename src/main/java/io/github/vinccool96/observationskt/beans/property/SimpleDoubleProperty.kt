@@ -7,12 +7,9 @@ package io.github.vinccool96.observationskt.beans.property
  *
  * @constructor The constructor of `DoubleProperty`
  *
- * @param bean
- *         the bean of this `DoubleProperty`
- * @param name
- *         the name of this `DoubleProperty`
- * @param initialValue
- *         the initial value of the wrapped value
+ * @param bean the bean of this `DoubleProperty`
+ * @param name the name of this `DoubleProperty`
+ * @param initialValue the initial value of the wrapped value
  */
 class SimpleDoubleProperty(override val bean: Any?, override val name: String, initialValue: Double) :
         DoublePropertyBase(initialValue) {
@@ -20,18 +17,15 @@ class SimpleDoubleProperty(override val bean: Any?, override val name: String, i
     /**
      * The constructor of `DoubleProperty`
      *
-     * @param initialValue
-     *         the initial value of the wrapped value
+     * @param initialValue the initial value of the wrapped value
      */
     constructor(initialValue: Double) : this(DEFAULT_BEAN, DEFAULT_NAME, initialValue)
 
     /**
      * The constructor of `DoubleProperty`
      *
-     * @param bean
-     *         the bean of this `DoubleProperty`
-     * @param name
-     *         the name of this `DoubleProperty`
+     * @param bean the bean of this `DoubleProperty`
+     * @param name the name of this `DoubleProperty`
      */
     constructor(bean: Any?, name: String) : this(bean, name, 0.0)
 

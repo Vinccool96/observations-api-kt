@@ -5,8 +5,7 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
 /**
  * A writable reference to an [ObservableSet].
  *
- * @param E
- *         the type of the `MutableSet` elements
+ * @param E the type of the `MutableSet` elements
  *
  * @see ObservableSet
  * @see WritableObjectValue

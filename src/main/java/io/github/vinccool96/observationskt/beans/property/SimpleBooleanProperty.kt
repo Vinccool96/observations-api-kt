@@ -7,31 +7,25 @@ package io.github.vinccool96.observationskt.beans.property
  *
  * @constructor The constructor of `BooleanProperty`
  *
- * @param bean
- *         the bean of this `BooleanProperty`
- * @param name
- *         the name of this `BooleanProperty`
- * @param initialValue
- *         the initial value of the wrapped value
+ * @param bean the bean of this `BooleanProperty`
+ * @param name the name of this `BooleanProperty`
+ * @param initialValue the initial value of the wrapped value. If `null` is provided, the value is set to `false`
  */
-class SimpleBooleanProperty(override val bean: Any?, override val name: String, initialValue: Boolean) :
+class SimpleBooleanProperty(override val bean: Any?, override val name: String, initialValue: Boolean?) :
         BooleanPropertyBase(initialValue) {
 
     /**
      * The constructor of `BooleanProperty`
      *
-     * @param initialValue
-     *         the initial value of the wrapped value
+     * @param initialValue the initial value of the wrapped value
      */
     constructor(initialValue: Boolean) : this(DEFAULT_BEAN, DEFAULT_NAME, initialValue)
 
     /**
      * The constructor of `BooleanProperty`
      *
-     * @param bean
-     *         the bean of this `BooleanProperty`
-     * @param name
-     *         the name of this `BooleanProperty`
+     * @param bean the bean of this `BooleanProperty`
+     * @param name the name of this `BooleanProperty`
      */
     constructor(bean: Any?, name: String) : this(bean, name, false)
 

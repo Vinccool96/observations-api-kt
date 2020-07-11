@@ -28,6 +28,10 @@ abstract class StringExpression : ObservableStringValue {
     val valueSafe: String
         get() = this.get() ?: ""
 
+    fun concat(other: Any?): StringExpression {
+        return Bindings.concat(this, other)
+    }
+
     /**
      * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableStringValue] are equal.
      *
@@ -271,7 +275,7 @@ abstract class StringExpression : ObservableStringValue {
      *
      * @return the new `IntBinding`
      */
-    fun length(): IntBinding? {
+    fun length(): IntBinding {
         return Bindings.length(this)
     }
 

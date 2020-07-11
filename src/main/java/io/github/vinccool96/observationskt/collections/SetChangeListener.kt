@@ -3,8 +3,7 @@ package io.github.vinccool96.observationskt.collections
 /**
  * Interface that receives notifications of changes to an [ObservableSet].
  *
- * @param E
- *         the element type
+ * @param E the element type
  */
 @FunctionalInterface
 interface SetChangeListener<E> {
@@ -14,9 +13,10 @@ interface SetChangeListener<E> {
      * Note that adding element that is already in the set does not modify the set and hence no change will be
      * generated.
      *
-     * @param E
-     *         element type
+     * @param E element type
+     *
      * @constructor Constructs a change associated with a set.
+     *
      * @param set the source of the change
      */
     abstract class Change<E>(val set: ObservableSet<E>) {
@@ -56,8 +56,7 @@ interface SetChangeListener<E> {
      * (add/remove) once. This means, complex changes like `removeAll(Collection)` or `clear()` may result in more than
      * one call of `onChanged` method.
      *
-     * @param change
-     *         the change that was made
+     * @param change the change that was made
      */
     fun onChanged(change: Change<out E>)
 

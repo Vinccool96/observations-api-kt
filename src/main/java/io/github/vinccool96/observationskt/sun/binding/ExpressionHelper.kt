@@ -59,7 +59,7 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
     private class SingleChange<T>(observable: ObservableValue<T>, private val listener: ChangeListener<in T>) :
             ExpressionHelper<T>(observable) {
 
-        private var currentValue: T? = this.observable.value
+        private var currentValue: T = this.observable.value
 
         override fun addListener(listener: InvalidationListener): ExpressionHelper<T> {
             return Generic(this.observable, listener, this.listener)
@@ -83,7 +83,7 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
             val changed = if (this.currentValue == null) oldValue != null else this.currentValue != oldValue
             if (changed) {
                 try {
-                    this.listener.changed(this.observable, this.currentValue!!, this.observable.value)
+                    this.listener.changed(this.observable, oldValue!!, this.currentValue)
                 } catch (e: Exception) {
                     Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), e)
                 }

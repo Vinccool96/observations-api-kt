@@ -99,10 +99,10 @@ abstract class StringFormatter : StringBinding() {
             return ArrayUtils.copyOfNotNulls(values)
         }
 
-        fun extractDependencies(vararg args: Any): Array<ObservableValue<*>> {
+        fun extractDependencies(vararg args: Any?): Array<ObservableValue<*>> {
             val dependencies: MutableList<ObservableValue<*>> =
                     ArrayList()
-            for (obj: Any in args) {
+            for (obj: Any? in args) {
                 if (obj is ObservableValue<*>) {
                     dependencies.add(obj)
                 }
@@ -118,12 +118,12 @@ abstract class StringFormatter : StringBinding() {
             }
         }
 
-        fun concat(vararg args: Any): StringExpression {
+        fun concat(vararg args: Any?): StringExpression {
             if (args.isEmpty()) {
                 return StringConstant.valueOf("")
             }
             if (args.size == 1) {
-                val cur: Any = args[0]
+                val cur: Any? = args[0]
                 return if (cur is ObservableValue<*>) convert(cur) else StringConstant.valueOf(cur.toString())
             }
             if (extractDependencies(*args).isEmpty()) {

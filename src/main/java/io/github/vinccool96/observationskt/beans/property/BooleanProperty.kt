@@ -97,8 +97,7 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, W
          *
          * Note: null values in the source property will be interpreted as `false`
          *
-         * @param property
-         *         The source `Property`
+         * @param property The source `Property`
          *
          * @return A `BooleanProperty` that wraps the `Property` if necessary
          */

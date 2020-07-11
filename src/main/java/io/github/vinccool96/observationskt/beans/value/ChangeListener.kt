@@ -20,12 +20,9 @@ interface ChangeListener<T> {
      *
      * In general is is considered bad practice to modify the observed value in this method.
      *
-     * @param observable
-     *         The `ObservableValue` which value changed
-     * @param oldValue
-     *         The old value
-     * @param newValue
-     *         The new value
+     * @param observable The `ObservableValue` which value changed
+     * @param oldValue The old value
+     * @param newValue The new value
      */
     fun changed(observable: ObservableValue<out T>, oldValue: T, newValue: T)
 

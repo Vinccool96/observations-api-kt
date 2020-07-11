@@ -6,8 +6,7 @@ import io.github.vinccool96.observationskt.beans.value.WritableValue
 /**
  * Generic interface that defines the methods common to all (writable) properties independent of their type.
  *
- * @param T
- *         the type of the wrapped value
+ * @param T the type of the wrapped value
  */
 interface Property<T> : ReadOnlyProperty<T>, WritableValue<T> {
 
@@ -17,8 +16,7 @@ interface Property<T> : ReadOnlyProperty<T>, WritableValue<T> {
      * Note that JavaFX has all the bind calls implemented through weak listeners. This means the bound property can be
      * garbage collected and stopped from being updated.
      *
-     * @param observable
-     *         The observable this `Property` should be bound to.
+     * @param observable The observable this `Property` should be bound to.
      *
      * @see unbind
      */
@@ -55,8 +53,7 @@ interface Property<T> : ReadOnlyProperty<T>, WritableValue<T> {
      * JavaFX bidirectional binding implementation use weak listeners. This means bidirectional binding does not prevent
      * properties from being garbage collected.
      *
-     * @param other
-     *         the other `Property`
+     * @param other the other `Property`
      *
      * @throws IllegalArgumentException
      *         if `other` is `this`
@@ -76,8 +73,7 @@ interface Property<T> : ReadOnlyProperty<T>, WritableValue<T> {
      * property2.unbindBidirectional(property1)
      * ```
      *
-     * @param other
-     *         the other `Property`
+     * @param other the other `Property`
      *
      * @throws IllegalArgumentException
      *         if `other` is `this`
