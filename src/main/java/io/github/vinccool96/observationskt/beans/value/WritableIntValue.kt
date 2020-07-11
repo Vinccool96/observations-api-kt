@@ -19,8 +19,7 @@ interface WritableIntValue : WritableNumberValue {
     /**
      * Set the wrapped value. Unlike [WritableIntValue.value], this method uses primitive `int`.
      *
-     * @param value
-     *         The new value
+     * @param value The new value
      */
     fun set(value: Int)
 

@@ -30,7 +30,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
     override val value: Number
         get() = this.get()
 
-    override fun negate(): FloatBinding {
+    override fun unaryMinus(): FloatBinding {
         return Bindings.negate(this) as FloatBinding
     }
 
@@ -129,8 +129,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
          * a `FloatExpression`, it will be returned. Otherwise a new [FloatBinding] is created that is bound to the
          * `ObservableFloatValue`.
          *
-         * @param value
-         *         The source `ObservableFloatValue`
+         * @param value The source `ObservableFloatValue`
          *
          * @return A `FloatExpression` that wraps the `ObservableFloatValue` if necessary
          */
@@ -173,10 +172,8 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
          *
          * Note: null values will be interpreted as `0.0`
          *
-         * @param value
-         *         The source `ObservableValue`
-         * @param T
-         *         The type of the wrapped number
+         * @param value The source `ObservableValue`
+         * @param T The type of the wrapped number
          *
          * @return A `FloatExpression` that wraps the `ObservableValue` if necessary
          */

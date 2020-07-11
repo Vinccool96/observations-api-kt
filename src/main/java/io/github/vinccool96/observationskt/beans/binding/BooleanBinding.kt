@@ -73,8 +73,7 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
      * Start observing the dependencies for changes. If the value of one of the dependencies changes, the binding is
      * marked as invalid.
      *
-     * @param dependencies
-     *         the dependencies to observe
+     * @param dependencies the dependencies to observe
      */
     protected fun bind(vararg dependencies: Observable) {
         if (dependencies.isNotEmpty()) {
@@ -90,8 +89,7 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
     /**
      * Stop observing the dependencies for changes.
      *
-     * @param dependencies
-     *         the dependencies to stop observing
+     * @param dependencies the dependencies to stop observing
      */
     protected fun unbind(vararg dependencies: Observable) {
         if (this.observer != null) {

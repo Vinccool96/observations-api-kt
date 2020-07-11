@@ -11,8 +11,7 @@ import io.github.vinccool96.observationskt.beans.Observable
  * Implementations have both `capacity`, which is internal array length, and `size`. If size needs to be increased
  * beyond capacity, the capacity increases to match that new size. Use [trimToSize] method to shrink it.
  *
- * @param T
- *         actual array instance type
+ * @param T actual array instance type
  *
  * @see ArrayChangeListener
  */
@@ -21,8 +20,7 @@ interface ObservableArray<T : ObservableArray<T>> : Observable {
     /**
      * Add a listener to this observable array.
      *
-     * @param listener
-     *         the listener for listening to the array changes
+     * @param listener the listener for listening to the array changes
      */
     fun addListener(listener: ArrayChangeListener<T>)
 
@@ -30,16 +28,14 @@ interface ObservableArray<T : ObservableArray<T>> : Observable {
      * Tries to remove a listener from this observable array. If the listener is not attached to this array, nothing
      * happens.
      *
-     * @param listener
-     *         a listener to remove
+     * @param listener a listener to remove
      */
     fun removeListener(listener: ArrayChangeListener<T>)
 
     /**
      * Verify if a `ArrayChangeListener` already exist for this `ObservableArray`.
      *
-     * @param listener
-     *         the `ArrayChangeListener` to verify
+     * @param listener the `ArrayChangeListener` to verify
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
@@ -50,8 +46,7 @@ interface ObservableArray<T : ObservableArray<T>> : Observable {
      * array will contain existing data for indexes that are less than the current size and zeroes for indexes that are
      * greater than the current size.
      *
-     * @param size
-     *         new length of data in this array
+     * @param size new length of data in this array
      *
      * @throws NegativeArraySizeException
      *         if size is negative
@@ -62,8 +57,7 @@ interface ObservableArray<T : ObservableArray<T>> : Observable {
      * Grows the capacity of this array if the current capacity is less than given `capacity`, does nothing if it
      * already exceeds the `capacity`.
      *
-     * @param capacity
-     *         the new capacity of the array
+     * @param capacity the new capacity of the array
      */
     fun ensureCapacity(capacity: Int)
 

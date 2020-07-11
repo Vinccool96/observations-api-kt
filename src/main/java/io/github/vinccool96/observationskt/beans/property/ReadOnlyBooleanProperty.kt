@@ -81,8 +81,7 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
          *
          * Note: null values will be interpreted as "false"
          *
-         * @param property
-         *         The source `ReadOnlyProperty`
+         * @param property The source `ReadOnlyProperty`
          *
          * @return A `ReadOnlyBooleanProperty` that wraps the `ReadOnlyProperty` if necessary
          */

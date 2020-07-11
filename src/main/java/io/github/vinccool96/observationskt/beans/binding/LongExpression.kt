@@ -30,7 +30,7 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
     override val value: Number
         get() = this.get()
 
-    override fun negate(): LongBinding {
+    override fun unaryMinus(): LongBinding {
         return Bindings.negate(this) as LongBinding
     }
 
@@ -172,10 +172,8 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
          *
          * Note: null values will be interpreted as `0L`
          *
-         * @param value
-         *         The source `ObservableValue`
-         * @param T
-         *         The type of the wrapped number
+         * @param value The source `ObservableValue`
+         * @param T The type of the wrapped number
          *
          * @return An `LongExpression` that wraps the `ObservableValue` if necessary
          */

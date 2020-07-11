@@ -13,15 +13,12 @@ import io.github.vinccool96.observationskt.collections.WeakListChangeListener
  * If the source list is observable, a listener is automatically added to it and the events are delegated to
  * [sourceChanged]
  *
- * @param E
- *         the type parameter of this list
- * @param F
- *         the upper bound of the type of the source list
+ * @param E the type parameter of this list
+ * @param F the upper bound of the type of the source list
  *
  * @constructor Creates a new Transformation list wrapped around the source list.
  *
- * @param source
- *         the wrapped list
+ * @param source the wrapped list
  *
  */
 abstract class TransformationList<E, F>(source: ObservableList<out F>) : ObservableListBase<E>(), ObservableList<E> {
@@ -56,8 +53,7 @@ abstract class TransformationList<E, F>(source: ObservableList<out F>) : Observa
      * This means the list is either the direct source as returned by [source] or the direct source is a
      * `TransformationList`, and the list is in it's transformation chain.
      *
-     * @param list
-     *         the list to check
+     * @param list the list to check
      *
      * @return true if the list is in the transformation chain as specified above.
      */
@@ -78,16 +74,14 @@ abstract class TransformationList<E, F>(source: ObservableList<out F>) : Observa
     /**
      * Called when a change from the source is triggered.
      *
-     * @param c
-     *         the change
+     * @param c the change
      */
     protected abstract fun sourceChanged(c: Change<out F>)
 
     /**
      * Maps the index of this list's element to an index in the direct source list.
      *
-     * @param index
-     *         the index in this list
+     * @param index the index in this list
      *
      * @return the index of the element's origin in the source list
      *
@@ -100,10 +94,8 @@ abstract class TransformationList<E, F>(source: ObservableList<out F>) : Observa
      *
      * The `list` must be in the transformation chain.
      *
-     * @param list
-     *         a list from the transformation chain
-     * @param index
-     *         the index of an element in this list
+     * @param list a list from the transformation chain
+     * @param index the index of an element in this list
      *
      * @return the index of the element's origin in the provided list
      *

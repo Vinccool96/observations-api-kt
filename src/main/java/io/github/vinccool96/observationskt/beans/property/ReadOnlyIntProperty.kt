@@ -81,10 +81,8 @@ abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number> {
          *
          * Note: null values will be interpreted as `0`
          *
-         * @param property
-         *         The source `ReadOnlyProperty`
-         * @param T
-         *         The type of the wrapped number
+         * @param property The source `ReadOnlyProperty`
+         * @param T The type of the wrapped number
          *
          * @return A `ReadOnlyIntProperty` that wraps the `ReadOnlyProperty` if necessary
          */

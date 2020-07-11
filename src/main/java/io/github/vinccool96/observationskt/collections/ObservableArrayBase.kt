@@ -8,8 +8,7 @@ import io.github.vinccool96.observationskt.sun.collections.ArrayListenerHelper
  * handling functionality by implementing `addListener` and `removeListener` methods. [fireChange] method is provided
  * for notifying the listeners.
  *
- * @param T
- *         actual array instance type
+ * @param T actual array instance type
  *
  * @see ObservableArray
  * @see ArrayChangeListener
@@ -56,12 +55,9 @@ abstract class ObservableArrayBase<T : ObservableArray<T>> : ObservableArray<T> 
     /**
      * Notifies all listeners of a change
      *
-     * @param sizeChanged
-     *         if the size changed
-     * @param from
-     *         index of the change start
-     * @param to
-     *         index of the change to
+     * @param sizeChanged if the size changed
+     * @param from index of the change start
+     * @param to index of the change to
      */
     protected fun fireChange(sizeChanged: Boolean, from: Int, to: Int) {
         ArrayListenerHelper.fireValueChangedEvent(this.helper, sizeChanged, from, to)

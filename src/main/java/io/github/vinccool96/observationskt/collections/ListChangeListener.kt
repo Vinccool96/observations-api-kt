@@ -3,8 +3,7 @@ package io.github.vinccool96.observationskt.collections
 /**
  * Interface that receives notifications of changes to an [ObservableList].
  *
- * @param E
- *         the list element type
+ * @param E the list element type
  *
  * @see Change
  */
@@ -81,8 +80,7 @@ interface ListChangeListener<E> {
      * changes must go after add/remove changes because they refer with their indexes to the current state of the list,
      * which means with all add/remove changes applied.
      *
-     * @param E
-     *         the list element type
+     * @param E the list element type
      *
      * @constructor Constructs a new change done to a list.
      *
@@ -265,8 +263,7 @@ interface ListChangeListener<E> {
          * Note: default implementation of this method takes the information from [permutation] method. You don't have
          * to override this method.
          *
-         * @param i
-         * the old index that contained the element prior to this change
+         * @param i the old index that contained the element prior to this change
          *
          * @return the new index of the same element
          *
@@ -284,8 +281,7 @@ interface ListChangeListener<E> {
     /**
      * Called after a change has been made to an ObservableList.
      *
-     * @param change
-     *         an object representing the change that was done
+     * @param change an object representing the change that was done
      *
      * @see Change
      */

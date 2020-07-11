@@ -31,7 +31,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
     override val value: Number
         get() = this.get()
 
-    override fun negate(): DoubleBinding {
+    override fun unaryMinus(): DoubleBinding {
         return Bindings.negate(this) as DoubleBinding
     }
 
@@ -146,8 +146,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
          * a `DoubleExpression`, it will be returned. Otherwise a new [DoubleBinding] is created that is bound to the
          * `ObservableDoubleValue`.
          *
-         * @param value
-         *         The source `ObservableDoubleValue`
+         * @param value The source `ObservableDoubleValue`
          *
          * @return A `DoubleExpression` that wraps the `ObservableDoubleValue` if necessary
          */
@@ -190,10 +189,8 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
          *
          * Note: null values will be interpreted as `0.0`
          *
-         * @param value
-         *         The source `ObservableValue`
-         * @param T
-         *         The type of the wrapped number
+         * @param value The source `ObservableValue`
+         * @param T The type of the wrapped number
          *
          * @return A `DoubleExpression` that wraps the `ObservableValue` if necessary
          */

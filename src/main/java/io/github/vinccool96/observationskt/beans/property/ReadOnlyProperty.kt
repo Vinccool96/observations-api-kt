@@ -5,8 +5,7 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
 /**
  * Generic interface that defines the methods common to all readable properties independent of their type.
  *
- * @param T
- *         the type of the wrapped value
+ * @param T the type of the wrapped value
  */
 interface ReadOnlyProperty<T> : ObservableValue<T> {
 

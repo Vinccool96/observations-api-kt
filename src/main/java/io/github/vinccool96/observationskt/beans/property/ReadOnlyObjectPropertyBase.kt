@@ -8,8 +8,7 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  * Base class for all readonly properties wrapping an arbitrary `Object`. This class provides a default implementation
  * to attach listener.
  *
- * @param T
- *         the type of the wrapped `Object`
+ * @param T the type of the wrapped `Object`
  *
  * @see ReadOnlyObjectProperty
  */

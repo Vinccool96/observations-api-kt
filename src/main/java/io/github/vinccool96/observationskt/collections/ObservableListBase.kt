@@ -48,8 +48,7 @@ import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
  * Note: In order to create list with sequential access, you should override [listIterator], [iterator] methods and use
  * them in [get], [size] and other methods accordingly.
  *
- * @param E
- *         the type of the elements contained in the List
+ * @param E the type of the elements contained in the List
  *
  * @see ObservableList
  * @see ListChangeListener.Change
@@ -68,8 +67,7 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param pos
-     *         the position in the list where the updated element resides.
+     * @param pos the position in the list where the updated element resides.
      */
     protected fun nextUpdate(pos: Int) {
         this.changeBuilder.nextUpdate(pos)
@@ -82,10 +80,8 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param idx
-     *         the index of the item that was set
-     * @param old
-     *         the old value at the `idx` position.
+     * @param idx the index of the item that was set
+     * @param old the old value at the `idx` position.
      */
     protected fun nextSet(idx: Int, old: E) {
         this.changeBuilder.nextSet(idx, old)
@@ -98,12 +94,9 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param from
-     *         the index where the items were replaced
-     * @param to
-     *         the end index (exclusive) of the range where the new items reside
-     * @param removed
-     *         the list of items that were removed
+     * @param from the index where the items were replaced
+     * @param to the end index (exclusive) of the range where the new items reside
+     * @param removed the list of items that were removed
      */
     protected fun nextReplace(from: Int, to: Int, removed: MutableList<out E>) {
         this.changeBuilder.nextReplace(from, to, removed)
@@ -116,10 +109,8 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param idx
-     *         the index where the items were removed
-     * @param removed
-     *         the list of items that were removed
+     * @param idx the index where the items were removed
+     * @param removed the list of items that were removed
      */
     protected fun nextRemove(idx: Int, removed: MutableList<out E>) {
         this.changeBuilder.nextRemove(idx, removed)
@@ -132,10 +123,8 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param idx
-     *         the index where the item was removed
-     * @param removed
-     *         the item that was removed
+     * @param idx the index where the item was removed
+     * @param removed the item that was removed
      */
     protected fun nextRemove(idx: Int, removed: E) {
         this.changeBuilder.nextRemove(idx, removed)
@@ -152,12 +141,9 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param from
-     *         marks the beginning (inclusive) of the range that was permutated
-     * @param to
-     *         marks the end (exclusive) of the range that was permutated
-     * @param perm
-     *         the permutation in that range. Even if `from != 0`, the array should contain the indexes of the list.
+     * @param from marks the beginning (inclusive) of the range that was permutated
+     * @param to marks the end (exclusive) of the range that was permutated
+     * @param perm the permutation in that range. Even if `from != 0`, the array should contain the indexes of the list.
      *         Therefore, such permutation would not contain indexes of range `(0, from)`
      */
     protected fun nextPermutation(from: Int, to: Int, perm: IntArray) {
@@ -172,10 +158,8 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
      *
      * **Note**: needs to reflect the *current* state of the list.
      *
-     * @param from
-     *         marks the beginning (inclusive) of the range that was added
-     * @param to
-     *         marks the end (exclusive) of the range that was added
+     * @param from marks the beginning (inclusive) of the range that was added
+     * @param to marks the end (exclusive) of the range that was added
      */
     protected fun nextAdd(from: Int, to: Int) {
         this.changeBuilder.nextAdd(from, to)

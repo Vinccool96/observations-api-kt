@@ -5,8 +5,7 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
 /**
  * An observable reference to an [ObservableSet].
  *
- * @param E
- *         the type of the `Set` elements
+ * @param E the type of the `Set` elements
  *
  * @see ObservableSet
  * @see ObservableObjectValue

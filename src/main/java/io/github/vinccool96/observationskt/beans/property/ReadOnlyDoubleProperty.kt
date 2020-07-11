@@ -81,10 +81,8 @@ abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Num
          *
          * Note: null values will be interpreted as `0.0`
          *
-         * @param property
-         *         The source `ReadOnlyProperty`
-         * @param T
-         *         The type of the wrapped number
+         * @param property The source `ReadOnlyProperty`
+         * @param T The type of the wrapped number
          *
          * @return A `ReadOnlyDoubleProperty` that wraps the `ReadOnlyProperty` if necessary
          */

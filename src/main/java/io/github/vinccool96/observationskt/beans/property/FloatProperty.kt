@@ -118,8 +118,7 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
          *
          * Another approach is to convert the FloatProperty to ObjectProperty using [asObject] method.
          *
-         * @param property
-         *         The source `Property`
+         * @param property The source `Property`
          *
          * @return A `FloatProperty` that wraps the `Property` if necessary
          */

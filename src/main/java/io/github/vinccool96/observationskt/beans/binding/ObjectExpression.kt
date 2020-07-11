@@ -3,7 +3,9 @@ package io.github.vinccool96.observationskt.beans.binding
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
+import java.util.*
 
 /**
  * An `ObjectExpression` is a [ObservableObjectValue] plus additional convenience methods to generate bindings in a
@@ -79,6 +81,50 @@ abstract class ObjectExpression<T> : ObservableObjectValue<T> {
      */
     fun isNotNull(): BooleanBinding {
         return Bindings.isNotNull(this)
+    }
+
+    /**
+     * Creates a [StringBinding] that holds the value of the `ObjectExpression` turned into a `String`. If the value of
+     * this `ObjectExpression` changes, the value of the `StringBinding` will be updated automatically.
+     *
+     * The conversion is done without any formatting applied.
+     *
+     * @return the new `StringBinding`
+     */
+    fun asString(): StringBinding {
+        return StringFormatter.convert(this) as StringBinding
+    }
+
+    /**
+     * Creates a [StringBinding] that holds the value of the `ObjectExpression` turned into a `String`. If the value of
+     * this `ObjectExpression` changes, the value of the `StringBinding` will be updated automatically.
+     *
+     * The result is formatted according to the formatting `String`. See [java.util.Formatter] for formatting rules.
+     *
+     * @param format the formatting `String`
+     *
+     * @return the new `StringBinding`
+     */
+    fun asString(format: String): StringBinding {
+        return Bindings.format(format, this) as StringBinding
+    }
+
+    /**
+     * Creates a [StringBinding] that holds the value of the `ObjectExpression` turned into a `String`. If the value of
+     * this `ObjectExpression` changes, the value of the `StringBinding` will be updated automatically.
+     *
+     * The result is formatted according to the formatting `String` and the passed in `Locale`. See
+     * [java.util.Formatter] for formatting rules. See [Locale] for details on `Locale`.
+     *
+     * @param locale the Locale
+     * @param format the formatting `String`
+     *
+     * @return the new `StringBinding`
+     *
+     * @see Locale
+     */
+    fun asString(locale: Locale, format: String): StringBinding {
+        return Bindings.format(locale, format, this) as StringBinding
     }
 
     companion object {

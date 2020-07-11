@@ -29,8 +29,7 @@ import io.github.vinccool96.observationskt.beans.Observable
  * Important note: attaching a `ChangeListener` enforces eager computation even if the implementation of the
  * `ObservableValue` supports lazy evaluation.
  *
- * @param T
- *         The type of the wrapped value.
+ * @param T The type of the wrapped value.
  *
  * @see ObservableBooleanValue
  * @see ObservableDoubleValue
@@ -61,8 +60,7 @@ interface ObservableValue<T> : Observable {
      * garbage collected and may result in a memory leak. It is recommended to either unregister a listener by calling
      * [removeListener][removeListener] after use or to use an instance of [WeakChangeListener] avoid this situation.
      *
-     * @param listener
-     *         The listener to register
+     * @param listener The listener to register
      *
      * @throws NullPointerException
      *         if the listener is null
@@ -78,8 +76,7 @@ interface ObservableValue<T> : Observable {
      * no-op. If it had been previously added then it will be removed. If it had been added more than once, then only
      * the first occurrence will be removed.
      *
-     * @param listener
-     *         The listener to remove
+     * @param listener The listener to remove
      *
      * @throws NullPointerException
      *         if the listener is null
@@ -90,8 +87,7 @@ interface ObservableValue<T> : Observable {
     /**
      * Verify if the specified `ChangeListener` already exists for this `ObservableValue`.
      *
-     * @param listener
-     *         the `ChangeListener` to verify
+     * @param listener the `ChangeListener` to verify
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */

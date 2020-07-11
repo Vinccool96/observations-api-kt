@@ -19,8 +19,7 @@ interface WritableFloatValue : WritableNumberValue {
     /**
      * Set the wrapped value. Unlike [WritableFloatValue.value], this method uses primitive `float`.
      *
-     * @param value
-     *         The new value
+     * @param value The new value
      */
     fun set(value: Float)
 

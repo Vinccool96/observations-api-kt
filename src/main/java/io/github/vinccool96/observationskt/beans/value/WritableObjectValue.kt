@@ -3,8 +3,7 @@ package io.github.vinccool96.observationskt.beans.value
 /**
  * A writable typed value.
  *
- * @param T
- *         The type of the wrapped value
+ * @param T The type of the wrapped value
  *
  * @see WritableValue
  */
@@ -23,8 +22,7 @@ interface WritableObjectValue<T> : WritableValue<T> {
     /**
      * Set the wrapped value. Should be equivalent to [setValue]
      *
-     * @param value
-     *         The new value
+     * @param value The new value
      *
      * @see get
      */

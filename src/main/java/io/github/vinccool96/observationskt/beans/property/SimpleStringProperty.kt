@@ -7,12 +7,9 @@ package io.github.vinccool96.observationskt.beans.property
  *
  * @constructor The constructor of `StringProperty`
  *
- * @param bean
- *         the bean of this `StringProperty`
- * @param name
- *         the name of this `StringProperty`
- * @param initialValue
- *         the initial value of the wrapped value
+ * @param bean the bean of this `StringProperty`
+ * @param name the name of this `StringProperty`
+ * @param initialValue the initial value of the wrapped value
  */
 class SimpleStringProperty(override val bean: Any?, override val name: String, initialValue: String?) :
         StringPropertyBase(initialValue) {
@@ -20,18 +17,15 @@ class SimpleStringProperty(override val bean: Any?, override val name: String, i
     /**
      * The constructor of `StringProperty`
      *
-     * @param initialValue
-     *         the initial value of the wrapped value
+     * @param initialValue the initial value of the wrapped value
      */
     constructor(initialValue: String?) : this(DEFAULT_BEAN, DEFAULT_NAME, initialValue)
 
     /**
      * The constructor of `StringProperty`
      *
-     * @param bean
-     *         the bean of this `StringProperty`
-     * @param name
-     *         the name of this `StringProperty`
+     * @param bean the bean of this `StringProperty`
+     * @param name the name of this `StringProperty`
      */
     constructor(bean: Any?, name: String) : this(bean, name, null)
 

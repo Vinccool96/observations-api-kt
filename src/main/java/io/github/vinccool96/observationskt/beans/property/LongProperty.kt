@@ -118,8 +118,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
          *
          * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
          *
-         * @param property
-         *         The source `Property`
+         * @param property The source `Property`
          *
          * @return A `LongProperty` that wraps the `Property` if necessary
          */

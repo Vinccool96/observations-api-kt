@@ -153,10 +153,8 @@ abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
      *
      * For the description of possible exceptions, please refer to the documentation of [add] method.
      *
-     * @param index
-     *         the position where to add the element
-     * @param element
-     *         the element that will be added
+     * @param index the position where to add the element
+     * @param element the element that will be added
      *
      * @throws ClassCastException
      *         if the class of the specified element prevents it from being added to this list
@@ -175,10 +173,8 @@ abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
      *
      * For the description of possible exceptions, please refer to the documentation of [set] method.
      *
-     * @param index
-     *         the position where to set the element
-     * @param element
-     *         the element that will be set at the specified position
+     * @param index the position where to set the element
+     * @param element the element that will be set at the specified position
      *
      * @return the old element at the specified position
      *

@@ -35,7 +35,7 @@ interface NumberExpression : ObservableNumberValue {
      *
      * @return the new `NumberBinding`
      */
-    fun negate(): NumberBinding
+    operator fun unaryMinus(): NumberBinding
 
     // ===============================================================
     // Plus
@@ -690,7 +690,6 @@ interface NumberExpression : ObservableNumberValue {
      * Creates a [StringBinding] that holds the value of the `NumberExpression` turned into a `String`. If the value of
      * this `NumberExpression` changes, the value of the `StringBinding` will be updated automatically.
      *
-     *
      * The conversion is done without any formatting applied.
      *
      * @return the new `StringBinding`
@@ -703,8 +702,7 @@ interface NumberExpression : ObservableNumberValue {
      *
      * The result is formatted according to the formatting `String`. See [java.util.Formatter] for formatting rules.
      *
-     * @param format
-     * the formatting `String`
+     * @param format the formatting `String`
      *
      * @return the new `StringBinding`
      */

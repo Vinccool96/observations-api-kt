@@ -10,8 +10,7 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  * This implementation can handle adding and removing listeners while the observers are being notified, but it is not
  * thread-safe.
  *
- * @param T
- *         The type of the wrapped value.
+ * @param T The type of the wrapped value.
  */
 abstract class ObservableValueBase<T> : ObservableValue<T> {
 

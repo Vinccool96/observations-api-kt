@@ -3,10 +3,8 @@ package io.github.vinccool96.observationskt.collections
 /**
  * Interface that receives notifications of changes to an [ObservableMap].
  *
- * @param K
- *         the key element type
- * @param V
- *         the value element type
+ * @param K the key element type
+ * @param V the value element type
  */
 @FunctionalInterface
 interface MapChangeListener<K, V> {
@@ -16,15 +14,12 @@ interface MapChangeListener<K, V> {
      * that put operation might remove an element if there was already a value associated with the same key. In this
      * case wasAdded() and wasRemoved() will both return true.
      *
-     * @param K
-     *         key type
-     * @param V
-     *         value type
+     * @param K key type
+     * @param V value type
      *
      * @constructor Constructs a change associated with a map.
      *
-     * @param map
-     *         the source of the change
+     * @param map the source of the change
      */
     abstract class Change<K, V>(val map: ObservableMap<K, V>) {
 
@@ -73,8 +68,7 @@ interface MapChangeListener<K, V> {
      * (put/remove) once. This means, complex changes like `keySet().removeAll(Collection)` or `clear()` may result in
      * more than one call of `onChanged` method.
      *
-     * @param change
-     *         the change that was made
+     * @param change the change that was made
      */
     fun onChanged(change: Change<out K, out V>)
 

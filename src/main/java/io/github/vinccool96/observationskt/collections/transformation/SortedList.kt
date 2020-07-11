@@ -116,8 +116,7 @@ class SortedList<E> : TransformationList<E, E> {
     /**
      * Returns the element at the specified position in this list.
      *
-     * @param index
-     * index of the element to return
+     * @param index index of the element to return
      *
      * @return the element at the specified position in this list
      *

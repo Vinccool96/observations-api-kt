@@ -19,8 +19,7 @@ interface WritableBooleanValue : WritableValue<Boolean> {
     /**
      * Set the wrapped value. Unlike [WritableBooleanValue.value], this method uses primitive `boolean`.
      *
-     * @param value
-     *         The new value
+     * @param value The new value
      */
     fun set(value: Boolean)
 

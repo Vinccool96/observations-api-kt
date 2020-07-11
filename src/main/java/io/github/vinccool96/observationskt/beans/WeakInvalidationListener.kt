@@ -22,8 +22,7 @@ class WeakInvalidationListener : InvalidationListener, WeakListener {
     /**
      * The constructor of {@code WeakInvalidationListener}.
      *
-     * @param listener
-     *         The original listener that should be notified
+     * @param listener The original listener that should be notified
      */
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(@NamedArg("listener") listener: InvalidationListener?) {
