@@ -12,7 +12,7 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
  */
 abstract class ReadOnlyBooleanPropertyBase : ReadOnlyBooleanProperty() {
 
-    private var helper: ExpressionHelper<Boolean>? = null
+    private var helper: ExpressionHelper<Boolean?>? = null
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
@@ -31,19 +31,19 @@ abstract class ReadOnlyBooleanPropertyBase : ReadOnlyBooleanProperty() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Boolean>) {
+    override fun addListener(listener: ChangeListener<in Boolean?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Boolean>) {
+    override fun removeListener(listener: ChangeListener<in Boolean?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }

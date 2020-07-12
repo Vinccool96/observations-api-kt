@@ -31,7 +31,7 @@ abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
 
     private var valid: Boolean = true
 
-    private var helper: ExpressionHelper<Number>? = null
+    private var helper: ExpressionHelper<Number?>? = null
 
     /**
      * The constructor of the `LongPropertyBase`. The initial value is `0L`
@@ -55,19 +55,19 @@ abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Number>) {
+    override fun addListener(listener: ChangeListener<in Number?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Number>) {
+    override fun removeListener(listener: ChangeListener<in Number?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -120,7 +120,7 @@ abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out Number>) {
+    override fun bind(observable: ObservableValue<out Number?>) {
         val newObservable: ObservableLongValue = if (observable is ObservableLongValue) observable
         else object : LongBinding() {
 
@@ -129,7 +129,7 @@ abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
             }
 
             override fun computeValue(): Long {
-                return observable.value.toLong()
+                return observable.value?.toLong() ?: 0L
             }
 
         }
@@ -148,7 +148,7 @@ abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
 
     override fun unbind() {
         if (this.observable != null) {
-            this.valueState = this.observable!!.value.toLong()
+            this.valueState = this.observable!!.value?.toLong() ?: 0L
             this.observable!!.removeListener(this.listener!!)
             this.observable = null
         }

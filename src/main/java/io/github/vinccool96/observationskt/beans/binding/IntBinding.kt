@@ -34,7 +34,7 @@ abstract class IntBinding : IntExpression(), NumberBinding {
 
     private var observer: BindingHelperObserver? = null
 
-    private var helper: ExpressionHelper<Number>? = null
+    private var helper: ExpressionHelper<Number?>? = null
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
@@ -53,19 +53,19 @@ abstract class IntBinding : IntExpression(), NumberBinding {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Number>) {
+    override fun addListener(listener: ChangeListener<in Number?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Number>) {
+    override fun removeListener(listener: ChangeListener<in Number?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }

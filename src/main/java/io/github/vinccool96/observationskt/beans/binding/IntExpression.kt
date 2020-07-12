@@ -27,7 +27,7 @@ abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Number
+    override val value: Number?
         get() = this.get()
 
     override fun unaryMinus(): IntBinding {

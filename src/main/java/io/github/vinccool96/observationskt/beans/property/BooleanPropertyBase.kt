@@ -31,7 +31,7 @@ abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
 
     private var valid: Boolean = true
 
-    private var helper: ExpressionHelper<Boolean>? = null
+    private var helper: ExpressionHelper<Boolean?>? = null
 
     /**
      * The constructor of the `BooleanPropertyBase`. The initial value is `false`
@@ -55,19 +55,19 @@ abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Boolean>) {
+    override fun addListener(listener: ChangeListener<in Boolean?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Boolean>) {
+    override fun removeListener(listener: ChangeListener<in Boolean?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -120,7 +120,7 @@ abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out Boolean>) {
+    override fun bind(observable: ObservableValue<out Boolean?>) {
         val newObservable: ObservableBooleanValue = if (observable is ObservableBooleanValue) observable
         else object : BooleanBinding() {
 
@@ -129,7 +129,7 @@ abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
             }
 
             override fun computeValue(): Boolean {
-                return observable.value
+                return observable.value ?: false
             }
 
         }
@@ -148,7 +148,7 @@ abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
 
     override fun unbind() {
         if (this.observable != null) {
-            this.valueState = this.observable!!.value
+            this.valueState = this.observable!!.value ?: false
             this.observable!!.removeListener(this.listener!!)
             this.observable = null
         }

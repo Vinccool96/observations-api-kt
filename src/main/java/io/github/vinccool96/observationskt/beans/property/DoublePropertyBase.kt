@@ -31,7 +31,7 @@ abstract class DoublePropertyBase(initialValue: Double) : DoubleProperty() {
 
     private var valid: Boolean = true
 
-    private var helper: ExpressionHelper<Number>? = null
+    private var helper: ExpressionHelper<Number?>? = null
 
     /**
      * The constructor of the `DoublePropertyBase`. The initial value is `0.0`
@@ -55,19 +55,19 @@ abstract class DoublePropertyBase(initialValue: Double) : DoubleProperty() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Number>) {
+    override fun addListener(listener: ChangeListener<in Number?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Number>) {
+    override fun removeListener(listener: ChangeListener<in Number?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -120,7 +120,7 @@ abstract class DoublePropertyBase(initialValue: Double) : DoubleProperty() {
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out Number>) {
+    override fun bind(observable: ObservableValue<out Number?>) {
         val newObservable: ObservableDoubleValue = if (observable is ObservableDoubleValue) observable
         else object : DoubleBinding() {
 
@@ -129,7 +129,7 @@ abstract class DoublePropertyBase(initialValue: Double) : DoubleProperty() {
             }
 
             override fun computeValue(): Double {
-                return observable.value.toDouble()
+                return observable.value?.toDouble() ?: 0.0
             }
 
         }
@@ -148,7 +148,7 @@ abstract class DoublePropertyBase(initialValue: Double) : DoubleProperty() {
 
     override fun unbind() {
         if (this.observable != null) {
-            this.valueState = this.observable!!.value.toDouble()
+            this.valueState = this.observable!!.value?.toDouble() ?: 0.0
             this.observable!!.removeListener(this.listener!!)
             this.observable = null
         }

@@ -27,7 +27,7 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Number
+    override val value: Number?
         get() = this.get()
 
     override fun unaryMinus(): LongBinding {

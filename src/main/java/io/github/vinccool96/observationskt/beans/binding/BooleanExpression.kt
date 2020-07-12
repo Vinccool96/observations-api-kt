@@ -18,7 +18,7 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  */
 abstract class BooleanExpression : ObservableBooleanValue {
 
-    override val value: Boolean
+    override val value: Boolean?
         get() = this.get()
 
     /**
@@ -99,7 +99,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
             }
 
             override fun computeValue(): Boolean {
-                return this@BooleanExpression.value
+                return this@BooleanExpression.get()
             }
 
             init {

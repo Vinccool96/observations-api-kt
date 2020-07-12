@@ -150,15 +150,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             float1, float2,
                             object : Functions<Float> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -182,15 +182,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             float1, float2,
                             object : Functions<Float> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -214,15 +214,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             float1, float2,
                             object : Functions<Float> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -246,15 +246,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             float1, float2,
                             object : Functions<Float> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -278,15 +278,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             float1, float2,
                             object : Functions<Float> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -310,15 +310,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             float1, float2,
                             object : Functions<Float> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -344,15 +344,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             double1, double2,
                             object : Functions<Double> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -376,15 +376,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             double1, double2,
                             object : Functions<Double> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -408,15 +408,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             double1, double2,
                             object : Functions<Double> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -440,15 +440,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             double1, double2,
                             object : Functions<Double> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -472,15 +472,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             double1, double2,
                             object : Functions<Double> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -504,15 +504,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             double1, double2,
                             object : Functions<Double> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -538,15 +538,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             int1, int2,
                             object : Functions<Int> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -569,15 +569,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             int1, int2,
                             object : Functions<Int> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -600,15 +600,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             int1, int2,
                             object : Functions<Int> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -631,15 +631,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             int1, int2,
                             object : Functions<Int> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -662,15 +662,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             int1, int2,
                             object : Functions<Int> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -693,15 +693,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             int1, int2,
                             object : Functions<Int> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -726,15 +726,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             long1, long2,
                             object : Functions<Long> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -757,15 +757,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             long1, long2,
                             object : Functions<Long> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -788,15 +788,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             long1, long2,
                             object : Functions<Long> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -819,15 +819,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             long1, long2,
                             object : Functions<Long> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -850,15 +850,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             long1, long2,
                             object : Functions<Long> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1, op2 as ObservableNumberValue)
                                 }
 
@@ -881,15 +881,15 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             long1, long2,
                             object : Functions<Long> {
 
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number> {
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number> {
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1, op2 as ObservableNumberValue)
                                 }
 

@@ -24,10 +24,8 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * @see Binding
  * @see BooleanExpression
- *
- * @constructor Sole constructor
  */
-abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
+abstract class BooleanBinding : BooleanExpression(), Binding<Boolean?> {
 
     private var valueState: Boolean = false
 
@@ -35,7 +33,7 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
 
     private var observer: BindingHelperObserver? = null
 
-    private var helper: ExpressionHelper<Boolean>? = null
+    private var helper: ExpressionHelper<Boolean?>? = null
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
@@ -53,19 +51,19 @@ abstract class BooleanBinding() : BooleanExpression(), Binding<Boolean> {
         return helper != null && this.helper!!.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Boolean>) {
+    override fun addListener(listener: ChangeListener<in Boolean?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Boolean>) {
+    override fun removeListener(listener: ChangeListener<in Boolean?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
         return helper != null && this.helper!!.changeListeners.contains(listener)
     }
 

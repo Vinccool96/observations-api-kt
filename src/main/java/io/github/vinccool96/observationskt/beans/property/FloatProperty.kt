@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableFloatValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
+import io.github.vinccool96.observationskt.sun.binding.Logging
 import java.security.AccessControlContext
 import java.security.AccessController
 import java.security.PrivilegedAction
@@ -23,17 +24,23 @@ import java.security.PrivilegedAction
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, WritableFloatValue {
+abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, WritableFloatValue {
 
-    override var value: Number
+    override var value: Number?
         get() = this.get()
-        set(value) = this.set(value.toFloat())
+        set(value) {
+            if (value == null) {
+                Logging.getLogger().fine("Attempt to set float property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toFloat() ?: 0.0f)
+        }
 
-    override fun bindBidirectional(other: Property<Number>) {
+    override fun bindBidirectional(other: Property<Number?>) {
         Bindings.bindBidirectional(this, other)
     }
 
-    override fun unbindBidirectional(other: Property<Number>) {
+    override fun unbindBidirectional(other: Property<Number?>) {
         Bindings.unbindBidirectional(this, other)
     }
 
@@ -77,7 +84,7 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this as Property<Number>, this@FloatProperty)
+                BidirectionalBinding.bind(this as Property<Number?>, this@FloatProperty)
             }
 
             override val bean: Any?
@@ -122,13 +129,13 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number>, Writab
          *
          * @return A `FloatProperty` that wraps the `Property` if necessary
          */
-        fun floatProperty(property: Property<Float>): FloatProperty {
+        fun floatProperty(property: Property<Float?>): FloatProperty {
             return if (property is FloatProperty) property else object : FloatPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property as Property<Number>)
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
 
                 override val bean: Any?

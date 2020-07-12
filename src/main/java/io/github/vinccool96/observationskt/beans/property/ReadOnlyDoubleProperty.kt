@@ -12,7 +12,7 @@ import io.github.vinccool96.observationskt.beans.binding.DoubleExpression
  * @see DoubleExpression
  * @see ReadOnlyProperty
  */
-abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Number> {
+abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Number?> {
 
     /**
      * Returns a string representation of this `ReadOnlyDoubleProperty` object.

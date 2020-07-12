@@ -23,15 +23,15 @@ class IntConstant private constructor(override val value: Int) : ObservableIntVa
         return false
     }
 
-    override fun addListener(listener: ChangeListener<in Number>) {
+    override fun addListener(listener: ChangeListener<in Number?>) {
         // no-op
     }
 
-    override fun removeListener(listener: ChangeListener<in Number>) {
+    override fun removeListener(listener: ChangeListener<in Number?>) {
         // no-op
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
         // no-op
         return false
     }

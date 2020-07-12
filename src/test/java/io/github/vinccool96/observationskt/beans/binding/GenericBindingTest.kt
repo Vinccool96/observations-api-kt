@@ -274,7 +274,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class DoubleBindingImpl(vararg dep: Observable) : DoubleBinding(), BindingMock<Number> {
+    class DoubleBindingImpl(vararg dep: Observable) : DoubleBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
@@ -284,10 +284,10 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
             super.bind(*dep)
         }
 
-        override var value: Number
+        override var value: Number?
             get() = this.get()
             set(value) {
-                this.valueState = value.toDouble()
+                this.valueState = value?.toDouble() ?: 0.0
             }
 
         override val computeValueCounter: Int
@@ -312,7 +312,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class FloatBindingImpl(vararg dep: Observable) : FloatBinding(), BindingMock<Number> {
+    class FloatBindingImpl(vararg dep: Observable) : FloatBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
@@ -322,10 +322,10 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
             super.bind(*dep)
         }
 
-        override var value: Number
+        override var value: Number?
             get() = this.get()
             set(value) {
-                this.valueState = value.toFloat()
+                this.valueState = value?.toFloat() ?: 0.0f
             }
 
         override val computeValueCounter: Int
@@ -350,7 +350,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class LongBindingImpl(vararg dep: Observable) : LongBinding(), BindingMock<Number> {
+    class LongBindingImpl(vararg dep: Observable) : LongBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
@@ -360,10 +360,10 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
             super.bind(*dep)
         }
 
-        override var value: Number
+        override var value: Number?
             get() = this.get()
             set(value) {
-                this.valueState = value.toLong()
+                this.valueState = value?.toLong() ?: 0L
             }
 
         override val computeValueCounter: Int
@@ -388,7 +388,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class IntBindingImpl(vararg dep: Observable) : IntBinding(), BindingMock<Number> {
+    class IntBindingImpl(vararg dep: Observable) : IntBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
@@ -398,10 +398,10 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
             super.bind(*dep)
         }
 
-        override var value: Number
+        override var value: Number?
             get() = this.get()
             set(value) {
-                this.valueState = value.toInt()
+                this.valueState = value?.toInt() ?: 0
             }
 
         override val computeValueCounter: Int
@@ -426,7 +426,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class BooleanBindingImpl(vararg dep: Observable) : BooleanBinding(), BindingMock<Boolean> {
+    class BooleanBindingImpl(vararg dep: Observable) : BooleanBinding(), BindingMock<Boolean?> {
 
         private var computeValueCounterState = 0
 
@@ -436,10 +436,10 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
             super.bind(*dep)
         }
 
-        override var value: Boolean
+        override var value: Boolean?
             get() = this.get()
             set(value) {
-                this.valueState = value
+                this.valueState = value ?: false
             }
 
         override val computeValueCounter: Int

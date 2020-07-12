@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableIntValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
+import io.github.vinccool96.observationskt.sun.binding.Logging
 import java.security.AccessControlContext
 import java.security.AccessController
 import java.security.PrivilegedAction
@@ -23,17 +24,23 @@ import java.security.PrivilegedAction
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIntValue {
+abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableIntValue {
 
-    override var value: Number
+    override var value: Number?
         get() = this.get()
-        set(value) = this.set(value.toInt())
+        set(value) {
+            if (value == null) {
+                Logging.getLogger().fine("Attempt to set int property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toInt() ?: 0)
+        }
 
-    override fun bindBidirectional(other: Property<Number>) {
+    override fun bindBidirectional(other: Property<Number?>) {
         Bindings.bindBidirectional(this, other)
     }
 
-    override fun unbindBidirectional(other: Property<Number>) {
+    override fun unbindBidirectional(other: Property<Number?>) {
         Bindings.unbindBidirectional(this, other)
     }
 
@@ -77,7 +84,7 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIn
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this as Property<Number>, this@IntProperty)
+                BidirectionalBinding.bind(this as Property<Number?>, this@IntProperty)
             }
 
             override val bean: Any?
@@ -122,13 +129,13 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number>, WritableIn
          *
          * @return A `IntProperty` that wraps the `Property` if necessary
          */
-        fun doubleProperty(property: Property<Int>): IntProperty {
+        fun intProperty(property: Property<Int>): IntProperty {
             return if (property is IntProperty) property else object : IntPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property as Property<Number>)
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
 
                 override val bean: Any?

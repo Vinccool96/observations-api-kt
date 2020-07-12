@@ -1,7 +1,7 @@
 package io.github.vinccool96.observationskt.beans.value
 
 /**
- * A writable `double` value.
+ * A writable `Double` value.
  *
  * @see WritableValue
  * @see WritableNumberValue
@@ -9,15 +9,15 @@ package io.github.vinccool96.observationskt.beans.value
 interface WritableDoubleValue : WritableNumberValue {
 
     /**
-     * Get the wrapped value. Unlike [value], this method returns primitive `double`. Needs to be
-     * identical to [value].
+     * Get the wrapped value. Unlike [value], this method returns not-nullable `Double`. Needs to be identical to
+     * [value].
      *
      * @return The current value
      */
     fun get(): Double
 
     /**
-     * Set the wrapped value. Unlike [WritableDoubleValue.value], this method uses primitive `double`.
+     * Set the wrapped value. Unlike [WritableDoubleValue.value], this method uses not-nullable `Double`.
      *
      * @param value The new value
      */

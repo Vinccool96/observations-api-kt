@@ -31,7 +31,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
 
     private var valid: Boolean = true
 
-    private var helper: ExpressionHelper<Number>? = null
+    private var helper: ExpressionHelper<Number?>? = null
 
     /**
      * The constructor of the `IntPropertyBase`. The initial value is `0`
@@ -55,19 +55,19 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in Number>) {
+    override fun addListener(listener: ChangeListener<in Number?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in Number>) {
+    override fun removeListener(listener: ChangeListener<in Number?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
@@ -120,7 +120,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out Number>) {
+    override fun bind(observable: ObservableValue<out Number?>) {
         val newObservable: ObservableIntValue = if (observable is ObservableIntValue) observable
         else object : IntBinding() {
 
@@ -129,7 +129,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
             }
 
             override fun computeValue(): Int {
-                return observable.value.toInt()
+                return observable.value?.toInt() ?: 0
             }
 
         }
@@ -148,7 +148,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
 
     override fun unbind() {
         if (this.observable != null) {
-            this.valueState = this.observable!!.value.toInt()
+            this.valueState = this.observable!!.value?.toInt() ?: 0
             this.observable!!.removeListener(this.listener!!)
             this.observable = null
         }

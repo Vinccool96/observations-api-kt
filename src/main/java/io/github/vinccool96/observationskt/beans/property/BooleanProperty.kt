@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableBooleanValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
+import io.github.vinccool96.observationskt.sun.binding.Logging
 import java.security.AccessControlContext
 import java.security.AccessController
 import java.security.PrivilegedAction
@@ -22,17 +23,23 @@ import java.security.PrivilegedAction
  * @see ReadOnlyBooleanProperty
  * @see Property
  */
-abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, WritableBooleanValue {
+abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, WritableBooleanValue {
 
-    override var value: Boolean
+    override var value: Boolean?
         get() = this.get()
-        set(value) = this.set(value)
+        set(value) {
+            if (value == null) {
+                Logging.getLogger().fine("Attempt to set boolean property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value ?: false)
+        }
 
-    override fun bindBidirectional(other: Property<Boolean>) {
+    override fun bindBidirectional(other: Property<Boolean?>) {
         Bindings.bindBidirectional(this, other)
     }
 
-    override fun unbindBidirectional(other: Property<Boolean>) {
+    override fun unbindBidirectional(other: Property<Boolean?>) {
         Bindings.unbindBidirectional(this, other)
     }
 
@@ -62,12 +69,12 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, W
      * @return the new `ObjectProperty`
      */
     override fun asObject(): ObjectProperty<Boolean> {
-        return object : ObjectPropertyBase<Boolean>(this@BooleanProperty.value) {
+        return object : ObjectPropertyBase<Boolean>(this@BooleanProperty.get()) {
 
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this, this@BooleanProperty)
+                BidirectionalBinding.bind(this as Property<Boolean?>, this@BooleanProperty)
             }
 
             override val bean: Any?
@@ -101,13 +108,13 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean>, W
          *
          * @return A `BooleanProperty` that wraps the `Property` if necessary
          */
-        fun booleanProperty(property: Property<Boolean>): BooleanProperty {
+        fun booleanProperty(property: Property<Boolean?>): BooleanProperty {
             return if (property is BooleanProperty) property else object : BooleanPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property)
+                    BidirectionalBinding.bind(this as Property<Boolean?>, property)
                 }
 
                 override val bean: Any?

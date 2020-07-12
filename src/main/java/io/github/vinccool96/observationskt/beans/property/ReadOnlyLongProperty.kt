@@ -12,7 +12,7 @@ import io.github.vinccool96.observationskt.beans.binding.LongExpression
  * @see LongExpression
  * @see ReadOnlyProperty
  */
-abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number> {
+abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number?> {
 
     /**
      * Returns a string representation of this `ReadOnlyLongProperty` object.
