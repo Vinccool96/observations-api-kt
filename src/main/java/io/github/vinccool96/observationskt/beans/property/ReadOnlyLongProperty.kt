@@ -26,7 +26,7 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number>
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
-        if (name.isNotEmpty()) {
+        if (name != null && name.isNotEmpty()) {
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
@@ -62,7 +62,7 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number>
             override val bean: Any?
                 get() = null // Virtual property, does not exist on a bean
 
-            override val name: String
+            override val name: String?
                 get() = this@ReadOnlyLongProperty.name
 
             override fun get(): Long {
@@ -115,7 +115,7 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number>
                 override val bean: Any?
                     get() = null // Virtual property, no bean
 
-                override val name: String
+                override val name: String?
                     get() = property.name
 
             }

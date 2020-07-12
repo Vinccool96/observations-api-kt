@@ -49,7 +49,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
-        if (name.isNotEmpty()) {
+        if (name != null && name.isNotEmpty()) {
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
@@ -83,7 +83,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
             override val bean: Any?
                 get() = null // Virtual property, does not exist on a bean
 
-            override val name: String
+            override val name: String?
                 get() = this@LongProperty.name
 
             @Throws(Throwable::class)
@@ -134,7 +134,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
                 override val bean: Any?
                     get() = null // Virtual property, does not exist on a bean
 
-                override val name: String
+                override val name: String?
                     get() = property.name
 
                 @Throws(Throwable::class)

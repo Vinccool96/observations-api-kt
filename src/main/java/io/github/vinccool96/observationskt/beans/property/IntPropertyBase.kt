@@ -105,14 +105,14 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
         return this.observable?.get() ?: this.valueState
     }
 
-    override fun set(value: Int) {
+    override fun set(value: Int?) {
         if (this.bound) {
             val curBean = this.bean
             throw RuntimeException((if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
                     "A bound value cannot be set.")
         }
         if (this.valueState != value) {
-            this.valueState = value
+            this.valueState = value ?: 0
             markInvalid()
         }
     }
@@ -166,7 +166,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
-        if (name.isNotEmpty()) {
+        if (name != null && name.isNotEmpty()) {
             result.append("name: ").append(name).append(", ")
         }
         if (this.bound) {

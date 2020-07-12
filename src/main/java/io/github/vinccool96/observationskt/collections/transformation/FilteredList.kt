@@ -71,7 +71,7 @@ class FilteredList<E> : TransformationList<E, E> {
                 override val bean: Any?
                     get() = this@FilteredList
 
-                override val name: String
+                override val name: String?
                     get() = "predicate"
 
             }

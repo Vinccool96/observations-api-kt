@@ -33,7 +33,7 @@ abstract class ReadOnlyObjectProperty<T> : ObjectExpression<T>(), ReadOnlyProper
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
-        if (name.isNotEmpty()) {
+        if (name != null && name.isNotEmpty()) {
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
