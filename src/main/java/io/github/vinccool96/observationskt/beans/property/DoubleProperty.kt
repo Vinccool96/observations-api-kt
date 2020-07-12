@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableDoubleValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
+import io.github.vinccool96.observationskt.sun.binding.Logging
 import java.security.AccessControlContext
 import java.security.AccessController
 import java.security.PrivilegedAction
@@ -23,17 +24,23 @@ import java.security.PrivilegedAction
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, WritableDoubleValue {
+abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, WritableDoubleValue {
 
-    override var value: Number
+    override var value: Number?
         get() = this.get()
-        set(value) = this.set(value.toDouble())
+        set(value) {
+            if (value == null) {
+                Logging.getLogger().fine("Attempt to set double property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toDouble() ?: 0.0)
+        }
 
-    override fun bindBidirectional(other: Property<Number>) {
+    override fun bindBidirectional(other: Property<Number?>) {
         Bindings.bindBidirectional(this, other)
     }
 
-    override fun unbindBidirectional(other: Property<Number>) {
+    override fun unbindBidirectional(other: Property<Number?>) {
         Bindings.unbindBidirectional(this, other)
     }
 
@@ -77,7 +84,7 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this as Property<Number>, this@DoubleProperty)
+                BidirectionalBinding.bind(this as Property<Number?>, this@DoubleProperty)
             }
 
             override val bean: Any?
@@ -122,13 +129,13 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number>, Writ
          *
          * @return A `DoubleProperty` that wraps the `Property` if necessary
          */
-        fun doubleProperty(property: Property<Double>): DoubleProperty {
+        fun doubleProperty(property: Property<Double?>): DoubleProperty {
             return if (property is DoubleProperty) property else object : DoublePropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property as Property<Number>)
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
 
                 override val bean: Any?

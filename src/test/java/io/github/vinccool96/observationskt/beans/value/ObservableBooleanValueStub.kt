@@ -1,6 +1,6 @@
 package io.github.vinccool96.observationskt.beans.value
 
-class ObservableBooleanValueStub(initialValue: Boolean) : ObservableValueBase<Boolean>(), ObservableBooleanValue {
+class ObservableBooleanValueStub(initialValue: Boolean) : ObservableValueBase<Boolean?>(), ObservableBooleanValue {
 
     private var valueState: Boolean = initialValue
 

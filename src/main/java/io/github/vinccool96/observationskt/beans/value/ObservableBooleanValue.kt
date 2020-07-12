@@ -5,7 +5,7 @@ package io.github.vinccool96.observationskt.beans.value
  *
  * @see ObservableValue
  */
-interface ObservableBooleanValue : ObservableValue<Boolean> {
+interface ObservableBooleanValue : ObservableValue<Boolean?> {
 
     /**
      * Returns the current value of this `ObservableBooleanValue`.

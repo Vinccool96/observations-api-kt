@@ -12,7 +12,7 @@ import io.github.vinccool96.observationskt.beans.binding.FloatExpression
  * @see FloatExpression
  * @see ReadOnlyProperty
  */
-abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Number> {
+abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Number?> {
 
     /**
      * Returns a string representation of this `ReadOnlyFloatProperty` object.

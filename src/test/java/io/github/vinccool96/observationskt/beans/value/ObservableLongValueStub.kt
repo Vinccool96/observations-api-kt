@@ -1,6 +1,6 @@
 package io.github.vinccool96.observationskt.beans.value
 
-class ObservableLongValueStub(initialValue: Long) : ObservableValueBase<Number>(), ObservableLongValue {
+class ObservableLongValueStub(initialValue: Long) : ObservableValueBase<Number?>(), ObservableLongValue {
 
     private var valueState: Long = initialValue
 
@@ -27,7 +27,7 @@ class ObservableLongValueStub(initialValue: Long) : ObservableValueBase<Number>(
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Number
+    override val value: Number?
         get() = this.get()
 
 }

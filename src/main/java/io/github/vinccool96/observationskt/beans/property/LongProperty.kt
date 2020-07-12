@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableLongValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
+import io.github.vinccool96.observationskt.sun.binding.Logging
 import java.security.AccessControlContext
 import java.security.AccessController
 import java.security.PrivilegedAction
@@ -23,17 +24,23 @@ import java.security.PrivilegedAction
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, WritableLongValue {
+abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, WritableLongValue {
 
-    override var value: Number
+    override var value: Number?
         get() = this.get()
-        set(value) = this.set(value.toLong())
+        set(value) {
+            if (value == null) {
+                Logging.getLogger().fine("Attempt to set double property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toLong() ?: 0L)
+        }
 
-    override fun bindBidirectional(other: Property<Number>) {
+    override fun bindBidirectional(other: Property<Number?>) {
         Bindings.bindBidirectional(this, other)
     }
 
-    override fun unbindBidirectional(other: Property<Number>) {
+    override fun unbindBidirectional(other: Property<Number?>) {
         Bindings.unbindBidirectional(this, other)
     }
 
@@ -77,7 +84,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this as Property<Number>, this@LongProperty)
+                BidirectionalBinding.bind(this as Property<Number?>, this@LongProperty)
             }
 
             override val bean: Any?
@@ -122,13 +129,13 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number>, Writable
          *
          * @return A `LongProperty` that wraps the `Property` if necessary
          */
-        fun longProperty(property: Property<Number>): LongProperty {
+        fun longProperty(property: Property<Long?>): LongProperty {
             return if (property is LongProperty) property else object : LongPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
-                    BidirectionalBinding.bind(this, property)
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
 
                 override val bean: Any?

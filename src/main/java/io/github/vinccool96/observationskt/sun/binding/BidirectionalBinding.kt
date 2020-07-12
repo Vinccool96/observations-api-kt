@@ -49,7 +49,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
     }
 
     private class BidirectionalBooleanBinding(property1: BooleanProperty, property2: BooleanProperty) :
-            BidirectionalBinding<Boolean>(property1, property2) {
+            BidirectionalBinding<Boolean?>(property1, property2) {
 
         private val propertyRef1: WeakReference<BooleanProperty> = WeakReference(property1)
 
@@ -57,13 +57,13 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         private var updating: Boolean = false
 
-        override val property1: Property<Boolean>?
+        override val property1: Property<Boolean?>?
             get() = this.propertyRef1.get()
 
-        override val property2: Property<Boolean>?
+        override val property2: Property<Boolean?>?
             get() = this.propertyRef2.get()
 
-        override fun changed(observable: ObservableValue<out Boolean>, oldValue: Boolean, newValue: Boolean) {
+        override fun changed(observable: ObservableValue<out Boolean?>, oldValue: Boolean?, newValue: Boolean?) {
             if (!this.updating) {
                 val property1: BooleanProperty? = this.propertyRef1.get()
                 val property2: BooleanProperty? = this.propertyRef2.get()
@@ -71,16 +71,16 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                     try {
                         this.updating = true
                         if (property1 === observable) {
-                            property2.set(newValue)
+                            property2.set(newValue!!)
                         } else {
-                            property1.set(newValue)
+                            property1.set(newValue!!)
                         }
                     } catch (e: RuntimeException) {
                         try {
                             if (property1 === observable) {
-                                property1.set(oldValue)
+                                property1.set(oldValue!!)
                             } else {
-                                property2.set(oldValue)
+                                property2.set(oldValue!!)
                             }
                         } catch (e2: Exception) {
                             e2.addSuppressed(e)
@@ -102,7 +102,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
     }
 
     private class BidirectionalDoubleBinding(property1: DoubleProperty, property2: DoubleProperty) :
-            BidirectionalBinding<Number>(property1, property2) {
+            BidirectionalBinding<Number?>(property1, property2) {
 
         private val propertyRef1: WeakReference<DoubleProperty> = WeakReference(property1)
 
@@ -110,13 +110,13 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         private var updating: Boolean = false
 
-        override val property1: Property<Number>?
+        override val property1: Property<Number?>?
             get() = this.propertyRef1.get()
 
-        override val property2: Property<Number>?
+        override val property2: Property<Number?>?
             get() = this.propertyRef2.get()
 
-        override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
+        override fun changed(observable: ObservableValue<out Number?>, oldValue: Number?, newValue: Number?) {
             if (!this.updating) {
                 val property1: DoubleProperty? = this.propertyRef1.get()
                 val property2: DoubleProperty? = this.propertyRef2.get()
@@ -124,16 +124,16 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                     try {
                         this.updating = true
                         if (property1 === observable) {
-                            property2.set(newValue.toDouble())
+                            property2.set(newValue!!.toDouble())
                         } else {
-                            property1.set(newValue.toDouble())
+                            property1.set(newValue!!.toDouble())
                         }
                     } catch (e: RuntimeException) {
                         try {
                             if (property1 === observable) {
-                                property1.set(oldValue.toDouble())
+                                property1.set(oldValue!!.toDouble())
                             } else {
-                                property2.set(oldValue.toDouble())
+                                property2.set(oldValue!!.toDouble())
                             }
                         } catch (e2: Exception) {
                             e2.addSuppressed(e)
@@ -155,7 +155,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
     }
 
     private class BidirectionalFloatBinding(property1: FloatProperty, property2: FloatProperty) :
-            BidirectionalBinding<Number>(property1, property2) {
+            BidirectionalBinding<Number?>(property1, property2) {
 
         private val propertyRef1: WeakReference<FloatProperty> = WeakReference(property1)
 
@@ -163,13 +163,13 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         private var updating: Boolean = false
 
-        override val property1: Property<Number>?
+        override val property1: Property<Number?>?
             get() = this.propertyRef1.get()
 
-        override val property2: Property<Number>?
+        override val property2: Property<Number?>?
             get() = this.propertyRef2.get()
 
-        override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
+        override fun changed(observable: ObservableValue<out Number?>, oldValue: Number?, newValue: Number?) {
             if (!this.updating) {
                 val property1: FloatProperty? = this.propertyRef1.get()
                 val property2: FloatProperty? = this.propertyRef2.get()
@@ -177,16 +177,16 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                     try {
                         this.updating = true
                         if (property1 === observable) {
-                            property2.set(newValue.toFloat())
+                            property2.set(newValue!!.toFloat())
                         } else {
-                            property1.set(newValue.toFloat())
+                            property1.set(newValue!!.toFloat())
                         }
                     } catch (e: RuntimeException) {
                         try {
                             if (property1 === observable) {
-                                property1.set(oldValue.toFloat())
+                                property1.set(oldValue!!.toFloat())
                             } else {
-                                property2.set(oldValue.toFloat())
+                                property2.set(oldValue!!.toFloat())
                             }
                         } catch (e2: Exception) {
                             e2.addSuppressed(e)
@@ -208,7 +208,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
     }
 
     private class BidirectionalLongBinding(property1: LongProperty, property2: LongProperty) :
-            BidirectionalBinding<Number>(property1, property2) {
+            BidirectionalBinding<Number?>(property1, property2) {
 
         private val propertyRef1: WeakReference<LongProperty> = WeakReference(property1)
 
@@ -216,13 +216,13 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         private var updating: Boolean = false
 
-        override val property1: Property<Number>?
+        override val property1: Property<Number?>?
             get() = this.propertyRef1.get()
 
-        override val property2: Property<Number>?
+        override val property2: Property<Number?>?
             get() = this.propertyRef2.get()
 
-        override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
+        override fun changed(observable: ObservableValue<out Number?>, oldValue: Number?, newValue: Number?) {
             if (!this.updating) {
                 val property1: LongProperty? = this.propertyRef1.get()
                 val property2: LongProperty? = this.propertyRef2.get()
@@ -230,16 +230,16 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                     try {
                         this.updating = true
                         if (property1 === observable) {
-                            property2.set(newValue.toLong())
+                            property2.set(newValue!!.toLong())
                         } else {
-                            property1.set(newValue.toLong())
+                            property1.set(newValue!!.toLong())
                         }
                     } catch (e: RuntimeException) {
                         try {
                             if (property1 === observable) {
-                                property1.set(oldValue.toLong())
+                                property1.set(oldValue!!.toLong())
                             } else {
-                                property2.set(oldValue.toLong())
+                                property2.set(oldValue!!.toLong())
                             }
                         } catch (e2: Exception) {
                             e2.addSuppressed(e)
@@ -261,7 +261,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
     }
 
     private class BidirectionalIntBinding(property1: IntProperty, property2: IntProperty) :
-            BidirectionalBinding<Number>(property1, property2) {
+            BidirectionalBinding<Number?>(property1, property2) {
 
         private val propertyRef1: WeakReference<IntProperty> = WeakReference(property1)
 
@@ -269,13 +269,13 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         private var updating: Boolean = false
 
-        override val property1: Property<Number>?
+        override val property1: Property<Number?>?
             get() = this.propertyRef1.get()
 
-        override val property2: Property<Number>?
+        override val property2: Property<Number?>?
             get() = this.propertyRef2.get()
 
-        override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
+        override fun changed(observable: ObservableValue<out Number?>, oldValue: Number?, newValue: Number?) {
             if (!this.updating) {
                 val property1: IntProperty? = this.propertyRef1.get()
                 val property2: IntProperty? = this.propertyRef2.get()
@@ -283,16 +283,16 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                     try {
                         this.updating = true
                         if (property1 === observable) {
-                            property2.set(newValue.toInt())
+                            property2.set(newValue!!.toInt())
                         } else {
-                            property1.set(newValue.toInt())
+                            property1.set(newValue!!.toInt())
                         }
                     } catch (e: RuntimeException) {
                         try {
                             if (property1 === observable) {
-                                property1.set(oldValue.toInt())
+                                property1.set(oldValue!!.toInt())
                             } else {
-                                property2.set(oldValue.toInt())
+                                property2.set(oldValue!!.toInt())
                             }
                         } catch (e2: Exception) {
                             e2.addSuppressed(e)
@@ -367,25 +367,25 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
     }
 
-    private class TypedNumberBidirectionalBinding<T : Number>(property1: Property<T>, property2: Property<Number>) :
-            BidirectionalBinding<Number>(property1, property2) {
+    private class TypedNumberBidirectionalBinding<T : Number>(property1: Property<T>, property2: Property<Number?>) :
+            BidirectionalBinding<Number?>(property1, property2) {
 
         private val propertyRef1: WeakReference<Property<T>> = WeakReference(property1)
 
-        private val propertyRef2: WeakReference<Property<Number>> = WeakReference(property2)
+        private val propertyRef2: WeakReference<Property<Number?>> = WeakReference(property2)
 
         private var updating: Boolean = false
 
         override val property1: Property<T>?
             get() = this.propertyRef1.get()
 
-        override val property2: Property<Number>?
+        override val property2: Property<Number?>?
             get() = this.propertyRef2.get()
 
-        override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
+        override fun changed(observable: ObservableValue<out Number?>, oldValue: Number?, newValue: Number?) {
             if (!this.updating) {
                 val property1: Property<T>? = this.propertyRef1.get()
-                val property2: Property<Number>? = this.propertyRef2.get()
+                val property2: Property<Number?>? = this.propertyRef2.get()
                 if (property1 != null && property2 != null) {
                     try {
                         this.updating = true

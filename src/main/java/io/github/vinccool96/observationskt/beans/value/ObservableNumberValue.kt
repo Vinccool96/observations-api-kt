@@ -15,7 +15,7 @@ package io.github.vinccool96.observationskt.beans.value
  *
  * @see ObservableLongValue
  */
-interface ObservableNumberValue : ObservableValue<Number> {
+interface ObservableNumberValue : ObservableValue<Number?> {
 
     /**
      * Returns the value of this `ObservableNumberValue` as an `int` . If the value is not an `int`, a standard cast is

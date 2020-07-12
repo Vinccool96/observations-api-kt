@@ -12,7 +12,7 @@ import io.github.vinccool96.observationskt.beans.binding.IntExpression
  * @see IntExpression
  * @see ReadOnlyProperty
  */
-abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number> {
+abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number?> {
 
     /**
      * Returns a string representation of this `ReadOnlyIntProperty` object.

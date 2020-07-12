@@ -41,7 +41,7 @@ object Bindings {
 
             override fun computeValue(): Boolean {
                 return try {
-                    func.call()
+                    func.call() ?: false
                 } catch (e: Exception) {
                     Logging.getLogger().warning("Exception while evaluating binding", e)
                     false
@@ -76,7 +76,7 @@ object Bindings {
 
             override fun computeValue(): Double {
                 return try {
-                    func.call()
+                    func.call() ?: 0.0
                 } catch (e: Exception) {
                     Logging.getLogger().warning("Exception while evaluating binding", e)
                     0.0

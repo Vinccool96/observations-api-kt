@@ -1,6 +1,6 @@
 package io.github.vinccool96.observationskt.beans.value
 
-class ObservableIntValueStub(initialValue: Int) : ObservableValueBase<Number>(), ObservableIntValue {
+class ObservableIntValueStub(initialValue: Int) : ObservableValueBase<Number?>(), ObservableIntValue {
 
     private var valueState: Int = initialValue
 
@@ -27,7 +27,7 @@ class ObservableIntValueStub(initialValue: Int) : ObservableValueBase<Number>(),
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Number
+    override val value: Number?
         get() = this.get()
 
 }

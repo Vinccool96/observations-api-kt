@@ -96,72 +96,73 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
         fun parameters(): List<Array<out Any?>> {
             return listOf(arrayOf(
                     SimpleBooleanProperty(), SimpleBooleanProperty(),
-                    object : Functions<Boolean> {
+                    object : Functions<Boolean?> {
 
-                        override fun create(func: Callable<Boolean>,
-                                vararg dependencies: Observable): Binding<Boolean> {
-                            return Bindings.createBooleanBinding(func, *dependencies)
+                        override fun create(func: Callable<Boolean?>,
+                                vararg dependencies: Observable): Binding<Boolean?> {
+                            return Bindings.createBooleanBinding(func as Callable<Boolean>, *dependencies)
                         }
 
-                        override fun check(value0: Boolean, value1: Any?) {
+                        override fun check(value0: Boolean?, value1: Any?) {
                             assertEquals(value0, value1)
                         }
 
                     }, true, false, false
             ), arrayOf(
                     SimpleDoubleProperty(), SimpleDoubleProperty(),
-                    object : Functions<Number> {
+                    object : Functions<Number?> {
 
-                        override fun create(func: Callable<Number>,
-                                vararg dependencies: Observable): Binding<Number> {
+                        override fun create(func: Callable<Number?>,
+                                vararg dependencies: Observable): Binding<Number?> {
                             return Bindings.createDoubleBinding(func as Callable<Double>, *dependencies)
                         }
 
-                        override fun check(value0: Number, value1: Any?) {
-                            org.junit.Assert.assertEquals(value0.toDouble(), (value1 as Number).toDouble(),
+                        override fun check(value0: Number?, value1: Any?) {
+                            org.junit.Assert.assertEquals(value0!!.toDouble(), (value1 as Number).toDouble(),
                                     EPSILON_DOUBLE)
                         }
 
                     }, PI, -E, 0.0
             ), arrayOf(
                     SimpleFloatProperty(), SimpleFloatProperty(),
-                    object : Functions<Number> {
+                    object : Functions<Number?> {
 
-                        override fun create(func: Callable<Number>,
-                                vararg dependencies: Observable): Binding<Number> {
+                        override fun create(func: Callable<Number?>,
+                                vararg dependencies: Observable): Binding<Number?> {
                             return Bindings.createFloatBinding(func as Callable<Float>, *dependencies)
                         }
 
-                        override fun check(value0: Number, value1: Any?) {
-                            org.junit.Assert.assertEquals(value0.toFloat(), (value1 as Number).toFloat(), EPSILON_FLOAT)
+                        override fun check(value0: Number?, value1: Any?) {
+                            org.junit.Assert.assertEquals(value0!!.toFloat(), (value1 as Number).toFloat(),
+                                    EPSILON_FLOAT)
                         }
 
                     }, PI.toFloat(), -E.toFloat(), 0.0f
             ), arrayOf(
                     SimpleIntProperty(), SimpleIntProperty(),
-                    object : Functions<Number> {
+                    object : Functions<Number?> {
 
-                        override fun create(func: Callable<Number>,
-                                vararg dependencies: Observable): Binding<Number> {
+                        override fun create(func: Callable<Number?>,
+                                vararg dependencies: Observable): Binding<Number?> {
                             return Bindings.createIntBinding(func as Callable<Int>, *dependencies)
                         }
 
-                        override fun check(value0: Number, value1: Any?) {
-                            assertEquals(value0.toInt(), (value1 as Number).toInt())
+                        override fun check(value0: Number?, value1: Any?) {
+                            assertEquals(value0!!.toInt(), (value1 as Number).toInt())
                         }
 
                     }, Int.MAX_VALUE, Int.MIN_VALUE, 0
             ), arrayOf(
                     SimpleLongProperty(), SimpleLongProperty(),
-                    object : Functions<Number> {
+                    object : Functions<Number?> {
 
-                        override fun create(func: Callable<Number>,
-                                vararg dependencies: Observable): Binding<Number> {
+                        override fun create(func: Callable<Number?>,
+                                vararg dependencies: Observable): Binding<Number?> {
                             return Bindings.createLongBinding(func as Callable<Long>, *dependencies)
                         }
 
-                        override fun check(value0: Number, value1: Any?) {
-                            assertEquals(value0.toLong(), (value1 as Number).toLong())
+                        override fun check(value0: Number?, value1: Any?) {
+                            assertEquals(value0!!.toLong(), (value1 as Number).toLong())
                         }
 
                     }, Long.MAX_VALUE, Long.MIN_VALUE, 0L

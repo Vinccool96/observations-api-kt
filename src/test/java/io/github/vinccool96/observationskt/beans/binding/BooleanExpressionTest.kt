@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.binding
 import io.github.vinccool96.observationskt.beans.property.BooleanProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleBooleanProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableBooleanValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import org.junit.Before
@@ -121,7 +122,8 @@ class BooleanExpressionTest {
     @Test
     fun testAsObject() {
         val valueModel = ObservableBooleanValueStub()
-        val exp: ObjectExpression<Boolean> = BooleanExpression.booleanExpression(valueModel).asObject()
+        val exp: ObjectExpression<Boolean> =
+                BooleanExpression.booleanExpression(valueModel as ObservableValue<Boolean?>).asObject()
 
         assertEquals(false, exp.get())
         valueModel.set(true)
@@ -133,7 +135,7 @@ class BooleanExpressionTest {
     @Test
     fun testFactory() {
         val valueModel = ObservableBooleanValueStub()
-        val exp: BooleanExpression = BooleanExpression.booleanExpression(valueModel)
+        val exp: BooleanExpression = BooleanExpression.booleanExpression(valueModel as ObservableValue<Boolean?>)
 
         assertTrue(exp is BooleanBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
@@ -145,7 +147,7 @@ class BooleanExpressionTest {
         assertEquals(false, exp.get())
 
         // make sure we do not create unnecessary bindings
-        assertSame(this.op1, BooleanExpression.booleanExpression(this.op1))
+        assertSame(this.op1, BooleanExpression.booleanExpression(this.op1 as ObservableValue<Boolean?>))
     }
 
     @Test
@@ -163,7 +165,7 @@ class BooleanExpressionTest {
         assertEquals(false, exp.get())
 
         // make sure we do not create unnecessary bindings
-        assertSame(this.op1, BooleanExpression.booleanExpression(this.op1))
+        assertSame(this.op1, BooleanExpression.booleanExpression(this.op1 as ObservableValue<Boolean?>))
     }
 
 }

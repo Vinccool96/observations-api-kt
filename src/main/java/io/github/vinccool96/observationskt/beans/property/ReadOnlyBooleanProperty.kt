@@ -12,7 +12,7 @@ import io.github.vinccool96.observationskt.beans.binding.BooleanExpression
  * @see BooleanExpression
  * @see ReadOnlyProperty
  */
-abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<Boolean> {
+abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<Boolean?> {
 
     /**
      * Returns a string representation of this `ReadOnlyBooleanProperty` object.
@@ -66,7 +66,7 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
                 get() = this@ReadOnlyBooleanProperty.name
 
             override fun get(): Boolean {
-                return this@ReadOnlyBooleanProperty.value
+                return this@ReadOnlyBooleanProperty.get()
             }
 
         }

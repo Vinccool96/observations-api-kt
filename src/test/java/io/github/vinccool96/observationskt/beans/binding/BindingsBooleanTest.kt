@@ -423,15 +423,15 @@ class BindingsBooleanTest {
             return this.listener == listener
         }
 
-        override fun addListener(listener: ChangeListener<in Boolean>) {
+        override fun addListener(listener: ChangeListener<in Boolean?>) {
             // not used
         }
 
-        override fun removeListener(listener: ChangeListener<in Boolean>) {
+        override fun removeListener(listener: ChangeListener<in Boolean?>) {
             // not used
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean>): Boolean {
+        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
             // not used
             return false
         }
