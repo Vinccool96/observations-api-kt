@@ -134,7 +134,7 @@ abstract class LongPropertyBase(initialValue: Long) : LongProperty() {
 
         }
 
-        if (newObservable != observable) {
+        if (newObservable != this.observable) {
             unbind()
             this.observable = newObservable
             if (this.listener == null) {

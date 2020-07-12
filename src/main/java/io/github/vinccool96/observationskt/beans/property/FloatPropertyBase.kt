@@ -134,7 +134,7 @@ abstract class FloatPropertyBase(initialValue: Float) : FloatProperty() {
 
         }
 
-        if (newObservable != observable) {
+        if (newObservable != this.observable) {
             unbind()
             this.observable = newObservable
             if (this.listener == null) {
