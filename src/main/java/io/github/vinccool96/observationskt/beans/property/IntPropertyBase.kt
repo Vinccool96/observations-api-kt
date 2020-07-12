@@ -112,7 +112,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
                     "A bound value cannot be set.")
         }
         if (this.valueState != value) {
-            this.valueState = value ?: 0
+            this.valueState = value
             markInvalid()
         }
     }
@@ -134,7 +134,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
 
         }
 
-        if (newObservable != observable) {
+        if (newObservable != this.observable) {
             unbind()
             this.observable = newObservable
             if (this.listener == null) {

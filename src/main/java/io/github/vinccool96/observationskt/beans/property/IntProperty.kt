@@ -129,7 +129,7 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
          *
          * @return A `IntProperty` that wraps the `Property` if necessary
          */
-        fun intProperty(property: Property<Int>): IntProperty {
+        fun intProperty(property: Property<Int?>): IntProperty {
             return if (property is IntProperty) property else object : IntPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()

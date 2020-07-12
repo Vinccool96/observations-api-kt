@@ -134,7 +134,7 @@ abstract class BooleanPropertyBase(initialValue: Boolean) : BooleanProperty() {
 
         }
 
-        if (newObservable != observable) {
+        if (newObservable != this.observable) {
             unbind()
             this.observable = newObservable
             if (this.listener == null) {
