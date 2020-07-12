@@ -83,7 +83,7 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
             val changed = if (this.currentValue == null) oldValue != null else this.currentValue != oldValue
             if (changed) {
                 try {
-                    this.listener.changed(this.observable, oldValue!!, this.currentValue)
+                    this.listener.changed(this.observable, oldValue, this.currentValue)
                 } catch (e: Exception) {
                     Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), e)
                 }

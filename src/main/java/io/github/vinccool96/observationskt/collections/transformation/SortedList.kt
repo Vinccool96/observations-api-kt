@@ -101,7 +101,7 @@ class SortedList<E> : TransformationList<E, E> {
                 override val bean: Any?
                     get() = this@SortedList
 
-                override val name: String
+                override val name: String?
                     get() = "comparator"
 
             }

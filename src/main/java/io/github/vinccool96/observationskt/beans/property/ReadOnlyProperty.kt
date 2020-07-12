@@ -22,6 +22,6 @@ interface ReadOnlyProperty<T> : ObservableValue<T> {
      *
      * @return the name or an empty `String`
      */
-    val name: String
+    val name: String?
 
 }

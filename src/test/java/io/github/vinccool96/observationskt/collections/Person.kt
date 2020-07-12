@@ -12,7 +12,7 @@ class Person(name: String) : Comparable<Person> {
         override val bean: Any?
             get() = this@Person
 
-        override val name: String
+        override val name: String?
             get() = "name"
 
     }

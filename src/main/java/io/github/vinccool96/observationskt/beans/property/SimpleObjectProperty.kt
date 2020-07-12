@@ -13,7 +13,7 @@ package io.github.vinccool96.observationskt.beans.property
  * @param name the name of this `ObjectProperty`
  * @param initialValue the initial value of the wrapped value
  */
-class SimpleObjectProperty<T>(override val bean: Any?, override val name: String, initialValue: T) :
+class SimpleObjectProperty<T>(override val bean: Any?, override val name: String?, initialValue: T) :
         ObjectPropertyBase<T>(initialValue) {
 
     /**

@@ -26,7 +26,7 @@ abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Numbe
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
-        if (name.isNotEmpty()) {
+        if (name != null && name.isNotEmpty()) {
             result.append("name: ").append(name).append(", ")
         }
         result.append("value: ").append(get()).append("]")
@@ -62,7 +62,7 @@ abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Numbe
             override val bean: Any?
                 get() = null // Virtual property, does not exist on a bean
 
-            override val name: String
+            override val name: String?
                 get() = this@ReadOnlyFloatProperty.name
 
             override fun get(): Float {
@@ -115,7 +115,7 @@ abstract class ReadOnlyFloatProperty : FloatExpression(), ReadOnlyProperty<Numbe
                 override val bean: Any?
                     get() = null // Virtual property, no bean
 
-                override val name: String
+                override val name: String?
                     get() = property.name
 
             }

@@ -11,7 +11,7 @@ package io.github.vinccool96.observationskt.beans.property
  * @param name the name of this `FloatProperty`
  * @param initialValue the initial value of the wrapped value
  */
-class SimpleFloatProperty(override val bean: Any?, override val name: String, initialValue: Float) :
+class SimpleFloatProperty(override val bean: Any?, override val name: String?, initialValue: Float) :
         FloatPropertyBase(initialValue) {
 
     /**
