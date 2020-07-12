@@ -105,7 +105,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
         return this.observable?.get() ?: this.valueState
     }
 
-    override fun set(value: Int?) {
+    override fun set(value: Int) {
         if (this.bound) {
             val curBean = this.bean
             throw RuntimeException((if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
