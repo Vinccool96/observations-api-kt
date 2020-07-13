@@ -19,7 +19,7 @@ import java.util.*
 abstract class ObjectExpression<T> : ObservableObjectValue<T> {
 
     override val value: T
-        get() = this.get()!!
+        get() = this.get()
 
     /**
      * Creates a new `BooleanExpression` that holds `true` if this and another [ObservableObjectValue] are equal.
@@ -150,7 +150,7 @@ abstract class ObjectExpression<T> : ObservableObjectValue<T> {
                     super.unbind(value)
                 }
 
-                override fun computeValue(): T? {
+                override fun computeValue(): T {
                     return value.get()
                 }
 

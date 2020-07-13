@@ -171,7 +171,7 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
                     object : Functions<Any?> {
 
                         override fun create(func: Callable<Any?>, vararg dependencies: Observable): Binding<Any?> {
-                            return Bindings.createObjectBinding(func, *dependencies)
+                            return Bindings.createObjectBinding(func, null, *dependencies)
                         }
 
                         override fun check(value0: Any?, value1: Any?) {
