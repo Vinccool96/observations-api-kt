@@ -14,6 +14,6 @@ interface ObservableObjectValue<T> : ObservableValue<T> {
      *
      * @return The current value
      */
-    fun get(): T?
+    fun get(): T
 
 }

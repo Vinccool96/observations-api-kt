@@ -203,7 +203,7 @@ object Bindings {
      *
      * @return The generated binding
      */
-    fun <T> createObjectBinding(func: Callable<T>, vararg dependencies: Observable): ObjectBinding<T> {
+    fun <T> createObjectBinding(func: Callable<T>, default: T, vararg dependencies: Observable): ObjectBinding<T> {
         return object : ObjectBinding<T>() {
 
             init {
@@ -214,12 +214,12 @@ object Bindings {
                 super.unbind(*dependencies)
             }
 
-            override fun computeValue(): T? {
+            override fun computeValue(): T {
                 return try {
                     func.call()
                 } catch (e: Exception) {
                     Logging.getLogger().warning("Exception while evaluating binding", e)
-                    null
+                    default
                 }
             }
 

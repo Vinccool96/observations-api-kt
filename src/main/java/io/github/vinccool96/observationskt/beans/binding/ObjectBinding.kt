@@ -29,7 +29,7 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  */
 abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
 
-    private var valueState: T? = null
+    private lateinit var holder: Holder<T>
 
     private var validState: Boolean = false
 
@@ -112,12 +112,16 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     override val dependencies: ObservableList<*>
         get() = ObservableCollections.emptyObservableList<Observable>()
 
-    final override fun get(): T? {
+    final override fun get(): T {
         if (!this.validState) {
-            this.valueState = computeValue()
+            if (!this::holder.isInitialized) {
+                this.holder = Holder(computeValue())
+            } else {
+                this.holder.value = computeValue()
+            }
             this.validState = true
         }
-        return this.valueState
+        return this.holder.value
     }
 
     /**
@@ -145,7 +149,7 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
      *
      * @return the current value
      */
-    protected abstract fun computeValue(): T?
+    protected abstract fun computeValue(): T
 
     /**
      * Returns a string representation of this `ObjectBinding` object.
@@ -155,5 +159,7 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     override fun toString(): String {
         return if (this.validState) "ObjectBinding [value: ${get()}]" else "ObjectBinding [invalid]"
     }
+
+    private class Holder<T>(var value: T)
 
 }
