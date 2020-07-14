@@ -11,7 +11,7 @@ package io.github.vinccool96.observationskt.beans.property
  * @param name the name of this `DoubleProperty`
  * @param initialValue the initial value of the wrapped value
  */
-class SimpleDoubleProperty(override val bean: Any?, override val name: String?, initialValue: Double) :
+open class SimpleDoubleProperty(override val bean: Any?, override val name: String?, initialValue: Double) :
         DoublePropertyBase(initialValue) {
 
     /**
