@@ -27,7 +27,7 @@ open class SimpleStringProperty(override val bean: Any?, override val name: Stri
      * @param bean the bean of this `StringProperty`
      * @param name the name of this `StringProperty`
      */
-    constructor(bean: Any?, name: String) : this(bean, name, null)
+    constructor(bean: Any?, name: String?) : this(bean, name, null)
 
     /**
      * The constructor of `StringProperty`

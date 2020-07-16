@@ -5,7 +5,7 @@ package io.github.vinccool96.observationskt.beans.property
  * synchronized. One property is read-only and can be passed to external users. The other property is read- and writable
  * and should be used internally only.
  */
-class ReadOnlyStringWrapper : SimpleStringProperty {
+open class ReadOnlyStringWrapper : SimpleStringProperty {
 
     private lateinit var readOnlyPropertyImpl: ReadOnlyPropertyImpl
 
@@ -31,7 +31,7 @@ class ReadOnlyStringWrapper : SimpleStringProperty {
      * @param bean the bean of this `ReadOnlyStringWrapper`
      * @param name the name of this `ReadOnlyStringWrapper`
      */
-    constructor(bean: Any?, name: String) : super(bean, name)
+    constructor(bean: Any?, name: String?) : super(bean, name)
 
     /**
      * The constructor of `ReadOnlyStringWrapper`

@@ -5,7 +5,7 @@ package io.github.vinccool96.observationskt.beans.property
  * synchronized. One property is read-only and can be passed to external users. The other property is read- and writable
  * and should be used internally only.
  */
-class ReadOnlyFloatWrapper : SimpleFloatProperty {
+open class ReadOnlyFloatWrapper : SimpleFloatProperty {
 
     private lateinit var readOnlyPropertyImpl: ReadOnlyPropertyImpl
 
@@ -31,7 +31,7 @@ class ReadOnlyFloatWrapper : SimpleFloatProperty {
      * @param bean the bean of this `ReadOnlyFloatWrapper`
      * @param name the name of this `ReadOnlyFloatWrapper`
      */
-    constructor(bean: Any?, name: String) : super(bean, name)
+    constructor(bean: Any?, name: String?) : super(bean, name)
 
     /**
      * The constructor of `ReadOnlyFloatWrapper`
@@ -39,7 +39,7 @@ class ReadOnlyFloatWrapper : SimpleFloatProperty {
     constructor() : super()
 
     /**
-     * Returns the readonly property, that is synchronized with this `ReadOnlyStringWrapper`.
+     * Returns the readonly property, that is synchronized with this `ReadOnlyFloatWrapper`.
      *
      * @return the readonly property
      */

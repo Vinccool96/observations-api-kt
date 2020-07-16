@@ -27,7 +27,7 @@ open class SimpleBooleanProperty(override val bean: Any?, override val name: Str
      * @param bean the bean of this `BooleanProperty`
      * @param name the name of this `BooleanProperty`
      */
-    constructor(bean: Any?, name: String) : this(bean, name, false)
+    constructor(bean: Any?, name: String?) : this(bean, name, false)
 
     /**
      * The constructor of `BooleanProperty`

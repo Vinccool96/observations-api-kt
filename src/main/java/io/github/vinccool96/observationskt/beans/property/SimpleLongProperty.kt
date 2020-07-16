@@ -27,7 +27,7 @@ open class SimpleLongProperty(override val bean: Any?, override val name: String
      * @param bean the bean of this `LongProperty`
      * @param name the name of this `LongProperty`
      */
-    constructor(bean: Any?, name: String) : this(bean, name, 0L)
+    constructor(bean: Any?, name: String?) : this(bean, name, 0L)
 
     /**
      * The constructor of `LongProperty`
