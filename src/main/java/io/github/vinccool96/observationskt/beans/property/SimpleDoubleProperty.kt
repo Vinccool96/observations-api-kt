@@ -27,7 +27,7 @@ open class SimpleDoubleProperty(override val bean: Any?, override val name: Stri
      * @param bean the bean of this `DoubleProperty`
      * @param name the name of this `DoubleProperty`
      */
-    constructor(bean: Any?, name: String) : this(bean, name, 0.0)
+    constructor(bean: Any?, name: String?) : this(bean, name, 0.0)
 
     /**
      * The constructor of `DoubleProperty`

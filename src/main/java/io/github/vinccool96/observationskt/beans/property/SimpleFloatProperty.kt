@@ -27,7 +27,7 @@ open class SimpleFloatProperty(override val bean: Any?, override val name: Strin
      * @param bean the bean of this `FloatProperty`
      * @param name the name of this `FloatProperty`
      */
-    constructor(bean: Any?, name: String) : this(bean, name, 0.0F)
+    constructor(bean: Any?, name: String?) : this(bean, name, 0.0F)
 
     /**
      * The constructor of `FloatProperty`

@@ -85,7 +85,7 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
          *
          * @return A `ReadOnlyBooleanProperty` that wraps the `ReadOnlyProperty` if necessary
          */
-        fun readOnlyBooleanProperty(property: ReadOnlyObjectProperty<Boolean?>): ReadOnlyBooleanProperty {
+        fun readOnlyBooleanProperty(property: ReadOnlyProperty<Boolean?>): ReadOnlyBooleanProperty {
             return if (property is ReadOnlyBooleanProperty) property else object : ReadOnlyBooleanPropertyBase() {
 
                 private var valid: Boolean = true
