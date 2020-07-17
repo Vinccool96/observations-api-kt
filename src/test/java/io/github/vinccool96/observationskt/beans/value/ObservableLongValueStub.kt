@@ -19,7 +19,7 @@ class ObservableLongValueStub(initialValue: Long) : ObservableValueBase<Number?>
         get() = this.get().toInt()
 
     override val longValue: Long
-        get() = this.get().toLong()
+        get() = this.get()
 
     override val floatValue: Float
         get() = this.get().toFloat()

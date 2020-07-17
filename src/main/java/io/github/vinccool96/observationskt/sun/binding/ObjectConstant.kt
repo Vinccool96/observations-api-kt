@@ -6,7 +6,7 @@ import io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
 
 class ObjectConstant<T> private constructor(override val value: T) : ObservableObjectValue<T> {
 
-    final override fun get(): T {
+    override fun get(): T {
         return this.value
     }
 

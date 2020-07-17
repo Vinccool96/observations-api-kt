@@ -124,7 +124,7 @@ class BindingsNumberCastTest(private val func: Functions) {
         @JvmStatic
         fun parameters(): Collection<Array<Any>> {
             return listOf(
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
@@ -137,7 +137,7 @@ class BindingsNumberCastTest(private val func: Functions) {
                                 }
                             }
                     ),
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
@@ -150,7 +150,7 @@ class BindingsNumberCastTest(private val func: Functions) {
                                 }
                             }
                     ),
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
@@ -169,7 +169,7 @@ class BindingsNumberCastTest(private val func: Functions) {
                                 }
                             }
                     ),
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
@@ -182,7 +182,7 @@ class BindingsNumberCastTest(private val func: Functions) {
                                 }
                             }
                     ),
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
@@ -195,7 +195,7 @@ class BindingsNumberCastTest(private val func: Functions) {
                                 }
                             }
                     ),
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
@@ -208,7 +208,7 @@ class BindingsNumberCastTest(private val func: Functions) {
                                 }
                             }
                     ),
-                    arrayOf<Any>(
+                    arrayOf(
                             object : Functions {
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {

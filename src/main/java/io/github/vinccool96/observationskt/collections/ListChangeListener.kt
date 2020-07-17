@@ -7,8 +7,7 @@ package io.github.vinccool96.observationskt.collections
  *
  * @see Change
  */
-@FunctionalInterface
-interface ListChangeListener<E> {
+fun interface ListChangeListener<E> {
 
     /**
      * Represents a report of a changes done to an [ObservableList]. The Change may consist of one or more actual

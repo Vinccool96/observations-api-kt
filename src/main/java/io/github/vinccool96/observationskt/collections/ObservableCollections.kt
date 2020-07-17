@@ -433,12 +433,8 @@ object ObservableCollections {
         private val listener: ListChangeListener<T>
 
         init {
-            this.listener = object : ListChangeListener<T> {
-
-                override fun onChanged(change: ListChangeListener.Change<out T>) {
-                    fireChange(SourceAdapterChange(this@UnmodifiableObservableListImpl, change))
-                }
-
+            this.listener = ListChangeListener {change ->
+                fireChange(SourceAdapterChange(this@UnmodifiableObservableListImpl, change))
             }
             this.backingList.addListener(this.listener)
         }

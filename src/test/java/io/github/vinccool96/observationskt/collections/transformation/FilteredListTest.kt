@@ -11,7 +11,6 @@ import org.junit.Before
 import org.junit.Test
 import java.util.*
 import java.util.function.Predicate
-import kotlin.Comparator
 import kotlin.test.assertEquals
 
 class FilteredListTest {
@@ -42,7 +41,7 @@ class FilteredListTest {
     fun testLiveMode_Add() {
         this.list.clear()
         this.mlo.clear()
-        assertEquals(Collections.emptyList<String>(), this.filteredList)
+        assertEquals(Collections.emptyList(), this.filteredList)
         this.list.addAll("a", "c", "d", "c")
         assertEquals(listOf("a", "d"), this.filteredList)
         this.mlo.check1AddRemove(this.filteredList, listOf(), 0, 2)
@@ -68,7 +67,7 @@ class FilteredListTest {
 
     @Test
     fun testLiveMode_Permutation() {
-        ObservableCollections.sort(this.list, Comparator {o1, o2 -> -o1.compareTo(o2)})
+        ObservableCollections.sort(this.list) {o1, o2 -> -o1.compareTo(o2)}
         this.mlo.check1Permutation(this.filteredList, intArrayOf(1, 0))
         assertEquals(listOf("d", "a"), this.filteredList)
     }
@@ -92,7 +91,7 @@ class FilteredListTest {
                 Person.createPersonsList(p1, p1, Person("BB"), Person("B"), p1, p1, Person("BC"), p1,
                         Person("C"))
 
-        val filtered: FilteredList<Person> = FilteredList(list, Predicate {p: Person -> p.name.get()!!.length > 1})
+        val filtered: FilteredList<Person> = FilteredList(list) {p: Person -> p.name.get()!!.length > 1}
         val lo: MockListObserver<Person> = MockListObserver()
         filtered.addListener(lo)
 
@@ -140,7 +139,7 @@ class FilteredListTest {
         val list: Updater<Person> =
                 Updater(Person.createPersonsFromNames("A0", "A1", "BB2", "B3", "A4", "A5", "BC6", "A7", "C8"))
 
-        val filtered: FilteredList<Person> = FilteredList(list, Predicate {p: Person -> p.name.get()!!.length > 2})
+        val filtered: FilteredList<Person> = FilteredList(list) {p: Person -> p.name.get()!!.length > 2}
         val lo: MockListObserver<Person> = MockListObserver()
         filtered.addListener(lo)
 

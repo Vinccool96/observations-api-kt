@@ -39,11 +39,7 @@ abstract class TransformationList<E, F>(source: ObservableList<out F>) : Observa
 
     init {
         this.source = source
-        sourceListener = object : ListChangeListener<F> {
-            override fun onChanged(change: Change<out F>) {
-                sourceChanged(change)
-            }
-        }
+        sourceListener = ListChangeListener {change -> sourceChanged(change)}
         this.source.addListener(WeakListChangeListener(this.sourceListener))
     }
 

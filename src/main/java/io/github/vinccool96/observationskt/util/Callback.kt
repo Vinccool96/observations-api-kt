@@ -10,8 +10,7 @@ package io.github.vinccool96.observationskt.util
  * @param P The type of the argument provided to the `call` method.
  * @param R The type of the return type of the `call` method.
  */
-@FunctionalInterface
-interface Callback<P, R> {
+fun interface Callback<P, R> {
 
     fun call(param: P): R
 
