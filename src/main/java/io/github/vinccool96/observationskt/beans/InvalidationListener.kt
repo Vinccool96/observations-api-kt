@@ -14,8 +14,7 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
  * @see Observable
  * @see ObservableValue
  */
-@FunctionalInterface
-interface InvalidationListener {
+fun interface InvalidationListener {
 
     /**
      * This method needs to be provided by an implementation of `InvalidationListener`. It is called if an [Observable]

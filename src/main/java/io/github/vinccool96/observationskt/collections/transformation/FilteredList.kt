@@ -55,7 +55,7 @@ class FilteredList<E> : TransformationList<E, E> {
      */
     constructor(@NamedArg("source") source: ObservableList<E>) : this(source, null)
 
-    private val basePredicate: Predicate<in E> = Predicate {true}
+    private val basePredicate: Predicate<in E> = Predicate<E> {true}
 
     /**
      * The predicate that will match the elements that will be in this FilteredList. Elements not matching the predicate
@@ -81,7 +81,7 @@ class FilteredList<E> : TransformationList<E, E> {
 
     var predicate: Predicate<in E>?
         get() = this.predicateObjectProperty.get()
-        set(value) = this.predicateObjectProperty.set(value ?: this.basePredicate)
+        set(value) = this.predicateObjectProperty.set(((value) ?: this.basePredicate) as Predicate<in E>)
 
     private val predicateImpl: Predicate<in E>
         get() = this.predicate!!

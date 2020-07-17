@@ -8,7 +8,6 @@ import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
 import io.github.vinccool96.observationskt.util.Callback
 import org.junit.Before
 import org.junit.Test
-import java.util.function.Predicate
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
@@ -40,6 +39,7 @@ class SortedListTest {
     }
 
     @Test
+    @Suppress("RemoveExplicitTypeArguments")
     fun testAdd() {
         this.list.clear()
         this.mockListObserver.clear()
@@ -181,26 +181,22 @@ class SortedListTest {
         sourceList.addAll(other)
         // wrap into a sorted list and add a listener to the sorted
         val sorted: SortedList<Double> = sourceList.sorted()
-        val listener: ListChangeListener<Double> = object : ListChangeListener<Double> {
+        val listener: ListChangeListener<Double> = ListChangeListener {change ->
+            assertEquals(listOf(400.0, 600.0, 1300.0), change.list)
 
-            override fun onChanged(change: ListChangeListener.Change<out Double>) {
-                assertEquals(listOf(400.0, 600.0, 1300.0), change.list)
+            change.next()
+            assertEquals(listOf(-300.0, 50.0), change.removed)
+            assertEquals(0, change.from)
+            assertEquals(0, change.to)
+            assertTrue(change.next())
+            assertEquals(listOf(4000.0), change.removed)
+            assertEquals(3, change.from)
+            assertEquals(3, change.to)
+            assertFalse(change.next())
 
-                change.next()
-                assertEquals(listOf(-300.0, 50.0), change.removed)
-                assertEquals(0, change.from)
-                assertEquals(0, change.to)
-                assertTrue(change.next())
-                assertEquals(listOf(4000.0), change.removed)
-                assertEquals(3, change.from)
-                assertEquals(3, change.to)
-                assertFalse(change.next())
-
-                // grab sourceIndex of last (aka: highest) value in sorted list
-                val sourceIndex: Int = sorted.getSourceIndex(sorted.lastIndex)
-                assertEquals(0, sourceIndex)
-            }
-
+            // grab sourceIndex of last (aka: highest) value in sorted list
+            val sourceIndex: Int = sorted.getSourceIndex(sorted.lastIndex)
+            assertEquals(0, sourceIndex)
         }
         sorted.addListener(listener)
         sourceList.removeAll(other)
@@ -264,17 +260,11 @@ class SortedListTest {
 
     @Test
     fun testMutableElementSortedFilteredChain() {
-        val extractor: Callback<Person, Array<Observable>> = object : Callback<Person, Array<Observable>> {
-
-            override fun call(param: Person): Array<Observable> {
-                return arrayOf(param.name)
-            }
-
-        }
+        val extractor: Callback<Person, Array<Observable>> = Callback {param -> arrayOf(param.name)}
         val items: ObservableList<Person> = ObservableCollections.observableArrayList(extractor)
         items.addAll(Person("b"), Person("c"), Person("a"), Person("f"), Person("e"), Person("d"))
 
-        val filtered: FilteredList<Person> = items.filtered(Predicate {e: Person -> !e.name.valueSafe.startsWith("z")})
+        val filtered: FilteredList<Person> = items.filtered {e: Person -> !e.name.valueSafe.startsWith("z")}
         val filterListener: MockListObserver<Person> = MockListObserver()
         filtered.addListener(filterListener)
 
@@ -292,13 +282,7 @@ class SortedListTest {
     }
 
     private fun createPersonsList(): ObservableList<Person> {
-        val extractor: Callback<Person, Array<Observable>> = object : Callback<Person, Array<Observable>> {
-
-            override fun call(param: Person): Array<Observable> {
-                return arrayOf(param.name)
-            }
-
-        }
+        val extractor: Callback<Person, Array<Observable>> = Callback {param -> arrayOf(param.name)}
         val list: ObservableList<Person> = ObservableCollections.observableArrayList(extractor)
         list.addAll(Person("one"), Person("two"), Person("three"), Person("four"), Person("five"))
         return list
@@ -439,18 +423,14 @@ class SortedListTest {
         val sortedList: SortedList<String> = SortedList(data)
 
         val pMap: HashMap<Int, Int> = HashMap()
-        sortedList.addListener(object : ListChangeListener<String> {
-
-            override fun onChanged(change: ListChangeListener.Change<out String>) {
-                while (change.next()) {
-                    if (change.wasPermutated) {
-                        for (i in change.from until change.to) {
-                            pMap[i] = change.getPermutation(i)
-                        }
+        sortedList.addListener(ListChangeListener {change ->
+            while (change.next()) {
+                if (change.wasPermutated) {
+                    for (i in change.from until change.to) {
+                        pMap[i] = change.getPermutation(i)
                     }
                 }
             }
-
         })
 
         val expected: MutableMap<Int, Int> = HashMap()

@@ -1,7 +1,6 @@
 package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
-import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.WeakInvalidationListener
 import io.github.vinccool96.observationskt.beans.binding.BooleanExpression
 
@@ -44,15 +43,11 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
 
             private var valid: Boolean = true
 
-            private val listener: InvalidationListener = object : InvalidationListener {
-
-                override fun invalidated(observable: Observable) {
-                    if (valid) {
-                        valid = false
-                        fireValueChangedEvent()
-                    }
+            private val listener: InvalidationListener = InvalidationListener {
+                if (valid) {
+                    valid = false
+                    fireValueChangedEvent()
                 }
-
             }
 
             init {
@@ -90,15 +85,11 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
 
                 private var valid: Boolean = true
 
-                private val listener: InvalidationListener = object : InvalidationListener {
-
-                    override fun invalidated(observable: Observable) {
-                        if (valid) {
-                            valid = false
-                            fireValueChangedEvent()
-                        }
+                private val listener: InvalidationListener = InvalidationListener {
+                    if (valid) {
+                        valid = false
+                        fireValueChangedEvent()
                     }
-
                 }
 
                 init {

@@ -5,8 +5,7 @@ package io.github.vinccool96.observationskt.collections
  *
  * @param E the element type
  */
-@FunctionalInterface
-interface SetChangeListener<E> {
+fun interface SetChangeListener<E> {
 
     /**
      * An elementary change done to an [ObservableSet]. Change contains information about an add or remove operation.

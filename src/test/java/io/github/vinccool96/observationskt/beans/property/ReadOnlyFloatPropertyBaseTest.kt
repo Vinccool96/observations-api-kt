@@ -73,7 +73,7 @@ class ReadOnlyFloatPropertyBaseTest {
 
         private val UNDEFINED: Float? = null
 
-        private val DEFAULT: Float = 0.0f
+        private const val DEFAULT: Float = 0.0f
 
         private const val VALUE_1: Float = PI.toFloat()
 

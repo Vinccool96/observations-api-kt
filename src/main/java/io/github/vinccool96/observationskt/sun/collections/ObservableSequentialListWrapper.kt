@@ -23,25 +23,17 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
 
     constructor(list: MutableList<E>, extractor: Callback<E, Array<Observable>>) : super() {
         this.backingList = list
-        this.elementObserver = ElementObserver(extractor, object : Callback<E, InvalidationListener> {
-
-            override fun call(param: E): InvalidationListener {
-                return object : InvalidationListener {
-
-                    override fun invalidated(observable: Observable) {
-                        beginChange()
-                        val size = this@ObservableSequentialListWrapper.size
-                        for (i in 0 until size) {
-                            if (this@ObservableSequentialListWrapper[i] == param) {
-                                nextUpdate(i)
-                            }
-                        }
-                        endChange()
+        this.elementObserver = ElementObserver(extractor, {param ->
+            InvalidationListener {
+                beginChange()
+                val size = this@ObservableSequentialListWrapper.size
+                for (i in 0 until size) {
+                    if (this@ObservableSequentialListWrapper[i] == param) {
+                        nextUpdate(i)
                     }
-
                 }
+                endChange()
             }
-
         }, this)
         for (e in this.backingList) {
             this.elementObserver.attachListener(e)

@@ -16,4 +16,8 @@ class ObservableObjectValueStub<T>(initialValue: T) : ObservableValueBase<T>(), 
     override val value: T
         get() = this.get()
 
+    fun fireChange() {
+        this.fireValueChangedEvent()
+    }
+
 }

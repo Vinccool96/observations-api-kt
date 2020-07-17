@@ -6,8 +6,7 @@ package io.github.vinccool96.observationskt.collections
  * @param K the key element type
  * @param V the value element type
  */
-@FunctionalInterface
-interface MapChangeListener<K, V> {
+fun interface MapChangeListener<K, V> {
 
     /**
      * An elementary change done to an [ObservableMap]. Change contains information about a put or remove operation. Note
