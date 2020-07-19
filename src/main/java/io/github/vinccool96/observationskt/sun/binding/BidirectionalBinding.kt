@@ -435,16 +435,16 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
     }
 
-    abstract class StringConversionBidirectionalBinding<T>(stringProperty: Property<String>,
-            otherProperty: Property<T>) : BidirectionalBinding<Any>(stringProperty, otherProperty) {
+    abstract class StringConversionBidirectionalBinding<T>(stringProperty: Property<String?>,
+            otherProperty: Property<T>) : BidirectionalBinding<Any?>(stringProperty, otherProperty) {
 
-        private val stringPropertyRef: WeakReference<Property<String>> = WeakReference(stringProperty)
+        private val stringPropertyRef: WeakReference<Property<String?>> = WeakReference(stringProperty)
 
         private val otherPropertyRef: WeakReference<Property<T>> = WeakReference(otherProperty)
 
         private var updating: Boolean = false
 
-        override val property1: Property<String>?
+        override val property1: Property<String?>?
             get() = this.stringPropertyRef.get()
 
         override val property2: Property<T>?
@@ -454,9 +454,9 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
         protected abstract fun fromString(value: String): T
 
-        override fun changed(observable: ObservableValue<out Any>, oldValue: Any, newValue: Any) {
+        override fun changed(observable: ObservableValue<out Any?>, oldValue: Any?, newValue: Any?) {
             if (!this.updating) {
-                val property1: Property<String>? = this.stringPropertyRef.get()
+                val property1: Property<String?>? = this.stringPropertyRef.get()
                 val property2: Property<T>? = this.otherPropertyRef.get()
                 if (property1 != null && property2 != null) {
                     try {
@@ -493,21 +493,21 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
 
     }
 
-    private class StringFormatBidirectionalBinding(stringProperty: Property<String>, otherProperty: Property<Any?>,
-            private val format: Format) : StringConversionBidirectionalBinding<Any?>(stringProperty, otherProperty) {
+    private class StringFormatBidirectionalBinding<T>(stringProperty: Property<String?>, otherProperty: Property<T>,
+            private val format: Format) : StringConversionBidirectionalBinding<T>(stringProperty, otherProperty) {
 
-        override fun toString(value: Any?): String {
+        override fun toString(value: T): String {
             return format.format(value)
         }
 
         @Throws(ParseException::class)
-        override fun fromString(value: String): Any {
-            return format.parseObject(value)
+        override fun fromString(value: String): T {
+            return format.parseObject(value) as T
         }
 
     }
 
-    private class StringConverterBidirectionalBinding<T>(stringProperty: Property<String>, otherProperty: Property<T>,
+    private class StringConverterBidirectionalBinding<T>(stringProperty: Property<String?>, otherProperty: Property<T>,
             private val converter: StringConverter<T>) :
             StringConversionBidirectionalBinding<T>(stringProperty, otherProperty) {
 
@@ -528,7 +528,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun <T> bind(property1: Property<T>, property2: Property<T>): BidirectionalBinding<*> {
+        fun <T> bind(property1: Property<T>, property2: Property<T>): BidirectionalBinding<T> {
             checkParameters(property1, property2)
             val binding: BidirectionalBinding<*> = when {
                 property1 is DoubleProperty && property2 is DoubleProperty -> BidirectionalDoubleBinding(property1,
@@ -546,6 +546,27 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
             property1.value = property2.value
             property1.addListener(binding as BidirectionalBinding<T>)
             property2.addListener(binding)
+            return binding
+        }
+
+        fun <T> bind(stringProperty: Property<String?>, otherProperty: Property<T>, format: Format): Any {
+            checkParameters(stringProperty, otherProperty)
+            val binding: StringConversionBidirectionalBinding<T> =
+                    StringFormatBidirectionalBinding(stringProperty, otherProperty, format)
+            stringProperty.value = format.format(otherProperty.value)
+            stringProperty.addListener(binding)
+            otherProperty.addListener(binding)
+            return binding
+        }
+
+        fun <T> bind(stringProperty: Property<String?>, otherProperty: Property<T>,
+                converter: StringConverter<T>): Any {
+            checkParameters(stringProperty, otherProperty)
+            val binding: StringConversionBidirectionalBinding<T> =
+                    StringConverterBidirectionalBinding(stringProperty, otherProperty, converter)
+            stringProperty.value = converter.toString(otherProperty.value)
+            stringProperty.addListener(binding)
+            otherProperty.addListener(binding)
             return binding
         }
 
