@@ -9,7 +9,9 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.binding.*
 import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
+import io.github.vinccool96.observationskt.util.StringConverter
 import java.lang.ref.WeakReference
+import java.text.Format
 import java.util.*
 import java.util.concurrent.Callable
 import kotlin.math.abs
@@ -307,8 +309,70 @@ object Bindings {
         BidirectionalBinding.unbind(property1, property2)
     }
 
+    /**
+     * Delete a bidirectional binding that was previously defined with [bindBidirectional].
+     *
+     * @param property1 the first `Property<T>`
+     * @param property2 the second `Property<T>`
+     *
+     * @throws IllegalArgumentException
+     *         if both properties are equal
+     */
     fun unbindBidirectional(property1: Any, property2: Any) {
         BidirectionalBinding.unbind(property1, property2)
+    }
+
+    /**
+     * Generates a bidirectional binding (or "bind with inverse") between a `String`-[Property] and another `Property`
+     * using the specified `Format` for conversion.
+     *
+     * A bidirectional binding is a binding that works in both directions. If two properties `a` and `b` are linked with
+     * a bidirectional binding and the value of `a` changes, `b` is set to the same value automatically. And vice versa,
+     * if `b` changes, `a` is set to the same value.
+     *
+     * A bidirectional binding can be removed with [unbindBidirectional].
+     *
+     * Note: this implementation of a bidirectional binding behaves differently from all other bindings here in two
+     * important aspects. A property that is linked to another property with a bidirectional binding can still be set
+     * (usually bindings would throw an exception). Secondly bidirectional bindings are calculated eagerly, i.e. a bound
+     * property is updated immediately.
+     *
+     * @param stringProperty the `String` `Property`
+     * @param otherProperty the other (non-`String`) `Property`
+     * @param format the `Format` used to convert between the properties
+     * @param T the type of the wrapped value
+     *
+     * @throws IllegalArgumentException if both properties are equal
+     */
+    fun <T> bindBidirectional(stringProperty: Property<String?>, otherProperty: Property<T>, format: Format) {
+        BidirectionalBinding.bind(stringProperty, otherProperty, format)
+    }
+
+    /**
+     * Generates a bidirectional binding (or "bind with inverse") between a `String`-[Property] and another `Property`
+     * using the specified [StringConverter] for conversion.
+     *
+     * A bidirectional binding is a binding that works in both directions. If two properties `a` and `b` are linked with
+     * a bidirectional binding and the value of `a` changes, `b` is set to the same value automatically. And vice versa,
+     * if `b` changes, `a` is set to the same value.
+     *
+     * A bidirectional binding can be removed with [unbindBidirectional].
+     *
+     * Note: this implementation of a bidirectional binding behaves differently from all other bindings here in two
+     * important aspects. A property that is linked to another property with a bidirectional binding can still be set
+     * (usually bindings would throw an exception). Secondly bidirectional bindings are calculated eagerly, i.e. a bound
+     * property is updated immediately.
+     *
+     * @param stringProperty the `String` `Property`
+     * @param otherProperty the other (non-`String`) `Property`
+     * @param converter the `StringConverter` used to convert between the properties
+     * @param T the type of the wrapped value
+     *
+     * @throws IllegalArgumentException if both properties are equal
+     */
+    fun <T> bindBidirectional(stringProperty: Property<String?>, otherProperty: Property<T>,
+            converter: StringConverter<T>) {
+        BidirectionalBinding.bind(stringProperty, otherProperty, converter)
     }
 
     // Numbers
