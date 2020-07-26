@@ -170,10 +170,11 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
                         val oldListeners = this.invalidationListenerArray
                         if (this.locked) {
                             this.invalidationListenerArray = arrayOfNulls(this.invalidationListenerArray.size)
-                            System.arraycopy(oldListeners, 0, this.invalidationListenerArray, 0, index)
+                            oldListeners.copyInto(this.invalidationListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            System.arraycopy(oldListeners, index + 1, this.invalidationListenerArray, index, numMoved)
+                            oldListeners.copyInto(this.invalidationListenerArray, index, index + 1,
+                                    this.invalidationSize)
                         }
                         this.invalidationSize--
                         if (!this.locked) {
@@ -227,10 +228,11 @@ abstract class ListListenerHelper<E> : ExpressionHelperBase() {
                         val oldListeners = this.listChangeListenerArray
                         if (this.locked) {
                             this.listChangeListenerArray = arrayOfNulls(this.listChangeListenerArray.size)
-                            System.arraycopy(oldListeners, 0, this.listChangeListenerArray, 0, index)
+                            oldListeners.copyInto(this.listChangeListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            System.arraycopy(oldListeners, index + 1, this.listChangeListenerArray, index, numMoved)
+                            oldListeners.copyInto(this.listChangeListenerArray, index, index + 1,
+                                    this.listChangeSize)
                         }
                         this.listChangeSize--
                         if (!this.locked) {
