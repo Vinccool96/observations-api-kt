@@ -178,10 +178,11 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
                         val oldListeners = this.invalidationListenerArray
                         if (this.locked) {
                             this.invalidationListenerArray = arrayOfNulls(this.invalidationListenerArray.size)
-                            System.arraycopy(oldListeners, 0, this.invalidationListenerArray, 0, index)
+                            oldListeners.copyInto(this.invalidationListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            System.arraycopy(oldListeners, index + 1, this.invalidationListenerArray, index, numMoved)
+                            oldListeners.copyInto(this.invalidationListenerArray, index, index + 1,
+                                    this.invalidationSize)
                         }
                         this.invalidationSize--
                         if (!this.locked) {
@@ -232,10 +233,11 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
                         val oldListeners = this.changeListenerArray
                         if (this.locked) {
                             this.changeListenerArray = arrayOfNulls(this.changeListenerArray.size)
-                            System.arraycopy(oldListeners, 0, this.changeListenerArray, 0, index)
+                            oldListeners.copyInto(this.changeListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            System.arraycopy(oldListeners, index + 1, this.changeListenerArray, index, numMoved)
+                            oldListeners.copyInto(this.changeListenerArray, index, index + 1,
+                                    this.changeSize)
                         }
                         this.changeSize--
                         if (!this.locked) {
@@ -258,7 +260,7 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
                 this.locked = true
                 for (i in 0 until curInvalidationSize) {
                     try {
-                        curInvalidationList[i]?.invalidated(this.observable)
+                        curInvalidationList[i]!!.invalidated(this.observable)
                     } catch (e: Exception) {
                         Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), e)
                     }
@@ -270,7 +272,7 @@ abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>)
                     if (changed) {
                         for (i in 0 until curChangeSize) {
                             try {
-                                curChangeList[i]?.changed(this.observable, oldValue, this.currentValue)
+                                curChangeList[i]!!.changed(this.observable, oldValue, this.currentValue)
                             } catch (e: Exception) {
                                 Thread.currentThread().uncaughtExceptionHandler.uncaughtException(
                                         Thread.currentThread(), e)

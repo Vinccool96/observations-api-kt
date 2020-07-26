@@ -6,7 +6,7 @@ import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.sun.binding.ExpressionHelperBase
 import io.github.vinccool96.observationskt.util.ArrayUtils
 
-@Suppress("DuplicatedCode")
+@Suppress("DuplicatedCode", "UNCHECKED_CAST")
 abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observable: T) : ExpressionHelperBase() {
 
     protected abstract fun addListener(listener: InvalidationListener): ArrayListenerHelper<T>
@@ -102,7 +102,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
         private var invalidationSize: Int
 
-        private var listChangeSize: Int
+        private var arrayChangeSize: Int
 
         private var locked: Boolean = false
 
@@ -111,7 +111,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             this.invalidationListenerArray = arrayOf(listener0, listener1)
             this.arrayChangeListenerArray = emptyArray()
             this.invalidationSize = 2
-            this.listChangeSize = 0
+            this.arrayChangeSize = 0
         }
 
         constructor(observable: T, listener0: ArrayChangeListener<T>, listener1: ArrayChangeListener<T>) :
@@ -119,7 +119,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             this.invalidationListenerArray = emptyArray()
             this.arrayChangeListenerArray = arrayOf(listener0, listener1)
             this.invalidationSize = 0
-            this.listChangeSize = 2
+            this.arrayChangeSize = 2
         }
 
         constructor(observable: T, invalidationListener: InvalidationListener,
@@ -127,7 +127,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             this.invalidationListenerArray = arrayOf(invalidationListener)
             this.arrayChangeListenerArray = arrayOf(listChangeListener)
             this.invalidationSize = 1
-            this.listChangeSize = 1
+            this.arrayChangeSize = 1
         }
 
         override fun addListener(listener: InvalidationListener): ArrayListenerHelper<T> {
@@ -155,22 +155,23 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             for (index in 0 until this.invalidationSize) {
                 if (listener == this.invalidationListenerArray[index]) {
                     if (this.invalidationSize == 1) {
-                        if (this.listChangeSize == 1) {
+                        if (this.arrayChangeSize == 1) {
                             return SingleArrayChange(this.observable, this.arrayChangeListeners[0])
                         }
                         this.invalidationListenerArray = emptyArray()
                         this.invalidationSize = 0
-                    } else if (this.invalidationSize == 2 && this.listChangeSize == 0) {
+                    } else if (this.invalidationSize == 2 && this.arrayChangeSize == 0) {
                         return SingleInvalidation(this.observable, this.invalidationListeners[1 - index])
                     } else {
                         val numMoved = this.invalidationSize - index - 1
                         val oldListeners = this.invalidationListenerArray
                         if (this.locked) {
                             this.invalidationListenerArray = arrayOfNulls(this.invalidationListenerArray.size)
-                            System.arraycopy(oldListeners, 0, this.invalidationListenerArray, 0, index)
+                            oldListeners.copyInto(this.invalidationListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            System.arraycopy(oldListeners, index + 1, this.invalidationListenerArray, index, numMoved)
+                            oldListeners.copyInto(this.invalidationListenerArray, index, index + 1,
+                                    this.invalidationSize)
                         }
                         this.invalidationSize--
                         if (!this.locked) {
@@ -186,48 +187,49 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
         override fun addListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T> {
             if (this.arrayChangeListenerArray.isEmpty()) {
                 this.arrayChangeListenerArray = arrayOf(listener)
-                this.listChangeSize = 1
+                this.arrayChangeSize = 1
             } else {
                 val oldSize = this.arrayChangeListenerArray.size
                 if (this.locked) {
-                    val newSize = if (this.listChangeSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
+                    val newSize = if (this.arrayChangeSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
                     this.arrayChangeListenerArray = this.arrayChangeListenerArray.copyOf(newSize)
-                } else if (this.listChangeSize == oldSize) {
-                    this.listChangeSize = trim(this.listChangeSize, this.arrayChangeListenerArray as Array<Any?>)
-                    if (this.listChangeSize == oldSize) {
-                        val newSize = if (this.listChangeSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
+                } else if (this.arrayChangeSize == oldSize) {
+                    this.arrayChangeSize = trim(this.arrayChangeSize, this.arrayChangeListenerArray as Array<Any?>)
+                    if (this.arrayChangeSize == oldSize) {
+                        val newSize = if (this.arrayChangeSize < oldSize) oldSize else (oldSize * 3) / 2 + 1
                         this.arrayChangeListenerArray = this.arrayChangeListenerArray.copyOf(newSize)
                     }
                 }
-                this.arrayChangeListenerArray[this.listChangeSize++] = listener
+                this.arrayChangeListenerArray[this.arrayChangeSize++] = listener
             }
             return this
         }
 
         override fun removeListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T>? {
-            for (index in 0 until this.listChangeSize) {
+            for (index in 0 until this.arrayChangeSize) {
                 if (listener == this.arrayChangeListenerArray[index]) {
-                    if (this.listChangeSize == 1) {
+                    if (this.arrayChangeSize == 1) {
                         if (this.invalidationSize == 1) {
                             return SingleInvalidation(this.observable, this.invalidationListeners[0])
                         }
                         this.arrayChangeListenerArray = emptyArray()
-                        this.listChangeSize = 0
-                    } else if (this.listChangeSize == 2 && this.invalidationSize == 0) {
+                        this.arrayChangeSize = 0
+                    } else if (this.arrayChangeSize == 2 && this.invalidationSize == 0) {
                         return SingleArrayChange(this.observable, this.arrayChangeListeners[1 - index])
                     } else {
-                        val numMoved = this.listChangeSize - index - 1
+                        val numMoved = this.arrayChangeSize - index - 1
                         val oldListeners = this.arrayChangeListenerArray
                         if (this.locked) {
                             this.arrayChangeListenerArray = arrayOfNulls(this.arrayChangeListenerArray.size)
-                            System.arraycopy(oldListeners, 0, this.arrayChangeListenerArray, 0, index)
+                            oldListeners.copyInto(this.arrayChangeListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            System.arraycopy(oldListeners, index + 1, this.arrayChangeListenerArray, index, numMoved)
+                            oldListeners.copyInto(this.arrayChangeListenerArray, index, index + 1,
+                                    this.arrayChangeSize)
                         }
-                        this.listChangeSize--
+                        this.arrayChangeSize--
                         if (!this.locked) {
-                            this.arrayChangeListenerArray[this.listChangeSize] = null // Let gc do its work
+                            this.arrayChangeListenerArray[this.arrayChangeSize] = null // Let gc do its work
                         }
                     }
                     break
@@ -240,7 +242,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             val curInvalidationList = this.invalidationListenerArray
             val curInvalidationSize = this.invalidationSize
             val curArrayChangeList = this.arrayChangeListenerArray
-            val curArrayChangeSize = this.listChangeSize
+            val curArrayChangeSize = this.arrayChangeSize
 
             try {
                 this.locked = true
@@ -272,6 +274,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
     }
 
     companion object {
+
         fun <T : ObservableArray<T>> addListener(helper: ArrayListenerHelper<T>?, observable: T,
                 listener: InvalidationListener): ArrayListenerHelper<T> {
             return helper?.addListener(listener) ?: SingleInvalidation(observable, listener)
@@ -300,5 +303,6 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
         fun <T : ObservableArray<T>> hasListeners(helper: ArrayListenerHelper<T>?): Boolean {
             return helper != null
         }
+
     }
 }
