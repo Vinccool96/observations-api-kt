@@ -39,7 +39,7 @@ open class ReadOnlyLongWrapper : SimpleLongProperty {
     constructor() : super()
 
     /**
-     * Returns the readonly property, that is synchronized with this `ReadOnlyStringWrapper`.
+     * Returns the readonly property, that is synchronized with this `ReadOnlyLongWrapper`.
      *
      * @return the readonly property
      */
