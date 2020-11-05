@@ -11,4 +11,4 @@ import io.github.vinccool96.observationskt.collections.ObservableList
  * @see ObservableObjectValue
  * @see ObservableValue
  */
-interface ObservableListValue<E> : ObservableObjectValue<ObservableList<E>>, ObservableList<E>
+interface ObservableListValue<E> : ObservableObjectValue<ObservableList<E>?>, ObservableList<E>

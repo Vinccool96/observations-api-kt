@@ -82,7 +82,7 @@ open class ObservableListWrapper<E> : ModifiableObservableListBase<E>, Observabl
         return this.backingList.lastIndexOf(element)
     }
 
-    override fun contains(element: E): Boolean {
+    override operator fun contains(element: E): Boolean {
         return this.backingList.contains(element)
     }
 

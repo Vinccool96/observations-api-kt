@@ -134,7 +134,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates and empty unmodifiable observable list.
+     * Creates an empty unmodifiable observable list.
      *
      * @param E the list element type
      *
@@ -168,7 +168,7 @@ object ObservableCollections {
      * @param T the list element type
      * @param list the list to be sorted
      *
-     * @see Collections#sort(List)
+     * @see Collections.sort
      */
     fun <T : Comparable<T>> sort(list: ObservableList<T>) {
         if (list is SortableList<*>) {
@@ -305,7 +305,7 @@ object ObservableCollections {
         override val size: Int
             get() = 0
 
-        override fun contains(element: E): Boolean {
+        override operator fun contains(element: E): Boolean {
             return false
         }
 
@@ -414,7 +414,7 @@ object ObservableCollections {
             return false
         }
 
-        override fun contains(element: E): Boolean {
+        override operator fun contains(element: E): Boolean {
             return this.element == element
         }
 

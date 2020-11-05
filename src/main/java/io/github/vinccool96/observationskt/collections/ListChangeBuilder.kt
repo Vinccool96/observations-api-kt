@@ -146,8 +146,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
 
     fun nextRemove(idx: Int, removed: E) {
         checkState()
-        val last =
-                if (addRemoveChanges.isEmpty()) null else addRemoveChanges[addRemoveChanges.size - 1]
+        val last = if (addRemoveChanges.isEmpty()) null else addRemoveChanges[addRemoveChanges.size - 1]
         if (last != null && last.to == idx) {
             last.removed!!.add(removed)
         } else if (last != null && last.from == idx + 1) {
@@ -162,8 +161,7 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
             if (uPos < 0) {
                 uPos = uPos.inv()
             } else {
-                val change =
-                        updateChanges[uPos]
+                val change = updateChanges[uPos]
                 if (change.from == change.to - 1) {
                     updateChanges.removeAt(uPos)
                 } else {

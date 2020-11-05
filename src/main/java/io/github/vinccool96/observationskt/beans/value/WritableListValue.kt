@@ -11,4 +11,4 @@ import io.github.vinccool96.observationskt.collections.ObservableList
  * @see WritableObjectValue
  * @see WritableListValue
  */
-interface WritableListValue<E> : WritableObjectValue<ObservableList<E>>, ObservableList<E>
+interface WritableListValue<E> : WritableObjectValue<ObservableList<E>?>, ObservableList<E>

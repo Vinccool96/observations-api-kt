@@ -14,6 +14,7 @@ import java.util.function.Predicate
  * @see ListChangeListener
  * @see ListChangeListener.Change
  */
+@Suppress("UNCHECKED_CAST")
 interface ObservableList<E> : MutableList<E>, Observable {
 
     /**
@@ -132,7 +133,6 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *
      * @return new `SortedList`
      */
-    @Suppress("UNCHECKED_CAST")
     fun sorted(): SortedList<E> {
         val naturalOrder: Comparator<E> = Comparator {o1, o2 ->
             return@Comparator if (o1 == null && o2 == null) {

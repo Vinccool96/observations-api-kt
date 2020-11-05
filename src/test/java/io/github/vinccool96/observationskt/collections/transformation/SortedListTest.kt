@@ -282,8 +282,7 @@ class SortedListTest {
     }
 
     private fun createPersonsList(): ObservableList<Person> {
-        val extractor: Callback<Person, Array<Observable>> = Callback {param -> arrayOf(param.name)}
-        val list: ObservableList<Person> = ObservableCollections.observableArrayList(extractor)
+        val list: ObservableList<Person> = ObservableCollections.observableArrayList {param -> arrayOf(param.name)}
         list.addAll(Person("one"), Person("two"), Person("three"), Person("four"), Person("five"))
         return list
     }

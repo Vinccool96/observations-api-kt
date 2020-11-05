@@ -1,6 +1,8 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.*
+import io.github.vinccool96.observationskt.collections.ObservableCollections
+import io.github.vinccool96.observationskt.collections.ObservableList
 import org.junit.Test
 import kotlin.math.E
 import kotlin.math.PI
@@ -199,7 +201,28 @@ class BindingToStringTest {
 
     @Test
     fun testListToString() {
-        // TODO
+        val value1 = ObservableCollections.observableArrayList(Any())
+        val value2 = ObservableCollections.observableArrayList(Any(), Any())
+        val v: ListProperty<Any> = SimpleListProperty(value1)
+        val binding: ListBinding<Any> = object : ListBinding<Any>() {
+
+            init {
+                super.bind(v)
+            }
+
+            override fun computeValue(): ObservableList<Any>? {
+                return v.get()
+            }
+
+        }
+
+        assertEquals("ListBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ListBinding [value: $value1]", binding.toString())
+        v.set(value2)
+        assertEquals("ListBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ListBinding [value: $value2]", binding.toString())
     }
 
 }

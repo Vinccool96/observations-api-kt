@@ -80,7 +80,7 @@ interface ObservableValue<T> : Observable {
      *
      * @throws NullPointerException
      *         if the listener is null
-     * @see #addListener(ChangeListener)
+     * @see addListener
      */
     fun removeListener(listener: ChangeListener<in T>)
 
