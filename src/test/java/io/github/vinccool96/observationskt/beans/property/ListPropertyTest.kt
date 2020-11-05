@@ -71,7 +71,7 @@ class ListPropertyTest {
         assertEquals("LongProperty [name: My name, value: $VALUE_1]", v5.toString())
     }
 
-    private class ListPropertyStub public constructor(override val bean: Any?, override val name: String?) :
+    private class ListPropertyStub(override val bean: Any?, override val name: String?) :
             ListProperty<Any>() {
 
         private var valueState: ObservableList<Any>? = null
