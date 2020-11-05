@@ -43,32 +43,32 @@ class StringPropertyTest {
     @Test
     fun testToString() {
         val v0: StringProperty = StringPropertyStub(NO_BEAN, NO_NAME_1)
-        assertEquals("StringProperty [value: ${DEFAULT}]", v0.toString())
+        assertEquals("StringProperty [value: $DEFAULT]", v0.toString())
 
         val v1: StringProperty = StringPropertyStub(NO_BEAN, NO_NAME_2)
-        assertEquals("StringProperty [value: ${DEFAULT}]", v1.toString())
+        assertEquals("StringProperty [value: $DEFAULT]", v1.toString())
 
         val bean = Any()
         val name = "My name"
         val v2: StringProperty = StringPropertyStub(bean, name)
-        assertEquals("StringProperty [bean: $bean, name: My name, value: ${DEFAULT}]", v2.toString())
+        assertEquals("StringProperty [bean: $bean, name: My name, value: $DEFAULT]", v2.toString())
         v2.set(VALUE_1)
-        assertEquals("StringProperty [bean: $bean, name: My name, value: ${VALUE_1}]", v2.toString())
+        assertEquals("StringProperty [bean: $bean, name: My name, value: $VALUE_1]", v2.toString())
 
         val v3: StringProperty = StringPropertyStub(bean, NO_NAME_1)
-        assertEquals("StringProperty [bean: $bean, value: ${DEFAULT}]", v3.toString())
+        assertEquals("StringProperty [bean: $bean, value: $DEFAULT]", v3.toString())
         v3.set(VALUE_1)
-        assertEquals("StringProperty [bean: $bean, value: ${VALUE_1}]", v3.toString())
+        assertEquals("StringProperty [bean: $bean, value: $VALUE_1]", v3.toString())
 
         val v4: StringProperty = StringPropertyStub(bean, NO_NAME_2)
-        assertEquals("StringProperty [bean: $bean, value: ${DEFAULT}]", v4.toString())
+        assertEquals("StringProperty [bean: $bean, value: $DEFAULT]", v4.toString())
         v4.set(VALUE_1)
-        assertEquals("StringProperty [bean: $bean, value: ${VALUE_1}]", v4.toString())
+        assertEquals("StringProperty [bean: $bean, value: $VALUE_1]", v4.toString())
 
         val v5: StringProperty = StringPropertyStub(NO_BEAN, name)
-        assertEquals("StringProperty [name: My name, value: ${DEFAULT}]", v5.toString())
+        assertEquals("StringProperty [name: My name, value: $DEFAULT]", v5.toString())
         v5.set(VALUE_1)
-        assertEquals("StringProperty [name: My name, value: ${VALUE_1}]", v5.toString())
+        assertEquals("StringProperty [name: My name, value: $VALUE_1]", v5.toString())
     }
 
     private class StringPropertyStub(override val bean: Any?, override val name: String?) : StringProperty() {
