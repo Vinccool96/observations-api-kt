@@ -4,6 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableValueBase
+import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 import org.junit.After
@@ -540,7 +541,43 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    // TODO: for list
+    class ListBindingImpl(vararg dep: Observable) : ListBinding<Any>(), BindingMock<ObservableList<Any>?> {
+
+        private var computeValueCounterState = 0
+
+        private var valueState: ObservableList<Any>? = null
+
+        init {
+            super.bind(*dep)
+        }
+
+        override var value: ObservableList<Any>?
+            get() = this.get()
+            set(value) {
+                this.valueState = value
+            }
+
+        override val computeValueCounter: Int
+            get() {
+                val result = this.computeValueCounterState
+                reset()
+                return result
+            }
+
+        override fun reset() {
+            this.computeValueCounterState = 0
+        }
+
+        override fun computeValue(): ObservableList<Any>? {
+            this.computeValueCounterState++
+            return this.valueState
+        }
+
+        @get:ReturnsUnmodifiableCollection
+        override val dependencies: ObservableList<*>
+            get() = fail("Should not reach here")
+
+    }
 
     companion object {
 
@@ -600,8 +637,15 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
                             StringBindingImpl(),
                             StringBindingImpl(dependency1),
                             StringBindingImpl(dependency1, dependency2)
+                    ),
+                    arrayOf(
+                            ObservableCollections.observableArrayList<Any>(),
+                            ObservableCollections.observableArrayList<Any>(),
+                            dependency1, dependency2,
+                            ListBindingImpl(),
+                            ListBindingImpl(dependency1),
+                            ListBindingImpl(dependency1, dependency2)
                     )
-                    // TODO: for list
             )
         }
 

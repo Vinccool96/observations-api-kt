@@ -40,7 +40,7 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
         }
     }
 
-    override fun contains(element: E): Boolean {
+    override operator fun contains(element: E): Boolean {
         return this.backingList.contains(element)
     }
 

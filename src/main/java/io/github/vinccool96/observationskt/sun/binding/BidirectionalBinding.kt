@@ -539,7 +539,7 @@ abstract class BidirectionalBinding<T>(property1: Any, property2: Any) : ChangeL
                         property2)
                 property1 is IntProperty && property2 is IntProperty -> BidirectionalIntBinding(property1,
                         property2)
-                property1 is DoubleProperty && property2 is DoubleProperty -> BidirectionalDoubleBinding(property1,
+                property1 is BooleanProperty && property2 is BooleanProperty -> BidirectionalBooleanBinding(property1,
                         property2)
                 else -> TypedGenericBidirectionalBinding(property1, property2)
             }

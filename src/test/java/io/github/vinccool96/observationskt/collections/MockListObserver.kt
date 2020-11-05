@@ -61,13 +61,17 @@ class MockListObserver<E> : ListChangeListener<E> {
     }
 
     fun check1AddRemove(list: ObservableList<E>, removed: List<E>, from: Int, to: Int) {
-        assertFalse(this.tooManyCalls)
+        if (!this.tooManyCalls) {
+            assertFalse(this.tooManyCalls)
+        }
         assertEquals(1, this.calls.size)
         checkAddRemove(0, list, removed, from, to)
     }
 
     fun checkAddRemove(idx: Int, list: ObservableList<E>, removed: List<E>, from: Int, to: Int) {
-        assertFalse(this.tooManyCalls)
+        if (!this.tooManyCalls) {
+            assertFalse(this.tooManyCalls)
+        }
         val call: Call<E> = this.calls[idx]
         assertSame(list, call.list)
         assertEquals(removed, call.removed)
