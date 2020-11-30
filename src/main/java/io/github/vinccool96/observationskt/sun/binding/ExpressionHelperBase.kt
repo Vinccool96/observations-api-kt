@@ -7,6 +7,7 @@ open class ExpressionHelperBase {
     protected companion object HelperBaseCompanion {
 
         fun trim(size: Int, listeners: Array<Any?>): Int {
+            @Suppress("NAME_SHADOWING")
             var size = size
             var index = 0
             while (index < size) {
