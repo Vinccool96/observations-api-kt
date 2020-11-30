@@ -15,6 +15,7 @@ import java.util.function.Predicate
  *
  * @see TransformationList
  */
+@Suppress("RedundantNullableReturnType")
 class FilteredList<E> : TransformationList<E, E> {
 
     private var filtered: IntArray

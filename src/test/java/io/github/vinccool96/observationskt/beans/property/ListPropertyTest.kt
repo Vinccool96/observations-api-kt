@@ -43,32 +43,32 @@ class ListPropertyTest {
     @Test
     fun testToString() {
         val v0: ListProperty<Any> = ListPropertyStub(NO_BEAN, NO_NAME_1)
-        assertEquals("LongProperty [value: $DEFAULT]", v0.toString())
+        assertEquals("ListProperty [value: $DEFAULT]", v0.toString())
 
         val v1: ListProperty<Any> = ListPropertyStub(NO_BEAN, NO_NAME_2)
-        assertEquals("LongProperty [value: $DEFAULT]", v1.toString())
+        assertEquals("ListProperty [value: $DEFAULT]", v1.toString())
 
         val bean = Any()
         val name = "My name"
         val v2: ListProperty<Any> = ListPropertyStub(bean, name)
-        assertEquals("LongProperty [bean: $bean, name: My name, value: $DEFAULT]", v2.toString())
+        assertEquals("ListProperty [bean: $bean, name: My name, value: $DEFAULT]", v2.toString())
         v2.set(VALUE_1)
-        assertEquals("LongProperty [bean: $bean, name: My name, value: $VALUE_1]", v2.toString())
+        assertEquals("ListProperty [bean: $bean, name: My name, value: $VALUE_1]", v2.toString())
 
         val v3: ListProperty<Any> = ListPropertyStub(bean, NO_NAME_1)
-        assertEquals("LongProperty [bean: $bean, value: $DEFAULT]", v3.toString())
+        assertEquals("ListProperty [bean: $bean, value: $DEFAULT]", v3.toString())
         v3.set(VALUE_1)
-        assertEquals("LongProperty [bean: $bean, value: $VALUE_1]", v3.toString())
+        assertEquals("ListProperty [bean: $bean, value: $VALUE_1]", v3.toString())
 
         val v4: ListProperty<Any> = ListPropertyStub(bean, NO_NAME_2)
-        assertEquals("LongProperty [bean: $bean, value: $DEFAULT]", v4.toString())
+        assertEquals("ListProperty [bean: $bean, value: $DEFAULT]", v4.toString())
         v4.set(VALUE_1)
-        assertEquals("LongProperty [bean: $bean, value: $VALUE_1]", v4.toString())
+        assertEquals("ListProperty [bean: $bean, value: $VALUE_1]", v4.toString())
 
         val v5: ListProperty<Any> = ListPropertyStub(NO_BEAN, name)
-        assertEquals("LongProperty [name: My name, value: $DEFAULT]", v5.toString())
+        assertEquals("ListProperty [name: My name, value: $DEFAULT]", v5.toString())
         v5.set(VALUE_1)
-        assertEquals("LongProperty [name: My name, value: $VALUE_1]", v5.toString())
+        assertEquals("ListProperty [name: My name, value: $VALUE_1]", v5.toString())
     }
 
     private class ListPropertyStub(override val bean: Any?, override val name: String?) :
