@@ -4473,7 +4473,7 @@ object Bindings {
      * @throws IllegalArgumentException if `index < 0`
      */
     fun <E> valueAt(op: ObservableList<E>, index: Int): ObjectBinding<E?> {
-        require(index >= 0) {"Index cannot be negative"}
+        require(index >= 0) { "Index cannot be negative" }
 
         return object : ObjectBinding<E?>() {
 
@@ -4533,11 +4533,11 @@ object Bindings {
         return object : ObjectBinding<E?>() {
 
             init {
-                super.bind(op)
+                super.bind(op, index)
             }
 
             override fun dispose() {
-                super.unbind(op)
+                super.unbind(op, index)
             }
 
             override fun computeValue(): E? {
@@ -4551,7 +4551,7 @@ object Bindings {
 
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
-                get() = ObservableCollections.singletonObservableList(op)
+                get() = ImmutableObservableList(op, index)
 
         }
     }
