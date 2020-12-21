@@ -132,7 +132,7 @@ abstract class LongBinding : LongExpression(), NumberBinding {
     protected open fun onInvalidating() {
     }
 
-    override fun invalidate() {
+    final override fun invalidate() {
         if (this.validState) {
             this.validState = false
             onInvalidating()
@@ -140,7 +140,7 @@ abstract class LongBinding : LongExpression(), NumberBinding {
         }
     }
 
-    override val valid: Boolean
+    final override val valid: Boolean
         get() = this.validState
 
     /**

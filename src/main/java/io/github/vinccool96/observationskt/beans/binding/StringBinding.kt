@@ -136,7 +136,7 @@ abstract class StringBinding : StringExpression(), Binding<String?> {
     protected open fun onInvalidating() {
     }
 
-    override fun invalidate() {
+    final override fun invalidate() {
         if (this.validState) {
             this.validState = false
             onInvalidating()
@@ -144,7 +144,7 @@ abstract class StringBinding : StringExpression(), Binding<String?> {
         }
     }
 
-    override val valid: Boolean
+    final override val valid: Boolean
         get() = this.validState
 
     /**

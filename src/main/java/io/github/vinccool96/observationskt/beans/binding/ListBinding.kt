@@ -32,6 +32,7 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * @see Binding
  * @see ListExpression
  */
+@Suppress("RedundantNullableReturnType")
 abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?> {
 
     private var valueState: ObservableList<E>? = null
@@ -225,7 +226,7 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
         }
     }
 
-    override fun invalidate() {
+    final override fun invalidate() {
         if (this.validState) {
             if (this.valueState != null) {
                 this.valueState!!.removeListener(this.listChangeListener)
@@ -237,7 +238,7 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
         }
     }
 
-    override val valid: Boolean
+    final override val valid: Boolean
         get() = this.validState
 
     /**

@@ -134,7 +134,7 @@ abstract class BooleanBinding : BooleanExpression(), Binding<Boolean?> {
     protected open fun onInvalidating() {
     }
 
-    override fun invalidate() {
+    final override fun invalidate() {
         if (this.validState) {
             this.validState = false
             onInvalidating()
@@ -142,7 +142,7 @@ abstract class BooleanBinding : BooleanExpression(), Binding<Boolean?> {
         }
     }
 
-    override val valid: Boolean
+    final override val valid: Boolean
         get() = this.validState
 
     /**
