@@ -131,7 +131,7 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     protected open fun onInvalidating() {
     }
 
-    override fun invalidate() {
+    final override fun invalidate() {
         if (this.validState) {
             this.validState = false
             onInvalidating()
@@ -139,7 +139,7 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
         }
     }
 
-    override val valid: Boolean
+    final override val valid: Boolean
         get() = this.validState
 
     /**
