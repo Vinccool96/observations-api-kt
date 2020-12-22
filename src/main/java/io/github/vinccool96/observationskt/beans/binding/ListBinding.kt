@@ -199,7 +199,7 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
      *
      * @return the current value
      */
-    override fun get(): ObservableList<E>? {
+    final override fun get(): ObservableList<E>? {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
