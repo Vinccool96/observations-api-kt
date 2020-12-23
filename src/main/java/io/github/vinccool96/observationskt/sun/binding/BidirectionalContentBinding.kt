@@ -2,7 +2,9 @@ package io.github.vinccool96.observationskt.sun.binding
 
 import io.github.vinccool96.observationskt.beans.WeakListener
 import io.github.vinccool96.observationskt.collections.ListChangeListener
+import io.github.vinccool96.observationskt.collections.MapChangeListener
 import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.collections.ObservableMap
 import java.lang.ref.WeakReference
 
 /**
@@ -12,7 +14,7 @@ import java.lang.ref.WeakReference
 object BidirectionalContentBinding {
 
     private fun checkParameters(property1: Any, property2: Any) {
-        require(property1 !== property2) {"Cannot bind object to itself"}
+        require(property1 !== property2) { "Cannot bind object to itself" }
     }
 
     fun <E> bind(list1: ObservableList<E>, list2: ObservableList<E>): Any {
@@ -24,6 +26,16 @@ object BidirectionalContentBinding {
         return binding
     }
 
+    fun <K, V> bind(map1: ObservableMap<K, V>, map2: ObservableMap<K, V>): Any {
+        checkParameters(map1, map2)
+        val binding = MapContentBinding(map1, map2)
+        map1.clear()
+        map1.putAll(map2)
+        map1.addListener(binding)
+        map2.addListener(binding)
+        return binding
+    }
+
     fun unbind(obj1: Any, obj2: Any) {
         checkParameters(obj1, obj2)
         if (obj1 is ObservableList<*> && obj2 is ObservableList<*>) {
@@ -32,6 +44,12 @@ object BidirectionalContentBinding {
             val binding: ListContentBinding<Any?> = ListContentBinding(list1, list2)
             list1.removeListener(binding)
             list2.removeListener(binding)
+        } else if (obj1 is ObservableMap<*, *> && obj2 is ObservableMap<*, *>) {
+            val map1: ObservableMap<Any?, Any?> = obj1 as ObservableMap<Any?, Any?>
+            val map2: ObservableMap<Any?, Any?> = obj2 as ObservableMap<Any?, Any?>
+            val binding: MapContentBinding<Any?, Any?> = MapContentBinding(map1, map2)
+            map1.removeListener(binding)
+            map2.removeListener(binding)
         }
     }
 
@@ -98,6 +116,79 @@ object BidirectionalContentBinding {
             }
 
             if (other is ListContentBinding<*>) {
+                val propertyB1 = other.propertyRef1.get()
+                val propertyB2 = other.propertyRef2.get()
+                if (propertyB1 == null || propertyB2 == null) {
+                    return false
+                }
+
+                if (propertyA1 === propertyB1 && propertyA2 === propertyB2) {
+                    return true
+                }
+                if (propertyA1 === propertyB2 && propertyA2 === propertyB1) {
+                    return true
+                }
+            }
+            return false
+        }
+
+    }
+
+    private class MapContentBinding<K, V>(map1: ObservableMap<K, V>, map2: ObservableMap<K, V>) :
+            MapChangeListener<K, V>, WeakListener {
+
+        private val propertyRef1: WeakReference<ObservableMap<K, V>> = WeakReference(map1)
+
+        private val propertyRef2: WeakReference<ObservableMap<K, V>> = WeakReference(map2)
+
+        private var updating: Boolean = false
+
+        override fun onChanged(change: MapChangeListener.Change<out K, out V>) {
+            if (!this.updating) {
+                val map1 = this.propertyRef1.get()
+                val map2 = this.propertyRef2.get()
+                if (map1 != null && map2 != null) {
+                    try {
+                        this.updating = true
+                        val dest = if (map1 == change.map) map2 else map1
+                        if (change.wasRemoved) {
+                            dest.remove(change.key)
+                        } else {
+                            dest[change.key] = change.valueAdded as V
+                        }
+                    } finally {
+                        this.updating = false
+                    }
+                } else {
+                    map1?.removeListener(this)
+                    map2?.removeListener(this)
+                }
+            }
+        }
+
+        override val wasGarbageCollected: Boolean
+            get() = this.propertyRef1.get() == null || this.propertyRef2.get() == null
+
+        override fun hashCode(): Int {
+            val map1 = this.propertyRef1.get()
+            val map2 = this.propertyRef2.get()
+            val hc1 = map1?.hashCode() ?: 0
+            val hc2 = map2?.hashCode() ?: 0
+            return hc1 * hc2
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            val propertyA1 = this.propertyRef1.get()
+            val propertyA2 = this.propertyRef2.get()
+            if (propertyA1 == null || propertyA2 == null) {
+                return false
+            }
+
+            if (other is MapContentBinding<*, *>) {
                 val propertyB1 = other.propertyRef1.get()
                 val propertyB2 = other.propertyRef2.get()
                 if (propertyB1 == null || propertyB2 == null) {

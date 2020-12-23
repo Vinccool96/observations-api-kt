@@ -48,8 +48,7 @@ interface ObservableArray<T : ObservableArray<T>> : Observable {
      *
      * @param size new length of data in this array
      *
-     * @throws NegativeArraySizeException
-     *         if size is negative
+     * @throws NegativeArraySizeException if size is negative
      */
     fun resize(size: Int)
 

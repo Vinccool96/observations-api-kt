@@ -62,8 +62,6 @@ interface ObservableValue<T> : Observable {
      *
      * @param listener The listener to register
      *
-     * @throws NullPointerException
-     *         if the listener is null
      * @see removeListener
      */
     fun addListener(listener: ChangeListener<in T>)
@@ -78,8 +76,6 @@ interface ObservableValue<T> : Observable {
      *
      * @param listener The listener to remove
      *
-     * @throws NullPointerException
-     *         if the listener is null
      * @see addListener
      */
     fun removeListener(listener: ChangeListener<in T>)

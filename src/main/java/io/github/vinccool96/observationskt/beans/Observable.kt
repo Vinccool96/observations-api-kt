@@ -30,8 +30,6 @@ interface Observable {
      *
      * @param listener The listener to register
      *
-     * @throws NullPointerException
-     *         if the listener is null
      * @see removeListener(InvalidationListener)
      */
     fun addListener(listener: InvalidationListener)
@@ -46,8 +44,6 @@ interface Observable {
      *
      * @param listener The listener to remove
      *
-     * @throws NullPointerException
-     *         if the listener is null
      * @see addListener(InvalidationListener)
      */
     fun removeListener(listener: InvalidationListener)

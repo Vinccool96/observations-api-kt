@@ -27,7 +27,7 @@ fun interface MapChangeListener<K, V> {
          *
          * @return `true` if a new value (or key-value) entry was added to the map
          */
-        abstract val added: Boolean
+        abstract val wasAdded: Boolean
 
         /**
          * If this change is a result of removal operation. Note that an element might be removed even as a result of
@@ -35,7 +35,7 @@ fun interface MapChangeListener<K, V> {
          *
          * @return `true` if an old value (or key-value) entry was removed from the map
          */
-        abstract val removed: Boolean
+        abstract val wasRemoved: Boolean
 
         /**
          * A key associated with the change. If the change is a remove change, the key no longer exist in a map.
@@ -50,7 +50,7 @@ fun interface MapChangeListener<K, V> {
          *
          * @return the value that is now associated with the key
          */
-        abstract val valueAdded: V
+        abstract val valueAdded: V?
 
         /**
          * Get the old value of the key. This is `null` if and only if the value was added to the key that was not
@@ -58,7 +58,7 @@ fun interface MapChangeListener<K, V> {
          *
          * @return the value previously associated with the key
          */
-        abstract val valueRemoved: V
+        abstract val valueRemoved: V?
 
     }
 

@@ -166,7 +166,7 @@ abstract class IntExpression : NumberExpressionBase(), ObservableIntValue {
          *
          * ```
          * val intProperty: IntProperty = SimpleIntProperty(1)
-         * val objectProperty: ObjectProperty<Int> = new SimpleObjectProperty(2)
+         * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(2)
          * val binding: BooleanBinding = intProperty.greaterThan(IntExpression.intExpression(objectProperty))
          * ```
          *

@@ -12,4 +12,4 @@ import io.github.vinccool96.observationskt.collections.ObservableMap
  * @see ObservableObjectValue
  * @see ObservableValue
  */
-interface ObservableMapValue<K, V> : ObservableObjectValue<ObservableMap<K, V>>, ObservableMap<K, V>
+interface ObservableMapValue<K, V> : ObservableObjectValue<ObservableMap<K, V>?>, ObservableMap<K, V>

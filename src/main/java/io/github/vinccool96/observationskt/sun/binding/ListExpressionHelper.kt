@@ -21,8 +21,9 @@ import io.github.vinccool96.observationskt.util.ArrayUtils
  * For the `ExpressionHelperBase` that is used with [io.github.vinccool96.observationskt.collections.ObservableListBase],
  * please refer to [io.github.vinccool96.observationskt.sun.collections.ListListenerHelper].
  */
-@Suppress("UNCHECKED_CAST")
-abstract class ListExpressionHelper<E>(protected val observable: ObservableListValue<E>) : ExpressionHelperBase() {
+@Suppress("UNCHECKED_CAST", "RedundantNullableReturnType")
+abstract class ListExpressionHelper<E> protected constructor(protected val observable: ObservableListValue<E>) :
+        ExpressionHelperBase() {
 
     protected abstract fun addListener(listener: InvalidationListener): ListExpressionHelper<E>
 

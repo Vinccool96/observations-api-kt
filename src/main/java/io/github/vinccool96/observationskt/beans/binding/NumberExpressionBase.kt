@@ -5,9 +5,9 @@ import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 import java.util.*
 
 /**
- * A {@code NumberExpressionBase} contains convenience methods to generate bindings in a fluent style, that are common
+ * A `NumberExpressionBase` contains convenience methods to generate bindings in a fluent style, that are common
  * to all NumberExpression subclasses.
- * <p>
+ *
  * NumberExpressionBase serves as a place for common code of specific NumberExpression subclasses for the specific
  * number type.
  *
@@ -214,13 +214,13 @@ abstract class NumberExpressionBase : NumberExpression {
     companion object {
 
         /**
-         * Returns a {@code NumberExpressionBase} that wraps a {@link ObservableNumberValue}. If the {@code
-         * ObservableNumberValue} is already an instance of {@code NumberExpressionBase}, it will be returned. Otherwise a
-         * new {@link NumberBinding} is created that is bound to the {@code ObservableNumberValue}.
+         * Returns a `NumberExpressionBase` that wraps a [ObservableNumberValue]. If the `ObservableNumberValue` is
+         * already an instance of `NumberExpressionBase`, it will be returned. Otherwise a new [NumberBinding] is
+         * created that is bound to the `ObservableNumberValue`.
          *
-         * @param value The source {@code ObservableNumberValue}
+         * @param value The source `ObservableNumberValue`
          *
-         * @return An {@code NumberExpressionBase} that wraps the {@code ObservableNumberValue} if necessary
+         * @return An `NumberExpressionBase` that wraps the `ObservableNumberValue` if necessary
          */
         fun numberExpression(value: ObservableNumberValue): NumberExpressionBase {
             return when (value) {
