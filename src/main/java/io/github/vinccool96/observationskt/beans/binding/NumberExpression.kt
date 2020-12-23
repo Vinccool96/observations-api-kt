@@ -97,8 +97,6 @@ interface NumberExpression : ObservableNumberValue {
      *
      * @return the new `NumberBinding`
      *
-     * @throws NullPointerException
-     * if the other `ObservableNumberValue` is `null`
      */
     operator fun minus(other: ObservableNumberValue): NumberBinding
 
@@ -477,9 +475,6 @@ interface NumberExpression : ObservableNumberValue {
      * @param other the second `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
-     *
-     * @throws NullPointerException
-     * if the other `ObservableNumberValue` is `null`
      */
     fun greaterThan(other: ObservableNumberValue): BooleanBinding
 
@@ -529,9 +524,6 @@ interface NumberExpression : ObservableNumberValue {
      * @param other the second `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
-     *
-     * @throws NullPointerException
-     * if the other `ObservableNumberValue` is `null`
      */
     fun lessThan(other: ObservableNumberValue): BooleanBinding
 
@@ -581,9 +573,6 @@ interface NumberExpression : ObservableNumberValue {
      * @param other the second `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
-     *
-     * @throws NullPointerException
-     * if the other `ObservableNumberValue` is `null`
      */
     fun greaterThanOrEqualTo(other: ObservableNumberValue): BooleanBinding
 
@@ -637,9 +626,6 @@ interface NumberExpression : ObservableNumberValue {
      * @param other the second `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
-     *
-     * @throws NullPointerException
-     * if the other `ObservableNumberValue` is `null`
      */
     fun lessThanOrEqualTo(other: ObservableNumberValue): BooleanBinding
 

@@ -156,14 +156,10 @@ abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
      * @param index the position where to add the element
      * @param element the element that will be added
      *
-     * @throws ClassCastException
-     *         if the class of the specified element prevents it from being added to this list
-     * @throws NullPointerException
-     *         if the specified element is null and this list does not permit null elements
-     * @throws IllegalArgumentException
-     *         if some property of the specified element prevents it from being added to this list
-     * @throws IndexOutOfBoundsException
-     *         if the index is out of range (`index < 0 || index >= size`)
+     * @throws ClassCastException if the class of the specified element prevents it from being added to this list
+     * @throws NullPointerException if the specified element is null and this list does not permit null elements
+     * @throws IllegalArgumentException if some property of the specified element prevents it from being added to this list
+     * @throws IndexOutOfBoundsException if the index is out of range (`index < 0 || index >= size`)
      */
     protected abstract fun doAdd(index: Int, element: E)
 
@@ -178,14 +174,10 @@ abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
      *
      * @return the old element at the specified position
      *
-     * @throws ClassCastException
-     *         if the class of the specified element prevents it from being added to this list
-     * @throws NullPointerException
-     *         if the specified element is null and this list does not permit null elements
-     * @throws IllegalArgumentException
-     *         if some property of the specified element prevents it from being added to this list
-     * @throws IndexOutOfBoundsException
-     *         if the index is out of range (`index < 0 || index >= size`)
+     * @throws ClassCastException if the class of the specified element prevents it from being added to this list
+     * @throws NullPointerException if the specified element is null and this list does not permit null elements
+     * @throws IllegalArgumentException if some property of the specified element prevents it from being added to this list
+     * @throws IndexOutOfBoundsException if the index is out of range (`index < 0 || index >= size`)
      */
     protected abstract fun doSet(index: Int, element: E): E
 
@@ -196,8 +188,7 @@ abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
      *
      * @return the removed element
      *
-     * @throws IndexOutOfBoundsException
-     *         if the index is out of range (`index < 0 || index >= size`)
+     * @throws IndexOutOfBoundsException if the index is out of range (`index < 0 || index >= size`)
      */
     protected abstract fun doRemove(index: Int): E
 

@@ -55,8 +55,7 @@ interface Property<T> : ReadOnlyProperty<T>, WritableValue<T> {
      *
      * @param other the other `Property`
      *
-     * @throws IllegalArgumentException
-     *         if `other` is `this`
+     * @throws IllegalArgumentException if `other` is `this`
      * @see unbindBidirectional
      */
     fun bindBidirectional(other: Property<T>)
@@ -75,8 +74,7 @@ interface Property<T> : ReadOnlyProperty<T>, WritableValue<T> {
      *
      * @param other the other `Property`
      *
-     * @throws IllegalArgumentException
-     *         if `other` is `this`
+     * @throws IllegalArgumentException if `other` is `this`
      * @see bindBidirectional
      */
     fun unbindBidirectional(other: Property<T>)

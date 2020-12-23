@@ -6,6 +6,7 @@ import io.github.vinccool96.observationskt.beans.property.Property
 import io.github.vinccool96.observationskt.beans.value.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.sun.binding.*
 import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
@@ -288,8 +289,7 @@ object Bindings {
      * @param property1 the first `Property<T>`
      * @param property2 the second `Property<T>`
      *
-     * @throws IllegalArgumentException
-     *         if both properties are equal
+     * @throws IllegalArgumentException if both properties are equal
      */
     fun <T> bindBidirectional(property1: Property<T>, property2: Property<T>) {
         BidirectionalBinding.bind(property1, property2)
@@ -302,8 +302,7 @@ object Bindings {
      * @param property1 the first `Property<T>`
      * @param property2 the second `Property<T>`
      *
-     * @throws IllegalArgumentException
-     *         if both properties are equal
+     * @throws IllegalArgumentException if both properties are equal
      */
     fun <T> unbindBidirectional(property1: Property<T>, property2: Property<T>) {
         BidirectionalBinding.unbind(property1, property2)
@@ -315,8 +314,7 @@ object Bindings {
      * @param property1 the first `Property<T>`
      * @param property2 the second `Property<T>`
      *
-     * @throws IllegalArgumentException
-     *         if both properties are equal
+     * @throws IllegalArgumentException if both properties are equal
      */
     fun unbindBidirectional(property1: Any, property2: Any) {
         BidirectionalBinding.unbind(property1, property2)
@@ -403,6 +401,32 @@ object Bindings {
     }
 
     /**
+     * Generates a bidirectional binding (or "bind with inverse") between two instances of [ObservableMap].
+     *
+     * A bidirectional binding is a binding that works in both directions. If two properties `a` and `b` are linked with
+     * a bidirectional binding and the value of `a` changes, `b` is set to the same value automatically. And vice versa,
+     * if `b` changes, `a` is set to the same value.
+     *
+     * Only the content of the two maps is synchronized, which means that both maps are different, but they contain the
+     * same elements.
+     *
+     * A bidirectional content-binding can be removed with [unbindContentBidirectional].
+     *
+     * Note: this implementation of a bidirectional binding behaves differently from all other bindings here in two
+     * important aspects. A property that is linked to another property with a bidirectional binding can still be set
+     * (usually bindings would throw an exception). Secondly bidirectional bindings are calculated eagerly, i.e. a bound
+     * property is updated immediately.
+     *
+     * @param K the type of the key elements
+     * @param V the type of the value elements
+     * @param map1 the first `ObservableMap<K, V>`
+     * @param map2 the second `ObservableMap<K, V>`
+     */
+    fun <K, V> bindContentBidirectional(map1: ObservableMap<K, V>, map2: ObservableMap<K, V>) {
+        BidirectionalContentBinding.bind(map1, map2)
+    }
+
+    /**
      * Remove a bidirectional content binding.
      *
      * @param obj1 the first `Object`
@@ -429,6 +453,28 @@ object Bindings {
      */
     fun <E> bindContent(list1: MutableList<E>, list2: ObservableList<out E>) {
         ContentBinding.bind(list1, list2)
+    }
+
+    /**
+     * Generates a content binding between an [ObservableMap] and a [MutableMap].
+     *
+     * A content binding ensures that the `MutableMap` contains the same elements as the `ObservableMap`. If the content
+     * of the `ObservableMap` changes, the `MutableMap` will be updated automatically.
+     *
+     * Once a `MutableMap` is bound to an `ObservableMap`, the `MutableMap` **must not** be changed directly anymore.
+     * Doing so would lead to unexpected results.
+     *
+     * A content-binding can be removed with [unbindContent].
+     *
+     * @param K the type of the key elements of the `MutableMap`
+     * @param V the type of the value elements of the `MutableMap`
+     * @param map1 the `MutableMap`
+     * @param map2 the `ObservableMap`
+     *
+     * @throws IllegalArgumentException if `map1 == map2`
+     */
+    fun <K, V> bindContent(map1: MutableMap<K, V>, map2: ObservableMap<K, V>) {
+        ContentBinding.bind(map1, map2)
     }
 
     /**
@@ -1601,10 +1647,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -1618,10 +1662,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -1637,12 +1679,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1658,12 +1697,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1677,10 +1713,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -1694,10 +1728,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -1803,12 +1835,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the first operand
+     * @param op2 the second operand
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1822,10 +1851,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -1841,12 +1868,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1862,12 +1886,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1883,12 +1904,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1904,12 +1922,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1925,12 +1940,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1946,12 +1958,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -1965,10 +1974,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -1982,10 +1989,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2001,12 +2006,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -2022,12 +2024,9 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
-     * @param epsilon
-     *         the permitted tolerance
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
      *
      * @return the new `BooleanBinding`
      */
@@ -2041,10 +2040,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2058,10 +2055,8 @@ object Bindings {
      *
      * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2163,10 +2158,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is greater
      * than the value of the second.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -2178,10 +2171,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2193,10 +2184,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2208,10 +2197,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2223,10 +2210,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2238,10 +2223,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2253,10 +2236,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2268,10 +2249,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2283,10 +2262,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2306,10 +2283,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is less than
      * the value of the second.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -2321,10 +2296,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2336,10 +2309,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2351,10 +2322,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2366,10 +2335,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2381,10 +2348,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2396,10 +2361,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2411,10 +2374,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2426,10 +2387,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2531,10 +2490,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is greater
      * than or equal to the value of the second.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -2546,10 +2503,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
      * equal to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2561,10 +2516,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2576,10 +2529,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
      * equal to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2591,10 +2542,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2606,10 +2555,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
      * equal to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2621,10 +2568,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2636,10 +2581,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
      * equal to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2651,10 +2594,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2674,10 +2615,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of the first [ObservableNumberValue] is less than
      * or equal to the value of the second.
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `BooleanBinding`
      */
@@ -2689,10 +2628,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
      * to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2704,10 +2641,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2719,10 +2654,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
      * to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2734,10 +2667,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2749,10 +2680,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
      * to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2764,10 +2693,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2779,10 +2706,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
      * to a constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `BooleanBinding`
      */
@@ -2794,10 +2719,8 @@ object Bindings {
      * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `BooleanBinding`
      */
@@ -2902,10 +2825,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the values of two instances of
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `NumberBinding`
      */
@@ -2917,10 +2838,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `DoubleBinding`
      */
@@ -2932,10 +2851,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `DoubleBinding`
      */
@@ -2947,10 +2864,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -2962,10 +2877,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -2977,10 +2890,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -2992,10 +2903,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -3007,10 +2916,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -3022,10 +2929,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -3130,10 +3035,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the maximum of the values of two instances of
      * [ObservableNumberValue].
      *
-     * @param op1
-     *         the first operand
-     * @param op2
-     *         the second operand
+     * @param op1 the first operand
+     * @param op2 the second operand
      *
      * @return the new `NumberBinding`
      */
@@ -3160,10 +3063,8 @@ object Bindings {
      * Creates a new [DoubleBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `DoubleBinding`
      */
@@ -3175,10 +3076,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -3190,10 +3089,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -3205,10 +3102,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */
@@ -3220,10 +3115,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the constant value
-     * @param op2
-     *         the `ObservableNumberValue`
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
      *
      * @return the new `NumberBinding`
      */
@@ -3235,10 +3128,8 @@ object Bindings {
      * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
      * constant value.
      *
-     * @param op1
-     *         the `ObservableNumberValue`
-     * @param op2
-     *         the constant value
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
      *
      * @return the new `NumberBinding`
      */

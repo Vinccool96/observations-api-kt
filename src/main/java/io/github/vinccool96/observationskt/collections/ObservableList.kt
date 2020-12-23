@@ -59,8 +59,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *
      * @return true (as specified by [MutableCollection.add])
      *
-     * @throws NullPointerException
-     *         if the specified arguments contain one or more null elements
+     * @throws NullPointerException if the specified arguments contain one or more null elements
      */
     fun setAll(vararg elements: E): Boolean
 
@@ -71,8 +70,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *
      * @return true (as specified by [MutableCollection.add])
      *
-     * @throws NullPointerException
-     *         if the specified collection contains one or more null elements
+     * @throws NullPointerException if the specified collection contains one or more null elements
      */
     fun setAll(col: Collection<E>): Boolean
 
@@ -101,8 +99,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
      * @param from the start of the range to remove (inclusive)
      * @param to the end of the range to remove (exclusive)
      *
-     * @throws IndexOutOfBoundsException
-     *         if an illegal range is provided
+     * @throws IndexOutOfBoundsException if an illegal range is provided
      */
     fun remove(from: Int, to: Int)
 

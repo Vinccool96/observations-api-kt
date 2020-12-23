@@ -183,7 +183,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
          *
          * ```
          * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1.0)
-         * val objectProperty: ObjectProperty<Double> = new SimpleObjectProperty(2.0)
+         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0)
          * val binding: BooleanBinding = doubleProperty.greaterThan(DoubleExpression.doubleExpression(objectProperty))
          * ```
          *

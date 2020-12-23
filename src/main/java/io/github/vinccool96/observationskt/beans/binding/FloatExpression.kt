@@ -166,7 +166,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
          *
          * ```
          * val floatProperty: FloatProperty = SimpleFloatProperty(1.0F)
-         * val objectProperty: ObjectProperty<Float> = new SimpleObjectProperty(2.0F)
+         * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2.0F)
          * val binding: BooleanBinding = floatProperty.greaterThan(FloatExpression.floatExpression(objectProperty))
          * ```
          *

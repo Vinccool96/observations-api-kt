@@ -166,7 +166,7 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
          *
          * ```
          * val longProperty: LongProperty = SimpleLongProperty(1L)
-         * val objectProperty: ObjectProperty<Long> = new SimpleObjectProperty(2L)
+         * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(2L)
          * val binding: BooleanBinding = longProperty.greaterThan(LongExpression.longExpression(objectProperty))
          * ```
          *
