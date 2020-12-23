@@ -11,4 +11,4 @@ import io.github.vinccool96.observationskt.collections.ObservableMap
  * @see ObservableMap
  * @see WritableObjectValue
  */
-interface WritableMapValue<K, V> : WritableObjectValue<ObservableMap<K, V>>, ObservableMap<K, V>
+interface WritableMapValue<K, V> : WritableObjectValue<ObservableMap<K, V>?>, ObservableMap<K, V>
