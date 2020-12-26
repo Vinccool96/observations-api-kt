@@ -255,6 +255,11 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
         }
     }
 
+    /**
+     * Returns a string representation of this `ListPropertyBase` object.
+     *
+     * @return a string representation of this `ListPropertyBase` object.
+     */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name

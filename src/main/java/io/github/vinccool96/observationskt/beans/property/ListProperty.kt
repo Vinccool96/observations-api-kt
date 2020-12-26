@@ -36,6 +36,11 @@ abstract class ListProperty<E> : ReadOnlyListProperty<E>(), Property<ObservableL
         Bindings.unbindBidirectional(this, other)
     }
 
+    /**
+     * Returns a string representation of this `ListProperty` object.
+     *
+     * @return a string representation of this `ListProperty` object.
+     */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
