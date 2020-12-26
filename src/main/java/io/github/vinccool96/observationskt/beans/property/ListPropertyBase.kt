@@ -25,6 +25,7 @@ import java.lang.ref.WeakReference
  *
  * @param initialValue the initial value of the wrapped value
  */
+@Suppress("RedundantNullableReturnType")
 abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListProperty<E>() {
 
     private var valueState: ObservableList<E>? = initialValue
