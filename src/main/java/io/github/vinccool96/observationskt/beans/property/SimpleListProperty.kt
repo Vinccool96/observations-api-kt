@@ -8,24 +8,15 @@ import io.github.vinccool96.observationskt.collections.ObservableList
  * @param E the type of the `List` elements
  *
  * @see ListPropertyBase
+ *
+ * @constructor The constructor of `SimpleListProperty`
+ *
+ * @param bean the bean of this `ListProperty`
+ * @param name the name of this `ListProperty`
+ * @param initialValue the initial value of the wrapped value
  */
-open class SimpleListProperty<E> : ListPropertyBase<E> {
-
-    final override val bean: Any?
-
-    final override val name: String?
-
-    /**
-     * The constructor of `SimpleListProperty`
-     *
-     * @param bean the bean of this `ListProperty`
-     * @param name the name of this `ListProperty`
-     * @param initialValue the initial value of the wrapped value
-     */
-    constructor(bean: Any?, name: String?, initialValue: ObservableList<E>?) : super(initialValue) {
-        this.bean = bean
-        this.name = name
-    }
+open class SimpleListProperty<E>(override val bean: Any?, override val name: String?,
+        initialValue: ObservableList<E>?) : ListPropertyBase<E>(initialValue) {
 
     /**
      * The constructor of `SimpleListProperty`
@@ -33,10 +24,7 @@ open class SimpleListProperty<E> : ListPropertyBase<E> {
      * @param bean the bean of this `ListProperty`
      * @param name the name of this `ListProperty`
      */
-    constructor(bean: Any?, name: String?) : super() {
-        this.bean = bean
-        this.name = name
-    }
+    constructor(bean: Any?, name: String?) : this(bean, name, null)
 
     /**
      * The constructor of `SimpleListProperty`
@@ -54,7 +42,7 @@ open class SimpleListProperty<E> : ListPropertyBase<E> {
 
         private val DEFAULT_BEAN: Any? = null
 
-        private val DEFAULT_NAME: String? = ""
+        private const val DEFAULT_NAME: String = ""
 
     }
 
