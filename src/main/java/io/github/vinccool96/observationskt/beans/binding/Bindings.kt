@@ -5041,4 +5041,730 @@ object Bindings {
         }
     }
 
+    // Map
+    // =================================================================================================================
+
+    /**
+     * Creates a new [IntBinding] that contains the size of an [ObservableMap].
+     *
+     * @param op the `ObservableMap`
+     * @param K type of the key elements of the `Map`
+     * @param V type of the value elements of the `Map`
+     *
+     * @return the new `IntegerBinding`
+     */
+    fun <K, V> size(op: ObservableMap<K, V>): IntBinding {
+        return object : IntBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                return op.size
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a given [ObservableMap] is empty.
+     *
+     * @param op the `ObservableMap`
+     * @param K type of the key elements of the `Map`
+     * @param V type of the value elements of the `Map`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <K, V> isEmpty(op: ObservableMap<K, V>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return op.isEmpty()
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a given [ObservableMap] is not empty.
+     *
+     * @param op the `ObservableMap`
+     * @param K type of the key elements of the `Map`
+     * @param V type of the value elements of the `Map`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <K, V> isNotEmpty(op: ObservableMap<K, V>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return op.isNotEmpty()
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ObjectBinding] that contains the mapping of a specific key in an [ObservableMap].
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     * @param V type of the value elements of the `Map`
+     *
+     * @return the new `ObjectBinding`
+     */
+    fun <K, V> valueAt(op: ObservableMap<K, V>, key: K): ObjectBinding<V?> {
+        return object : ObjectBinding<V?>() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): V? {
+                try {
+                    return op[key]
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ObjectBinding] that contains the mapping of a specific key in an [ObservableMap].
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     * @param V type of the value elements of the `Map`
+     *
+     * @return the new `ObjectBinding`
+     */
+    fun <K, V> valueAt(op: ObservableMap<K, V>, key: ObservableValue<K>): ObjectBinding<V?> {
+        return object : ObjectBinding<V?>() {
+
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): V? {
+                try {
+                    return op[key.value]
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `BooleanBinding` will hold `false`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <K> booleanValueAt(op: ObservableMap<K, Boolean>, key: K): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return false
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `BooleanBinding` will hold `false`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <K> booleanValueAt(op: ObservableMap<K, Boolean>, key: ObservableValue<K>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return false
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+
+        }
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `DoubleBinding` will hold `0.0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun <K> doubleValueAt(op: ObservableMap<K, Double>, key: K): DoubleBinding {
+        return object : DoubleBinding() {
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Double {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0.0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+        }
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `DoubleBinding` will hold `0.0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun <K> doubleValueAt(op: ObservableMap<K, Double>, key: ObservableValue<K>): DoubleBinding {
+        return object : DoubleBinding() {
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Double {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0.0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+        }
+    }
+
+    /**
+     * Creates a new [FloatBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `FloatBinding` will hold `0.0f`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `FloatBinding`
+     */
+    fun <K> floatValueAt(op: ObservableMap<K, Float>, key: K): FloatBinding {
+        return object : FloatBinding() {
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Float {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0.0f
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+        }
+    }
+
+    /**
+     * Creates a new [FloatBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `FloatBinding` will hold `0.0f`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `FloatBinding`
+     */
+    fun <K> floatValueAt(op: ObservableMap<K, Float>, key: ObservableValue<K>): FloatBinding {
+        return object : FloatBinding() {
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Float {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0.0f
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+        }
+    }
+
+    /**
+     * Creates a new [IntBinding] that contains the mapping of a specific key in an [ObservableMap]. The `IntBinding`
+     * will hold `0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `IntBinding`
+     */
+    fun <K> intValueAt(op: ObservableMap<K, Int>, key: K): IntBinding {
+        return object : IntBinding() {
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+        }
+    }
+
+    /**
+     * Creates a new [IntBinding] that contains the mapping of a specific key in an [ObservableMap]. The `IntBinding`
+     * will hold `0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `IntBinding`
+     */
+    fun <K> intValueAt(op: ObservableMap<K, Int>, key: ObservableValue<K>): IntBinding {
+        return object : IntBinding() {
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+        }
+    }
+
+    /**
+     * Creates a new [LongBinding] that contains the mapping of a specific key in an [ObservableMap]. The `LongBinding`
+     * will hold `0L`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `LongBinding`
+     */
+    fun <K> longValueAt(op: ObservableMap<K, Long>, key: K): LongBinding {
+        return object : LongBinding() {
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Long {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0L
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+        }
+    }
+
+    /**
+     * Creates a new [LongBinding] that contains the mapping of a specific key in an [ObservableMap]. The `LongBinding`
+     * will hold `0L`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `LongBinding`
+     */
+    fun <K> longValueAt(op: ObservableMap<K, Long>, key: ObservableValue<K>): LongBinding {
+        return object : LongBinding() {
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Long {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0L
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+        }
+    }
+
+    /**
+     * Creates a new [StringBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `StringBinding` will hold `null`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `StringBinding`
+     */
+    fun <K> stringValueAt(op: ObservableMap<K, String?>, key: K): StringBinding {
+        return object : StringBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): String? {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [StringBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `StringBinding` will hold `null`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `StringBinding`
+     */
+    fun <K> stringValueAt(op: ObservableMap<K, String?>, key: ObservableValue<K>): StringBinding {
+        return object : StringBinding() {
+
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): String? {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+
+        }
+    }
+
 }
