@@ -9,9 +9,9 @@ package io.github.vinccool96.observationskt.collections
 fun interface MapChangeListener<K, V> {
 
     /**
-     * An elementary change done to an [ObservableMap]. Change contains information about a put or remove operation. Note
-     * that put operation might remove an element if there was already a value associated with the same key. In this
-     * case wasAdded() and wasRemoved() will both return true.
+     * An elementary change done to an [ObservableMap]. Change contains information about a put or remove operation.
+     * Note  that put operation might remove an element if there was already a value associated with the same key. In
+     * this case [wasAdded] and [wasRemoved] will both return true.
      *
      * @param K key type
      * @param V value type
@@ -64,7 +64,7 @@ fun interface MapChangeListener<K, V> {
 
     /**
      * Called after a change has been made to an [ObservableMap]. This method is called on every elementary change
-     * (put/remove) once. This means, complex changes like `keySet().removeAll(Collection)` or `clear()` may result in
+     * (put/remove) once. This means, complex changes like `keys.removeAll(Collection)` or `clear()` may result in
      * more than one call of `onChanged` method.
      *
      * @param change the change that was made
