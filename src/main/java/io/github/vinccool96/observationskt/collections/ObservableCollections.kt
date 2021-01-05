@@ -3,11 +3,13 @@ package io.github.vinccool96.observationskt.collections
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.collections.ObservableCollections.emptyObservableList
+import io.github.vinccool96.observationskt.collections.ObservableCollections.synchronizedObservableList
 import io.github.vinccool96.observationskt.sun.collections.*
 import io.github.vinccool96.observationskt.util.Callback
 import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Utility object that consists of methods that are 1:1 copies of [Collections] methods.
@@ -20,7 +22,32 @@ import kotlin.collections.ArrayList
  * limited number of notifications. On the other hand, `Collections` methods might call "modification methods" on an
  * `ObservableList` multiple times, resulting in a number of notifications.
  */
+@Suppress("SuspiciousEqualsCombination")
 object ObservableCollections {
+
+    private fun <E> singletonIterator(e: E): MutableIterator<E> {
+        return object : MutableIterator<E> {
+
+            private var hasNext: Boolean = true
+
+            override fun hasNext(): Boolean {
+                return this.hasNext
+            }
+
+            override fun next(): E {
+                if (this.hasNext) {
+                    this.hasNext = false
+                    return e
+                }
+                throw NoSuchElementException()
+            }
+
+            override fun remove() {
+                throw UnsupportedOperationException()
+            }
+
+        }
+    }
 
     /**
      * Constructs an ObservableList that is backed by the specified list. Mutation operations on the ObservableList
@@ -58,6 +85,101 @@ object ObservableCollections {
     fun <E> observableList(list: MutableList<E>, extractor: Callback<E, Array<Observable>>): ObservableList<E> {
         return if (list is RandomAccess) ObservableListWrapper(list, extractor)
         else ObservableSequentialListWrapper(list, extractor)
+    }
+
+    /**
+     * Constructs an ObservableMap that is backed by the specified map. Mutation operations on the ObservableMap
+     * instance will be reported to observers that have registered on that instance.
+     *
+     * Note that mutation operations made directly to the underlying map are *not* reported to observers of any
+     * ObservableMap that wraps it.
+     *
+     * @param K the type of keys maintained by this map
+     * @param V the type of mapped values
+     * @param map a Map that backs this ObservableMap
+     *
+     * @return a newly created ObservableMap
+     */
+    fun <K, V> observableMap(map: MutableMap<K, V>): ObservableMap<K, V> {
+        return ObservableMapWrapper(map)
+    }
+
+    /**
+     * Constructs a read-only interface to the specified ObservableMap. Only mutation operations made to the underlying
+     * ObservableMap will be reported to observers that have registered on the unmodifiable instance. This allows
+     * clients to track changes in a Map but disallows the ability to modify it.
+     *
+     * @param K the type of keys maintained by this map
+     * @param V the type of mapped values
+     * @param map an ObservableMap that is to be monitored by this interface
+     *
+     * @return a newly created UnmodifiableObservableMap
+     */
+    fun <K, V> unmodifiableObservableMap(map: ObservableMap<K, V>): ObservableMap<K, V> {
+        return UnmodifiableObservableMap(map)
+    }
+
+    /**
+     * Creates and returns a typesafe wrapper on top of provided observable map.
+     *
+     * @param K the type of keys maintained by this map
+     * @param V the type of mapped values
+     * @param map an Observable map to be wrapped
+     * @param keyType the type of key that `map` is permitted to hold
+     * @param valueType the type of value that `map` is permitted to hold
+     *
+     * @return a dynamically typesafe view of the specified map
+     *
+     * @see Collections.checkedMap
+     */
+    fun <K, V> checkedObservableMap(map: ObservableMap<K, V>, keyType: Class<K>,
+            valueType: Class<V>): ObservableMap<K, V> {
+        return CheckedObservableMap(map, keyType, valueType)
+    }
+
+    /**
+     * Creates and returns a synchronized wrapper on top of provided observable map.
+     *
+     * @param K the type of keys maintained by this map
+     * @param V the type of mapped values
+     * @param map the map to be "wrapped" in a synchronized map.
+     *
+     * @return A synchronized version of the observable map
+     *
+     * @see Collections.synchronizedMap
+     */
+    fun <K, V> synchronizedObservableMap(map: ObservableMap<K, V>): ObservableMap<K, V> {
+        return SynchronizedObservableMap(map)
+    }
+
+    /**
+     * Creates and empty unmodifiable observable map.
+     *
+     * @param K the type of keys maintained by this map
+     * @param V the type of mapped values
+     *
+     * @return An empty unmodifiable observable map
+     *
+     * @see Collections.emptyMap
+     */
+    @ReturnsUnmodifiableCollection
+    fun <K, V> emptyObservableMap(): ObservableMap<K, V> {
+        return EmptyObservableMap()
+    }
+
+    /**
+     * Returns an immutable map, mapping only the specified key to the specified value.
+     *
+     * @param K the class of the map keys
+     * @param V the class of the map values
+     * @param key the sole key to be stored in the returned map.
+     * @param value the value to which the returned map maps `key`.
+     *
+     * @return an immutable map containing only the specified key-value mapping.
+     */
+    @ReturnsUnmodifiableCollection
+    fun <K, V> singletonObservableMap(key: K, value: V): ObservableMap<K, V> {
+        return SingletonObservableMap(key, value)
     }
 
     /**
@@ -120,6 +242,33 @@ object ObservableCollections {
     }
 
     /**
+     * Creates a new empty observable map that is backed by a HashMap.
+     *
+     * @param K the type of keys
+     * @param V the type of values
+     *
+     * @return a newly created observable HashMap
+     */
+    fun <K, V> observableHashMap(): ObservableMap<K, V> {
+        return observableMap(HashMap())
+    }
+
+    /**
+     * Constructs an ObservableMap that is backed by a HashMap, containing the specified key-value [Pairs][Pair].
+     * Mutation operations on the ObservableMap instance will be reported to observers that have registered on that
+     * instance.
+     *
+     * @param K the type of keys maintained by this map
+     * @param V the type of mapped values
+     * @param pairs the key-value pairs
+     *
+     * @return a newly created ObservableMap
+     */
+    fun <K, V> observableHashMap(vararg pairs: Pair<K, V>): ObservableMap<K, V> {
+        return observableMap(hashMapOf(*pairs))
+    }
+
+    /**
      * Creates and returns unmodifiable wrapper list on top of provided observable list.
      *
      * @param E the list element type
@@ -131,6 +280,35 @@ object ObservableCollections {
      */
     fun <E> unmodifiableObservableList(list: ObservableList<E>): ObservableList<E> {
         return UnmodifiableObservableListImpl(list)
+    }
+
+    /**
+     * Creates and returns a typesafe wrapper on top of provided observable list.
+     *
+     * @param E the list element type
+     * @param list an Observable list to be wrapped
+     * @param type the type of element that `list` is permitted to hold
+     *
+     * @return a dynamically typesafe view of the specified list
+     *
+     * @see Collections.checkedList
+     */
+    fun <E> checkedObservableList(list: ObservableList<E>, type: Class<E>): ObservableList<E> {
+        return CheckedObservableList(list, type)
+    }
+
+    /**
+     * Creates and returns a synchronized wrapper on top of provided observable list.
+     *
+     * @param E the list element type
+     * @param list the list to be "wrapped" in a synchronized list.
+     *
+     * @return A synchronized version of the observable list
+     *
+     * @see Collections.synchronizedList
+     */
+    fun <E> synchronizedObservableList(list: ObservableList<E>): ObservableList<E> {
+        return SynchronizedObservableList(list)
     }
 
     /**
@@ -160,6 +338,33 @@ object ObservableCollections {
     @ReturnsUnmodifiableCollection
     fun <E> singletonObservableList(e: E): ObservableList<E> {
         return SingletonObservableList(e)
+    }
+
+    /**
+     * Creates and empty unmodifiable observable set.
+     *
+     * @param E the set element type
+     *
+     * @return An empty unmodifiable observable set
+     *
+     * @see Collections.emptySet
+     */
+    @ReturnsUnmodifiableCollection
+    fun <E> emptyObservableSet(): ObservableSet<E> {
+        return EmptyObservableSet()
+    }
+
+    /**
+     * Returns an immutable set containing only the specified object. The returned set is serializable.
+     *
+     * @param E the class of the objects in the set
+     * @param o the sole object to be stored in the returned set.
+     *
+     * @return an immutable set containing only the specified object.
+     */
+    @ReturnsUnmodifiableCollection
+    fun <E> singletonObservable(o: E): ObservableSet<E> {
+        return SingletonObservableSet(o)
     }
 
     /**
@@ -427,13 +632,14 @@ object ObservableCollections {
 
     }
 
+    @Suppress("JoinDeclarationAndAssignment")
     private class UnmodifiableObservableListImpl<T>(private val backingList: ObservableList<T>) :
             ObservableListBase<T>(), ObservableList<T> {
 
         private val listener: ListChangeListener<T>
 
         init {
-            this.listener = ListChangeListener {change ->
+            this.listener = ListChangeListener { change ->
                 fireChange(SourceAdapterChange(this@UnmodifiableObservableListImpl, change))
             }
             this.backingList.addListener(this.listener)
@@ -480,6 +686,1308 @@ object ObservableCollections {
 
         override fun remove(from: Int, to: Int) {
             throw UnsupportedOperationException()
+        }
+
+    }
+
+    private open class SynchronizedList<T>(list: MutableList<T>, protected val mutex: Any) : MutableList<T> {
+
+        private val backingList: MutableList<T> = list
+
+        override val size: Int
+            get() = synchronized(this.mutex) { return@synchronized this.backingList.size }
+
+        override fun isEmpty(): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.isEmpty()
+            }
+        }
+
+        override fun contains(element: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.contains(element)
+            }
+        }
+
+        override fun iterator(): MutableIterator<T> {
+            return this.backingList.iterator()
+        }
+
+        override fun add(element: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.add(element)
+            }
+        }
+
+        override fun remove(element: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.remove(element)
+            }
+        }
+
+        override fun containsAll(elements: Collection<T>): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.containsAll(elements)
+            }
+        }
+
+        override fun addAll(elements: Collection<T>): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.addAll(elements)
+            }
+        }
+
+        override fun addAll(index: Int, elements: Collection<T>): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.addAll(index, elements)
+            }
+        }
+
+        override fun removeAll(elements: Collection<T>): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.removeAll(elements)
+            }
+        }
+
+        override fun retainAll(elements: Collection<T>): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.retainAll(elements)
+            }
+        }
+
+        override fun clear() {
+            synchronized(this.mutex) {
+                this.backingList.clear()
+            }
+        }
+
+        override fun get(index: Int): T {
+            synchronized(this.mutex) {
+                return this.backingList[index]
+            }
+        }
+
+        override fun set(index: Int, element: T): T {
+            synchronized(this.mutex) {
+                return this.backingList.set(index, element)
+            }
+        }
+
+        override fun add(index: Int, element: T) {
+            synchronized(this.mutex) {
+                this.backingList.add(index, element)
+            }
+        }
+
+        override fun removeAt(index: Int): T {
+            synchronized(this.mutex) {
+                return this.backingList.removeAt(index)
+            }
+        }
+
+        override fun indexOf(element: T): Int {
+            synchronized(this.mutex) {
+                return this.backingList.indexOf(element)
+            }
+        }
+
+        override fun lastIndexOf(element: T): Int {
+            synchronized(this.mutex) {
+                return this.backingList.lastIndexOf(element)
+            }
+        }
+
+        override fun listIterator(): MutableListIterator<T> {
+            synchronized(this.mutex) {
+                return this.backingList.listIterator()
+            }
+        }
+
+        override fun listIterator(index: Int): MutableListIterator<T> {
+            synchronized(this.mutex) {
+                return this.backingList.listIterator(index)
+            }
+        }
+
+        override fun subList(fromIndex: Int, toIndex: Int): MutableList<T> {
+            synchronized(this.mutex) {
+                return this.backingList.subList(fromIndex, toIndex)
+            }
+        }
+
+    }
+
+    private class SynchronizedObservableList<T>(seq: ObservableList<T>, mutex: Any) : SynchronizedList<T>(seq, mutex),
+            ObservableList<T> {
+
+        private var helper: ListListenerHelper<T>? = null
+
+        private val backingList: ObservableList<T> = seq
+
+        private val listener: ListChangeListener<T> = ListChangeListener { change ->
+            ListListenerHelper.fireValueChangedEvent(this.helper, SourceAdapterChange(this, change))
+        }
+
+        init {
+            this.backingList.addListener(WeakListChangeListener(this.listener))
+        }
+
+        constructor(seq: ObservableList<T>) : this(seq, Any())
+
+        override fun addAll(vararg elements: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.addAll(*elements)
+            }
+        }
+
+        override fun setAll(vararg elements: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.setAll(*elements)
+            }
+        }
+
+        override fun removeAll(vararg elements: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.removeAll(*elements)
+            }
+        }
+
+        override fun retainAll(vararg elements: T): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.retainAll(*elements)
+            }
+        }
+
+        override fun remove(from: Int, to: Int) {
+            synchronized(this.mutex) {
+                this.backingList.remove(from, to)
+            }
+        }
+
+        override fun setAll(col: Collection<T>): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList.setAll(col)
+            }
+        }
+
+        override fun addListener(listener: InvalidationListener) {
+            synchronized(this.mutex) {
+                if (!isInvalidationListenerAlreadyAdded(listener)) {
+                    this.helper = ListListenerHelper.addListener(this.helper, listener)
+                }
+            }
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            synchronized(this.mutex) {
+                if (isInvalidationListenerAlreadyAdded(listener)) {
+                    this.helper = ListListenerHelper.removeListener(this.helper, listener)
+                }
+            }
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            val curHelper = this.helper
+            return curHelper != null && curHelper.invalidationListeners.contains(listener)
+        }
+
+        override fun addListener(listener: ListChangeListener<in T>) {
+            synchronized(this.mutex) {
+                if (!isListChangeListenerAlreadyAdded(listener)) {
+                    this.helper = ListListenerHelper.addListener(this.helper, listener)
+                }
+            }
+        }
+
+        override fun removeListener(listener: ListChangeListener<in T>) {
+            synchronized(this.mutex) {
+                if (isListChangeListenerAlreadyAdded(listener)) {
+                    this.helper = ListListenerHelper.removeListener(this.helper, listener)
+                }
+            }
+        }
+
+        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in T>): Boolean {
+            val curHelper = this.helper
+            return curHelper != null && curHelper.listChangeListeners.contains(listener)
+        }
+
+    }
+
+    private class CheckedObservableList<T>(private val list: ObservableList<T>, private val type: Class<T>) :
+            ObservableListBase<T>(), ObservableList<T> {
+
+        private val listener: ListChangeListener<T> = ListChangeListener { change ->
+            fireChange(SourceAdapterChange(this, change))
+        }
+
+        init {
+            this.list.addListener(WeakListChangeListener(this.listener))
+        }
+
+        private fun typeCheck(o: Any?) {
+            if (o != null && !this.type.isInstance(o)) {
+                throw ClassCastException("Attempt to insert ${o.javaClass} element into collection with element type" +
+                        " ${this.type}")
+            }
+        }
+
+        override val size: Int
+            get() = this.list.size
+
+        override fun isEmpty(): Boolean {
+            return this.list.isEmpty()
+        }
+
+        override fun contains(element: T): Boolean {
+            return this.list.contains(element)
+        }
+
+        override fun toString(): String {
+            return this.list.toString()
+        }
+
+        override fun remove(element: T): Boolean {
+            return this.list.remove(element)
+        }
+
+        override fun containsAll(elements: Collection<T>): Boolean {
+            return this.list.containsAll(elements)
+        }
+
+        override fun removeAll(elements: Collection<T>): Boolean {
+            return this.list.removeAll(elements)
+        }
+
+        override fun retainAll(elements: Collection<T>): Boolean {
+            return this.list.retainAll(elements)
+        }
+
+        override fun removeAll(vararg elements: T): Boolean {
+            return this.list.removeAll(*elements)
+        }
+
+        override fun retainAll(vararg elements: T): Boolean {
+            return this.list.retainAll(*elements)
+        }
+
+        override fun remove(from: Int, to: Int) {
+            this.list.remove(from, to)
+        }
+
+        override fun clear() {
+            this.list.clear()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return other === this || this.list == other
+        }
+
+        override fun hashCode(): Int {
+            return this.list.hashCode()
+        }
+
+        override fun get(index: Int): T {
+            return this.list[index]
+        }
+
+        override fun removeAt(index: Int): T {
+            return this.list.removeAt(index)
+        }
+
+        override fun indexOf(element: T): Int {
+            return this.list.indexOf(element)
+        }
+
+        override fun lastIndexOf(element: T): Int {
+            return this.list.lastIndexOf(element)
+        }
+
+        override fun set(index: Int, element: T): T {
+            typeCheck(element)
+            return this.list.set(index, element)
+        }
+
+        override fun add(index: Int, element: T) {
+            typeCheck(element)
+            return this.list.add(index, element)
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun addAll(index: Int, elements: Collection<T>): Boolean {
+            val a: Array<T>
+            val c = ArrayList(elements)
+            try {
+                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<T>)
+            } catch (e: ArrayStoreException) {
+                throw ClassCastException()
+            }
+
+            return this.list.addAll(index, a.asList())
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun addAll(elements: Collection<T>): Boolean {
+            val a: Array<T>
+            val c = ArrayList(elements)
+            try {
+                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<T>)
+            } catch (e: ArrayStoreException) {
+                throw ClassCastException()
+            }
+
+            return this.list.addAll(a.asList())
+        }
+
+        override fun listIterator(): MutableListIterator<T> {
+            return listIterator(0)
+        }
+
+        override fun listIterator(index: Int): MutableListIterator<T> {
+            return object : MutableListIterator<T> {
+
+                private val i: MutableListIterator<T> = this@CheckedObservableList.list.listIterator(index)
+
+                override fun hasNext(): Boolean {
+                    return this.i.hasNext()
+                }
+
+                override fun next(): T {
+                    return this.i.next()
+                }
+
+                override fun hasPrevious(): Boolean {
+                    return this.i.hasPrevious()
+                }
+
+                override fun previous(): T {
+                    return this.i.previous()
+                }
+
+                override fun nextIndex(): Int {
+                    return this.i.nextIndex()
+                }
+
+                override fun previousIndex(): Int {
+                    return this.i.previousIndex()
+                }
+
+                override fun remove() {
+                    this.i.remove()
+                }
+
+                override fun set(element: T) {
+                    typeCheck(element)
+                    this.i.set(element)
+                }
+
+                override fun add(element: T) {
+                    typeCheck(element)
+                    this.i.add(element)
+                }
+
+            }
+        }
+
+        override fun iterator(): MutableIterator<T> {
+            return object : MutableIterator<T> {
+
+                private val it: MutableIterator<T> = this@CheckedObservableList.list.iterator()
+
+                override fun hasNext(): Boolean {
+                    return this.it.hasNext()
+                }
+
+                override fun next(): T {
+                    return this.it.next()
+                }
+
+                override fun remove() {
+                    this.it.remove()
+                }
+
+            }
+        }
+
+        override fun add(element: T): Boolean {
+            typeCheck(element)
+            return this.list.add(element)
+        }
+
+        override fun subList(fromIndex: Int, toIndex: Int): MutableList<T> {
+            return Collections.checkedList(this.list.subList(fromIndex, toIndex), this.type)
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun addAll(vararg elements: T): Boolean {
+            return addAll(elements.toList())
+        }
+
+        override fun setAll(vararg elements: T): Boolean {
+            return setAll(elements.toList())
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun setAll(col: Collection<T>): Boolean {
+            val a: Array<T>
+            val c = ArrayList(col)
+            try {
+                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<T>)
+            } catch (e: ArrayStoreException) {
+                throw ClassCastException()
+            }
+
+            return this.list.setAll(a.asList())
+        }
+
+    }
+
+    private class EmptyObservableSet<E> : AbstractMutableSet<E>(), ObservableSet<E> {
+
+        override fun addListener(listener: InvalidationListener) {
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            return false
+        }
+
+        override fun addListener(listener: SetChangeListener<in E>) {
+        }
+
+        override fun removeListener(listener: SetChangeListener<in E>) {
+        }
+
+        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+            return false
+        }
+
+        override val size: Int
+            get() = 0
+
+        override fun isEmpty(): Boolean {
+            return true
+        }
+
+        override fun contains(element: E): Boolean {
+            return false
+        }
+
+        override fun containsAll(elements: Collection<E>): Boolean {
+            return elements.isEmpty()
+        }
+
+        override fun toArray(): Array<Any> {
+            return arrayOf()
+        }
+
+        override fun <T : Any?> toArray(a: Array<T?>): Array<T?> {
+            if (a.isNotEmpty()) {
+                a[0] = null
+            }
+            return a
+        }
+
+        override fun iterator(): MutableIterator<E> {
+            return object : MutableIterator<E> {
+
+                override fun hasNext(): Boolean {
+                    return false
+                }
+
+                override fun next(): E {
+                    throw NoSuchElementException()
+                }
+
+                override fun remove() {
+                    throw UnsupportedOperationException()
+                }
+
+            }
+        }
+
+        override fun add(element: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+    }
+
+    private class SingletonObservableSet<E>(private val element: E) : AbstractMutableSet<E>(), ObservableSet<E> {
+
+        override fun addListener(listener: InvalidationListener) {
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            return false
+        }
+
+        override fun addListener(listener: SetChangeListener<in E>) {
+        }
+
+        override fun removeListener(listener: SetChangeListener<in E>) {
+        }
+
+        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+            return false
+        }
+
+        override val size: Int
+            get() = 1
+
+        override fun isEmpty(): Boolean {
+            return false
+        }
+
+        override fun contains(element: E): Boolean {
+            return this.element == element
+        }
+
+        override fun iterator(): MutableIterator<E> {
+            return singletonIterator(this.element)
+        }
+
+        override fun add(element: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+    }
+
+    private open class SynchronizedSet<E>(set: MutableSet<E>, protected val mutex: Any) : MutableSet<E> {
+
+        private val backingSet: MutableSet<E> = set
+
+        constructor(set: MutableSet<E>) : this(set, Any())
+
+        override val size: Int
+            get() = synchronized(this.mutex) { return@synchronized this.backingSet.size }
+
+        override fun isEmpty(): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.isEmpty()
+            }
+        }
+
+        override fun contains(element: E): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.contains(element)
+            }
+        }
+
+        override fun iterator(): MutableIterator<E> {
+            return this.backingSet.iterator()
+        }
+
+        override fun add(element: E): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.add(element)
+            }
+        }
+
+        override fun remove(element: E): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.remove(element)
+            }
+        }
+
+        override fun containsAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.containsAll(elements)
+            }
+        }
+
+        override fun addAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.addAll(elements)
+            }
+        }
+
+        override fun retainAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.retainAll(elements)
+            }
+        }
+
+        override fun removeAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingSet.removeAll(elements)
+            }
+        }
+
+        override fun clear() {
+            synchronized(this.mutex) {
+                this.backingSet.clear()
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+            return synchronized(this.mutex) {
+                this.backingSet == other
+            }
+        }
+
+        override fun hashCode(): Int {
+            return synchronized(this.mutex) {
+                this.backingSet.hashCode()
+            }
+        }
+
+    }
+
+    private class EmptyObservableMap<K, V> : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
+
+        override fun addListener(listener: InvalidationListener) {
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            return false
+        }
+
+        override fun addListener(listener: MapChangeListener<in K, in V>) {
+        }
+
+        override fun removeListener(listener: MapChangeListener<in K, in V>) {
+        }
+
+        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+            return false
+        }
+
+        override val size: Int
+            get() = 0
+
+        override fun isEmpty(): Boolean {
+            return true
+        }
+
+        override fun put(key: K, value: V): V? {
+            throw UnsupportedOperationException()
+        }
+
+        override fun containsKey(key: K): Boolean {
+            return false
+        }
+
+        override fun containsValue(value: V): Boolean {
+            return false
+        }
+
+        override fun get(key: K): V? {
+            return null
+        }
+
+        override val keys: MutableSet<K>
+            get() = emptyObservableSet()
+
+        override val values: MutableCollection<V>
+            get() = emptyObservableSet()
+
+        override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
+            get() = emptyObservableSet()
+
+        override fun equals(other: Any?): Boolean {
+            return if (other is Map<*, *>) other.isEmpty() else false
+        }
+
+        override fun hashCode(): Int {
+            return 0
+        }
+
+    }
+
+    private class SingletonObservableMap<K, V>(private val key: K, private val value: V) : AbstractMutableMap<K, V>(),
+            ObservableMap<K, V> {
+
+        override fun addListener(listener: InvalidationListener) {
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            return false
+        }
+
+        override fun addListener(listener: MapChangeListener<in K, in V>) {
+        }
+
+        override fun removeListener(listener: MapChangeListener<in K, in V>) {
+        }
+
+        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+            return false
+        }
+
+        override val size: Int
+            get() = 1
+
+        override fun isEmpty(): Boolean {
+            return false
+        }
+
+        override fun containsKey(key: K): Boolean {
+            return this.key == key
+        }
+
+        override fun containsValue(value: V): Boolean {
+            return this.value == value
+        }
+
+        override fun get(key: K): V? {
+            return if (key == this.key) this.value else null
+        }
+
+        override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
+            get() = singletonObservable(SimpleImmutableEntry(this.key, this.value))
+
+        override fun put(key: K, value: V): V? {
+            throw UnsupportedOperationException()
+        }
+
+    }
+
+    private class CheckedObservableMap<K, V>(map: ObservableMap<K, V>, private val keyType: Class<K>,
+            private val valueType: Class<V>) : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
+
+        private val backingMap: ObservableMap<K, V> = map
+
+        private var listenerHelper: MapListenerHelper<K, V>? = null
+
+        private val listener: MapChangeListener<K, V> = MapChangeListener { change ->
+            callObservers(MapAdapterChange(this, change))
+        }
+
+        init {
+            this.backingMap.addListener(WeakMapChangeListener(this.listener))
+        }
+
+        private fun callObservers(c: MapChangeListener.Change<out K, out V>) {
+            MapListenerHelper.fireValueChangedEvent(this.listenerHelper, c)
+        }
+
+        fun typeCheck(key: Any?, value: Any?) {
+            if (key != null && !this.keyType.isInstance(key)) {
+                throw ClassCastException(
+                        "Attempt to insert ${key.javaClass} key into map with key type ${this.keyType}")
+            }
+
+            if (value != null && !this.valueType.isInstance(value)) {
+                throw ClassCastException(
+                        "Attempt to insert ${value.javaClass} value into map with value type ${this.valueType}")
+            }
+        }
+
+        override fun addListener(listener: InvalidationListener) {
+            if (!isInvalidationListenerAlreadyAdded(listener)) {
+                this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            if (isInvalidationListenerAlreadyAdded(listener)) {
+                this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.invalidationListeners.contains(listener)
+        }
+
+        override fun addListener(listener: MapChangeListener<in K, in V>) {
+            if (!isMapChangeListenerAlreadyAdded(listener)) {
+                this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun removeListener(listener: MapChangeListener<in K, in V>) {
+            if (isMapChangeListenerAlreadyAdded(listener)) {
+                this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.mapChangeListeners.contains(listener)
+        }
+
+        override val size: Int
+            get() = this.backingMap.size
+
+        override fun isEmpty(): Boolean {
+            return this.backingMap.isEmpty()
+        }
+
+        override fun containsKey(key: K): Boolean {
+            return this.backingMap.containsKey(key)
+        }
+
+        override fun containsValue(value: V): Boolean {
+            return this.backingMap.containsValue(value)
+        }
+
+        override fun get(key: K): V? {
+            return this.backingMap[key]
+        }
+
+        override fun put(key: K, value: V): V? {
+            typeCheck(key, value)
+            return this.backingMap.put(key, value)
+        }
+
+        override fun remove(key: K): V? {
+            return this.backingMap.remove(key)
+        }
+
+        override fun putAll(from: Map<out K, V>) {
+            // Satisfy the following goals:
+            // - good diagnostics in case of type mismatch
+            // - all-or-nothing semantics
+            // - protection from malicious t
+            // - correct behavior if t is a concurrent map
+            val entries = from.entries.toTypedArray()
+            val checked: MutableList<MutableMap.MutableEntry<K, V>> = ArrayList(entries.size)
+            for (e in entries) {
+                val k = e.key
+                val v = e.value
+                typeCheck(k, v)
+                checked.add(SimpleImmutableEntry(k, v))
+            }
+            for (e in checked) {
+                this.backingMap[e.key] = e.value
+            }
+        }
+
+        override fun clear() {
+            this.backingMap.clear()
+        }
+
+        override val keys: MutableSet<K>
+            get() = this.backingMap.keys
+
+        override val values: MutableCollection<V>
+            get() = this.backingMap.values
+
+        @Transient
+        private lateinit var entrySet: MutableSet<MutableMap.MutableEntry<K, V>>
+
+        override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
+            get() {
+                if (!this::entrySet.isInitialized) {
+                    this.entrySet = CheckedEntrySet(this.backingMap.entries, this.valueType)
+                }
+                return this.entrySet
+            }
+
+        override fun equals(other: Any?): Boolean {
+            return this === other || this.backingMap == other
+        }
+
+        override fun hashCode(): Int {
+            return this.backingMap.hashCode()
+        }
+
+        private class CheckedEntrySet<K, V>(private val s: MutableSet<MutableMap.MutableEntry<K, V>>,
+                private val valueType: Class<V>) : MutableSet<MutableMap.MutableEntry<K, V>> {
+
+            override val size: Int
+                get() = this.s.size
+
+            override fun isEmpty(): Boolean {
+                return this.s.isEmpty()
+            }
+
+            override fun toString(): String {
+                return this.s.toString()
+            }
+
+            override fun hashCode(): Int {
+                return this.s.hashCode()
+            }
+
+            override fun clear() {
+                this.s.clear()
+            }
+
+            override fun add(element: MutableMap.MutableEntry<K, V>): Boolean {
+                throw UnsupportedOperationException()
+            }
+
+            override fun addAll(elements: Collection<MutableMap.MutableEntry<K, V>>): Boolean {
+                throw UnsupportedOperationException()
+            }
+
+            override fun iterator(): MutableIterator<MutableMap.MutableEntry<K, V>> {
+                val i = this.s.iterator()
+                return object : MutableIterator<MutableMap.MutableEntry<K, V>> {
+
+                    override fun hasNext(): Boolean {
+                        return i.hasNext()
+                    }
+
+                    override fun remove() {
+                        i.remove()
+                    }
+
+                    override fun next(): MutableMap.MutableEntry<K, V> {
+                        return checkedEntry(i.next(), this@CheckedEntrySet.valueType)
+                    }
+
+                }
+            }
+
+            @Suppress("USELESS_CAST")
+            override fun contains(element: MutableMap.MutableEntry<K, V>): Boolean {
+                return this.s.contains(
+                        if (element is CheckedEntry<*, *, *>) element as MutableMap.MutableEntry<K, V>
+                        else checkedEntry(element, this.valueType))
+            }
+
+            override fun containsAll(elements: Collection<MutableMap.MutableEntry<K, V>>): Boolean {
+                return this.s.containsAll(elements)
+            }
+
+            override fun remove(element: MutableMap.MutableEntry<K, V>): Boolean {
+                return this.s.remove(element)
+            }
+
+            override fun removeAll(elements: Collection<MutableMap.MutableEntry<K, V>>): Boolean {
+                return batchRemove(elements, false)
+            }
+
+            override fun retainAll(elements: Collection<MutableMap.MutableEntry<K, V>>): Boolean {
+                return batchRemove(elements, true)
+            }
+
+            private fun batchRemove(elements: Collection<MutableMap.MutableEntry<K, V>>, complement: Boolean): Boolean {
+                var modified = false
+                val it = iterator()
+                while (it.hasNext()) {
+                    if (elements.contains(it.next()) != complement) {
+                        it.remove()
+                        modified = true
+                    }
+                }
+                return modified
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+                if (other !is Set<*>) {
+                    return false
+                }
+                return other.size == this.s.size && containsAll(other)
+            }
+
+            /**
+             * This "wrapper class" serves two purposes: it prevents the client from modifying the backing Map, by
+             * short-circuiting the setValue method, and it protects the backing Map against an ill-behaved Map.Entry
+             * that attempts to modify another Map.Entry when asked to perform an equality check.
+             */
+            private class CheckedEntry<K, V, T>(private val e: MutableMap.MutableEntry<K, V>,
+                    private val valueType: Class<T>) : MutableMap.MutableEntry<K, V> {
+
+                override val key: K
+                    get() = this.e.key
+
+                override val value: V
+                    get() = this.e.value
+
+                override fun hashCode(): Int {
+                    return this.e.hashCode()
+                }
+
+                override fun toString(): String {
+                    return this.e.toString()
+                }
+
+                override fun setValue(newValue: V): V {
+                    if (newValue != null && !this.valueType.isInstance(newValue)) {
+                        throw ClassCastException(badValueMsg(newValue))
+                    }
+                    return this.e.setValue(newValue)
+                }
+
+                private fun badValueMsg(value: Any?): String {
+                    return "Attempt to insert ${value?.javaClass} value into map with value type ${this.valueType}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+                    if (other !is Map.Entry<*, *>) {
+                        return false
+                    }
+                    return e == SimpleImmutableEntry(other)
+                }
+
+            }
+
+            companion object {
+
+                private fun <K, V, T> checkedEntry(e: MutableMap.MutableEntry<K, V>,
+                        valueType: Class<T>): CheckedEntry<K, V, T> {
+                    return CheckedEntry(e, valueType)
+                }
+
+            }
+
+        }
+
+    }
+
+    private open class SynchronizedMap<K, V>(map: MutableMap<K, V>, protected val mutex: Any) : MutableMap<K, V> {
+
+        private val backingMap: MutableMap<K, V> = map
+
+        constructor(map: MutableMap<K, V>) : this(map, Any())
+
+        override val size: Int
+            get() = synchronized(this.mutex) { return@synchronized this.backingMap.size }
+
+        override fun isEmpty(): Boolean {
+            return synchronized(this.mutex) {
+                this.backingMap.isEmpty()
+            }
+        }
+
+        override fun containsKey(key: K): Boolean {
+            return synchronized(this.mutex) {
+                this.backingMap.containsKey(key)
+            }
+        }
+
+        override fun containsValue(value: V): Boolean {
+            return synchronized(this.mutex) {
+                this.backingMap.containsValue(value)
+            }
+        }
+
+        override fun get(key: K): V? {
+            return synchronized(this.mutex) {
+                this.backingMap[key]
+            }
+        }
+
+        override fun put(key: K, value: V): V? {
+            return synchronized(this.mutex) {
+                this.backingMap.put(key, value)
+            }
+        }
+
+        override fun remove(key: K): V? {
+            return synchronized(this.mutex) {
+                this.backingMap.remove(key)
+            }
+        }
+
+        override fun putAll(from: Map<out K, V>) {
+            return synchronized(this.mutex) {
+                this.backingMap.putAll(from)
+            }
+        }
+
+        override fun clear() {
+            synchronized(this.mutex) {
+                this.backingMap.clear()
+            }
+        }
+
+        @Transient
+        private lateinit var keySet: MutableSet<K>
+
+        @Transient
+        private lateinit var valueCollection: MutableCollection<V>
+
+        @Transient
+        private lateinit var entrySet: MutableSet<MutableMap.MutableEntry<K, V>>
+
+        override val keys: MutableSet<K>
+            get() {
+                return synchronized(this.mutex) {
+                    if (!this::keySet.isInitialized) {
+                        this.keySet = SynchronizedSet(this.backingMap.keys, this.mutex)
+                    }
+                    this.keySet
+                }
+            }
+
+        override val values: MutableCollection<V>
+            get() {
+                return synchronized(this.mutex) {
+                    if (!this::valueCollection.isInitialized) {
+                        this.valueCollection = SynchronizedCollection(this.backingMap.values, this.mutex)
+                    }
+                    this.valueCollection
+                }
+            }
+
+        override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
+            get() {
+                return synchronized(this.mutex) {
+                    if (!this::entrySet.isInitialized) {
+                        this.entrySet = SynchronizedSet(this.backingMap.entries, this.mutex)
+                    }
+                    this.entrySet
+                }
+            }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+            return synchronized(this.mutex) {
+                this.backingMap == other
+            }
+        }
+
+        override fun hashCode(): Int {
+            return synchronized(this.mutex) {
+                this.backingMap.hashCode()
+            }
+        }
+
+    }
+
+    private class SynchronizedObservableMap<K, V>(map: ObservableMap<K, V>, mutex: Any) :
+            SynchronizedMap<K, V>(map, mutex), ObservableMap<K, V> {
+
+        private val backingMap: ObservableMap<K, V> = map
+
+        private var listenerHelper: MapListenerHelper<K, V>? = null
+
+        private val listener: MapChangeListener<K, V> = MapChangeListener { change ->
+            MapListenerHelper.fireValueChangedEvent(this.listenerHelper, MapAdapterChange(this, change))
+        }
+
+        init {
+            this.backingMap.addListener(WeakMapChangeListener(this.listener))
+        }
+
+        constructor(map: ObservableMap<K, V>) : this(map, Any())
+
+        override fun addListener(listener: InvalidationListener) {
+            synchronized(this.mutex) {
+                if (!isInvalidationListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            synchronized(this.mutex) {
+                if (isInvalidationListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.invalidationListeners.contains(listener)
+        }
+
+        override fun addListener(listener: MapChangeListener<in K, in V>) {
+            synchronized(this.mutex) {
+                if (!isMapChangeListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun removeListener(listener: MapChangeListener<in K, in V>) {
+            synchronized(this.mutex) {
+                if (isMapChangeListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.mapChangeListeners.contains(listener)
+        }
+
+    }
+
+    private class SynchronizedCollection<E>(c: MutableCollection<E>, private val mutex: Any) : MutableCollection<E> {
+
+        private val backingCollection: MutableCollection<E> = c
+
+        constructor(c: MutableCollection<E>) : this(c, Any())
+
+        override val size: Int
+            get() = synchronized(this.mutex) { return@synchronized this.backingCollection.size }
+
+        override fun isEmpty(): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.isEmpty()
+            }
+        }
+
+        override fun contains(element: E): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.contains(element)
+            }
+        }
+
+        override fun iterator(): MutableIterator<E> {
+            return this.backingCollection.iterator()
+        }
+
+        override fun add(element: E): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.add(element)
+            }
+        }
+
+        override fun remove(element: E): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.remove(element)
+            }
+        }
+
+        override fun containsAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.containsAll(elements)
+            }
+        }
+
+        override fun addAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.addAll(elements)
+            }
+        }
+
+        override fun removeAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.removeAll(elements)
+            }
+        }
+
+        override fun retainAll(elements: Collection<E>): Boolean {
+            return synchronized(this.mutex) {
+                this.backingCollection.retainAll(elements)
+            }
+        }
+
+        override fun clear() {
+            synchronized(this.mutex) {
+                this.backingCollection.clear()
+            }
         }
 
     }
