@@ -4,6 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.collections.ListChangeListener
 import io.github.vinccool96.observationskt.collections.ObservableList
 
+@Suppress("UNCHECKED_CAST")
 class ImmutableObservableList<E>(vararg elements: E) : AbstractMutableList<E>(), ObservableList<E> {
 
     private val elements: Array<E>?

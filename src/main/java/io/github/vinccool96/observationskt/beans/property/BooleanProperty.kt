@@ -23,6 +23,7 @@ import java.security.PrivilegedAction
  * @see ReadOnlyBooleanProperty
  * @see Property
  */
+@Suppress("UNCHECKED_CAST")
 abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, WritableBooleanValue {
 
     override var value: Boolean?

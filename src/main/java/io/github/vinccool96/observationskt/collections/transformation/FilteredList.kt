@@ -15,7 +15,7 @@ import java.util.function.Predicate
  *
  * @see TransformationList
  */
-@Suppress("RedundantNullableReturnType")
+@Suppress("RedundantNullableReturnType", "UNCHECKED_CAST")
 class FilteredList<E> : TransformationList<E, E> {
 
     private var filtered: IntArray
@@ -56,7 +56,7 @@ class FilteredList<E> : TransformationList<E, E> {
      */
     constructor(@NamedArg("source") source: ObservableList<E>) : this(source, null)
 
-    private val basePredicate: Predicate<in E> = Predicate<E> {true}
+    private val basePredicate: Predicate<in E> = Predicate<E> { true }
 
     /**
      * The predicate that will match the elements that will be in this FilteredList. Elements not matching the predicate
