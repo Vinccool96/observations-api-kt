@@ -11,6 +11,7 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
+import java.util.*
 
 /**
  * A `MapExpression` is a [ObservableMapValue] plus additional convenience methods to generate bindings in a fluent
@@ -33,7 +34,7 @@ abstract class MapExpression<K, V> : ObservableMapValue<K, V> {
     private class EmptyObservableMap<K, V> : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
 
         override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
-            get() = mutableSetOf()
+            get() = Collections.emptySet()
 
         override fun put(key: K, value: V): V? {
             // no-op

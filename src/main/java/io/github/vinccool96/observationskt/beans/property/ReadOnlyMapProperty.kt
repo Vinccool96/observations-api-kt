@@ -80,6 +80,9 @@ abstract class ReadOnlyMapProperty<K, V> : MapExpression<K, V>(), ReadOnlyProper
         if (other !is Map<*, *>) {
             return false
         }
+        if (this.size != other.size) {
+            return false
+        }
 
         try {
             for (e in this.entries) {

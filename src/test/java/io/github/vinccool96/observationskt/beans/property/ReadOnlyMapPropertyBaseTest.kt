@@ -3,18 +3,19 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.collections.ObservableMap
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 import kotlin.test.fail
 
-class ReadOnlyListPropertyBaseTest {
+class ReadOnlyMapPropertyBaseTest {
 
     private lateinit var property: ReadOnlyPropertyMock
 
     private lateinit var invalidationListener: InvalidationListenerMock
 
-    private lateinit var changeListener: ChangeListenerMock<ObservableList<Any?>?>
+    private lateinit var changeListener: ChangeListenerMock<ObservableMap<Any, Any>?>
 
     @Before
     fun setUp() {
@@ -49,21 +50,21 @@ class ReadOnlyListPropertyBaseTest {
         this.changeListener.check(null, UNDEFINED, UNDEFINED, 0)
     }
 
-    private class ReadOnlyPropertyMock : ReadOnlyListPropertyBase<Any?>() {
+    private class ReadOnlyPropertyMock : ReadOnlyMapPropertyBase<Any, Any>() {
 
-        private var list: ObservableList<Any?>? = DEFAULT
+        private var valueState: ObservableMap<Any, Any>? = null
 
         override val bean: Any? = null // not used
 
         override val name: String? = null // not used
 
-        override fun get(): ObservableList<Any?>? {
-            return this.list
+        fun set(value: ObservableMap<Any, Any>) {
+            this.valueState = value
+            this.fireValueChangedEvent()
         }
 
-        fun set(list: ObservableList<Any?>?) {
-            this.list = list
-            fireValueChangedEvent()
+        override fun get(): ObservableMap<Any, Any>? {
+            return this.valueState
         }
 
         override val sizeProperty: ReadOnlyIntProperty
@@ -76,13 +77,13 @@ class ReadOnlyListPropertyBaseTest {
 
     companion object {
 
-        private val UNDEFINED: ObservableList<Any?>? = null
+        private val UNDEFINED: ObservableMap<Any, Any>? = null
 
-        private val DEFAULT: ObservableList<Any?>? = null
+        private val DEFAULT: ObservableMap<Any, Any>? = null
 
-        private val VALUE_1: ObservableList<Any?> = ObservableCollections.observableArrayList()
+        private val VALUE_1: ObservableMap<Any, Any> = ObservableCollections.observableMap(Collections.emptyMap())
 
-        private val VALUE_2: ObservableList<Any?> = ObservableCollections.observableArrayList(Any())
+        private val VALUE_2: ObservableMap<Any, Any> = ObservableCollections.singletonObservableMap(Any(), Any())
 
     }
 

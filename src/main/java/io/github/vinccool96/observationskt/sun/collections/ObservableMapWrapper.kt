@@ -171,11 +171,23 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
 
     override val entries: MutableSet<MutableEntry<K, V>>
         get() {
-            if (this::entrySet.isInitialized) {
+            if (!this::entrySet.isInitialized) {
                 this.entrySet = ObservableEntrySet()
             }
             return this.entrySet
         }
+
+    override fun toString(): String {
+        return this.backingMap.toString()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return this.backingMap.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return this.backingMap.hashCode()
+    }
 
     private inner class ObservableKeySet : MutableSet<K> {
 
