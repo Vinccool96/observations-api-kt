@@ -236,7 +236,7 @@ abstract class MapPropertyBase<K, V>(initialValue: ObservableMap<K, V>?) : MapPr
     }
 
     override val bound: Boolean
-        get() = this.observable == null
+        get() = this.observable != null
 
     override fun bind(observable: ObservableValue<out ObservableMap<K, V>?>) {
         if (observable != this.observable) {
