@@ -25,7 +25,7 @@ open class SimpleMapProperty<K, V>(override val bean: Any?, override val name: S
      * @param bean the bean of this `MapProperty`
      * @param name the name of this `MapProperty`
      */
-    constructor(bean: Any?, name: String?) : this(bean, name ?: DEFAULT_NAME, null)
+    constructor(bean: Any?, name: String?) : this(bean, name, null)
 
     /**
      * The constructor of `SimpleMapProperty`
