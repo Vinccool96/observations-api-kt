@@ -12,7 +12,7 @@
     <url>https://github.com/Vinccool96/observations-api-kt</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.4.30-RC</kotlin.version>
+        <kotlin.version>1.4.30</kotlin.version>
         <dokka.version>0.10.1</dokka.version>
     </properties>
 
