@@ -2,35 +2,37 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
-import io.github.vinccool96.observationskt.beans.value.ObservableListValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableMapValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
-import io.github.vinccool96.observationskt.collections.MockListObserver
+import io.github.vinccool96.observationskt.collections.MockMapObserver
+import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.collections.ObservableMap
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class ReadOnlyListWrapperTest {
+class ReadOnlyMapWrapperTest {
 
-    private lateinit var property: ReadOnlyListWrapperMock
+    private lateinit var property: ReadOnlyMapWrapperMock
 
-    private lateinit var readOnlyProperty: ReadOnlyListProperty<Any>
+    private lateinit var readOnlyProperty: ReadOnlyMapProperty<Any, Any>
 
     private lateinit var internalInvalidationListener: InvalidationListenerMock
 
     private lateinit var publicInvalidationListener: InvalidationListenerMock
 
-    private lateinit var internalChangeListener: ChangeListenerMock<Any?>
+    private lateinit var internalChangeListener: ChangeListenerMock<ObservableMap<Any, Any>?>
 
-    private lateinit var publicChangeListener: ChangeListenerMock<Any?>
+    private lateinit var publicChangeListener: ChangeListenerMock<ObservableMap<Any, Any>?>
 
     @Before
     fun setUp() {
-        this.property = ReadOnlyListWrapperMock()
+        this.property = ReadOnlyMapWrapperMock()
         this.readOnlyProperty = this.property.readOnlyProperty
         this.internalInvalidationListener = InvalidationListenerMock()
         this.publicInvalidationListener = InvalidationListenerMock()
@@ -44,7 +46,7 @@ class ReadOnlyListWrapperTest {
         this.property.get()
         this.readOnlyProperty.get()
         this.internalInvalidationListener.reset()
-        this.publicChangeListener.reset()
+        this.publicInvalidationListener.reset()
     }
 
     private fun attachInternalChangeListener() {
@@ -61,7 +63,7 @@ class ReadOnlyListWrapperTest {
 
     @Test
     fun testConstructor_NoArguments() {
-        val p1 = ReadOnlyListWrapper<Any>()
+        val p1 = ReadOnlyMapWrapper<Any, Any>()
         assertEquals(DEFAULT, p1.get())
         assertEquals(DEFAULT, p1.value)
         assertFalse(this.property.bound)
@@ -76,7 +78,7 @@ class ReadOnlyListWrapperTest {
 
     @Test
     fun testConstructor_InitialValue() {
-        val p1 = ReadOnlyListWrapper(VALUE_1)
+        val p1 = ReadOnlyMapWrapper(VALUE_1)
         assertEquals(VALUE_1, p1.get())
         assertEquals(VALUE_1, p1.value)
         assertFalse(this.property.bound)
@@ -92,8 +94,8 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testConstructor_Bean_Name() {
         val bean = Any()
-        val name = "General Kenobi"
-        val p1 = ReadOnlyListWrapper<Any>(bean, name)
+        val name = "My name"
+        val p1 = ReadOnlyMapWrapper<Any, Any>(bean, name)
         assertEquals(DEFAULT, p1.get())
         assertEquals(DEFAULT, p1.value)
         assertFalse(this.property.bound)
@@ -109,22 +111,22 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testConstructor_Bean_Name_InitialValue() {
         val bean = Any()
-        val name = "General Kenobi"
-        val p1 = ReadOnlyListWrapper(bean, name, VALUE_1)
-        assertEquals(VALUE_1, p1.get())
-        assertEquals(VALUE_1, p1.value)
+        val name = "My name"
+        val p1 = ReadOnlyMapWrapper(bean, name, VALUE_2)
+        assertEquals(VALUE_2, p1.get())
+        assertEquals(VALUE_2, p1.value)
         assertFalse(this.property.bound)
         assertEquals(bean, p1.bean)
         assertEquals(name, p1.name)
         val r1 = p1.readOnlyProperty
-        assertEquals(VALUE_1, r1.get())
-        assertEquals(VALUE_1, r1.value)
+        assertEquals(VALUE_2, r1.get())
+        assertEquals(VALUE_2, r1.value)
         assertEquals(bean, r1.bean)
         assertEquals(name, r1.name)
     }
 
     @Test
-    fun testLazySet() {
+    fun testLazyMap() {
         attachInvalidationListeners()
 
         // set value once
@@ -154,7 +156,7 @@ class ReadOnlyListWrapperTest {
     }
 
     @Test
-    fun testInternalEagerSet() {
+    fun testInternalEagerMap() {
         attachInternalChangeListener()
 
         // set value once
@@ -181,7 +183,7 @@ class ReadOnlyListWrapperTest {
     }
 
     @Test
-    fun testPublicEagerSet() {
+    fun testPublicEagerMap() {
         attachPublicChangeListener()
 
         // set value once
@@ -208,7 +210,7 @@ class ReadOnlyListWrapperTest {
     }
 
     @Test
-    fun testLazyValueSet() {
+    fun testLazyMapValue() {
         attachInvalidationListeners()
 
         // set value once
@@ -238,7 +240,7 @@ class ReadOnlyListWrapperTest {
     }
 
     @Test
-    fun testInternalEagerValueSet() {
+    fun testInternalEagerMapValue() {
         attachInternalChangeListener()
 
         // set value once
@@ -265,7 +267,7 @@ class ReadOnlyListWrapperTest {
     }
 
     @Test
-    fun testPublicEagerValueSet() {
+    fun testPublicEagerMapValue() {
         attachPublicChangeListener()
 
         // set value once
@@ -292,8 +294,8 @@ class ReadOnlyListWrapperTest {
     }
 
     @Test(expected = RuntimeException::class)
-    fun testSetBoundValue() {
-        val v: ListProperty<Any> = SimpleListProperty(VALUE_1)
+    fun testMapBoundValue() {
+        val v = SimpleMapProperty(VALUE_1)
         this.property.bind(v)
         this.property.set(VALUE_2)
     }
@@ -301,7 +303,7 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testLazyBind_primitive() {
         attachInvalidationListeners()
-        val v = ObservableListValueStub(VALUE_1)
+        val v = ObservableMapValueStub(VALUE_1)
 
         this.property.bind(v)
         assertEquals(VALUE_1, this.property.get())
@@ -341,7 +343,7 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testInternalEagerBind_primitive() {
         attachInternalChangeListener()
-        val v = ObservableListValueStub(VALUE_1)
+        val v = ObservableMapValueStub(VALUE_1)
 
         this.property.bind(v)
         assertEquals(VALUE_1, this.property.get())
@@ -377,7 +379,7 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testPublicEagerBind_primitive() {
         attachPublicChangeListener()
-        val v = ObservableListValueStub(VALUE_1)
+        val v = ObservableMapValueStub(VALUE_1)
 
         this.property.bind(v)
         assertEquals(VALUE_1, this.property.get())
@@ -525,8 +527,8 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testRebind() {
         attachInvalidationListeners()
-        val v1: ListProperty<Any> = SimpleListProperty(VALUE_1)
-        val v2: ListProperty<Any> = SimpleListProperty(VALUE_2)
+        val v1 = SimpleMapProperty(VALUE_1)
+        val v2 = SimpleMapProperty(VALUE_2)
         this.property.bind(v1)
         this.property.get()
         this.readOnlyProperty.get()
@@ -572,7 +574,7 @@ class ReadOnlyListWrapperTest {
     @Test
     fun testUnbind() {
         attachInvalidationListeners()
-        val v: ListProperty<Any> = SimpleListProperty(VALUE_1)
+        val v: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1)
         this.property.bind(v)
         this.property.unbind()
         assertEquals(VALUE_1, this.property.get())
@@ -582,7 +584,7 @@ class ReadOnlyListWrapperTest {
         this.internalInvalidationListener.reset()
         this.publicInvalidationListener.reset()
 
-        // change binding
+        // change old binding
         v.set(VALUE_2)
         assertEquals(VALUE_1, this.property.get())
         this.property.check(0)
@@ -601,7 +603,7 @@ class ReadOnlyListWrapperTest {
 
     @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
-        val v: ListProperty<Any> = SimpleListProperty(VALUE_1)
+        val v: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1)
         val internalListener2 = InvalidationListenerMock()
         val internalListener3 = InvalidationListenerMock()
         val publicListener2 = InvalidationListenerMock()
@@ -654,16 +656,16 @@ class ReadOnlyListWrapperTest {
         this.internalInvalidationListener.check(null, 0)
         this.internalChangeListener.check(null, UNDEFINED, UNDEFINED, 0)
 
-        // no read only property created => no-op
-        val v = ReadOnlyListWrapper<Any>()
+        // no read only property created=> no-op
+        val v = ReadOnlyMapWrapper<Any, Any>()
         v.removeListener(this.internalInvalidationListener)
         v.removeListener(this.internalChangeListener)
     }
 
     @Test
     fun testNoReadOnlyPropertyCreated() {
-        val v1: ListProperty<Any> = SimpleListProperty(VALUE_1)
-        val p1 = ReadOnlyListWrapper<Any>()
+        val v1: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1)
+        val p1 = ReadOnlyMapWrapper<Any, Any>()
 
         p1.set(VALUE_1)
         p1.bind(v1)
@@ -674,57 +676,59 @@ class ReadOnlyListWrapperTest {
 
     @Test
     fun testToString() {
-        val v1: ListProperty<Any> = SimpleListProperty(VALUE_1)
+        val v1: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1)
 
         this.property.set(VALUE_1)
-        Assert.assertEquals("ListProperty [value: $VALUE_1]", this.property.toString())
-        assertEquals("ReadOnlyListProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
+        Assert.assertEquals("MapProperty [value: ${VALUE_1}]", this.property.toString())
+        assertEquals("ReadOnlyMapProperty [value: ${VALUE_1}]", this.readOnlyProperty.toString())
 
         this.property.bind(v1)
-        Assert.assertEquals("ListProperty [bound, invalid]", this.property.toString())
-        assertEquals("ReadOnlyListProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
+        Assert.assertEquals("MapProperty [bound, invalid]", this.property.toString())
+        assertEquals("ReadOnlyMapProperty [value: ${VALUE_1}]", this.readOnlyProperty.toString())
         this.property.get()
-        Assert.assertEquals("ListProperty [bound, value: $VALUE_1]", this.property.toString())
-        assertEquals("ReadOnlyListProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
+        Assert.assertEquals("MapProperty [bound, value: ${VALUE_1}]", this.property.toString())
+        assertEquals("ReadOnlyMapProperty [value: ${VALUE_1}]", this.readOnlyProperty.toString())
         v1.set(VALUE_2)
-        Assert.assertEquals("ListProperty [bound, invalid]", this.property.toString())
-        assertEquals("ReadOnlyListProperty [value: ${VALUE_2}]", this.readOnlyProperty.toString())
+        Assert.assertEquals("MapProperty [bound, invalid]", this.property.toString())
+        assertEquals("ReadOnlyMapProperty [value: ${VALUE_2}]", this.readOnlyProperty.toString())
         this.property.get()
-        Assert.assertEquals("ListProperty [bound, value: ${VALUE_2}]", this.property.toString())
-        assertEquals("ReadOnlyListProperty [value: ${VALUE_2}]", this.readOnlyProperty.toString())
+        Assert.assertEquals("MapProperty [bound, value: ${VALUE_2}]", this.property.toString())
+        assertEquals("ReadOnlyMapProperty [value: ${VALUE_2}]", this.readOnlyProperty.toString())
 
         val bean = Any()
         val name = "My name"
-        val v2 = ReadOnlyListWrapper(bean, name, DEFAULT)
-        assertEquals("ListProperty [bean: $bean, name: My name, value: $DEFAULT]", v2.toString())
-        assertEquals("ReadOnlyListProperty [bean: $bean, name: My name, value: $DEFAULT]",
+        val v2 = ReadOnlyMapWrapper(bean, name, DEFAULT)
+        assertEquals("MapProperty [bean: $bean, name: My name, value: ${DEFAULT}]", v2.toString())
+        assertEquals("ReadOnlyMapProperty [bean: $bean, name: My name, value: ${DEFAULT}]",
                 v2.readOnlyProperty.toString())
 
-        val v3 = ReadOnlyListWrapper(bean, "", DEFAULT)
-        assertEquals("ListProperty [bean: $bean, value: $DEFAULT]", v3.toString())
-        assertEquals("ReadOnlyListProperty [bean: $bean, value: $DEFAULT]", v3.readOnlyProperty.toString())
+        val v3 = ReadOnlyMapWrapper(bean, "", DEFAULT)
+        assertEquals("MapProperty [bean: $bean, value: ${DEFAULT}]", v3.toString())
+        assertEquals("ReadOnlyMapProperty [bean: $bean, value: ${DEFAULT}]", v3.readOnlyProperty.toString())
 
-        val v4 = ReadOnlyListWrapper(null, name, DEFAULT)
-        assertEquals("ListProperty [name: My name, value: $DEFAULT]", v4.toString())
-        assertEquals("ReadOnlyListProperty [name: My name, value: $DEFAULT]", v4.readOnlyProperty.toString())
+        val v4 = ReadOnlyMapWrapper(null, name, DEFAULT)
+        assertEquals("MapProperty [name: My name, value: ${DEFAULT}]", v4.toString())
+        assertEquals("ReadOnlyMapProperty [name: My name, value: ${DEFAULT}]", v4.readOnlyProperty.toString())
     }
 
     @Test
-    fun testBothListChangeListeners() {
-        this.property.set(ObservableCollections.observableArrayList())
+    fun testBothMapChangeListeners() {
+        this.property.set(ObservableCollections.observableHashMap())
 
-        val mLOInternal = MockListObserver<Any>()
-        val mLOPublic = MockListObserver<Any>()
-        this.property.addListener(mLOInternal)
-        this.readOnlyProperty.addListener(mLOPublic)
+        val mMOInternal = MockMapObserver<Any, Any>()
+        val mMOPublic = MockMapObserver<Any, Any>()
+        this.property.addListener(mMOInternal)
+        this.readOnlyProperty.addListener(mMOPublic)
 
-        this.property.add(Any())
+        val k = Any()
+        val v = Any()
+        this.property[k] = v
 
-        mLOInternal.check1AddRemove(this.property, emptyList(), 0, 1)
-        mLOPublic.check1AddRemove(this.readOnlyProperty, emptyList(), 0, 1)
+        mMOInternal.assertAdded(Tuple.tup(k, v))
+        mMOPublic.assertAdded(Tuple.tup(k, v))
     }
 
-    private class ReadOnlyListWrapperMock : ReadOnlyListWrapper<Any>() {
+    private class ReadOnlyMapWrapperMock : ReadOnlyMapWrapper<Any, Any>() {
 
         private var counter: Int = 0
 
@@ -745,13 +749,13 @@ class ReadOnlyListWrapperTest {
 
     companion object {
 
-        private val UNDEFINED: Any? = null
+        private val UNDEFINED: ObservableMap<Any, Any>? = null
 
-        private val DEFAULT: ObservableList<Any>? = null
+        private val DEFAULT: ObservableMap<Any, Any>? = null
 
-        private val VALUE_1: ObservableList<Any> = ObservableCollections.observableArrayList()
+        private val VALUE_1: ObservableMap<Any, Any> = ObservableCollections.observableMap(Collections.emptyMap())
 
-        private val VALUE_2: ObservableList<Any> = ObservableCollections.observableArrayList(Any())
+        private val VALUE_2: ObservableMap<Any, Any> = ObservableCollections.singletonObservableMap(Any(), Any())
 
     }
 
