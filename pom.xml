@@ -8,11 +8,12 @@
     <artifactId>observable-api-kt</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Observations Api Kt</name>
-    <description>API for observations for Kotlin. It is the observations' part of the JavaFX library.</description>
+    <description>API for observations for Kotlin. It is the observations part of the JavaFX library.</description>
     <url>https://github.com/Vinccool96/observations-api-kt</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.4.30</kotlin.version>
+        <kotlin.version>1.4.31</kotlin.version>
         <dokka.version>1.4.20</dokka.version>
     </properties>
 
