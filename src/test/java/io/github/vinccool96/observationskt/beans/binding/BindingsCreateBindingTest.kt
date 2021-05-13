@@ -118,8 +118,7 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
                         }
 
                         override fun check(value0: Number?, value1: Any?) {
-                            org.junit.Assert.assertEquals(value0!!.toDouble(), (value1 as Number).toDouble(),
-                                    EPSILON_DOUBLE)
+                            assertEquals(value0!!.toDouble(), (value1 as Number).toDouble(), EPSILON_DOUBLE)
                         }
 
                     }, PI, -E, 0.0
@@ -133,8 +132,7 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
                         }
 
                         override fun check(value0: Number?, value1: Any?) {
-                            org.junit.Assert.assertEquals(value0!!.toFloat(), (value1 as Number).toFloat(),
-                                    EPSILON_FLOAT)
+                            assertEquals(value0!!.toFloat(), (value1 as Number).toFloat(), EPSILON_FLOAT)
                         }
 
                     }, PI.toFloat(), -E.toFloat(), 0.0f

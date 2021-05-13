@@ -20,8 +20,8 @@ import java.util.*
  * A concrete sub-class of `MapExpression` has to implement the method [ObservableMapValue.get], which provides the
  * actual value of this expression.
  *
- * If the wrapped list of a `MapExpression` is `null`, all methods implementing the `Map` interface will behave as if
- * they were applied to an immutable empty map.
+ * If the wrapped map of a `MapExpression` is `null`, all methods implementing the `MutableMap` interface will behave as
+ * if they were applied to an immutable empty map.
  *
  * @param K the type of the key elements
  * @param V the type of the value elements

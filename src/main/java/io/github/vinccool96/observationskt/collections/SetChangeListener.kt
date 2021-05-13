@@ -25,14 +25,14 @@ fun interface SetChangeListener<E> {
          *
          * @return `true` if a new element was added to the set
          */
-        abstract val added: Boolean
+        abstract val wasAdded: Boolean
 
         /**
          * If this change is a result of removal operation.
          *
          * @return `true` if an old element was removed from the set
          */
-        abstract val removed: Boolean
+        abstract val wasRemoved: Boolean
 
         /**
          * Get the new element. Return `null` if this is a removal.

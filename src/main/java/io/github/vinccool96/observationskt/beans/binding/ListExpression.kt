@@ -17,6 +17,9 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * A concrete sub-class of `ListExpression` has to implement the method [get], which provides the actual value of this
  * expression.
  *
+ * If the wrapped list of a `ListExpression` is `null`, all methods implementing the `MutableList` interface will behave
+ * as if they were applied to an immutable empty list.
+ *
  * @param E the type of the `List` elements.
  */
 @Suppress("PrivatePropertyName")

@@ -1,10 +1,7 @@
 package io.github.vinccool96.observationskt.sun.binding
 
 import io.github.vinccool96.observationskt.beans.WeakListener
-import io.github.vinccool96.observationskt.collections.ListChangeListener
-import io.github.vinccool96.observationskt.collections.MapChangeListener
-import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.collections.ObservableMap
+import io.github.vinccool96.observationskt.collections.*
 import java.lang.ref.WeakReference
 
 @Suppress("UNCHECKED_CAST")
@@ -28,6 +25,16 @@ object ContentBinding {
         return binding
     }
 
+    fun <E> bind(set1: MutableSet<E>, set2: ObservableSet<out E>): Any {
+        checkParameters(set1, set2)
+        val contentBinding: SetContentBinding<E> = SetContentBinding(set1)
+        set1.clear()
+        set1.addAll(set2)
+        set2.removeListener(contentBinding)
+        set2.addListener(contentBinding)
+        return contentBinding
+    }
+
     fun <K, V> bind(map1: MutableMap<K, V>, map2: ObservableMap<out K, out V>): Any {
         checkParameters(map1, map2)
         val contentBinding = MapContentBinding(map1)
@@ -42,6 +49,8 @@ object ContentBinding {
         checkParameters(obj1, obj2)
         if (obj1 is MutableList<*> && obj2 is ObservableList<*>) {
             obj2.removeListener(ListContentBinding(obj1 as MutableList<Any?>))
+        } else if (obj1 is MutableSet<*> && obj2 is ObservableSet<*>) {
+            obj2.removeListener(SetContentBinding(obj2 as ObservableSet<Any?>))
         } else if (obj1 is MutableMap<*, *> && obj2 is ObservableMap<*, *>) {
             obj2.removeListener(MapContentBinding(obj1 as MutableMap<Any?, Any?>))
         }
@@ -88,6 +97,47 @@ object ContentBinding {
 
             if (other is ListContentBinding<*>) {
                 return list === other.listRef.get()
+            }
+
+            return false
+        }
+
+    }
+
+    private class SetContentBinding<E>(set: MutableSet<E>) : SetChangeListener<E>, WeakListener {
+
+        private val setRef: WeakReference<MutableSet<E>> = WeakReference(set)
+
+        override fun onChanged(change: SetChangeListener.Change<out E>) {
+            val set = this.setRef.get()
+            if (set == null) {
+                change.set.removeListener(this)
+            } else {
+                if (change.wasRemoved) {
+                    set.remove(change.elementRemoved as E)
+                } else {
+                    set.add(change.elementAdded as E)
+                }
+            }
+        }
+
+        override val wasGarbageCollected: Boolean
+            get() = this.setRef.get() == null
+
+        override fun hashCode(): Int {
+            return this.setRef.get()?.hashCode() ?: 0
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            val set1 = this.setRef.get() ?: return false
+
+            if (other is SetContentBinding<*>) {
+                val set2 = other.setRef.get()
+                return set1 == set2
             }
 
             return false

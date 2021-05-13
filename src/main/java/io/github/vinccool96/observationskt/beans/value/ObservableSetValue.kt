@@ -11,4 +11,4 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
  * @see ObservableObjectValue
  * @see ObservableValue
  */
-interface ObservableSetValue<E> : ObservableObjectValue<ObservableSet<E>>, ObservableSet<E>
+interface ObservableSetValue<E> : ObservableObjectValue<ObservableSet<E>?>, ObservableSet<E>

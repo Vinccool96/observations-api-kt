@@ -261,10 +261,10 @@ abstract class MapListenerHelper<K, V> : ExpressionHelperBase() {
 
     }
 
-    companion object {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Static methods
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Static methods
+    companion object {
 
         fun <K, V> addListener(helper: MapListenerHelper<K, V>?,
                 listener: InvalidationListener): MapListenerHelper<K, V> {

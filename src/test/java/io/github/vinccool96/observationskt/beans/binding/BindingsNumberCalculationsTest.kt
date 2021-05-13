@@ -171,8 +171,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    org.junit.Assert.assertEquals(op1 + op2, (exp as ObservableFloatValue).get(),
-                                            EPSILON_FLOAT)
+                                    assertEquals(op1 + op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
@@ -203,8 +202,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    org.junit.Assert.assertEquals(op1 - op2, (exp as ObservableFloatValue).get(),
-                                            EPSILON_FLOAT)
+                                    assertEquals(op1 - op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
@@ -235,8 +233,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    org.junit.Assert.assertEquals(op1 * op2, (exp as ObservableFloatValue).get(),
-                                            EPSILON_FLOAT)
+                                    assertEquals(op1 * op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
@@ -267,8 +264,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    org.junit.Assert.assertEquals(op1 / op2, (exp as ObservableFloatValue).get(),
-                                            EPSILON_FLOAT)
+                                    assertEquals(op1 / op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
@@ -299,8 +295,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    org.junit.Assert.assertEquals(min(op1, op2), (exp as ObservableFloatValue).get(),
-                                            EPSILON_FLOAT)
+                                    assertEquals(min(op1, op2), (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
@@ -331,8 +326,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    org.junit.Assert.assertEquals(max(op1, op2), (exp as ObservableFloatValue).get(),
-                                            EPSILON_FLOAT)
+                                    assertEquals(max(op1, op2), (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
@@ -365,8 +359,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Double, op2: Double, exp: ObservableValue<in Double>) {
-                                    org.junit.Assert.assertEquals(op1 + op2, (exp as ObservableDoubleValue).get(),
-                                            EPSILON_DOUBLE)
+                                    assertEquals(op1 + op2, (exp as ObservableDoubleValue).get(), EPSILON_DOUBLE)
                                 }
 
                             },
@@ -397,8 +390,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Double, op2: Double, exp: ObservableValue<in Double>) {
-                                    org.junit.Assert.assertEquals(op1 - op2, (exp as ObservableDoubleValue).get(),
-                                            EPSILON_DOUBLE)
+                                    assertEquals(op1 - op2, (exp as ObservableDoubleValue).get(), EPSILON_DOUBLE)
                                 }
 
                             },
@@ -429,8 +421,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Double, op2: Double, exp: ObservableValue<in Double>) {
-                                    org.junit.Assert.assertEquals(op1 * op2, (exp as ObservableDoubleValue).get(),
-                                            EPSILON_DOUBLE)
+                                    assertEquals(op1 * op2, (exp as ObservableDoubleValue).get(), EPSILON_DOUBLE)
                                 }
 
                             },
@@ -461,8 +452,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Double, op2: Double, exp: ObservableValue<in Double>) {
-                                    org.junit.Assert.assertEquals(op1 / op2, (exp as ObservableDoubleValue).get(),
-                                            EPSILON_DOUBLE)
+                                    assertEquals(op1 / op2, (exp as ObservableDoubleValue).get(), EPSILON_DOUBLE)
                                 }
 
                             },
@@ -493,8 +483,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Double, op2: Double, exp: ObservableValue<in Double>) {
-                                    org.junit.Assert.assertEquals(min(op1, op2), (exp as ObservableDoubleValue).get(),
-                                            EPSILON_DOUBLE)
+                                    assertEquals(min(op1, op2), (exp as ObservableDoubleValue).get(), EPSILON_DOUBLE)
                                 }
 
                             },
@@ -525,8 +514,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                                 }
 
                                 override fun check(op1: Double, op2: Double, exp: ObservableValue<in Double>) {
-                                    org.junit.Assert.assertEquals(max(op1, op2), (exp as ObservableDoubleValue).get(),
-                                            EPSILON_DOUBLE)
+                                    assertEquals(max(op1, op2), (exp as ObservableDoubleValue).get(), EPSILON_DOUBLE)
                                 }
 
                             },

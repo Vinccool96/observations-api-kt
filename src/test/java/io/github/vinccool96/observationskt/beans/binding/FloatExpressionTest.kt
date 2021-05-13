@@ -37,8 +37,8 @@ class FloatExpressionTest {
 
     @Test
     fun testGetters() {
-        org.junit.Assert.assertEquals(this.data.toDouble(), this.op1.doubleValue, EPSILON.toDouble())
-        org.junit.Assert.assertEquals(this.data, this.op1.floatValue, EPSILON)
+        assertEquals(this.data.toDouble(), this.op1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data, this.op1.floatValue, EPSILON)
         assertEquals(this.data.toLong(), this.op1.longValue)
         assertEquals(this.data.toInt(), this.op1.intValue)
     }
@@ -46,67 +46,67 @@ class FloatExpressionTest {
     @Test
     fun testNegation() {
         val binding: FloatBinding = -this.op1
-        org.junit.Assert.assertEquals(-this.data, binding.floatValue, EPSILON)
+        assertEquals(-this.data, binding.floatValue, EPSILON)
     }
 
     @Test
     fun testPlus() {
         val binding1: DoubleBinding = this.op1 + this.double1
-        org.junit.Assert.assertEquals(this.data + this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data + this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 + this.float1
-        org.junit.Assert.assertEquals(this.data + this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data + this.float1, binding2.floatValue, EPSILON)
 
         val binding3: FloatBinding = this.op1 + this.long1
-        org.junit.Assert.assertEquals(this.data + this.long1, binding3.floatValue, EPSILON)
+        assertEquals(this.data + this.long1, binding3.floatValue, EPSILON)
 
         val binding4: FloatBinding = this.op1 + this.int1
-        org.junit.Assert.assertEquals(this.data + this.int1, binding4.floatValue, EPSILON)
+        assertEquals(this.data + this.int1, binding4.floatValue, EPSILON)
     }
 
     @Test
     fun testMinus() {
         val binding1: DoubleBinding = this.op1 - this.double1
-        org.junit.Assert.assertEquals(this.data - this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data - this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 - this.float1
-        org.junit.Assert.assertEquals(this.data - this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data - this.float1, binding2.floatValue, EPSILON)
 
         val binding3: FloatBinding = this.op1 - this.long1
-        org.junit.Assert.assertEquals(this.data - this.long1, binding3.floatValue, EPSILON)
+        assertEquals(this.data - this.long1, binding3.floatValue, EPSILON)
 
         val binding4: FloatBinding = this.op1 - this.int1
-        org.junit.Assert.assertEquals(this.data - this.int1, binding4.floatValue, EPSILON)
+        assertEquals(this.data - this.int1, binding4.floatValue, EPSILON)
     }
 
     @Test
     fun testTimes() {
         val binding1: DoubleBinding = this.op1 * this.double1
-        org.junit.Assert.assertEquals(this.data * this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data * this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 * this.float1
-        org.junit.Assert.assertEquals(this.data * this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data * this.float1, binding2.floatValue, EPSILON)
 
         val binding3: FloatBinding = this.op1 * this.long1
-        org.junit.Assert.assertEquals(this.data * this.long1, binding3.floatValue, EPSILON)
+        assertEquals(this.data * this.long1, binding3.floatValue, EPSILON)
 
         val binding4: FloatBinding = this.op1 * this.int1
-        org.junit.Assert.assertEquals(this.data * this.int1, binding4.floatValue, EPSILON)
+        assertEquals(this.data * this.int1, binding4.floatValue, EPSILON)
     }
 
     @Test
     fun testDividedBy() {
         val binding1: DoubleBinding = this.op1 / this.double1
-        org.junit.Assert.assertEquals(this.data / this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data / this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 / this.float1
-        org.junit.Assert.assertEquals(this.data / this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data / this.float1, binding2.floatValue, EPSILON)
 
         val binding3: FloatBinding = this.op1 / this.long1
-        org.junit.Assert.assertEquals(this.data / this.long1, binding3.floatValue, EPSILON)
+        assertEquals(this.data / this.long1, binding3.floatValue, EPSILON)
 
         val binding4: FloatBinding = this.op1 / this.int1
-        org.junit.Assert.assertEquals(this.data / this.int1, binding4.floatValue, EPSILON)
+        assertEquals(this.data / this.int1, binding4.floatValue, EPSILON)
     }
 
     @Test
@@ -114,11 +114,11 @@ class FloatExpressionTest {
         val valueModel = ObservableFloatValueStub()
         val exp: ObjectExpression<Float> = FloatExpression.floatExpression(valueModel).asObject()
 
-        org.junit.Assert.assertEquals(0.0f, exp.value, EPSILON)
+        assertEquals(0.0f, exp.value, EPSILON)
         valueModel.set(this.data)
-        org.junit.Assert.assertEquals(this.data, exp.value, EPSILON)
+        assertEquals(this.data, exp.value, EPSILON)
         valueModel.set(this.float1)
-        org.junit.Assert.assertEquals(this.float1, exp.value, EPSILON)
+        assertEquals(this.float1, exp.value, EPSILON)
     }
 
     @Test
@@ -129,11 +129,11 @@ class FloatExpressionTest {
         assertTrue(exp is FloatBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
 
-        org.junit.Assert.assertEquals(0.0f, exp.floatValue, EPSILON)
+        assertEquals(0.0f, exp.floatValue, EPSILON)
         valueModel.set(this.data)
-        org.junit.Assert.assertEquals(this.data, exp.floatValue, EPSILON)
+        assertEquals(this.data, exp.floatValue, EPSILON)
         valueModel.set(this.float1)
-        org.junit.Assert.assertEquals(this.float1, exp.floatValue, EPSILON)
+        assertEquals(this.float1, exp.floatValue, EPSILON)
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, FloatExpression.floatExpression(this.op1))
@@ -147,11 +147,11 @@ class FloatExpressionTest {
         assertTrue(exp is FloatBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
 
-        org.junit.Assert.assertEquals(0.0f, exp.floatValue, EPSILON)
+        assertEquals(0.0f, exp.floatValue, EPSILON)
         valueModel.set(this.data)
-        org.junit.Assert.assertEquals(this.data, exp.floatValue, EPSILON)
+        assertEquals(this.data, exp.floatValue, EPSILON)
         valueModel.set(this.float1)
-        org.junit.Assert.assertEquals(this.float1, exp.floatValue, EPSILON)
+        assertEquals(this.float1, exp.floatValue, EPSILON)
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, FloatExpression.floatExpression(this.op1))

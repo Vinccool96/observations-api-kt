@@ -491,6 +491,9 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Static methods
+
     companion object {
 
         fun <E> addListener(helper: ListExpressionHelper<E>?, observable: ObservableListValue<E>,

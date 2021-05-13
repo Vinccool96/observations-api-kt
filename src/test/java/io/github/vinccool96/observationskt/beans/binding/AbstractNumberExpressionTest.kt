@@ -57,16 +57,16 @@ class AbstractNumberExpressionTest {
     @Test
     fun testArithmetic() {
         var binding: NumberBinding = op1 + op2
-        org.junit.Assert.assertEquals(data1 + data2, binding.doubleValue, EPSILON)
+        assertEquals(data1 + data2, binding.doubleValue, EPSILON)
 
         binding = op1 - op2
-        org.junit.Assert.assertEquals(data1 - data2, binding.doubleValue, EPSILON)
+        assertEquals(data1 - data2, binding.doubleValue, EPSILON)
 
         binding = op1 * op2
-        org.junit.Assert.assertEquals(data1 * data2, binding.doubleValue, EPSILON)
+        assertEquals(data1 * data2, binding.doubleValue, EPSILON)
 
         binding = op1 / op2
-        org.junit.Assert.assertEquals(data1 / data2, binding.doubleValue, EPSILON)
+        assertEquals(data1 / data2, binding.doubleValue, EPSILON)
     }
 
     @Test
@@ -354,18 +354,18 @@ class AbstractNumberExpressionTest {
         var exp: NumberExpression = NumberExpressionBase.numberExpression(double2)
         assertTrue(exp is DoubleBinding)
         assertEquals(ObservableCollections.singletonObservableList(double2), exp.dependencies)
-        org.junit.Assert.assertEquals(double1, exp.doubleValue, EPSILON)
+        assertEquals(double1, exp.doubleValue, EPSILON)
         double2.set(0.0)
-        org.junit.Assert.assertEquals(0.0, exp.doubleValue, EPSILON)
+        assertEquals(0.0, exp.doubleValue, EPSILON)
 
         val float2 = ObservableFloatValueStub()
         float2.set(float1)
         exp = NumberExpressionBase.numberExpression(float2)
         assertTrue(exp is FloatBinding)
         assertEquals(ObservableCollections.singletonObservableList(float2), exp.dependencies)
-        org.junit.Assert.assertEquals(float1, exp.floatValue, EPSILON.toFloat())
+        assertEquals(float1, exp.floatValue, EPSILON.toFloat())
         float2.set(0.0F)
-        org.junit.Assert.assertEquals(0.0F, exp.floatValue, EPSILON.toFloat())
+        assertEquals(0.0F, exp.floatValue, EPSILON.toFloat())
 
         val long2 = ObservableLongValueStub()
         long2.set(long1)

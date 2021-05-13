@@ -7,6 +7,7 @@ import io.github.vinccool96.observationskt.beans.value.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableMap
+import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.sun.binding.*
 import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
@@ -401,6 +402,33 @@ object Bindings {
     }
 
     /**
+     * Generates a bidirectional binding (or "bind with inverse") between two instances of [ObservableSet].
+     *
+     * A bidirectional binding is a binding that works in both directions. If two properties `a` and `b` are linked with
+     * a bidirectional binding and the value of `a` changes, `b` is set to the same value automatically. And vice versa,
+     * if `b` changes, `a` is set to the same value.
+     *
+     * Only the content of the two sets is synchronized, which means that both sets are different, but they contain the
+     * same elements.
+     *
+     * A bidirectional content-binding can be removed with [unbindContentBidirectional].
+     *
+     * Note: this implementation of a bidirectional binding behaves differently from all other bindings here in two
+     * important aspects. A property that is linked to another property with a bidirectional binding can still be set
+     * (usually bindings would throw an exception). Secondly bidirectional bindings are calculated eagerly, i.e. a bound
+     * property is updated immediately.
+     *
+     * @param E the type of the set elements
+     * @param set1 the first `ObservableSet<E>`
+     * @param set2 the second `ObservableSet<E>`
+     *
+     * @throws IllegalArgumentException if `set1 === set2`
+     */
+    fun <E> bindContentBidirectional(set1: ObservableSet<E>, set2: ObservableSet<E>) {
+        BidirectionalContentBinding.bind(set1, set2)
+    }
+
+    /**
      * Generates a bidirectional binding (or "bind with inverse") between two instances of [ObservableMap].
      *
      * A bidirectional binding is a binding that works in both directions. If two properties `a` and `b` are linked with
@@ -421,6 +449,8 @@ object Bindings {
      * @param V the type of the value elements
      * @param map1 the first `ObservableMap<K, V>`
      * @param map2 the second `ObservableMap<K, V>`
+     *
+     * @throws IllegalArgumentException if `map1 === map2`
      */
     fun <K, V> bindContentBidirectional(map1: ObservableMap<K, V>, map2: ObservableMap<K, V>) {
         BidirectionalContentBinding.bind(map1, map2)
@@ -453,6 +483,27 @@ object Bindings {
      */
     fun <E> bindContent(list1: MutableList<E>, list2: ObservableList<out E>) {
         ContentBinding.bind(list1, list2)
+    }
+
+    /**
+     * Generates a content binding between an [ObservableSet] and a [MutableSet].
+     *
+     * A content binding ensures that the `MutableSet` contains the same elements as the `ObservableSet`. If the content
+     * of the `ObservableSet` changes, the `MutableSet` will be updated automatically.
+     *
+     * Once a `MutableSet` is bound to an `ObservableSet`, the `MutableSet` must not be changed directly anymore. Doing
+     * so would lead to unexpected results.
+     *
+     * A content-binding can be removed with [unbindContent].
+     *
+     * @param E the type of the `MutableSet` elements
+     * @param set1 the `MutableSet`
+     * @param set2 the `ObservableSet`
+     *
+     * @throws IllegalArgumentException if `set1 == set2`
+     */
+    fun <E> bindContent(set1: MutableSet<E>, set2: ObservableSet<out E>) {
+        ContentBinding.bind(set1, set2)
     }
 
     /**
@@ -3155,7 +3206,7 @@ object Bindings {
     // boolean
     // =================================================================================================================
 
-    class BooleanAndBinding(internal val op1: ObservableBooleanValue, private val op2: ObservableBooleanValue) :
+    private class BooleanAndBinding(val op1: ObservableBooleanValue, private val op2: ObservableBooleanValue) :
             BooleanBinding() {
 
         private val observer: InvalidationListener
@@ -3214,7 +3265,7 @@ object Bindings {
         return BooleanAndBinding(op1, op2)
     }
 
-    class BooleanOrBinding(internal val op1: ObservableBooleanValue, private val op2: ObservableBooleanValue) :
+    private class BooleanOrBinding(val op1: ObservableBooleanValue, private val op2: ObservableBooleanValue) :
             BooleanBinding() {
 
         private val observer: InvalidationListener
@@ -5041,6 +5092,99 @@ object Bindings {
         }
     }
 
+    // Set
+    // =================================================================================================================
+
+    /**
+     * Creates a new [IntBinding] that contains the size of an [ObservableSet].
+     *
+     * @param op the `ObservableSet`
+     * @param E the type of the `MutableSet` elements
+     *
+     * @return the new `IntBinding`
+     */
+    fun <E> size(op: ObservableSet<E>): IntBinding {
+        return object : IntBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                return op.size
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a given [ObservableSet] is empty.
+     *
+     * @param op the `ObservableSet`
+     * @param E the type of the `MutableSet` elements
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <E> isEmpty(op: ObservableSet<E>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return op.isEmpty()
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a given [ObservableSet] is not empty.
+     *
+     * @param op the `ObservableSet`
+     * @param E the type of the `MutableSet` elements
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <E> isNotEmpty(op: ObservableSet<E>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return op.isNotEmpty()
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
     // Map
     // =================================================================================================================
 
@@ -5051,7 +5195,7 @@ object Bindings {
      * @param K type of the key elements of the `Map`
      * @param V type of the value elements of the `Map`
      *
-     * @return the new `IntegerBinding`
+     * @return the new `IntBinding`
      */
     fun <K, V> size(op: ObservableMap<K, V>): IntBinding {
         return object : IntBinding() {

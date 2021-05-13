@@ -11,6 +11,9 @@ import io.github.vinccool96.observationskt.sun.binding.MapExpressionHelper
  * Base class for all readonly properties wrapping an {@link ObservableMap}. This class provides a default
  * implementation to attach listener.
  *
+ * @param K the type of the key elements of the map
+ * @param V the type of the value elements of the map
+ *
  * @see ReadOnlyMapProperty
  */
 abstract class ReadOnlyMapPropertyBase<K, V> : ReadOnlyMapProperty<K, V>() {
@@ -72,7 +75,7 @@ abstract class ReadOnlyMapPropertyBase<K, V> : ReadOnlyMapProperty<K, V>() {
      * This method needs to be called if the reference to the [ObservableMap] changes.
      *
      * It sends notifications to all attached [InvalidationListeners][InvalidationListener],
-     * [ChangeListeners][ChangeListener], and [MapChangeListener].
+     * [ChangeListeners][ChangeListener], and [MapChangeListeners][MapChangeListener].
      *
      * This method needs to be called, if the value of this property changes.
      */
@@ -83,8 +86,8 @@ abstract class ReadOnlyMapPropertyBase<K, V> : ReadOnlyMapProperty<K, V>() {
     /**
      * This method needs to be called if the content of the referenced [ObservableMap] changes.
      *
-     * Sends notifications to all attached [InvalidationListeners][InvalidationListener],
-     * [ChangeListeners][ChangeListener], and [MapChangeListener].
+     * It sends notifications to all attached [InvalidationListeners][InvalidationListener],
+     * [ChangeListeners][ChangeListener], and [MapChangeListeners][MapChangeListener].
      *
      * This method is called when the content of the list changes.
      *

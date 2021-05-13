@@ -20,6 +20,7 @@ class SimpleDoublePropertyTest {
         assertEquals(DEFAULT_BEAN, v1.bean)
         assertEquals(DEFAULT_NAME, v1.name)
         assertEquals(VALUE_1, v1.get())
+
         val v2: DoubleProperty = SimpleDoubleProperty(DEFAULT_VALUE)
         assertEquals(DEFAULT_BEAN, v2.bean)
         assertEquals(DEFAULT_NAME, v2.name)
@@ -34,6 +35,7 @@ class SimpleDoublePropertyTest {
         assertEquals(bean, v.bean)
         assertEquals(name, v.name)
         assertEquals(DEFAULT_VALUE, v.get())
+
         val v2: DoubleProperty = SimpleDoubleProperty(bean, null)
         assertEquals(bean, v2.bean)
         assertEquals(null, v2.name)
@@ -48,14 +50,17 @@ class SimpleDoublePropertyTest {
         assertEquals(bean, v1.bean)
         assertEquals(name, v1.name)
         assertEquals(VALUE_1, v1.get())
+
         val v2: DoubleProperty = SimpleDoubleProperty(bean, name, DEFAULT_VALUE)
         assertEquals(bean, v2.bean)
         assertEquals(name, v2.name)
         assertEquals(DEFAULT_VALUE, v2.get())
+
         val v3: DoubleProperty = SimpleDoubleProperty(bean, null, VALUE_1)
         assertEquals(bean, v3.bean)
         assertEquals(null, v3.name)
         assertEquals(VALUE_1, v3.get())
+
         val v4: DoubleProperty = SimpleDoubleProperty(bean, null, DEFAULT_VALUE)
         assertEquals(bean, v4.bean)
         assertEquals(null, v4.name)

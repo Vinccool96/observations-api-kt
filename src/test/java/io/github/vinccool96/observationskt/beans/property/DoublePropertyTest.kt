@@ -18,7 +18,7 @@ class DoublePropertyTest {
     fun testValueSet_Null() {
         val p: DoubleProperty = SimpleDoubleProperty(VALUE_1)
         p.value = null
-        org.junit.Assert.assertEquals(DEFAULT, p.get(), EPSILON)
+        assertEquals(DEFAULT, p.get(), EPSILON)
         log.checkFine(NullPointerException::class.java)
     }
 
@@ -28,26 +28,26 @@ class DoublePropertyTest {
         val p2: DoubleProperty = SimpleDoubleProperty(VALUE_1)
 
         p1.bindBidirectional(p2)
-        org.junit.Assert.assertEquals(VALUE_1, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_1, p2.get(), EPSILON)
+        assertEquals(VALUE_1, p1.get(), EPSILON)
+        assertEquals(VALUE_1, p2.get(), EPSILON)
 
         p1.set(VALUE_2)
-        org.junit.Assert.assertEquals(VALUE_2, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_2, p2.get(), EPSILON)
+        assertEquals(VALUE_2, p1.get(), EPSILON)
+        assertEquals(VALUE_2, p2.get(), EPSILON)
 
         p2.set(VALUE_1)
-        org.junit.Assert.assertEquals(VALUE_1, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_1, p2.get(), EPSILON)
+        assertEquals(VALUE_1, p1.get(), EPSILON)
+        assertEquals(VALUE_1, p2.get(), EPSILON)
 
         p1.unbindBidirectional(p2)
         p1.set(VALUE_2)
-        org.junit.Assert.assertEquals(VALUE_2, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_1, p2.get(), EPSILON)
+        assertEquals(VALUE_2, p1.get(), EPSILON)
+        assertEquals(VALUE_1, p2.get(), EPSILON)
 
         p1.set(VALUE_1)
         p2.set(VALUE_2)
-        org.junit.Assert.assertEquals(VALUE_1, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_2, p2.get(), EPSILON)
+        assertEquals(VALUE_1, p1.get(), EPSILON)
+        assertEquals(VALUE_2, p2.get(), EPSILON)
     }
 
     @Test
@@ -86,14 +86,14 @@ class DoublePropertyTest {
         val valueModel: DoubleProperty = SimpleDoubleProperty(2.0)
         val exp: ObjectProperty<Double> = valueModel.asObject()
 
-        org.junit.Assert.assertEquals(2.0, exp.get(), EPSILON)
+        assertEquals(2.0, exp.get(), EPSILON)
         valueModel.set(-4354.3)
-        org.junit.Assert.assertEquals(-4354.3, exp.get(), EPSILON)
+        assertEquals(-4354.3, exp.get(), EPSILON)
         valueModel.set(5e11)
-        org.junit.Assert.assertEquals(5e11, exp.get(), EPSILON)
+        assertEquals(5e11, exp.get(), EPSILON)
 
         exp.set(1234.0)
-        org.junit.Assert.assertEquals(1234.0, valueModel.get(), EPSILON)
+        assertEquals(1234.0, valueModel.get(), EPSILON)
     }
 
     @Test
@@ -101,14 +101,14 @@ class DoublePropertyTest {
         val valueModel: ObjectProperty<Double?> = SimpleObjectProperty(null)
         val exp: DoubleProperty = DoubleProperty.doubleProperty(valueModel)
 
-        org.junit.Assert.assertEquals(0.0, exp.get(), EPSILON)
+        assertEquals(0.0, exp.get(), EPSILON)
         valueModel.set(-4354.3)
-        org.junit.Assert.assertEquals(-4354.3, exp.get(), EPSILON)
+        assertEquals(-4354.3, exp.get(), EPSILON)
         valueModel.set(5e11)
-        org.junit.Assert.assertEquals(5e11, exp.get(), EPSILON)
+        assertEquals(5e11, exp.get(), EPSILON)
 
         exp.set(1234.0)
-        org.junit.Assert.assertEquals(1234.0, valueModel.get()!!, EPSILON)
+        assertEquals(1234.0, valueModel.get()!!, EPSILON)
     }
 
     private class DoublePropertyStub(override val bean: Any?, override val name: String?) : DoubleProperty() {

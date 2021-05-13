@@ -626,6 +626,9 @@ abstract class MapExpressionHelper<K, V> protected constructor(protected val obs
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Static methods
+
     companion object {
 
         fun <K, V> addListener(helper: MapExpressionHelper<K, V>?, observable: ObservableMapValue<K, V>,
