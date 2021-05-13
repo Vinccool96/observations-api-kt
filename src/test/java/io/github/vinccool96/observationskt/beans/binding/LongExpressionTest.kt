@@ -37,8 +37,8 @@ class LongExpressionTest {
 
     @Test
     fun testGetters() {
-        org.junit.Assert.assertEquals(this.data.toDouble(), this.op1.doubleValue, EPSILON.toDouble())
-        org.junit.Assert.assertEquals(this.data.toFloat(), this.op1.floatValue, EPSILON)
+        assertEquals(this.data.toDouble(), this.op1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data.toFloat(), this.op1.floatValue, EPSILON)
         assertEquals(this.data, this.op1.longValue)
         assertEquals(this.data.toInt(), this.op1.intValue)
     }
@@ -52,10 +52,10 @@ class LongExpressionTest {
     @Test
     fun testPlus() {
         val binding1: DoubleBinding = this.op1 + this.double1
-        org.junit.Assert.assertEquals(this.data + this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data + this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 + this.float1
-        org.junit.Assert.assertEquals(this.data + this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data + this.float1, binding2.floatValue, EPSILON)
 
         val binding3: LongBinding = this.op1 + this.long1
         assertEquals(this.data + this.long1, binding3.longValue)
@@ -67,10 +67,10 @@ class LongExpressionTest {
     @Test
     fun testMinus() {
         val binding1: DoubleBinding = this.op1 - this.double1
-        org.junit.Assert.assertEquals(this.data - this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data - this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 - this.float1
-        org.junit.Assert.assertEquals(this.data - this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data - this.float1, binding2.floatValue, EPSILON)
 
         val binding3: LongBinding = this.op1 - this.long1
         assertEquals(this.data - this.long1, binding3.longValue)
@@ -82,10 +82,10 @@ class LongExpressionTest {
     @Test
     fun testTimes() {
         val binding1: DoubleBinding = this.op1 * this.double1
-        org.junit.Assert.assertEquals(this.data * this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data * this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 * this.float1
-        org.junit.Assert.assertEquals(this.data * this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data * this.float1, binding2.floatValue, EPSILON)
 
         val binding3: LongBinding = this.op1 * this.long1
         assertEquals(this.data * this.long1, binding3.longValue)
@@ -97,10 +97,10 @@ class LongExpressionTest {
     @Test
     fun testDividedBy() {
         val binding1: DoubleBinding = this.op1 / this.double1
-        org.junit.Assert.assertEquals(this.data / this.double1, binding1.doubleValue, EPSILON.toDouble())
+        assertEquals(this.data / this.double1, binding1.doubleValue, EPSILON.toDouble())
 
         val binding2: FloatBinding = this.op1 / this.float1
-        org.junit.Assert.assertEquals(this.data / this.float1, binding2.floatValue, EPSILON)
+        assertEquals(this.data / this.float1, binding2.floatValue, EPSILON)
 
         val binding3: LongBinding = this.op1 * this.long1
         assertEquals(this.data * this.long1, binding3.longValue)

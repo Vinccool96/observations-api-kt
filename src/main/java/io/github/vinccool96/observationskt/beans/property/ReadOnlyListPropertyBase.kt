@@ -72,7 +72,7 @@ abstract class ReadOnlyListPropertyBase<E> : ReadOnlyListProperty<E>() {
      * This method needs to be called if the reference to the [ObservableList] changes.
      *
      * It sends notifications to all attached [InvalidationListeners][InvalidationListener],
-     * [ChangeListeners][ChangeListener], and [ListChangeListener].
+     * [ChangeListeners][ChangeListener], and [ListChangeListeners][ListChangeListener].
      *
      * This method needs to be called, if the value of this property changes.
      */
@@ -83,8 +83,8 @@ abstract class ReadOnlyListPropertyBase<E> : ReadOnlyListProperty<E>() {
     /**
      * This method needs to be called if the content of the referenced [ObservableList] changes.
      *
-     * Sends notifications to all attached [InvalidationListeners][InvalidationListener],
-     * [ChangeListeners][ChangeListener], and [ListChangeListener].
+     * It sends notifications to all attached [InvalidationListeners][InvalidationListener],
+     * [ChangeListeners][ChangeListener], and [ListChangeListeners][ListChangeListener].
      *
      * This method is called when the content of the list changes.
      *

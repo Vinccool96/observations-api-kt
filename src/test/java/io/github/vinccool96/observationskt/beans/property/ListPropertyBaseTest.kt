@@ -700,7 +700,7 @@ class ListPropertyBaseTest {
         val bean = Any()
         val name = "My name"
         val v1: ListProperty<Any> = ListPropertyMock(bean, name)
-        assertEquals("ListProperty [bean: $bean, name: My name, value: null]", v1.toString())
+        assertEquals("ListProperty [bean: $bean, name: My name, value: ${null}]", v1.toString())
         v1.set(value1)
         assertEquals("ListProperty [bean: $bean, name: My name, value: $value1]", v1.toString())
         v1.set(value0)
@@ -714,14 +714,14 @@ class ListPropertyBaseTest {
         assertEquals("ListProperty [bean: $bean, name: My name, value: $value0]", v1.toString())
 
         val v3: ListProperty<Any> = ListPropertyMock(bean, NO_NAME_2)
-        assertEquals("ListProperty [bean: $bean, value: null]", v3.toString())
+        assertEquals("ListProperty [bean: $bean, value: ${null}]", v3.toString())
         v3.set(value1)
         assertEquals("ListProperty [bean: $bean, value: $value1]", v3.toString())
         v1.set(value0)
         assertEquals("ListProperty [bean: $bean, name: My name, value: $value0]", v1.toString())
 
         val v4: ListProperty<Any> = ListPropertyMock(NO_BEAN, name)
-        assertEquals("ListProperty [name: My name, value: " + null + "]", v4.toString())
+        assertEquals("ListProperty [name: My name, value: ${null}]", v4.toString())
         v4.set(value1)
         v1.set(value0)
         assertEquals("ListProperty [bean: $bean, name: My name, value: $value0]", v1.toString())
@@ -769,7 +769,7 @@ class ListPropertyBaseTest {
 
         private val NO_NAME_1: String? = null
 
-        private val NO_NAME_2: String? = ""
+        private const val NO_NAME_2: String = ""
 
         private val UNDEFINED: ObservableList<Any> = ObservableCollections.observableArrayList()
 

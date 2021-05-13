@@ -3,10 +3,11 @@ package io.github.vinccool96.observationskt.beans.binding
 import io.github.vinccool96.observationskt.beans.property.SimpleStringProperty
 import io.github.vinccool96.observationskt.beans.property.StringProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableIntValueStub
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class StringExpressionTest {
 
@@ -199,7 +200,7 @@ class StringExpressionTest {
         assertEquals(this.data1, this.op1.get())
         assertEquals(this.data1, this.op1.valueSafe)
         this.op1.set(null)
-        Assert.assertNull(this.op1.get())
+        assertNull(this.op1.get())
         assertEquals("", this.op1.valueSafe)
     }
 
@@ -207,8 +208,8 @@ class StringExpressionTest {
     fun testFactory() {
         val valueModel = ObservableIntValueStub()
         val exp = StringExpression.stringExpression(valueModel)
-        Assert.assertTrue(exp is StringBinding)
-        DependencyUtils.checkDependencies((exp as StringBinding).dependencies, valueModel)
+        assertTrue(exp is StringBinding)
+        DependencyUtils.checkDependencies(exp.dependencies, valueModel)
         assertEquals("0", exp.get())
         valueModel.set(42)
         assertEquals("42", exp.get())

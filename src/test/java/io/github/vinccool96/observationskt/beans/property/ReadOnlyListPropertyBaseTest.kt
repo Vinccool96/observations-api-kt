@@ -14,7 +14,7 @@ class ReadOnlyListPropertyBaseTest {
 
     private lateinit var invalidationListener: InvalidationListenerMock
 
-    private lateinit var changeListener: ChangeListenerMock<ObservableList<Any?>?>
+    private lateinit var changeListener: ChangeListenerMock<ObservableList<Any>?>
 
     @Before
     fun setUp() {
@@ -49,19 +49,19 @@ class ReadOnlyListPropertyBaseTest {
         this.changeListener.check(null, UNDEFINED, UNDEFINED, 0)
     }
 
-    private class ReadOnlyPropertyMock : ReadOnlyListPropertyBase<Any?>() {
+    private class ReadOnlyPropertyMock : ReadOnlyListPropertyBase<Any>() {
 
-        private var list: ObservableList<Any?>? = DEFAULT
+        private var list: ObservableList<Any>? = DEFAULT
 
         override val bean: Any? = null // not used
 
         override val name: String? = null // not used
 
-        override fun get(): ObservableList<Any?>? {
+        override fun get(): ObservableList<Any>? {
             return this.list
         }
 
-        fun set(list: ObservableList<Any?>?) {
+        fun set(list: ObservableList<Any>?) {
             this.list = list
             fireValueChangedEvent()
         }
@@ -76,13 +76,13 @@ class ReadOnlyListPropertyBaseTest {
 
     companion object {
 
-        private val UNDEFINED: ObservableList<Any?>? = null
+        private val UNDEFINED: ObservableList<Any>? = null
 
-        private val DEFAULT: ObservableList<Any?>? = null
+        private val DEFAULT: ObservableList<Any>? = null
 
-        private val VALUE_1: ObservableList<Any?> = ObservableCollections.observableArrayList()
+        private val VALUE_1: ObservableList<Any> = ObservableCollections.observableArrayList()
 
-        private val VALUE_2: ObservableList<Any?> = ObservableCollections.observableArrayList(Any())
+        private val VALUE_2: ObservableList<Any> = ObservableCollections.observableArrayList(Any())
 
     }
 

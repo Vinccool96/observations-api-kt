@@ -4,16 +4,14 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableStringValue
 
 /**
- * This class provides a full implementation of a {@link Property} wrapping a {@code String} value.
- * <p>
- * The value of a {@code StringProperty} can be get and set with {@link #get()}, {@link #getValue()}, {@link
- * #set(Object)}, and {@link #setValue(String)}.
- * <p>
- * A property can be bound and unbound unidirectional with {@link #bind(ObservableValue)} and {@link #unbind()}.
- * Bidirectional bindings can be created and removed with {@link #bindBidirectional(Property)} and {@link
- * #unbindBidirectional(Property)}.
- * <p>
- * The context of a {@code StringProperty} can be read with {@link #getBean()} and {@link #getName()}.
+ * This class provides a full implementation of a [Property] wrapping a `String` value.
+ *
+ * The value of a `StringProperty` can be get and set with [get], [set], and [value].
+ *
+ * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
+ * and removed with [bindBidirectional] and [unbindBidirectional].
+ *
+ * The context of a `StringProperty` can be read with [bean] and [name].
  *
  * @see io.github.vinccool96.observationskt.beans.value.ObservableStringValue
  * @see WritableStringValue

@@ -2,8 +2,6 @@ package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,6 +9,8 @@ import org.junit.runners.Parameterized
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(Parameterized::class)
 class BindingsNumberCastTest(private val func: Functions) {

@@ -29,16 +29,16 @@ class ChangeListenerMock<T>(private val undefined: T) : ChangeListener<T> {
     fun check(observable: ObservableValue<out T>?, oldValue: T, newValue: T, counter: Int) {
         assertEquals(observable, this.valueModel)
         if (oldValue is Double && this.oldValue is Double) {
-            org.junit.Assert.assertEquals(oldValue, this.oldValue as Double, EPSILON_DOUBLE)
+            assertEquals(oldValue, this.oldValue as Double, EPSILON_DOUBLE)
         } else if (oldValue is Float && this.oldValue is Float) {
-            org.junit.Assert.assertEquals(oldValue, this.oldValue as Float, EPSILON_FLOAT)
+            assertEquals(oldValue, this.oldValue as Float, EPSILON_FLOAT)
         } else {
             assertEquals(oldValue, this.oldValue)
         }
         if (newValue is Double && this.newValue is Double) {
-            org.junit.Assert.assertEquals(newValue, this.newValue as Double, EPSILON_DOUBLE)
+            assertEquals(newValue, this.newValue as Double, EPSILON_DOUBLE)
         } else if (newValue is Float && this.newValue is Float) {
-            org.junit.Assert.assertEquals(newValue, this.newValue as Float, EPSILON_FLOAT)
+            assertEquals(newValue, this.newValue as Float, EPSILON_FLOAT)
         } else {
             assertEquals(newValue, this.newValue)
         }

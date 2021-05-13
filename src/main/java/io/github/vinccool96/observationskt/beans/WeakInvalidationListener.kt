@@ -20,7 +20,7 @@ class WeakInvalidationListener : InvalidationListener, WeakListener {
     private val ref: WeakReference<InvalidationListener>
 
     /**
-     * The constructor of {@code WeakInvalidationListener}.
+     * The constructor of `WeakInvalidationListener`.
      *
      * @param listener The original listener that should be notified
      */

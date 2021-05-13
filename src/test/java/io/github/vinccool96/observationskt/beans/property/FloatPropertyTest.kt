@@ -18,7 +18,7 @@ class FloatPropertyTest {
     fun testValueSet_Null() {
         val p: FloatProperty = SimpleFloatProperty(VALUE_1)
         p.value = null
-        org.junit.Assert.assertEquals(DEFAULT, p.get(), EPSILON)
+        assertEquals(DEFAULT, p.get(), EPSILON)
         log.checkFine(NullPointerException::class.java)
     }
 
@@ -28,26 +28,26 @@ class FloatPropertyTest {
         val p2: FloatProperty = SimpleFloatProperty(VALUE_1)
 
         p1.bindBidirectional(p2)
-        org.junit.Assert.assertEquals(VALUE_1, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_1, p2.get(), EPSILON)
+        assertEquals(VALUE_1, p1.get(), EPSILON)
+        assertEquals(VALUE_1, p2.get(), EPSILON)
 
         p1.set(VALUE_2)
-        org.junit.Assert.assertEquals(VALUE_2, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_2, p2.get(), EPSILON)
+        assertEquals(VALUE_2, p1.get(), EPSILON)
+        assertEquals(VALUE_2, p2.get(), EPSILON)
 
         p2.set(VALUE_1)
-        org.junit.Assert.assertEquals(VALUE_1, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_1, p2.get(), EPSILON)
+        assertEquals(VALUE_1, p1.get(), EPSILON)
+        assertEquals(VALUE_1, p2.get(), EPSILON)
 
         p1.unbindBidirectional(p2)
         p1.set(VALUE_2)
-        org.junit.Assert.assertEquals(VALUE_2, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_1, p2.get(), EPSILON)
+        assertEquals(VALUE_2, p1.get(), EPSILON)
+        assertEquals(VALUE_1, p2.get(), EPSILON)
 
         p1.set(VALUE_1)
         p2.set(VALUE_2)
-        org.junit.Assert.assertEquals(VALUE_1, p1.get(), EPSILON)
-        org.junit.Assert.assertEquals(VALUE_2, p2.get(), EPSILON)
+        assertEquals(VALUE_1, p1.get(), EPSILON)
+        assertEquals(VALUE_2, p2.get(), EPSILON)
     }
 
     @Test
@@ -86,14 +86,14 @@ class FloatPropertyTest {
         val valueModel: FloatProperty = SimpleFloatProperty(2.0f)
         val exp: ObjectProperty<Float> = valueModel.asObject()
 
-        org.junit.Assert.assertEquals(2.0f, exp.get(), EPSILON)
+        assertEquals(2.0f, exp.get(), EPSILON)
         valueModel.set(-4354.3f)
-        org.junit.Assert.assertEquals(-4354.3f, exp.get(), EPSILON)
+        assertEquals(-4354.3f, exp.get(), EPSILON)
         valueModel.set(5e11f)
-        org.junit.Assert.assertEquals(5e11f, exp.get(), EPSILON)
+        assertEquals(5e11f, exp.get(), EPSILON)
 
         exp.set(1234.0f)
-        org.junit.Assert.assertEquals(1234.0f, valueModel.get(), EPSILON)
+        assertEquals(1234.0f, valueModel.get(), EPSILON)
     }
 
     @Test
@@ -101,14 +101,14 @@ class FloatPropertyTest {
         val valueModel: ObjectProperty<Float?> = SimpleObjectProperty(null)
         val exp: FloatProperty = FloatProperty.floatProperty(valueModel)
 
-        org.junit.Assert.assertEquals(0.0f, exp.get(), EPSILON)
+        assertEquals(0.0f, exp.get(), EPSILON)
         valueModel.set(-4354.3f)
-        org.junit.Assert.assertEquals(-4354.3f, exp.get(), EPSILON)
+        assertEquals(-4354.3f, exp.get(), EPSILON)
         valueModel.set(5e11f)
-        org.junit.Assert.assertEquals(5e11f, exp.get(), EPSILON)
+        assertEquals(5e11f, exp.get(), EPSILON)
 
         exp.set(1234.0f)
-        org.junit.Assert.assertEquals(1234.0f, valueModel.get()!!, EPSILON)
+        assertEquals(1234.0f, valueModel.get()!!, EPSILON)
     }
 
     private class FloatPropertyStub(override val bean: Any?, override val name: String?) : FloatProperty() {

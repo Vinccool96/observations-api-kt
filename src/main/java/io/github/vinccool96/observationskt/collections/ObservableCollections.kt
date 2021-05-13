@@ -7,9 +7,6 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections.syn
 import io.github.vinccool96.observationskt.sun.collections.*
 import io.github.vinccool96.observationskt.util.Callback
 import java.util.*
-import kotlin.NoSuchElementException
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Utility object that consists of methods that are 1:1 copies of [Collections] methods.
@@ -57,7 +54,7 @@ object ObservableCollections {
      * ObservableList that wraps it.
      *
      * @param E the list element type
-     * @param list a concrete List that backs this ObservableList
+     * @param list a concrete MutableList that backs this ObservableList
      *
      * @return a newly created ObservableList
      */
@@ -77,7 +74,7 @@ object ObservableCollections {
      * ListChangeListener.
      *
      * @param E the list element type
-     * @param list a concrete List that backs this ObservableList
+     * @param list a concrete MutableList that backs this ObservableList
      * @param extractor element to Observable[] convertor
      *
      * @return a newly created ObservableList
@@ -96,12 +93,40 @@ object ObservableCollections {
      *
      * @param K the type of keys maintained by this map
      * @param V the type of mapped values
-     * @param map a Map that backs this ObservableMap
+     * @param map a MutableMap that backs this ObservableMap
      *
      * @return a newly created ObservableMap
      */
     fun <K, V> observableMap(map: MutableMap<K, V>): ObservableMap<K, V> {
         return ObservableMapWrapper(map)
+    }
+
+    /**
+     * Constructs an ObservableSet that is backed by the specified set. Mutation operations on the ObservableSet
+     * instance will be reported to observers that have registered on that instance.
+     *
+     * Note that mutation operations made directly to the underlying set are *not* reported to observers of any
+     * ObservableSet that wraps it.
+     *
+     * @param E the type of elements maintained by this set
+     * @param set a MutableSet that backs this ObservableSet
+     *
+     * @return a newly created ObservableSet
+     */
+    fun <E> observableSet(set: MutableSet<E>): ObservableSet<E> {
+        return ObservableSetWrapper(set)
+    }
+
+    /**
+     * Constructs an ObservableSet backed by a HashSet that contains all the specified elements.
+     *
+     * @param E the type of elements maintained by this set
+     * @param elements elements that will be added into returned ObservableSet
+     *
+     * @return a newly created ObservableSet
+     */
+    fun <E> observableSet(vararg elements: E): ObservableSet<E> {
+        return ObservableSetWrapper(hashSetOf(*elements))
     }
 
     /**
@@ -338,6 +363,50 @@ object ObservableCollections {
     @ReturnsUnmodifiableCollection
     fun <E> singletonObservableList(e: E): ObservableList<E> {
         return SingletonObservableList(e)
+    }
+
+    /**
+     * Creates and returns unmodifiable wrapper on top of provided observable set.
+     *
+     * @param E the set element type
+     * @param set an ObservableSet that is to be wrapped
+     *
+     * @return an ObservableSet wrapper that is unmodifiable
+     *
+     * @see Collections.unmodifiableSet
+     */
+    @ReturnsUnmodifiableCollection
+    fun <E> unmodifiableObservableSet(set: ObservableSet<E>): ObservableSet<E> {
+        return UnmodifiableObservableSet(set)
+    }
+
+    /**
+     * Creates and returns a typesafe wrapper on top of provided observable set.
+     *
+     * @param E the set element type
+     * @param set an Observable set to be wrapped
+     * @param type the type of element that `set` is permitted to hold
+     *
+     * @return a dynamically typesafe view of the specified set
+     *
+     * @see Collections.checkedSet
+     */
+    fun <E, NNE : E> checkedObservableSet(set: ObservableSet<E>, type: Class<NNE>): ObservableSet<E> {
+        return CheckedObservableSet(set, type)
+    }
+
+    /**
+     * Creates and returns a synchronized wrapper on top of provided observable set.
+     *
+     * @param E the set element type
+     * @param set the set to be "wrapped" in a synchronized set.
+     *
+     * @return A synchronized version of the observable set
+     *
+     * @see Collections.synchronizedSet
+     */
+    fun <E> synchronizedObservableSet(set: ObservableSet<E>): ObservableSet<E> {
+        return SynchronizedObservableSet(set)
     }
 
     /**
@@ -1257,6 +1326,109 @@ object ObservableCollections {
 
     }
 
+    private class UnmodifiableObservableSet<E>(private val backingSet: ObservableSet<E>) : AbstractMutableSet<E>(),
+            ObservableSet<E> {
+
+        private var listenerHelper: SetListenerHelper<E>? = null
+
+        private lateinit var listener: SetChangeListener<E>
+
+        private fun initListener() {
+            if (!this::listener.isInitialized) {
+                this.listener = SetChangeListener { change -> callObservers(SetAdapterChange(this, change)) }
+                this.backingSet.addListener(WeakSetChangeListener(this.listener))
+            }
+        }
+
+        private fun callObservers(change: SetChangeListener.Change<out E>) {
+            SetListenerHelper.fireValueChangedEvent(this.listenerHelper, change)
+        }
+
+        override fun iterator(): MutableIterator<E> {
+            return object : MutableIterator<E> {
+
+                private val i = this@UnmodifiableObservableSet.backingSet.iterator()
+
+                override fun hasNext(): Boolean {
+                    return this.i.hasNext()
+                }
+
+                override fun next(): E {
+                    return this.i.next()
+                }
+
+                override fun remove() {
+                    throw UnsupportedOperationException()
+                }
+
+            }
+        }
+
+        override val size: Int
+            get() = this.backingSet.size
+
+        override fun addListener(listener: InvalidationListener) {
+            if (!isInvalidationListenerAlreadyAdded(listener)) {
+                initListener()
+                this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            if (isInvalidationListenerAlreadyAdded(listener)) {
+                this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.invalidationListeners.contains(listener)
+        }
+
+        override fun addListener(listener: SetChangeListener<in E>) {
+            if (!isSetChangeListenerAlreadyAdded(listener)) {
+                initListener()
+                this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun removeListener(listener: SetChangeListener<in E>) {
+            if (isSetChangeListenerAlreadyAdded(listener)) {
+                this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.setChangeListeners.contains(listener)
+        }
+
+        override fun add(element: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun remove(element: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun addAll(elements: Collection<E>): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun retainAll(elements: Collection<E>): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun removeAll(elements: Collection<E>): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun clear() {
+            throw UnsupportedOperationException()
+        }
+
+    }
+
     private open class SynchronizedSet<E>(set: MutableSet<E>, protected val mutex: Any) : MutableSet<E> {
 
         private val backingSet: MutableSet<E> = set
@@ -1336,6 +1508,205 @@ object ObservableCollections {
         override fun hashCode(): Int {
             return synchronized(this.mutex) {
                 this.backingSet.hashCode()
+            }
+        }
+
+    }
+
+    private class SynchronizedObservableSet<E>(set: ObservableSet<E>, mutex: Any) : SynchronizedSet<E>(set, mutex),
+            ObservableSet<E> {
+
+        private val backingSet: ObservableSet<E> = set
+
+        private var listenerHelper: SetListenerHelper<E>? = null
+
+        private val listener: SetChangeListener<E> = SetChangeListener { change ->
+            SetListenerHelper.fireValueChangedEvent(this.listenerHelper, SetAdapterChange(this, change))
+        }
+
+        init {
+            this.backingSet.addListener(WeakSetChangeListener(this.listener))
+        }
+
+        constructor(set: ObservableSet<E>) : this(set, Any())
+
+        override fun addListener(listener: InvalidationListener) {
+            synchronized(this.mutex) {
+                if (!isInvalidationListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            synchronized(this.mutex) {
+                if (isInvalidationListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.invalidationListeners.contains(listener)
+        }
+
+        override fun addListener(listener: SetChangeListener<in E>) {
+            synchronized(this.mutex) {
+                if (!isSetChangeListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun removeListener(listener: SetChangeListener<in E>) {
+            synchronized(this.mutex) {
+                if (isSetChangeListenerAlreadyAdded(listener)) {
+                    this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
+                }
+            }
+        }
+
+        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.setChangeListeners.contains(listener)
+        }
+
+    }
+
+    private class CheckedObservableSet<E, NNE : E>(set: ObservableSet<E>, private val type: Class<NNE>) :
+            AbstractMutableSet<E>(), ObservableSet<E> {
+
+        private val backingSet: ObservableSet<E> = set
+
+        private var listenerHelper: SetListenerHelper<E>? = null
+
+        private val listener: SetChangeListener<E> = SetChangeListener { change ->
+            callObservers(SetAdapterChange(this, change))
+        }
+
+        init {
+            this.backingSet.addListener(this.listener)
+        }
+
+        private fun callObservers(change: SetChangeListener.Change<out E>) {
+            SetListenerHelper.fireValueChangedEvent(this.listenerHelper, change)
+        }
+
+        private fun typeCheck(o: Any?) {
+            if (o != null && !this.type.isInstance(o)) {
+                throw ClassCastException("Attempt to insert ${o.javaClass} element into collection with element type " +
+                        "$type")
+            }
+        }
+
+        override fun addListener(listener: InvalidationListener) {
+            if (!isInvalidationListenerAlreadyAdded(listener)) {
+                this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            if (isInvalidationListenerAlreadyAdded(listener)) {
+                this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.invalidationListeners.contains(listener)
+        }
+
+        override fun addListener(listener: SetChangeListener<in E>) {
+            if (!isSetChangeListenerAlreadyAdded(listener)) {
+                this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun removeListener(listener: SetChangeListener<in E>) {
+            if (isSetChangeListenerAlreadyAdded(listener)) {
+                this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
+            }
+        }
+
+        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+            val curHelper = this.listenerHelper
+            return curHelper != null && curHelper.setChangeListeners.contains(listener)
+        }
+
+        override val size: Int
+            get() = this.backingSet.size
+
+        override fun isEmpty(): Boolean {
+            return this.backingSet.isEmpty()
+        }
+
+        override fun contains(element: E): Boolean {
+            return this.backingSet.contains(element)
+        }
+
+        override fun add(element: E): Boolean {
+            typeCheck(element)
+            return this.backingSet.add(element)
+        }
+
+        override fun remove(element: E): Boolean {
+            return this.backingSet.remove(element)
+        }
+
+        override fun containsAll(elements: Collection<E>): Boolean {
+            return this.backingSet.containsAll(elements)
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun addAll(elements: Collection<E>): Boolean {
+            val a: Array<E>
+            val c = ArrayList(elements)
+            try {
+                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<E>)
+            } catch (e: ArrayStoreException) {
+                throw ClassCastException()
+            }
+            return this.backingSet.addAll(a.asList())
+        }
+
+        override fun retainAll(elements: Collection<E>): Boolean {
+            return this.backingSet.retainAll(elements)
+        }
+
+        override fun removeAll(elements: Collection<E>): Boolean {
+            return this.backingSet.removeAll(elements)
+        }
+
+        override fun clear() {
+            this.backingSet.clear()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return other !== this && this.backingSet == other
+        }
+
+        override fun hashCode(): Int {
+            return this.backingSet.hashCode()
+        }
+
+        override fun iterator(): MutableIterator<E> {
+            val it = this.backingSet.iterator()
+
+            return object : MutableIterator<E> {
+
+                override fun hasNext(): Boolean {
+                    return it.hasNext()
+                }
+
+                override fun next(): E {
+                    return it.next()
+                }
+
+                override fun remove() {
+                    it.remove()
+                }
+
             }
         }
 

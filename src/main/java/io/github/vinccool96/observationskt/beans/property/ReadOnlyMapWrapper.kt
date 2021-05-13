@@ -13,31 +13,31 @@ open class ReadOnlyMapWrapper<K, V> : SimpleMapProperty<K, V> {
     private lateinit var readOnlyPropertyImpl: ReadOnlyPropertyImpl
 
     /**
-     * The constructor of {@code ReadOnlyMapWrapper}
+     * The constructor of `ReadOnlyMapWrapper`
      *
-     * @param bean the bean of this {@code ReadOnlyMapWrapper}
-     * @param name the name of this {@code ReadOnlyMapWrapper}
+     * @param bean the bean of this `ReadOnlyMapWrapper`
+     * @param name the name of this `ReadOnlyMapWrapper`
      * @param initialValue the initial value of the wrapped value
      */
     constructor(bean: Any?, name: String?, initialValue: ObservableMap<K, V>?) : super(bean, name, initialValue)
 
     /**
-     * The constructor of {@code ReadOnlyMapWrapper}
+     * The constructor of `ReadOnlyMapWrapper`
      *
-     * @param bean the bean of this {@code ReadOnlyMapWrapper}
-     * @param name the name of this {@code ReadOnlyMapWrapper}
+     * @param bean the bean of this `ReadOnlyMapWrapper`
+     * @param name the name of this `ReadOnlyMapWrapper`
      */
     constructor(bean: Any?, name: String?) : super(bean, name)
 
     /**
-     * The constructor of {@code ReadOnlyMapWrapper}
+     * The constructor of `ReadOnlyMapWrapper`
      *
      * @param initialValue the initial value of the wrapped value
      */
     constructor(initialValue: ObservableMap<K, V>?) : super(initialValue)
 
     /**
-     * The constructor of {@code ReadOnlyMapWrapper}
+     * The constructor of `ReadOnlyMapWrapper`
      */
     constructor() : super()
 
