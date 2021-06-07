@@ -52,7 +52,7 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
             } else {
                 builder.append("removed ").append(this.old)
             }
-            builder.append(" at key").append(this.keyState)
+            builder.append(" at key ").append(this.keyState)
             return builder.toString()
         }
 
@@ -155,7 +155,7 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
 
     override val keys: MutableSet<K>
         get() {
-            if (this::keySet.isInitialized) {
+            if (!this::keySet.isInitialized) {
                 this.keySet = ObservableKeySet()
             }
             return this.keySet
@@ -218,12 +218,11 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
                 override fun next(): K {
                     val last = this.entryIt.next()
                     this.lastKey = last.key
-                    this.lastValue
+                    this.lastValue = last.value
                     return last.key
                 }
 
                 override fun remove() {
-                    this@ObservableMapWrapper.backingMap.entries.toTypedArray()
                     this.entryIt.remove()
                     callObservers(SimpleChange(this.lastKey!!, this.lastValue, null, wasAddedState = false,
                             wasRemovedState = true))
@@ -323,12 +322,11 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
                 override fun next(): V {
                     val last = this.entryIt.next()
                     this.lastKey = last.key
-                    this.lastValue
+                    this.lastValue = last.value
                     return last.value
                 }
 
                 override fun remove() {
-                    this@ObservableMapWrapper.backingMap.entries.toTypedArray()
                     this.entryIt.remove()
                     callObservers(SimpleChange(this.lastKey!!, this.lastValue, null, wasAddedState = false,
                             wasRemovedState = true))
@@ -462,7 +460,7 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
                 override fun next(): MutableEntry<K, V> {
                     val last = this.entryIt.next()
                     this.lastKey = last.key
-                    this.lastValue
+                    this.lastValue = last.value
                     return ObservableEntry(last)
                 }
 

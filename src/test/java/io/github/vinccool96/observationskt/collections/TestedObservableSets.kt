@@ -2,6 +2,7 @@ package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.beans.property.SimpleSetProperty
 import java.util.*
+import kotlin.reflect.full.createType
 
 @Suppress("PropertyName")
 object TestedObservableSets {
@@ -15,7 +16,8 @@ object TestedObservableSets {
     }
 
     val CHECKED_OBSERVABLE_HASH_SET: Callable<ObservableSet<String?>> = Callable {
-        ObservableCollections.checkedObservableSet(ObservableCollections.observableSet(HashSet()), String::class.java)
+        ObservableCollections.checkedObservableSet(ObservableCollections.observableSet(HashSet()),
+                String::class.createType(nullable = true))
     }
 
     val SYNCHRONIZED_OBSERVABLE_HASH_SET: Callable<ObservableSet<String?>> = Callable {

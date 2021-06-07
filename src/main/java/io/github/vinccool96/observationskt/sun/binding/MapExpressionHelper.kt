@@ -429,7 +429,7 @@ abstract class MapExpressionHelper<K, V> protected constructor(protected val obs
 
         override fun removeListener(listener: MapChangeListener<in K, in V>): MapExpressionHelper<K, V>? {
             if (this.mapChangeListenerArray.isNotEmpty()) {
-                for (index in 0 until this.changeSize) {
+                for (index in 0 until this.mapChangeSize) {
                     if (listener == this.mapChangeListenerArray[index]) {
                         if (this.mapChangeSize == 1) {
                             if (this.invalidationSize == 1 && this.changeSize == 0) {
