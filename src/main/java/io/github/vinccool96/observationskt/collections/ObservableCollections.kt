@@ -7,6 +7,8 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections.syn
 import io.github.vinccool96.observationskt.sun.collections.*
 import io.github.vinccool96.observationskt.util.Callback
 import java.util.*
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 /**
  * Utility object that consists of methods that are 1:1 copies of [Collections] methods.
@@ -157,8 +159,7 @@ object ObservableCollections {
      *
      * @see Collections.checkedMap
      */
-    fun <K, V> checkedObservableMap(map: ObservableMap<K, V>, keyType: Class<K>,
-            valueType: Class<V>): ObservableMap<K, V> {
+    fun <K, V> checkedObservableMap(map: ObservableMap<K, V>, keyType: KType, valueType: KType): ObservableMap<K, V> {
         return CheckedObservableMap(map, keyType, valueType)
     }
 
@@ -318,7 +319,7 @@ object ObservableCollections {
      *
      * @see Collections.checkedList
      */
-    fun <E> checkedObservableList(list: ObservableList<E>, type: Class<E>): ObservableList<E> {
+    fun <E> checkedObservableList(list: ObservableList<E>, type: KType): ObservableList<E> {
         return CheckedObservableList(list, type)
     }
 
@@ -391,7 +392,7 @@ object ObservableCollections {
      *
      * @see Collections.checkedSet
      */
-    fun <E, NNE : E> checkedObservableSet(set: ObservableSet<E>, type: Class<NNE>): ObservableSet<E> {
+    fun <E> checkedObservableSet(set: ObservableSet<E>, type: KType): ObservableSet<E> {
         return CheckedObservableSet(set, type)
     }
 
@@ -884,6 +885,24 @@ object ObservableCollections {
             }
         }
 
+        override fun toString(): String {
+            synchronized(this.mutex) {
+                return this.backingList.toString()
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            synchronized(this.mutex) {
+                return this.backingList == other
+            }
+        }
+
+        override fun hashCode(): Int {
+            synchronized(this.mutex) {
+                return this.backingList.hashCode()
+            }
+        }
+
     }
 
     private class SynchronizedObservableList<T>(seq: ObservableList<T>, mutex: Any) : SynchronizedList<T>(seq, mutex),
@@ -983,7 +1002,7 @@ object ObservableCollections {
 
     }
 
-    private class CheckedObservableList<T>(private val list: ObservableList<T>, private val type: Class<T>) :
+    private class CheckedObservableList<T>(private val list: ObservableList<T>, private val type: KType) :
             ObservableListBase<T>(), ObservableList<T> {
 
         private val listener: ListChangeListener<T> = ListChangeListener { change ->
@@ -995,8 +1014,9 @@ object ObservableCollections {
         }
 
         private fun typeCheck(o: Any?) {
-            if (o != null && !this.type.isInstance(o)) {
-                throw ClassCastException("Attempt to insert ${o.javaClass} element into collection with element type" +
+            if ((o == null && !this.type.isMarkedNullable) ||
+                    (o != null && !(this.type.classifier as KClass<*>).isInstance(o))) {
+                throw ClassCastException("Attempt to insert ${o?.javaClass} element into collection with element type" +
                         " ${this.type}")
             }
         }
@@ -1087,7 +1107,8 @@ object ObservableCollections {
             val a: Array<T>
             val c = ArrayList(elements)
             try {
-                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<T>)
+                val kClass = this.type.classifier as KClass<*>
+                a = c.toArray(java.lang.reflect.Array.newInstance(kClass.java, 0) as Array<T>)
             } catch (e: ArrayStoreException) {
                 throw ClassCastException()
             }
@@ -1100,7 +1121,8 @@ object ObservableCollections {
             val a: Array<T>
             val c = ArrayList(elements)
             try {
-                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<T>)
+                val kClass = this.type.classifier as KClass<*>
+                a = c.toArray(java.lang.reflect.Array.newInstance(kClass.java, 0) as Array<T>)
             } catch (e: ArrayStoreException) {
                 throw ClassCastException()
             }
@@ -1184,7 +1206,7 @@ object ObservableCollections {
         }
 
         override fun subList(fromIndex: Int, toIndex: Int): MutableList<T> {
-            return Collections.checkedList(this.list.subList(fromIndex, toIndex), this.type)
+            return CheckedObservableList(observableList(this.list.subList(fromIndex, toIndex)), this.type)
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -1201,7 +1223,8 @@ object ObservableCollections {
             val a: Array<T>
             val c = ArrayList(col)
             try {
-                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<T>)
+                val kClass = this.type.classifier as KClass<*>
+                a = c.toArray(java.lang.reflect.Array.newInstance(kClass.java, 0) as Array<T>)
             } catch (e: ArrayStoreException) {
                 throw ClassCastException()
             }
@@ -1574,7 +1597,7 @@ object ObservableCollections {
 
     }
 
-    private class CheckedObservableSet<E, NNE : E>(set: ObservableSet<E>, private val type: Class<NNE>) :
+    private class CheckedObservableSet<E>(set: ObservableSet<E>, private val type: KType) :
             AbstractMutableSet<E>(), ObservableSet<E> {
 
         private val backingSet: ObservableSet<E> = set
@@ -1594,9 +1617,10 @@ object ObservableCollections {
         }
 
         private fun typeCheck(o: Any?) {
-            if (o != null && !this.type.isInstance(o)) {
-                throw ClassCastException("Attempt to insert ${o.javaClass} element into collection with element type " +
-                        "$type")
+            if ((o == null && !this.type.isMarkedNullable) ||
+                    (o != null && !(this.type.classifier as KClass<*>).isInstance(o))) {
+                throw ClassCastException("Attempt to insert ${o?.javaClass} element into collection with element " +
+                        "type $type")
             }
         }
 
@@ -1663,7 +1687,8 @@ object ObservableCollections {
             val a: Array<E>
             val c = ArrayList(elements)
             try {
-                a = c.toArray(java.lang.reflect.Array.newInstance(this.type, 0) as Array<E>)
+                val kClass = this.type.classifier as KClass<*>
+                a = c.toArray(java.lang.reflect.Array.newInstance(kClass.java, 0) as Array<E>)
             } catch (e: ArrayStoreException) {
                 throw ClassCastException()
             }
@@ -1827,8 +1852,8 @@ object ObservableCollections {
 
     }
 
-    private class CheckedObservableMap<K, V>(map: ObservableMap<K, V>, private val keyType: Class<K>,
-            private val valueType: Class<V>) : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
+    private class CheckedObservableMap<K, V>(map: ObservableMap<K, V>, private val keyType: KType,
+            private val valueType: KType) : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
 
         private val backingMap: ObservableMap<K, V> = map
 
@@ -1847,14 +1872,16 @@ object ObservableCollections {
         }
 
         fun typeCheck(key: Any?, value: Any?) {
-            if (key != null && !this.keyType.isInstance(key)) {
+            if ((key == null && !this.keyType.isMarkedNullable) ||
+                    (key != null && !(this.keyType.classifier as KClass<*>).isInstance(key))) {
                 throw ClassCastException(
-                        "Attempt to insert ${key.javaClass} key into map with key type ${this.keyType}")
+                        "Attempt to insert ${key?.javaClass} key into map with key type ${this.keyType}")
             }
 
-            if (value != null && !this.valueType.isInstance(value)) {
+            if ((value == null && !this.valueType.isMarkedNullable) ||
+                    (value != null && !(this.valueType.classifier as KClass<*>).isInstance(value))) {
                 throw ClassCastException(
-                        "Attempt to insert ${value.javaClass} value into map with value type ${this.valueType}")
+                        "Attempt to insert ${value?.javaClass} value into map with value type ${this.valueType}")
             }
         }
 
@@ -1969,7 +1996,7 @@ object ObservableCollections {
         }
 
         private class CheckedEntrySet<K, V>(private val s: MutableSet<MutableMap.MutableEntry<K, V>>,
-                private val valueType: Class<V>) : MutableSet<MutableMap.MutableEntry<K, V>> {
+                private val valueType: KType) : MutableSet<MutableMap.MutableEntry<K, V>> {
 
             override val size: Int
                 get() = this.s.size
@@ -2020,7 +2047,7 @@ object ObservableCollections {
             @Suppress("USELESS_CAST")
             override fun contains(element: MutableMap.MutableEntry<K, V>): Boolean {
                 return this.s.contains(
-                        if (element is CheckedEntry<*, *, *>) element as MutableMap.MutableEntry<K, V>
+                        if (element is CheckedEntry<*, *>) element as MutableMap.MutableEntry<K, V>
                         else checkedEntry(element, this.valueType))
             }
 
@@ -2067,8 +2094,8 @@ object ObservableCollections {
              * short-circuiting the setValue method, and it protects the backing Map against an ill-behaved Map.Entry
              * that attempts to modify another Map.Entry when asked to perform an equality check.
              */
-            private class CheckedEntry<K, V, T>(private val e: MutableMap.MutableEntry<K, V>,
-                    private val valueType: Class<T>) : MutableMap.MutableEntry<K, V> {
+            private class CheckedEntry<K, V>(private val e: MutableMap.MutableEntry<K, V>,
+                    private val valueType: KType) : MutableMap.MutableEntry<K, V> {
 
                 override val key: K
                     get() = this.e.key
@@ -2085,7 +2112,8 @@ object ObservableCollections {
                 }
 
                 override fun setValue(newValue: V): V {
-                    if (newValue != null && !this.valueType.isInstance(newValue)) {
+                    if ((newValue == null && !this.valueType.isMarkedNullable) ||
+                            (newValue != null && !(this.valueType.classifier as KClass<*>).isInstance(newValue))) {
                         throw ClassCastException(badValueMsg(newValue))
                     }
                     return this.e.setValue(newValue)
@@ -2109,8 +2137,8 @@ object ObservableCollections {
 
             companion object {
 
-                private fun <K, V, T> checkedEntry(e: MutableMap.MutableEntry<K, V>,
-                        valueType: Class<T>): CheckedEntry<K, V, T> {
+                private fun <K, V> checkedEntry(e: MutableMap.MutableEntry<K, V>,
+                        valueType: KType): CheckedEntry<K, V> {
                     return CheckedEntry(e, valueType)
                 }
 

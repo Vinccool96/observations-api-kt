@@ -106,7 +106,7 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
 
             override fun add(element: E) {
                 beginChange()
-                val idx: Int = previousIndex()
+                val idx: Int = nextIndex()
                 this.backingIt.add(element)
                 nextAdd(idx, idx + 1)
                 endChange()

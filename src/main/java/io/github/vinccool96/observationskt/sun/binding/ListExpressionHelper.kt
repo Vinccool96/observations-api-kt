@@ -401,7 +401,7 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
 
         override fun removeListener(listener: ListChangeListener<in E>): ListExpressionHelper<E>? {
             if (this.listChangeListenerArray.isNotEmpty()) {
-                for (index in 0 until this.changeSize) {
+                for (index in 0 until this.listChangeSize) {
                     if (listener == this.listChangeListenerArray[index]) {
                         if (this.listChangeSize == 1) {
                             if (this.invalidationSize == 1 && this.changeSize == 0) {
