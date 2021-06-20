@@ -58,8 +58,6 @@ interface ObservableList<E> : MutableList<E>, Observable {
      * @param elements the elements to set
      *
      * @return true (as specified by [MutableCollection.add])
-     *
-     * @throws NullPointerException if the specified arguments contain one or more null elements
      */
     fun setAll(vararg elements: E): Boolean
 
@@ -69,8 +67,6 @@ interface ObservableList<E> : MutableList<E>, Observable {
      * @param col the collection with elements that will be added to this observableArrayList
      *
      * @return true (as specified by [MutableCollection.add])
-     *
-     * @throws NullPointerException if the specified collection contains one or more null elements
      */
     fun setAll(col: Collection<E>): Boolean
 
