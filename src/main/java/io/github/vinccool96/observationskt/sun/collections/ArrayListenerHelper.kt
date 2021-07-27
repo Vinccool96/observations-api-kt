@@ -297,7 +297,9 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
         fun <T : ObservableArray<T>> fireValueChangedEvent(helper: ArrayListenerHelper<T>?, sizeChanged: Boolean,
                 from: Int, to: Int) {
-            helper?.fireValueChangedEvent(sizeChanged, from, to)
+            if (from < to || sizeChanged) {
+                helper?.fireValueChangedEvent(sizeChanged, from, to)
+            }
         }
 
         fun <T : ObservableArray<T>> hasListeners(helper: ArrayListenerHelper<T>?): Boolean {

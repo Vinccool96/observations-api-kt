@@ -209,6 +209,174 @@ object ObservableCollections {
     }
 
     /**
+     * Creates a new empty observable double array.
+     *
+     * @return a newly created ObservableDoubleArray
+     */
+    fun observableDoubleArray(): ObservableDoubleArray {
+        return ObservableDoubleArrayImpl()
+    }
+
+    /**
+     * Creates a new observable double array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable double array
+     *
+     * @return a newly created ObservableDoubleArray
+     */
+    fun observableDoubleArray(vararg values: Double): ObservableDoubleArray {
+        return ObservableDoubleArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable double array with copy of elements in given {@code array}.
+     *
+     * @param array observable double array to copy
+     *
+     * @return a newly created ObservableDoubleArray
+     */
+    fun observableDoubleArray(array: Array<Double>): ObservableDoubleArray {
+        return ObservableDoubleArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable double array with copy of elements in given {@code array}.
+     *
+     * @param array observable double array to copy
+     *
+     * @return a newly created ObservableDoubleArray
+     */
+    fun observableDoubleArray(array: ObservableDoubleArray): ObservableDoubleArray {
+        return ObservableDoubleArrayImpl(array)
+    }
+
+    /**
+     * Creates a new empty observable float array.
+     *
+     * @return a newly created ObservableFloatArray
+     */
+    fun observableFloatArray(): ObservableFloatArray {
+        return ObservableFloatArrayImpl()
+    }
+
+    /**
+     * Creates a new observable float array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable float array
+     *
+     * @return a newly created ObservableFloatArray
+     */
+    fun observableFloatArray(vararg values: Float): ObservableFloatArray {
+        return ObservableFloatArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable float array with copy of elements in given {@code array}.
+     *
+     * @param array observable float array to copy
+     *
+     * @return a newly created ObservableFloatArray
+     */
+    fun observableFloatArray(array: Array<Float>): ObservableFloatArray {
+        return ObservableFloatArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable float array with copy of elements in given {@code array}.
+     *
+     * @param array observable float array to copy
+     *
+     * @return a newly created ObservableFloatArray
+     */
+    fun observableFloatArray(array: ObservableFloatArray): ObservableFloatArray {
+        return ObservableFloatArrayImpl(array)
+    }
+
+    /**
+     * Creates a new empty observable int array.
+     *
+     * @return a newly created ObservableIntArray
+     */
+    fun observableIntArray(): ObservableIntArray {
+        return ObservableIntArrayImpl()
+    }
+
+    /**
+     * Creates a new observable int array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable int array
+     *
+     * @return a newly created ObservableIntArray
+     */
+    fun observableIntArray(vararg values: Int): ObservableIntArray {
+        return ObservableIntArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable int array with copy of elements in given {@code array}.
+     *
+     * @param array observable int array to copy
+     *
+     * @return a newly created ObservableIntArray
+     */
+    fun observableIntArray(array: Array<Int>): ObservableIntArray {
+        return ObservableIntArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable int array with copy of elements in given {@code array}.
+     *
+     * @param array observable int array to copy
+     *
+     * @return a newly created ObservableIntArray
+     */
+    fun observableIntArray(array: ObservableIntArray): ObservableIntArray {
+        return ObservableIntArrayImpl(array)
+    }
+
+    /**
+     * Creates a new empty observable long array.
+     *
+     * @return a newly created ObservableLongArray
+     */
+    fun observableLongArray(): ObservableLongArray {
+        return ObservableLongArrayImpl()
+    }
+
+    /**
+     * Creates a new observable long array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable long array
+     *
+     * @return a newly created ObservableLongArray
+     */
+    fun observableLongArray(vararg values: Long): ObservableLongArray {
+        return ObservableLongArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable long array with copy of elements in given {@code array}.
+     *
+     * @param array observable long array to copy
+     *
+     * @return a newly created ObservableLongArray
+     */
+    fun observableLongArray(array: Array<Long>): ObservableLongArray {
+        return ObservableLongArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable long array with copy of elements in given {@code array}.
+     *
+     * @param array observable long array to copy
+     *
+     * @return a newly created ObservableLongArray
+     */
+    fun observableLongArray(array: ObservableLongArray): ObservableLongArray {
+        return ObservableLongArrayImpl(array)
+    }
+
+    /**
      * Creates a new empty observable list that is backed by an arraylist.
      *
      * @param E the list element type
