@@ -65,7 +65,7 @@ interface ObservableFloatArray : ObservableArray<ObservableFloatArray> {
      * Appends content of a given array to the end of this array. Capacity is increased if necessary to match the new
      * size of the data.
      *
-     * @param src observable array with elements to append
+     * @param src array with elements to append
      */
     fun addAll(src: Array<Float>) {
         addAll(*src.toFloatArray())

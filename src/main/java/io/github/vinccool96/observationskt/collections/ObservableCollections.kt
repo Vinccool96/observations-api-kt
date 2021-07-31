@@ -229,7 +229,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable double array with copy of elements in given {@code array}.
+     * Creates a new observable double array with copy of elements in given `array`.
      *
      * @param array observable double array to copy
      *
@@ -240,7 +240,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable double array with copy of elements in given {@code array}.
+     * Creates a new observable double array with copy of elements in given `array`.
      *
      * @param array observable double array to copy
      *
@@ -271,7 +271,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable float array with copy of elements in given {@code array}.
+     * Creates a new observable float array with copy of elements in given `array`.
      *
      * @param array observable float array to copy
      *
@@ -282,7 +282,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable float array with copy of elements in given {@code array}.
+     * Creates a new observable float array with copy of elements in given `array`.
      *
      * @param array observable float array to copy
      *
@@ -313,7 +313,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable int array with copy of elements in given {@code array}.
+     * Creates a new observable int array with copy of elements in given `array`.
      *
      * @param array observable int array to copy
      *
@@ -324,7 +324,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable int array with copy of elements in given {@code array}.
+     * Creates a new observable int array with copy of elements in given `array`.
      *
      * @param array observable int array to copy
      *
@@ -355,7 +355,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable long array with copy of elements in given {@code array}.
+     * Creates a new observable long array with copy of elements in given `array`.
      *
      * @param array observable long array to copy
      *
@@ -366,7 +366,7 @@ object ObservableCollections {
     }
 
     /**
-     * Creates a new observable long array with copy of elements in given {@code array}.
+     * Creates a new observable long array with copy of elements in given `array`.
      *
      * @param array observable long array to copy
      *

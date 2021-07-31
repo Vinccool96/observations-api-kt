@@ -65,7 +65,7 @@ interface ObservableDoubleArray : ObservableArray<ObservableDoubleArray> {
      * Appends content of a given array to the end of this array. Capacity is increased if necessary to match the new
      * size of the data.
      *
-     * @param src observable array with elements to append
+     * @param src array with elements to append
      */
     fun addAll(src: Array<Double>) {
         addAll(*src.toDoubleArray())

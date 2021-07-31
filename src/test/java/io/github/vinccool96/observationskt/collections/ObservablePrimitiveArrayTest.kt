@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
  * Tests for ObservableArray.
  */
 @RunWith(Parameterized::class)
-class ObservableArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrapper: ArrayWrapper<T, A, P>) {
+class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrapper: ArrayWrapper<T, A, P>) {
 
     private var initialSize: Int = 0
 
@@ -3355,7 +3355,11 @@ class ObservableArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrappe
         }
 
         override fun createNotEmptyArray(src: DoubleArray): ObservableDoubleArray {
-            return ObservableCollections.observableDoubleArray(*src).also { this.array = it }
+            return when (this.nextValueState.toInt() % 3) {
+                0 -> ObservableCollections.observableDoubleArray(*src)
+                1 -> ObservableCollections.observableDoubleArray(src.toTypedArray())
+                else -> ObservableCollections.observableDoubleArray(ObservableCollections.observableDoubleArray(*src))
+            }.also { this.array = it }
         }
 
         override fun newInstance(): ArrayWrapper<ObservableDoubleArray, DoubleArray, Double> {
@@ -3543,7 +3547,11 @@ class ObservableArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrappe
         }
 
         override fun createNotEmptyArray(src: FloatArray): ObservableFloatArray {
-            return ObservableCollections.observableFloatArray(*src).also { this.array = it }
+            return when (this.nextValueState.toInt() % 3) {
+                0 -> ObservableCollections.observableFloatArray(*src)
+                1 -> ObservableCollections.observableFloatArray(src.toTypedArray())
+                else -> ObservableCollections.observableFloatArray(ObservableCollections.observableFloatArray(*src))
+            }.also { this.array = it }
         }
 
         override fun newInstance(): ArrayWrapper<ObservableFloatArray, FloatArray, Float> {
@@ -3729,7 +3737,11 @@ class ObservableArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrappe
         }
 
         override fun createNotEmptyArray(src: IntArray): ObservableIntArray {
-            return ObservableCollections.observableIntArray(*src).also { this.array = it }
+            return when (this.nextValueState % 3) {
+                0 -> ObservableCollections.observableIntArray(*src)
+                1 -> ObservableCollections.observableIntArray(src.toTypedArray())
+                else -> ObservableCollections.observableIntArray(ObservableCollections.observableIntArray(*src))
+            }.also { this.array = it }
         }
 
         override fun newInstance(): ArrayWrapper<ObservableIntArray, IntArray, Int> {
@@ -3910,7 +3922,11 @@ class ObservableArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrappe
         }
 
         override fun createNotEmptyArray(src: LongArray): ObservableLongArray {
-            return ObservableCollections.observableLongArray(*src).also { this.array = it }
+            return when (this.nextValueState.toInt() % 3) {
+                0 -> ObservableCollections.observableLongArray(*src)
+                1 -> ObservableCollections.observableLongArray(src.toTypedArray())
+                else -> ObservableCollections.observableLongArray(ObservableCollections.observableLongArray(*src))
+            }.also { this.array = it }
         }
 
         override fun newInstance(): ArrayWrapper<ObservableLongArray, LongArray, Long> {
