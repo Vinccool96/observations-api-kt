@@ -2525,7 +2525,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
         val actual = this.array.toString()
         val expected = this.wrapper.toArray().contentToString()
         assertEquals(expected, actual)
-        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)?){${this.initialSize - 1}}]"
+        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)){${this.initialSize - 1}}]"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -2535,7 +2535,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
         val actual = this.array.toString()
         val expected = this.wrapper.toArray().contentToString()
         assertEquals(expected, actual)
-        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)?){${this.array.size - 1}}]"
+        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)){${this.array.size - 1}}]"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 

@@ -3225,7 +3225,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         val actual = this.array.toString()
         val expected = this.wrapper.primitiveArrayToString(this.wrapper.toArray())
         assertEquals(expected, actual)
-        val regex = "\\[[0-9]+(\\.[0-9]+)?(, [0-9]+(.[0-9]+)?){${this.initialSize - 1}}]"
+        val regex = "\\[(-)?[0-9]+(\\.[0-9]+)?(, (-)?[0-9]+(.[0-9]+)?){${this.initialSize - 1}}]"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -3235,7 +3235,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         val actual = this.array.toString()
         val expected = this.wrapper.primitiveArrayToString(this.wrapper.toArray())
         assertEquals(expected, actual)
-        val regex = "\\[[0-9]+(\\.[0-9]+)?(, [0-9]+(.[0-9]+)?){${this.array.size - 1}}]"
+        val regex = "\\[(-)?[0-9]+(\\.[0-9]+)?(, (-)?[0-9]+(.[0-9]+)?){${this.array.size - 1}}]"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -4099,6 +4099,390 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     }
 
+    private class ShortArrayWrapper : ArrayWrapper<ObservableShortArray, ShortArray, Short>() {
+
+        private var nextValueState: Short = 0
+
+        override fun createEmptyArray(): ObservableShortArray {
+            return ObservableCollections.observableShortArray().also { this.array = it }
+        }
+
+        override fun createNotEmptyArray(src: ShortArray): ObservableShortArray {
+            return when (this.nextValueState.toInt() % 3) {
+                0 -> ObservableCollections.observableShortArray(*src)
+                1 -> ObservableCollections.observableShortArray(src.toTypedArray())
+                else -> ObservableCollections.observableShortArray(ObservableCollections.observableShortArray(*src))
+            }.also { this.array = it }
+        }
+
+        override fun newInstance(): ArrayWrapper<ObservableShortArray, ShortArray, Short> {
+            return ShortArrayWrapper()
+        }
+
+        override val nextValue: Short
+            get() = this.nextValueState++
+
+        override operator fun set(index: Int, value: Short) {
+            this.array[index] = value
+        }
+
+        override fun setAllA(src: ShortArray) {
+            this.array.setAll(*src)
+        }
+
+        override fun setAllP(src: Array<Short>) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllT(src: ObservableShortArray) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllA(src: ShortArray, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllP(src: Array<Short>, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllT(src: ObservableShortArray, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllA(src: ShortArray) {
+            this.array.addAll(*src)
+        }
+
+        override fun addAllP(src: Array<Short>) {
+            this.array.addAll(src)
+        }
+
+        override fun addAllT(src: ObservableShortArray) {
+            this.array.addAll(src)
+        }
+
+        override operator fun plusAssign(src: ShortArray) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: Array<Short>) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: ObservableShortArray) {
+            this.array += src
+        }
+
+        override fun addAllA(src: ShortArray, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllP(src: Array<Short>, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllT(src: ObservableShortArray, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun setA(src: ShortArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setP(src: Array<Short>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setT(src: ObservableShortArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoA(dest: ShortArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoP(dest: Array<Short>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoT(dest: ObservableShortArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override operator fun get(index: Int): Short {
+            return this.array[index]
+        }
+
+        override fun toArray(): ShortArray {
+            return this.array.toShortArray()
+        }
+
+        override fun toArray(startIndex: Int, endIndex: Int): ShortArray {
+            return this.array.toShortArray(startIndex, endIndex)
+        }
+
+        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): ShortArray {
+            return if (fillWithData) ShortArray(size) { this.nextValueState++ } else ShortArray(size)
+        }
+
+        override fun createArray(size: Int, fillWithData: Boolean): Array<Short> {
+            return Array(size) { if (fillWithData) this.nextValueState++ else 0 }
+        }
+
+        override fun clonePrimitiveArray(array: ShortArray): ShortArray {
+            return array.copyOf()
+        }
+
+        override fun cloneArray(array: Array<Short>): Array<Short> {
+            return array.copyOf()
+        }
+
+        override fun arraySize(array: ShortArray): Int {
+            return array.size
+        }
+
+        override fun get(array: ShortArray, index: Int): Short {
+            return array[index]
+        }
+
+        override fun assertElementsEqual(actual: ShortArray, from: Int, to: Int, expected: ShortArray, expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected short = ${expected[j]}, actual short = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: ShortArray, from: Int, to: Int, expected: Array<Short>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected short = ${expected[j]}, actual short = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: Array<Short>, from: Int, to: Int, expected: ShortArray,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected short = ${expected[j]}, actual short = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: Array<Short>, from: Int, to: Int, expected: Array<Short>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected short = ${expected[j]}, actual short = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun primitiveArrayToString(array: ShortArray): String {
+            return array.contentToString()
+        }
+
+    }
+
+    private class ByteArrayWrapper : ArrayWrapper<ObservableByteArray, ByteArray, Byte>() {
+
+        private var nextValueState: Byte = 0
+
+        override fun createEmptyArray(): ObservableByteArray {
+            return ObservableCollections.observableByteArray().also { this.array = it }
+        }
+
+        override fun createNotEmptyArray(src: ByteArray): ObservableByteArray {
+            return when (this.nextValueState.toInt() % 3) {
+                0 -> ObservableCollections.observableByteArray(*src)
+                1 -> ObservableCollections.observableByteArray(src.toTypedArray())
+                else -> ObservableCollections.observableByteArray(ObservableCollections.observableByteArray(*src))
+            }.also { this.array = it }
+        }
+
+        override fun newInstance(): ArrayWrapper<ObservableByteArray, ByteArray, Byte> {
+            return ByteArrayWrapper()
+        }
+
+        override val nextValue: Byte
+            get() = this.nextValueState++
+
+        override operator fun set(index: Int, value: Byte) {
+            this.array[index] = value
+        }
+
+        override fun setAllA(src: ByteArray) {
+            this.array.setAll(*src)
+        }
+
+        override fun setAllP(src: Array<Byte>) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllT(src: ObservableByteArray) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllA(src: ByteArray, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllP(src: Array<Byte>, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllT(src: ObservableByteArray, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllA(src: ByteArray) {
+            this.array.addAll(*src)
+        }
+
+        override fun addAllP(src: Array<Byte>) {
+            this.array.addAll(src)
+        }
+
+        override fun addAllT(src: ObservableByteArray) {
+            this.array.addAll(src)
+        }
+
+        override operator fun plusAssign(src: ByteArray) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: Array<Byte>) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: ObservableByteArray) {
+            this.array += src
+        }
+
+        override fun addAllA(src: ByteArray, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllP(src: Array<Byte>, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllT(src: ObservableByteArray, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun setA(src: ByteArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setP(src: Array<Byte>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setT(src: ObservableByteArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoA(dest: ByteArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoP(dest: Array<Byte>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoT(dest: ObservableByteArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override operator fun get(index: Int): Byte {
+            return this.array[index]
+        }
+
+        override fun toArray(): ByteArray {
+            return this.array.toByteArray()
+        }
+
+        override fun toArray(startIndex: Int, endIndex: Int): ByteArray {
+            return this.array.toByteArray(startIndex, endIndex)
+        }
+
+        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): ByteArray {
+            return if (fillWithData) ByteArray(size) { this.nextValueState++ } else ByteArray(size)
+        }
+
+        override fun createArray(size: Int, fillWithData: Boolean): Array<Byte> {
+            return Array(size) { if (fillWithData) this.nextValueState++ else 0 }
+        }
+
+        override fun clonePrimitiveArray(array: ByteArray): ByteArray {
+            return array.copyOf()
+        }
+
+        override fun cloneArray(array: Array<Byte>): Array<Byte> {
+            return array.copyOf()
+        }
+
+        override fun arraySize(array: ByteArray): Int {
+            return array.size
+        }
+
+        override fun get(array: ByteArray, index: Int): Byte {
+            return array[index]
+        }
+
+        override fun assertElementsEqual(actual: ByteArray, from: Int, to: Int, expected: ByteArray, expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected byte = ${expected[j]}, actual byte = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: ByteArray, from: Int, to: Int, expected: Array<Byte>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected byte = ${expected[j]}, actual byte = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: Array<Byte>, from: Int, to: Int, expected: ByteArray,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected byte = ${expected[j]}, actual byte = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: Array<Byte>, from: Int, to: Int, expected: Array<Byte>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected byte = ${expected[j]}, actual byte = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun primitiveArrayToString(array: ByteArray): String {
+            return array.contentToString()
+        }
+
+    }
+
     companion object {
 
         private const val INITIAL_SIZE: Int = 6
@@ -4110,7 +4494,9 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
                     arrayOf(DoubleArrayWrapper()),
                     arrayOf(FloatArrayWrapper()),
                     arrayOf(IntArrayWrapper()),
-                    arrayOf(LongArrayWrapper())
+                    arrayOf(LongArrayWrapper()),
+                    arrayOf(ShortArrayWrapper()),
+                    arrayOf(ByteArrayWrapper())
             )
         }
 

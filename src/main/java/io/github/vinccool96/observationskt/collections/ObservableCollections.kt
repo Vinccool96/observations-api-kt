@@ -377,6 +377,90 @@ object ObservableCollections {
     }
 
     /**
+     * Creates a new empty observable short array.
+     *
+     * @return a newly created ObservableShortArray
+     */
+    fun observableShortArray(): ObservableShortArray {
+        return ObservableShortArrayImpl()
+    }
+
+    /**
+     * Creates a new observable short array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable short array
+     *
+     * @return a newly created ObservableShortArray
+     */
+    fun observableShortArray(vararg values: Short): ObservableShortArray {
+        return ObservableShortArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable short array with copy of elements in given `array`.
+     *
+     * @param array observable short array to copy
+     *
+     * @return a newly created ObservableShortArray
+     */
+    fun observableShortArray(array: Array<Short>): ObservableShortArray {
+        return ObservableShortArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable short array with copy of elements in given `array`.
+     *
+     * @param array observable short array to copy
+     *
+     * @return a newly created ObservableShortArray
+     */
+    fun observableShortArray(array: ObservableShortArray): ObservableShortArray {
+        return ObservableShortArrayImpl(array)
+    }
+
+    /**
+     * Creates a new empty observable byte array.
+     *
+     * @return a newly created ObservableByteArray
+     */
+    fun observableByteArray(): ObservableByteArray {
+        return ObservableByteArrayImpl()
+    }
+
+    /**
+     * Creates a new observable byte array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable byte array
+     *
+     * @return a newly created ObservableByteArray
+     */
+    fun observableByteArray(vararg values: Byte): ObservableByteArray {
+        return ObservableByteArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable byte array with copy of elements in given `array`.
+     *
+     * @param array observable byte array to copy
+     *
+     * @return a newly created ObservableByteArray
+     */
+    fun observableByteArray(array: Array<Byte>): ObservableByteArray {
+        return ObservableByteArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable byte array with copy of elements in given `array`.
+     *
+     * @param array observable byte array to copy
+     *
+     * @return a newly created ObservableByteArray
+     */
+    fun observableByteArray(array: ObservableByteArray): ObservableByteArray {
+        return ObservableByteArrayImpl(array)
+    }
+
+    /**
      * Creates a new empty observable array.
      *
      * @param baseArray the base array of size `1` containing the base element
