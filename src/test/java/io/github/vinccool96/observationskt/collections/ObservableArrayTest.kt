@@ -1,5 +1,6 @@
 package io.github.vinccool96.observationskt.collections
 
+import io.github.vinccool96.observationskt.utils.RandomUtils
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -9,15 +10,12 @@ import kotlin.math.max
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * Tests for ObservableArray.
- */
 @RunWith(Parameterized::class)
-class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrapper: ArrayWrapper<T, A, P>) {
+class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayWrapper<T, P>) {
 
     private var initialSize: Int = 0
 
-    private lateinit var initialElements: A
+    private lateinit var initialElements: Array<P>
 
     private lateinit var array: T
 
@@ -26,7 +24,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     @Before
     fun setUp() {
         this.initialSize = INITIAL_SIZE
-        this.initialElements = this.wrapper.createPrimitiveArray(this.initialSize)
+        this.initialElements = this.wrapper.createArray(this.initialSize)
         this.array = this.wrapper.createNotEmptyArray(this.initialElements)
         this.mao = MockArrayObserver()
         this.array.addListener(this.mao)
@@ -34,7 +32,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private fun makeEmpty() {
         this.initialSize = 0
-        this.initialElements = this.wrapper.createPrimitiveArray(this.initialSize)
+        this.initialElements = this.wrapper.createArray(this.initialSize)
         this.array.clear()
         this.mao.reset()
     }
@@ -43,7 +41,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check0()
         assertEquals(this.initialSize, this.array.size)
         val actual = this.wrapper.toArray()
-        assertEquals(this.initialSize, this.wrapper.arraySize(actual))
+        assertEquals(this.initialSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, this.array.size, this.initialElements, 0)
     }
 
@@ -65,7 +63,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     @Test
     fun testGet() {
         for (i in 0 until this.array.size) {
-            val expected = this.wrapper.get(this.initialElements, i)
+            val expected = this.initialElements[i]
             val actual = this.wrapper[i]
             assertEquals(expected, actual)
         }
@@ -76,7 +74,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     fun testToArray() {
         val expected = this.initialElements
         val actual = this.wrapper.toArray()
-        assertEquals(INITIAL_SIZE, this.wrapper.arraySize(actual))
+        assertEquals(INITIAL_SIZE, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, this.array.size, expected, 0)
     }
 
@@ -161,10 +159,10 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, matchingElements, expected, 0)
         this.wrapper.assertElementsEqual(actual, matchingElements, newSize,
-                this.wrapper.createPrimitiveArray(max(0, newSize - matchingElements), false), 0)
+                this.wrapper.createArray(max(0, newSize - matchingElements), false), 0)
     }
 
     @Test
@@ -208,49 +206,6 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
     }
 
-    // ========================= setAll(primitive array) tests =========================
-
-    private fun testSetAllA(sizeChanged: Boolean, newSize: Int) {
-        val expected = this.wrapper.createPrimitiveArray(newSize)
-
-        this.wrapper.setAllA(expected)
-
-        this.mao.check(this.array, sizeChanged, 0, newSize)
-        val actual = this.wrapper.toArray()
-        assertEquals(this.wrapper.arraySize(expected), this.array.size)
-        assertEquals(this.wrapper.arraySize(expected), this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, this.wrapper.arraySize(expected), expected, 0)
-    }
-
-    @Test
-    fun testSetAllASmaller() {
-        testSetAllA(true, 3)
-    }
-
-    @Test
-    fun testSetAllABigger() {
-        testSetAllA(true, 10)
-    }
-
-    @Test
-    fun testSetAllAOnSameSize() {
-        testSetAllA(false, INITIAL_SIZE)
-    }
-
-    @Test
-    fun testSetAllAOnEmpty() {
-        makeEmpty()
-        testSetAllA(true, 3)
-    }
-
-    @Test
-    fun testSetAllAOnEmptyToEmpty() {
-        makeEmpty()
-        this.wrapper.setAllA(this.wrapper.createPrimitiveArray(0))
-        assertUnchanged()
-        assertEquals(0, this.array.size)
-    }
-
     // ========================= setAll(array) tests =========================
 
     private fun testSetAllP(sizeChanged: Boolean, newSize: Int) {
@@ -261,7 +216,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, 0, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(expected.size, this.array.size)
-        assertEquals(expected.size, this.wrapper.arraySize(actual))
+        assertEquals(expected.size, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, expected.size, expected, 0)
     }
 
@@ -298,16 +253,16 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private fun testSetAllT(sizeChanged: Boolean, newSize: Int) {
         val wrapper2 = this.wrapper.newInstance()
-        val expected = this.wrapper.createPrimitiveArray(newSize)
+        val expected = this.wrapper.createArray(newSize)
         val src = wrapper2.createNotEmptyArray(expected)
 
         this.wrapper.setAllT(src)
 
         this.mao.check(this.array, sizeChanged, 0, newSize)
         val actual = this.wrapper.toArray()
-        assertEquals(this.wrapper.arraySize(expected), this.array.size)
-        assertEquals(this.wrapper.arraySize(expected), this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, this.wrapper.arraySize(expected), expected, 0)
+        assertEquals(expected.size, this.array.size)
+        assertEquals(expected.size, actual.size)
+        this.wrapper.assertElementsEqual(actual, 0, expected.size, expected, 0)
     }
 
     @Test
@@ -346,7 +301,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check0()
         val actual = this.wrapper.toArray()
         assertEquals(this.initialSize, this.array.size)
-        assertEquals(this.initialSize, this.wrapper.arraySize(actual))
+        assertEquals(this.initialSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, this.initialSize, this.initialElements, 0)
     }
 
@@ -359,111 +314,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check0()
         val actual = this.wrapper.toArray()
         assertEquals(0, this.array.size)
-        assertEquals(0, this.wrapper.arraySize(actual))
-    }
-
-    // ========================= setAll(primitive array, range) tests =========================
-
-    private fun testSetAllARange(sizeChanged: Boolean, newSize: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        val expected = this.wrapper.createPrimitiveArray(newSize)
-
-        this.wrapper.setAllA(expected, startIndex, endIndex)
-
-        this.mao.check(this.array, sizeChanged, 0, length)
-        val actual = this.wrapper.toArray()
-        assertEquals(length, this.array.size)
-        assertEquals(length, this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, length, expected, startIndex)
-    }
-
-    @Test
-    fun testSetAllARange1() {
-        testSetAllARange(false, INITIAL_SIZE, 0, INITIAL_SIZE)
-    }
-
-    @Test
-    fun testSetAllARange2() {
-        testSetAllARange(false, INITIAL_SIZE + 10, 0, INITIAL_SIZE)
-    }
-
-    @Test
-    fun testSetAllARange3() {
-        testSetAllARange(false, INITIAL_SIZE + 10, 10, INITIAL_SIZE + 10)
-    }
-
-    @Test
-    fun testSetAllARange4() {
-        testSetAllARange(false, INITIAL_SIZE + 10, 2, INITIAL_SIZE + 2)
-    }
-
-    @Test
-    fun testSetAllARange5() {
-        testSetAllARange(true, INITIAL_SIZE, 0, INITIAL_SIZE / 2)
-    }
-
-    @Test
-    fun testSetAllARange6() {
-        testSetAllARange(true, INITIAL_SIZE + 10, 0, INITIAL_SIZE + 10)
-    }
-
-    @Test
-    fun testSetAllARange7() {
-        testSetAllARange(true, INITIAL_SIZE + 20, 10, INITIAL_SIZE + 20)
-    }
-
-    @Test
-    fun testSetAllARange8() {
-        testSetAllARange(true, INITIAL_SIZE + 10, 2, INITIAL_SIZE - 1)
-    }
-
-    @Test
-    fun testSetAllARangeOnEmpty() {
-        makeEmpty()
-        testSetAllARange(true, INITIAL_SIZE, 1, 4)
-    }
-
-    @Test
-    fun testSetAllARangeOnEmptyToEmpty() {
-        makeEmpty()
-        this.wrapper.setAllA(this.wrapper.createPrimitiveArray(INITIAL_SIZE), 1, 1)
-        assertUnchanged()
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetAllARangeNegative1() {
-        try {
-            testSetAllARange(true, INITIAL_SIZE, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetAllARangeNegative2() {
-        try {
-            testSetAllARange(true, INITIAL_SIZE, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetAllARangeNegative3() {
-        try {
-            testSetAllARange(true, INITIAL_SIZE, 1, 0)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetAllARangeNegative4() {
-        try {
-            testSetAllARange(true, INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
-        }
+        assertEquals(0, actual.size)
     }
 
     // ========================= setAll(array, range) tests =========================
@@ -477,7 +328,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, 0, length)
         val actual = this.wrapper.toArray()
         assertEquals(length, this.array.size)
-        assertEquals(length, this.wrapper.arraySize(actual))
+        assertEquals(length, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, length, expected, startIndex)
     }
 
@@ -574,7 +425,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private fun testSetAllTRange(sizeChanged: Boolean, newSize: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val expected = this.wrapper.createPrimitiveArray(newSize)
+        val expected = this.wrapper.createArray(newSize)
         val src = this.wrapper.newInstance().createNotEmptyArray(expected)
 
         this.wrapper.setAllT(src, startIndex, endIndex)
@@ -582,7 +433,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, 0, length)
         val actual = this.wrapper.toArray()
         assertEquals(length, this.array.size)
-        assertEquals(length, this.wrapper.arraySize(actual))
+        assertEquals(length, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, length, expected, startIndex)
     }
 
@@ -636,7 +487,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     fun testSetAllTRangeOnEmptyToEmpty() {
         makeEmpty()
         this.wrapper.setAllT(this.wrapper.newInstance().createNotEmptyArray(
-                this.wrapper.createPrimitiveArray(INITIAL_SIZE)), 1, 1)
+                this.wrapper.createArray(INITIAL_SIZE)), 1, 1)
         assertUnchanged()
     }
 
@@ -678,7 +529,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testSetAllTRangeNegativeAfterSrcEnsureCapacity() {
-        val expected = this.wrapper.createPrimitiveArray(INITIAL_SIZE)
+        val expected = this.wrapper.createArray(INITIAL_SIZE)
         val src = this.wrapper.newInstance().createNotEmptyArray(expected)
         src.ensureCapacity(INITIAL_SIZE * 2)
         try {
@@ -690,7 +541,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testSetAllTRangeNegativeAfterSrcClear() {
-        val expected = this.wrapper.createPrimitiveArray(INITIAL_SIZE)
+        val expected = this.wrapper.createArray(INITIAL_SIZE)
         val src = this.wrapper.newInstance().createNotEmptyArray(expected)
         src.clear()
         try {
@@ -715,7 +566,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
         val actual = this.wrapper.toArray()
         assertEquals(length, this.array.size)
-        assertEquals(length, this.wrapper.arraySize(actual))
+        assertEquals(length, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, length, this.initialElements, startIndex)
     }
 
@@ -801,82 +652,6 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
     }
 
-    // ========================= addAll(primitive array) tests =========================
-
-    private fun testAddAllA(srcSize: Int) {
-        val src = this.wrapper.createPrimitiveArray(srcSize)
-        val oldSize = this.array.size
-
-        this.wrapper.addAllA(src)
-
-        val newSize = oldSize + srcSize
-        val sizeChanged = newSize != oldSize
-        this.mao.check(this.array, sizeChanged, oldSize, newSize)
-        val actual = this.wrapper.toArray()
-        assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
-        this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, 0)
-    }
-
-    @Test
-    fun testAddAllA0() {
-        this.wrapper.addAllA(this.wrapper.createPrimitiveArray(0))
-        assertUnchanged()
-    }
-
-    @Test
-    fun testAddAllA1() {
-        testAddAllA(1)
-    }
-
-    @Test
-    fun testAddAllA3() {
-        testAddAllA(3)
-    }
-
-    @Test
-    fun testAddAllABig() {
-        testAddAllA(INITIAL_SIZE * 2)
-    }
-
-    @Test
-    fun testAddAllASameSize() {
-        testAddAllA(INITIAL_SIZE)
-    }
-
-    @Test
-    fun testAddAllAOnEmpty1() {
-        makeEmpty()
-        testAddAllA(1)
-    }
-
-    @Test
-    fun testAddAllAOnEmptySameSize() {
-        makeEmpty()
-        testAddAllA(INITIAL_SIZE)
-    }
-
-    @Test
-    fun testAddAllAOnEmptyBig() {
-        makeEmpty()
-        testAddAllA(INITIAL_SIZE * 3)
-    }
-
-    @Test
-    fun testAddAllAOnEmpty0() {
-        makeEmpty()
-        this.wrapper.addAllA(this.wrapper.createPrimitiveArray(0))
-        assertUnchanged()
-    }
-
-    @Test
-    fun testAddAllAManyPoints() {
-        for (i in 0 until 65_000) {
-            this.wrapper.addAllA(this.wrapper.createPrimitiveArray(3))
-        }
-    }
-
     // ========================= addAll(array) tests =========================
 
     private fun testAddAllP(srcSize: Int) {
@@ -890,7 +665,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, oldSize, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, 0)
     }
@@ -956,7 +731,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     // ========================= addAll(observable array) tests =========================
 
     private fun testAddAllT(srcSize: Int) {
-        val src = this.wrapper.createPrimitiveArray(srcSize)
+        val src = this.wrapper.createArray(srcSize)
         val oldSize = this.array.size
 
         this.wrapper.addAllT(this.wrapper.newInstance().createNotEmptyArray(src))
@@ -966,7 +741,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, oldSize, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, 0)
     }
@@ -1042,90 +817,14 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check0()
         val actual = this.wrapper.toArray()
         assertEquals(0, this.array.size)
-        assertEquals(0, this.wrapper.arraySize(actual))
+        assertEquals(0, actual.size)
     }
 
     @Test
     fun testAddAllTManyPoints() {
         for (i in 0 until 65_000) {
             this.wrapper.addAllT(this.wrapper.newInstance().createNotEmptyArray(
-                    this.wrapper.createPrimitiveArray(3)))
-        }
-    }
-
-    // ========================= plusAssign(primitive array) tests =========================
-
-    private fun testPlusAssignA(srcSize: Int) {
-        val src = this.wrapper.createPrimitiveArray(srcSize)
-        val oldSize = this.array.size
-
-        this.wrapper += src
-
-        val newSize = oldSize + srcSize
-        val sizeChanged = newSize != oldSize
-        this.mao.check(this.array, sizeChanged, oldSize, newSize)
-        val actual = this.wrapper.toArray()
-        assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
-        this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, 0)
-    }
-
-    @Test
-    fun testPlusAssignA0() {
-        this.wrapper += this.wrapper.createPrimitiveArray(0)
-        assertUnchanged()
-    }
-
-    @Test
-    fun testPlusAssignA1() {
-        testPlusAssignA(1)
-    }
-
-    @Test
-    fun testPlusAssignA3() {
-        testPlusAssignA(3)
-    }
-
-    @Test
-    fun testPlusAssignABig() {
-        testPlusAssignA(INITIAL_SIZE * 2)
-    }
-
-    @Test
-    fun testPlusAssignASameSize() {
-        testPlusAssignA(INITIAL_SIZE)
-    }
-
-    @Test
-    fun testPlusAssignAOnEmpty1() {
-        makeEmpty()
-        testPlusAssignA(1)
-    }
-
-    @Test
-    fun testPlusAssignAOnEmptySameSize() {
-        makeEmpty()
-        testPlusAssignA(INITIAL_SIZE)
-    }
-
-    @Test
-    fun testPlusAssignAOnEmptyBig() {
-        makeEmpty()
-        testPlusAssignA(INITIAL_SIZE * 3)
-    }
-
-    @Test
-    fun testPlusAssignAOnEmpty0() {
-        makeEmpty()
-        this.wrapper += this.wrapper.createPrimitiveArray(0)
-        assertUnchanged()
-    }
-
-    @Test
-    fun testPlusAssignAManyPoints() {
-        for (i in 0 until 65_000) {
-            this.wrapper += this.wrapper.createPrimitiveArray(3)
+                    this.wrapper.createArray(3)))
         }
     }
 
@@ -1142,7 +841,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, oldSize, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, 0)
     }
@@ -1208,7 +907,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     // ========================= plusAssign(observable array) tests =========================
 
     private fun testPlusAssignT(srcSize: Int) {
-        val src = this.wrapper.createPrimitiveArray(srcSize)
+        val src = this.wrapper.createArray(srcSize)
         val oldSize = this.array.size
 
         this.wrapper += this.wrapper.newInstance().createNotEmptyArray(src)
@@ -1218,7 +917,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, oldSize, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, 0)
     }
@@ -1294,129 +993,14 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check0()
         val actual = this.wrapper.toArray()
         assertEquals(0, this.array.size)
-        assertEquals(0, this.wrapper.arraySize(actual))
+        assertEquals(0, actual.size)
     }
 
     @Test
     fun testPlusAssignTManyPoints() {
         for (i in 0 until 65_000) {
             this.wrapper += this.wrapper.newInstance().createNotEmptyArray(
-                    this.wrapper.createPrimitiveArray(3))
-        }
-    }
-
-    // ========================= addAll(primitive array, range) tests =========================
-
-    private fun testAddAllARange(srcSize: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        val src = this.wrapper.createPrimitiveArray(srcSize)
-        val oldSize = this.array.size
-
-        this.wrapper.addAllA(src, startIndex, endIndex)
-
-        val newSize = oldSize + length
-        val sizeChanged = newSize != oldSize
-
-        this.mao.check(this.array, sizeChanged, oldSize, newSize)
-        val actual = this.wrapper.toArray()
-        assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
-        this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, startIndex)
-    }
-
-    @Test
-    fun testAddAllARange1() {
-        testAddAllARange(INITIAL_SIZE, 0, INITIAL_SIZE)
-    }
-
-    @Test
-    fun testAddAllARange2() {
-        testAddAllARange(INITIAL_SIZE + 10, 0, INITIAL_SIZE)
-    }
-
-    @Test
-    fun testAddAllARange3() {
-        testAddAllARange(INITIAL_SIZE + 10, 10, INITIAL_SIZE + 10)
-    }
-
-    @Test
-    fun testAddAllARange4() {
-        testAddAllARange(INITIAL_SIZE + 10, 2, INITIAL_SIZE + 2)
-    }
-
-    @Test
-    fun testAddAllARange5() {
-        testAddAllARange(INITIAL_SIZE, 0, INITIAL_SIZE / 2)
-    }
-
-    @Test
-    fun testAddAllARange6() {
-        testAddAllARange(INITIAL_SIZE + 10, 0, INITIAL_SIZE + 10)
-    }
-
-    @Test
-    fun testAddAllARange7() {
-        testAddAllARange(INITIAL_SIZE + 20, 10, INITIAL_SIZE + 20)
-    }
-
-    @Test
-    fun testAddAllARange8() {
-        testAddAllARange(INITIAL_SIZE + 10, 2, INITIAL_SIZE - 1)
-    }
-
-    @Test
-    fun testAddAllARangeOnEmpty1() {
-        makeEmpty()
-        testAddAllARange(INITIAL_SIZE, 1, 4)
-    }
-
-    @Test
-    fun testAddAllARangeOnEmpty2() {
-        makeEmpty()
-        testAddAllARange(INITIAL_SIZE * 3, INITIAL_SIZE, INITIAL_SIZE * 3)
-    }
-
-    @Test
-    fun testAddAllARangeOnEmpty3() {
-        makeEmpty()
-        this.wrapper.addAllA(this.wrapper.createPrimitiveArray(INITIAL_SIZE), 1, 1)
-        assertUnchanged()
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testAddAllARangeNegative1() {
-        try {
-            testAddAllARange(INITIAL_SIZE, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testAddAllARangeNegative2() {
-        try {
-            testAddAllARange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testAddAllARangeNegative3() {
-        try {
-            testAddAllARange(INITIAL_SIZE, 1, 0)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testAddAllARangeNegative4() {
-        try {
-            testAddAllARange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+                    this.wrapper.createArray(3))
         }
     }
 
@@ -1435,7 +1019,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, oldSize, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, startIndex)
     }
@@ -1539,7 +1123,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private fun testAddAllTRange(srcSize: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val src = this.wrapper.createPrimitiveArray(srcSize)
+        val src = this.wrapper.createArray(srcSize)
         val oldSize = this.array.size
 
         this.wrapper.addAllT(this.wrapper.newInstance().createNotEmptyArray(src), startIndex, endIndex)
@@ -1550,7 +1134,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, sizeChanged, oldSize, newSize)
         val actual = this.wrapper.toArray()
         assertEquals(newSize, this.array.size)
-        assertEquals(newSize, this.wrapper.arraySize(actual))
+        assertEquals(newSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, oldSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, oldSize, newSize, src, startIndex)
     }
@@ -1611,7 +1195,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     fun testAddAllTRangeOnEmpty3() {
         makeEmpty()
         this.wrapper.addAllT(
-                this.wrapper.newInstance().createNotEmptyArray(this.wrapper.createPrimitiveArray(INITIAL_SIZE)), 1, 1)
+                this.wrapper.newInstance().createNotEmptyArray(this.wrapper.createArray(INITIAL_SIZE)), 1, 1)
         assertUnchanged()
     }
 
@@ -1653,7 +1237,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testAddAllTRangeNegativeAfterSrcEnsureCapacity() {
-        val srcA = this.wrapper.createPrimitiveArray(INITIAL_SIZE)
+        val srcA = this.wrapper.createArray(INITIAL_SIZE)
         val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
         src.ensureCapacity(INITIAL_SIZE * 2)
         try {
@@ -1665,7 +1249,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testAddAllTRangeNegativeAfterSrcClear() {
-        val srcA = this.wrapper.createPrimitiveArray(INITIAL_SIZE)
+        val srcA = this.wrapper.createArray(INITIAL_SIZE)
         val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
         src.clear()
         try {
@@ -1683,7 +1267,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.check(this.array, true, this.initialSize, expSize)
         val actual = this.wrapper.toArray()
         assertEquals(expSize, this.array.size)
-        assertEquals(expSize, this.wrapper.arraySize(actual))
+        assertEquals(expSize, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, this.initialSize, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, this.initialSize, expSize, this.initialElements, startIndex)
     }
@@ -1764,132 +1348,6 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
     }
 
-    // ========================= set(primitive array, range) tests =========================
-
-    private fun testSetARange(srcSize: Int, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        val expected = this.wrapper.createPrimitiveArray(srcSize)
-
-        this.wrapper.setA(expected, destinationOffset, startIndex, endIndex)
-
-        this.mao.checkOnlyElementsChanged(this.array, destinationOffset, destinationOffset + length)
-        val actual = this.wrapper.toArray()
-        assertEquals(INITIAL_SIZE, this.array.size)
-        assertEquals(INITIAL_SIZE, this.wrapper.arraySize(actual))
-        this.wrapper.assertElementsEqual(actual, 0, destinationOffset, this.initialElements, 0)
-        this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, expected, startIndex)
-        this.wrapper.assertElementsEqual(actual, destinationOffset + length, INITIAL_SIZE, this.initialElements,
-                destinationOffset + length)
-    }
-
-    @Test
-    fun testSetARange1() {
-        testSetARange(5, 0, 0, 5)
-    }
-
-    @Test
-    fun testSetARange2() {
-        testSetARange(3, 2, 0, 3)
-    }
-
-    @Test
-    fun testSetARange3() {
-        testSetARange(5, 0, 2, 5)
-    }
-
-    @Test
-    fun testSetARange4() {
-        testSetARange(5, 0, 0, 3)
-    }
-
-    @Test
-    fun testSetARange5() {
-        testSetARange(10, 3, 5, 8)
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative1() {
-        try {
-            testSetARange(10, -1, 0, 3)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative2() {
-        try {
-            testSetARange(10, 0, -1, 3)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative3() {
-        try {
-            testSetARange(10, 1, 1, 0)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative4() {
-        try {
-            testSetARange(10, INITIAL_SIZE, 0, 3)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative5() {
-        try {
-            testSetARange(10, 0, 10, 11)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative6() {
-        try {
-            testSetARange(3, 0, 1, 5)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegative7() {
-        try {
-            testSetARange(10, INITIAL_SIZE - 3, 0, 4)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            testSetARange(10, INITIAL_SIZE, 0, 1)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testSetARangeNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testSetARange(1, 0, 0, 1)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
     // ========================= set(array, range) tests =========================
 
     private fun testSetPRange(srcSize: Int, destinationOffset: Int, startIndex: Int, endIndex: Int) {
@@ -1901,7 +1359,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.checkOnlyElementsChanged(this.array, destinationOffset, destinationOffset + length)
         val actual = this.wrapper.toArray()
         assertEquals(INITIAL_SIZE, this.array.size)
-        assertEquals(INITIAL_SIZE, this.wrapper.arraySize(actual))
+        assertEquals(INITIAL_SIZE, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, destinationOffset, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, expected, startIndex)
         this.wrapper.assertElementsEqual(actual, destinationOffset + length, INITIAL_SIZE, this.initialElements,
@@ -2020,7 +1478,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private fun testSetTRange(srcSize: Int, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val expected = this.wrapper.createPrimitiveArray(srcSize)
+        val expected = this.wrapper.createArray(srcSize)
         val src = this.wrapper.newInstance().createNotEmptyArray(expected)
 
         this.wrapper.setT(src, destinationOffset, startIndex, endIndex)
@@ -2028,7 +1486,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.checkOnlyElementsChanged(this.array, destinationOffset, destinationOffset + length)
         val actual = this.wrapper.toArray()
         assertEquals(INITIAL_SIZE, this.array.size)
-        assertEquals(INITIAL_SIZE, this.wrapper.arraySize(actual))
+        assertEquals(INITIAL_SIZE, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, destinationOffset, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, expected, startIndex)
         this.wrapper.assertElementsEqual(actual, destinationOffset + length, INITIAL_SIZE, this.initialElements,
@@ -2145,7 +1603,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testSetTRangeNegativeAfterSrcEnsureCapacity() {
-        val srcA = this.wrapper.createPrimitiveArray(1)
+        val srcA = this.wrapper.createArray(1)
         val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
         src.ensureCapacity(2)
         try {
@@ -2157,7 +1615,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testSetTRangeNegativeAfterSrcClear() {
-        val srcA = this.wrapper.createPrimitiveArray(1)
+        val srcA = this.wrapper.createArray(1)
         val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
         src.clear()
         try {
@@ -2174,7 +1632,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.mao.checkOnlyElementsChanged(this.array, destinationOffset, destinationOffset + length)
         val actual = this.wrapper.toArray()
         assertEquals(INITIAL_SIZE, this.array.size)
-        assertEquals(INITIAL_SIZE, this.wrapper.arraySize(actual))
+        assertEquals(INITIAL_SIZE, actual.size)
         this.wrapper.assertElementsEqual(actual, 0, destinationOffset, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, this.initialElements,
                 startIndex)
@@ -2482,164 +1940,6 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
     }
 
-    // ========================= copyInto(primitive array) tests =========================
-
-    private fun testCopyIntoA(destSize: Int, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val actual = this.wrapper.createPrimitiveArray(destSize)
-        val initial = this.wrapper.clonePrimitiveArray(actual)
-        this.wrapper.copyIntoA(actual, destinationOffset, startIndex, endIndex)
-        assertUnchanged()
-        val length = endIndex - startIndex
-        val expected = this.wrapper.toArray()
-        this.wrapper.assertElementsEqual(actual, 0, destinationOffset, initial, 0)
-        this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, expected, startIndex)
-        this.wrapper.assertElementsEqual(actual, destinationOffset + length, this.wrapper.arraySize(actual), initial,
-                destinationOffset + length)
-    }
-
-    @Test
-    fun testCopyIntoA1() {
-        testCopyIntoA(this.array.size, 0, 0, this.array.size)
-    }
-
-    @Test
-    fun testCopyIntoA2() {
-        testCopyIntoA(this.array.size, 2, 1, 4)
-    }
-
-    @Test
-    fun testCopyIntoA3() {
-        testCopyIntoA(this.array.size, 2, 2, 4)
-    }
-
-    @Test
-    fun testCopyIntoA4() {
-        testCopyIntoA(this.array.size, 2, 0, 2)
-    }
-
-    @Test
-    fun testCopyIntoA5() {
-        testCopyIntoA(3, 1, 0, 2)
-    }
-
-    @Test
-    fun testCopyIntoA6() {
-        testCopyIntoA(this.array.size * 3, this.array.size * 2, 0, this.array.size)
-    }
-
-    @Test
-    fun testCopyIntoA7() {
-        testCopyIntoA(this.array.size, 0, 3, this.array.size)
-    }
-
-    @Test
-    fun testCopyIntoA8() {
-        testCopyIntoA(10, 7, 0, 3)
-    }
-
-    @Test
-    fun testCopyIntoA9() {
-        testCopyIntoA(0, 0, 1, 1)
-    }
-
-    @Test
-    fun testCopyIntoA10() {
-        makeEmpty()
-        testCopyIntoA(0, 0, 0, 0)
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative1() {
-        try {
-            testCopyIntoA(this.array.size, 0, -1, this.array.size)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative2() {
-        try {
-            testCopyIntoA(this.array.size / 2, 0, 0, this.array.size)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative3() {
-        try {
-            testCopyIntoA(this.array.size, 0, this.array.size, this.array.size * 2)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative4() {
-        try {
-            testCopyIntoA(this.array.size, -1, 0, this.array.size)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative5() {
-        try {
-            testCopyIntoA(this.array.size, this.array.size, 0, this.array.size)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative6() {
-        try {
-            testCopyIntoA(this.array.size, 0, 0, this.array.size * 2)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative7() {
-        makeEmpty()
-        try {
-            testCopyIntoA(0, 0, 1, 1)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegative8() {
-        try {
-            testCopyIntoA(0, 1, 0, 0)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegativeAfterEnsureCapacity() {
-        try {
-            testCopyIntoA(0, 1, 0, 0)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
-    fun testCopyIntoANegativeAfterClear() {
-        makeEmpty()
-        try {
-            testCopyIntoA(1, 0, 0, 1)
-        } finally {
-            assertUnchanged()
-        }
-    }
-
     // ========================= copyInto(array) tests =========================
 
     private fun testCopyIntoP(destSize: Int, destinationOffset: Int, startIndex: Int, endIndex: Int) {
@@ -2802,7 +2102,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private fun testCopyIntoT(destSize: Int, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         val wrapper2 = this.wrapper.newInstance()
-        val initial = wrapper2.createPrimitiveArray(destSize)
+        val initial = wrapper2.createArray(destSize)
         val dest = wrapper2.createNotEmptyArray(initial)
 
         this.wrapper.copyIntoT(dest, destinationOffset, startIndex, endIndex)
@@ -2813,7 +2113,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         val actual = wrapper2.toArray()
         this.wrapper.assertElementsEqual(actual, 0, destinationOffset, initial, 0)
         this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, expected, startIndex)
-        this.wrapper.assertElementsEqual(actual, destinationOffset + length, this.wrapper.arraySize(actual), initial,
+        this.wrapper.assertElementsEqual(actual, destinationOffset + length, actual.size, initial,
                 destinationOffset + length)
     }
 
@@ -2963,7 +2263,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testCopyIntoTNegativeAfterDestEnsureCapacity() {
         val wrapper2 = this.wrapper.newInstance()
-        val initial = wrapper2.createPrimitiveArray(1)
+        val initial = wrapper2.createArray(1)
         val dest = wrapper2.createNotEmptyArray(initial)
         dest.ensureCapacity(2)
         try {
@@ -2976,7 +2276,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     @Test(expected = ArrayIndexOutOfBoundsException::class)
     fun testCopyIntoTNegativeAfterDestClear() {
         val wrapper2 = this.wrapper.newInstance()
-        val initial = wrapper2.createPrimitiveArray(1)
+        val initial = wrapper2.createArray(1)
         val dest = wrapper2.createNotEmptyArray(initial)
         dest.clear()
         try {
@@ -2994,7 +2294,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         this.wrapper.assertElementsEqual(actual, 0, destinationOffset, this.initialElements, 0)
         this.wrapper.assertElementsEqual(actual, destinationOffset, destinationOffset + length, this.initialElements,
                 startIndex)
-        this.wrapper.assertElementsEqual(actual, destinationOffset + length, this.wrapper.arraySize(actual),
+        this.wrapper.assertElementsEqual(actual, destinationOffset + length, actual.size,
                 this.initialElements, destinationOffset + length)
     }
 
@@ -3223,9 +2523,9 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     @Test
     fun testToString() {
         val actual = this.array.toString()
-        val expected = this.wrapper.primitiveArrayToString(this.wrapper.toArray())
+        val expected = this.wrapper.toArray().contentToString()
         assertEquals(expected, actual)
-        val regex = "\\[[0-9]+(\\.[0-9]+)?(, [0-9]+(.[0-9]+)?){${this.initialSize - 1}}]"
+        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)?){${this.initialSize - 1}}]"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -3233,9 +2533,9 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
     fun testToStringAfterResize() {
         this.array.resize(this.initialSize / 2)
         val actual = this.array.toString()
-        val expected = this.wrapper.primitiveArrayToString(this.wrapper.toArray())
+        val expected = this.wrapper.toArray().contentToString()
         assertEquals(expected, actual)
-        val regex = "\\[[0-9]+(\\.[0-9]+)?(, [0-9]+(.[0-9]+)?){${this.array.size - 1}}]"
+        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)?){${this.array.size - 1}}]"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -3250,60 +2550,45 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     /**
      * @param T ObservableArray subclass
-     * @param A corresponding primitive array
      * @param P corresponding class for boxed elements
      */
-    abstract class ArrayWrapper<T : ObservableArray<T>, A, P> {
+    abstract class ArrayWrapper<T : ObservableArray<T>, P> {
 
         protected lateinit var array: T
 
         abstract fun createEmptyArray(): T
 
-        abstract fun createNotEmptyArray(src: A): T
+        abstract fun createNotEmptyArray(src: Array<P>): T
 
-        abstract fun newInstance(): ArrayWrapper<T, A, P>
+        abstract fun newInstance(): ArrayWrapper<T, P>
 
         abstract val nextValue: P
 
         abstract operator fun set(index: Int, value: P)
 
-        abstract fun setAllA(src: A)
-
         abstract fun setAllP(src: Array<P>)
 
         abstract fun setAllT(src: T)
-
-        abstract fun setAllA(src: A, startIndex: Int, endIndex: Int)
 
         abstract fun setAllP(src: Array<P>, startIndex: Int, endIndex: Int)
 
         abstract fun setAllT(src: T, startIndex: Int, endIndex: Int)
 
-        abstract fun addAllA(src: A)
-
         abstract fun addAllP(src: Array<P>)
 
         abstract fun addAllT(src: T)
-
-        abstract operator fun plusAssign(src: A)
 
         abstract operator fun plusAssign(src: Array<P>)
 
         abstract operator fun plusAssign(src: T)
 
-        abstract fun addAllA(src: A, startIndex: Int, endIndex: Int)
-
         abstract fun addAllP(src: Array<P>, startIndex: Int, endIndex: Int)
 
         abstract fun addAllT(src: T, startIndex: Int, endIndex: Int)
 
-        abstract fun setA(src: A, destinationOffset: Int, startIndex: Int, endIndex: Int)
-
         abstract fun setP(src: Array<P>, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
         abstract fun setT(src: T, destinationOffset: Int, startIndex: Int, endIndex: Int)
-
-        abstract fun copyIntoA(dest: A, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
         abstract fun copyIntoP(dest: Array<P>, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
@@ -3311,15 +2596,9 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
         abstract operator fun get(index: Int): P
 
-        abstract fun toArray(): A
+        abstract fun toArray(): Array<P>
 
-        abstract fun toArray(startIndex: Int, endIndex: Int): A
-
-        fun createPrimitiveArray(size: Int): A {
-            return createPrimitiveArray(size, true)
-        }
-
-        abstract fun createPrimitiveArray(size: Int, fillWithData: Boolean): A
+        abstract fun toArray(startIndex: Int, endIndex: Int): Array<P>
 
         fun createArray(size: Int): Array<P> {
             return createArray(size, true)
@@ -3327,774 +2606,244 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
         abstract fun createArray(size: Int, fillWithData: Boolean): Array<P>
 
-        abstract fun clonePrimitiveArray(array: A): A
-
         abstract fun cloneArray(array: Array<P>): Array<P>
-
-        abstract fun arraySize(array: A): Int
-
-        abstract fun get(array: A, index: Int): P
-
-        abstract fun assertElementsEqual(actual: A, from: Int, to: Int, expected: A, expFrom: Int)
-
-        abstract fun assertElementsEqual(actual: A, from: Int, to: Int, expected: Array<P>, expFrom: Int)
-
-        abstract fun assertElementsEqual(actual: Array<P>, from: Int, to: Int, expected: A, expFrom: Int)
 
         abstract fun assertElementsEqual(actual: Array<P>, from: Int, to: Int, expected: Array<P>, expFrom: Int)
 
-        abstract fun primitiveArrayToString(array: A): String
-
     }
 
-    private class DoubleArrayWrapper : ArrayWrapper<ObservableDoubleArray, DoubleArray, Double>() {
+    private class StringWrapper : ArrayWrapper<ObservableObjectArray<String>, String>() {
 
-        private var nextValueState: Double = 0.0
+        private var counter = 0
 
-        override fun createEmptyArray(): ObservableDoubleArray {
-            return ObservableCollections.observableDoubleArray().also { this.array = it }
+        override fun createEmptyArray(): ObservableObjectArray<String> {
+            return ObservableCollections.observableObjectArray(arrayOf("1")).also { this.array = it }
         }
 
-        override fun createNotEmptyArray(src: DoubleArray): ObservableDoubleArray {
-            return when (this.nextValueState.toInt() % 3) {
-                0 -> ObservableCollections.observableDoubleArray(*src)
-                1 -> ObservableCollections.observableDoubleArray(src.toTypedArray())
-                else -> ObservableCollections.observableDoubleArray(ObservableCollections.observableDoubleArray(*src))
+        override fun createNotEmptyArray(src: Array<String>): ObservableObjectArray<String> {
+            return when (this.counter % 1) {
+                0 -> ObservableCollections.observableObjectArray(arrayOf("1"), *src)
+                else -> ObservableCollections.observableObjectArray<String>(arrayOf("1"),
+                        ObservableCollections.observableObjectArray(arrayOf("1"), *src))
             }.also { this.array = it }
         }
 
-        override fun newInstance(): ArrayWrapper<ObservableDoubleArray, DoubleArray, Double> {
-            return DoubleArrayWrapper()
+        override fun newInstance(): ArrayWrapper<ObservableObjectArray<String>, String> {
+            return StringWrapper()
         }
 
-        override val nextValue: Double
-            get() = this.nextValueState++
+        override val nextValue: String
+            get() {
+                return RandomUtils.randomString(16)
+            }
 
-        override operator fun set(index: Int, value: Double) {
+        override operator fun set(index: Int, value: String) {
             this.array[index] = value
         }
 
-        override fun setAllA(src: DoubleArray) {
+        override fun setAllP(src: Array<String>) {
             this.array.setAll(*src)
         }
 
-        override fun setAllP(src: Array<Double>) {
+        override fun setAllT(src: ObservableObjectArray<String>) {
             this.array.setAll(src)
         }
 
-        override fun setAllT(src: ObservableDoubleArray) {
-            this.array.setAll(src)
-        }
-
-        override fun setAllA(src: DoubleArray, startIndex: Int, endIndex: Int) {
+        override fun setAllP(src: Array<String>, startIndex: Int, endIndex: Int) {
             this.array.setAll(src, startIndex, endIndex)
         }
 
-        override fun setAllP(src: Array<Double>, startIndex: Int, endIndex: Int) {
+        override fun setAllT(src: ObservableObjectArray<String>, startIndex: Int, endIndex: Int) {
             this.array.setAll(src, startIndex, endIndex)
         }
 
-        override fun setAllT(src: ObservableDoubleArray, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllA(src: DoubleArray) {
+        override fun addAllP(src: Array<String>) {
             this.array.addAll(*src)
         }
 
-        override fun addAllP(src: Array<Double>) {
+        override fun addAllT(src: ObservableObjectArray<String>) {
             this.array.addAll(src)
         }
 
-        override fun addAllT(src: ObservableDoubleArray) {
-            this.array.addAll(src)
-        }
-
-        override operator fun plusAssign(src: DoubleArray) {
+        override operator fun plusAssign(src: Array<String>) {
             this.array += src
         }
 
-        override operator fun plusAssign(src: Array<Double>) {
+        override operator fun plusAssign(src: ObservableObjectArray<String>) {
             this.array += src
         }
 
-        override operator fun plusAssign(src: ObservableDoubleArray) {
-            this.array += src
-        }
-
-        override fun addAllA(src: DoubleArray, startIndex: Int, endIndex: Int) {
+        override fun addAllP(src: Array<String>, startIndex: Int, endIndex: Int) {
             this.array.addAll(src, startIndex, endIndex)
         }
 
-        override fun addAllP(src: Array<Double>, startIndex: Int, endIndex: Int) {
+        override fun addAllT(src: ObservableObjectArray<String>, startIndex: Int, endIndex: Int) {
             this.array.addAll(src, startIndex, endIndex)
         }
 
-        override fun addAllT(src: ObservableDoubleArray, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun setA(src: DoubleArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun setP(src: Array<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.array.set(src, destinationOffset, startIndex, endIndex)
         }
 
-        override fun setP(src: Array<Double>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun setT(src: ObservableObjectArray<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.array.set(src, destinationOffset, startIndex, endIndex)
         }
 
-        override fun setT(src: ObservableDoubleArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoA(dest: DoubleArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun copyIntoP(dest: Array<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
         }
 
-        override fun copyIntoP(dest: Array<Double>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun copyIntoT(dest: ObservableObjectArray<String>, destinationOffset: Int, startIndex: Int,
+                endIndex: Int) {
             this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
         }
 
-        override fun copyIntoT(dest: ObservableDoubleArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override operator fun get(index: Int): Double {
+        override operator fun get(index: Int): String {
             return this.array[index]
         }
 
-        override fun toArray(): DoubleArray {
-            return this.array.toDoubleArray()
+        override fun toArray(): Array<String> {
+            return this.array.toTypedArray()
         }
 
-        override fun toArray(startIndex: Int, endIndex: Int): DoubleArray {
-            return this.array.toDoubleArray(startIndex, endIndex)
+        override fun toArray(startIndex: Int, endIndex: Int): Array<String> {
+            return this.array.toTypedArray(startIndex, endIndex)
         }
 
-        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): DoubleArray {
-            return if (fillWithData) DoubleArray(size) { this.nextValueState++ } else DoubleArray(size)
+        override fun createArray(size: Int, fillWithData: Boolean): Array<String> {
+            return (if (fillWithData) Array(size) { this.nextValue } else Array(size) { "1" })
         }
 
-        override fun createArray(size: Int, fillWithData: Boolean): Array<Double> {
-            return Array(size) { if (fillWithData) this.nextValueState++ else 0.0 }
-        }
-
-        override fun clonePrimitiveArray(array: DoubleArray): DoubleArray {
+        override fun cloneArray(array: Array<String>): Array<String> {
             return array.copyOf()
         }
 
-        override fun cloneArray(array: Array<Double>): Array<Double> {
-            return array.copyOf()
-        }
-
-        override fun arraySize(array: DoubleArray): Int {
-            return array.size
-        }
-
-        override fun get(array: DoubleArray, index: Int): Double {
-            return array[index]
-        }
-
-        override fun assertElementsEqual(actual: DoubleArray, from: Int, to: Int, expected: DoubleArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected double = ${expected[j]}, actual double = ${actual[i]}")
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: DoubleArray, from: Int, to: Int, expected: Array<Double>,
+        override fun assertElementsEqual(actual: Array<String>, from: Int, to: Int, expected: Array<String>,
                 expFrom: Int) {
             var j = expFrom
             for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected double = ${expected[j]}, actual double = ${actual[i]}")
+                assertEquals(expected[j], actual[i],
+                        "expected String = ${expected[j]}, actual String = ${actual[i]}")
                 j++
             }
-        }
-
-        override fun assertElementsEqual(actual: Array<Double>, from: Int, to: Int, expected: DoubleArray,
-                expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected double = ${expected[j]}, actual double = ${actual[i]}")
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Double>, from: Int, to: Int, expected: Array<Double>,
-                expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected double = ${expected[j]}, actual double = ${actual[i]}")
-                j++
-            }
-        }
-
-        override fun primitiveArrayToString(array: DoubleArray): String {
-            return array.contentToString()
         }
 
     }
 
-    private class FloatArrayWrapper : ArrayWrapper<ObservableFloatArray, FloatArray, Float>() {
+    private class NullableStringWrapper : ArrayWrapper<ObservableObjectArray<String?>, String?>() {
 
-        private var nextValueState: Float = 0.0f
+        private var counter = 0
 
-        override fun createEmptyArray(): ObservableFloatArray {
-            return ObservableCollections.observableFloatArray().also { this.array = it }
+        override fun createEmptyArray(): ObservableObjectArray<String?> {
+            return ObservableCollections.observableObjectArray(arrayOf<String?>(null)).also { this.array = it }
         }
 
-        override fun createNotEmptyArray(src: FloatArray): ObservableFloatArray {
-            return when (this.nextValueState.toInt() % 3) {
-                0 -> ObservableCollections.observableFloatArray(*src)
-                1 -> ObservableCollections.observableFloatArray(src.toTypedArray())
-                else -> ObservableCollections.observableFloatArray(ObservableCollections.observableFloatArray(*src))
+        override fun createNotEmptyArray(src: Array<String?>): ObservableObjectArray<String?> {
+            return when (this.counter % 1) {
+                0 -> ObservableCollections.observableObjectArray(arrayOf(null), *src)
+                else -> ObservableCollections.observableObjectArray<String?>(arrayOf(null),
+                        ObservableCollections.observableObjectArray(arrayOf(null), *src))
             }.also { this.array = it }
         }
 
-        override fun newInstance(): ArrayWrapper<ObservableFloatArray, FloatArray, Float> {
-            return FloatArrayWrapper()
+        override fun newInstance(): ArrayWrapper<ObservableObjectArray<String?>, String?> {
+            return NullableStringWrapper()
         }
 
-        override val nextValue: Float
-            get() = this.nextValueState++
+        override val nextValue: String?
+            get() {
+                return if (RandomUtils.nextInt() % 2 == 0) RandomUtils.randomString(16) else null
+            }
 
-        override operator fun set(index: Int, value: Float) {
+        override operator fun set(index: Int, value: String?) {
             this.array[index] = value
         }
 
-        override fun setAllA(src: FloatArray) {
+        override fun setAllP(src: Array<String?>) {
             this.array.setAll(*src)
         }
 
-        override fun setAllP(src: Array<Float>) {
+        override fun setAllT(src: ObservableObjectArray<String?>) {
             this.array.setAll(src)
         }
 
-        override fun setAllT(src: ObservableFloatArray) {
-            this.array.setAll(src)
-        }
-
-        override fun setAllA(src: FloatArray, startIndex: Int, endIndex: Int) {
+        override fun setAllP(src: Array<String?>, startIndex: Int, endIndex: Int) {
             this.array.setAll(src, startIndex, endIndex)
         }
 
-        override fun setAllP(src: Array<Float>, startIndex: Int, endIndex: Int) {
+        override fun setAllT(src: ObservableObjectArray<String?>, startIndex: Int, endIndex: Int) {
             this.array.setAll(src, startIndex, endIndex)
         }
 
-        override fun setAllT(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllA(src: FloatArray) {
+        override fun addAllP(src: Array<String?>) {
             this.array.addAll(*src)
         }
 
-        override fun addAllP(src: Array<Float>) {
+        override fun addAllT(src: ObservableObjectArray<String?>) {
             this.array.addAll(src)
         }
 
-        override fun addAllT(src: ObservableFloatArray) {
-            this.array.addAll(src)
-        }
-
-        override operator fun plusAssign(src: FloatArray) {
+        override operator fun plusAssign(src: Array<String?>) {
             this.array += src
         }
 
-        override operator fun plusAssign(src: Array<Float>) {
+        override operator fun plusAssign(src: ObservableObjectArray<String?>) {
             this.array += src
         }
 
-        override operator fun plusAssign(src: ObservableFloatArray) {
-            this.array += src
-        }
-
-        override fun addAllA(src: FloatArray, startIndex: Int, endIndex: Int) {
+        override fun addAllP(src: Array<String?>, startIndex: Int, endIndex: Int) {
             this.array.addAll(src, startIndex, endIndex)
         }
 
-        override fun addAllP(src: Array<Float>, startIndex: Int, endIndex: Int) {
+        override fun addAllT(src: ObservableObjectArray<String?>, startIndex: Int, endIndex: Int) {
             this.array.addAll(src, startIndex, endIndex)
         }
 
-        override fun addAllT(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun setA(src: FloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun setP(src: Array<String?>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.array.set(src, destinationOffset, startIndex, endIndex)
         }
 
-        override fun setP(src: Array<Float>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun setT(src: ObservableObjectArray<String?>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.array.set(src, destinationOffset, startIndex, endIndex)
         }
 
-        override fun setT(src: ObservableFloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoA(dest: FloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun copyIntoP(dest: Array<String?>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
         }
 
-        override fun copyIntoP(dest: Array<Float>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        override fun copyIntoT(dest: ObservableObjectArray<String?>, destinationOffset: Int, startIndex: Int,
+                endIndex: Int) {
             this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
         }
 
-        override fun copyIntoT(dest: ObservableFloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override operator fun get(index: Int): Float {
+        override operator fun get(index: Int): String? {
             return this.array[index]
         }
 
-        override fun toArray(): FloatArray {
-            return this.array.toFloatArray()
+        override fun toArray(): Array<String?> {
+            return this.array.toTypedArray()
         }
 
-        override fun toArray(startIndex: Int, endIndex: Int): FloatArray {
-            return this.array.toFloatArray(startIndex, endIndex)
+        override fun toArray(startIndex: Int, endIndex: Int): Array<String?> {
+            return this.array.toTypedArray(startIndex, endIndex)
         }
 
-        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): FloatArray {
-            return if (fillWithData) FloatArray(size) { this.nextValueState++ } else FloatArray(size)
+        override fun createArray(size: Int, fillWithData: Boolean): Array<String?> {
+            return (if (fillWithData) Array(size) { this.nextValue } else Array(size) { null })
         }
 
-        override fun createArray(size: Int, fillWithData: Boolean): Array<Float> {
-            return Array(size) { if (fillWithData) this.nextValueState++ else 0.0f }
-        }
-
-        override fun clonePrimitiveArray(array: FloatArray): FloatArray {
+        override fun cloneArray(array: Array<String?>): Array<String?> {
             return array.copyOf()
         }
 
-        override fun cloneArray(array: Array<Float>): Array<Float> {
-            return array.copyOf()
-        }
-
-        override fun arraySize(array: FloatArray): Int {
-            return array.size
-        }
-
-        override fun get(array: FloatArray, index: Int): Float {
-            return array[index]
-        }
-
-        override fun assertElementsEqual(actual: FloatArray, from: Int, to: Int, expected: FloatArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected float = ${expected[j]}, actual float = ${actual[i]}")
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: FloatArray, from: Int, to: Int, expected: Array<Float>, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected float = ${expected[j]}, actual float = ${actual[i]}")
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Float>, from: Int, to: Int, expected: FloatArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected float = ${expected[j]}, actual float = ${actual[i]}")
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Float>, from: Int, to: Int, expected: Array<Float>,
+        override fun assertElementsEqual(actual: Array<String?>, from: Int, to: Int, expected: Array<String?>,
                 expFrom: Int) {
             var j = expFrom
             for (i in from until to) {
-                assertEquals(expected[j].toRawBits(), actual[i].toRawBits(),
-                        "expected float = ${expected[j]}, actual float = ${actual[i]}")
+                assertEquals(expected[j], actual[i],
+                        "expected String? = ${expected[j]}, actual String? = ${actual[i]}")
                 j++
             }
-        }
-
-        override fun primitiveArrayToString(array: FloatArray): String {
-            return array.contentToString()
-        }
-
-    }
-
-    private class IntArrayWrapper : ArrayWrapper<ObservableIntArray, IntArray, Int>() {
-
-        private var nextValueState: Int = 0
-
-        override fun createEmptyArray(): ObservableIntArray {
-            return ObservableCollections.observableIntArray().also { this.array = it }
-        }
-
-        override fun createNotEmptyArray(src: IntArray): ObservableIntArray {
-            return when (this.nextValueState % 3) {
-                0 -> ObservableCollections.observableIntArray(*src)
-                1 -> ObservableCollections.observableIntArray(src.toTypedArray())
-                else -> ObservableCollections.observableIntArray(ObservableCollections.observableIntArray(*src))
-            }.also { this.array = it }
-        }
-
-        override fun newInstance(): ArrayWrapper<ObservableIntArray, IntArray, Int> {
-            return IntArrayWrapper()
-        }
-
-        override val nextValue: Int
-            get() = this.nextValueState++
-
-        override operator fun set(index: Int, value: Int) {
-            this.array[index] = value
-        }
-
-        override fun setAllA(src: IntArray) {
-            this.array.setAll(*src)
-        }
-
-        override fun setAllP(src: Array<Int>) {
-            this.array.setAll(src)
-        }
-
-        override fun setAllT(src: ObservableIntArray) {
-            this.array.setAll(src)
-        }
-
-        override fun setAllA(src: IntArray, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun setAllP(src: Array<Int>, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun setAllT(src: ObservableIntArray, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllA(src: IntArray) {
-            this.array.addAll(*src)
-        }
-
-        override fun addAllP(src: Array<Int>) {
-            this.array.addAll(src)
-        }
-
-        override fun addAllT(src: ObservableIntArray) {
-            this.array.addAll(src)
-        }
-
-        override operator fun plusAssign(src: IntArray) {
-            this.array += src
-        }
-
-        override operator fun plusAssign(src: Array<Int>) {
-            this.array += src
-        }
-
-        override operator fun plusAssign(src: ObservableIntArray) {
-            this.array += src
-        }
-
-        override fun addAllA(src: IntArray, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllP(src: Array<Int>, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllT(src: ObservableIntArray, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun setA(src: IntArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun setP(src: Array<Int>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun setT(src: ObservableIntArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoA(dest: IntArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoP(dest: Array<Int>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoT(dest: ObservableIntArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override operator fun get(index: Int): Int {
-            return this.array[index]
-        }
-
-        override fun toArray(): IntArray {
-            return this.array.toIntArray()
-        }
-
-        override fun toArray(startIndex: Int, endIndex: Int): IntArray {
-            return this.array.toIntArray(startIndex, endIndex)
-        }
-
-        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): IntArray {
-            return if (fillWithData) IntArray(size) { this.nextValueState++ } else IntArray(size)
-        }
-
-        override fun createArray(size: Int, fillWithData: Boolean): Array<Int> {
-            return Array(size) { if (fillWithData) this.nextValueState++ else 0 }
-        }
-
-        override fun clonePrimitiveArray(array: IntArray): IntArray {
-            return array.copyOf()
-        }
-
-        override fun cloneArray(array: Array<Int>): Array<Int> {
-            return array.copyOf()
-        }
-
-        override fun arraySize(array: IntArray): Int {
-            return array.size
-        }
-
-        override fun get(array: IntArray, index: Int): Int {
-            return array[index]
-        }
-
-        override fun assertElementsEqual(actual: IntArray, from: Int, to: Int, expected: IntArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: IntArray, from: Int, to: Int, expected: Array<Int>, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Int>, from: Int, to: Int, expected: IntArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Int>, from: Int, to: Int, expected: Array<Int>, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun primitiveArrayToString(array: IntArray): String {
-            return array.contentToString()
-        }
-
-    }
-
-    private class LongArrayWrapper : ArrayWrapper<ObservableLongArray, LongArray, Long>() {
-
-        private var nextValueState: Long = 0L
-
-        override fun createEmptyArray(): ObservableLongArray {
-            return ObservableCollections.observableLongArray().also { this.array = it }
-        }
-
-        override fun createNotEmptyArray(src: LongArray): ObservableLongArray {
-            return when (this.nextValueState.toInt() % 3) {
-                0 -> ObservableCollections.observableLongArray(*src)
-                1 -> ObservableCollections.observableLongArray(src.toTypedArray())
-                else -> ObservableCollections.observableLongArray(ObservableCollections.observableLongArray(*src))
-            }.also { this.array = it }
-        }
-
-        override fun newInstance(): ArrayWrapper<ObservableLongArray, LongArray, Long> {
-            return LongArrayWrapper()
-        }
-
-        override val nextValue: Long
-            get() = this.nextValueState++
-
-        override operator fun set(index: Int, value: Long) {
-            this.array[index] = value
-        }
-
-        override fun setAllA(src: LongArray) {
-            this.array.setAll(*src)
-        }
-
-        override fun setAllP(src: Array<Long>) {
-            this.array.setAll(src)
-        }
-
-        override fun setAllT(src: ObservableLongArray) {
-            this.array.setAll(src)
-        }
-
-        override fun setAllA(src: LongArray, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun setAllP(src: Array<Long>, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun setAllT(src: ObservableLongArray, startIndex: Int, endIndex: Int) {
-            this.array.setAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllA(src: LongArray) {
-            this.array.addAll(*src)
-        }
-
-        override fun addAllP(src: Array<Long>) {
-            this.array.addAll(src)
-        }
-
-        override fun addAllT(src: ObservableLongArray) {
-            this.array.addAll(src)
-        }
-
-        override operator fun plusAssign(src: LongArray) {
-            this.array += src
-        }
-
-        override operator fun plusAssign(src: Array<Long>) {
-            this.array += src
-        }
-
-        override operator fun plusAssign(src: ObservableLongArray) {
-            this.array += src
-        }
-
-        override fun addAllA(src: LongArray, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllP(src: Array<Long>, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun addAllT(src: ObservableLongArray, startIndex: Int, endIndex: Int) {
-            this.array.addAll(src, startIndex, endIndex)
-        }
-
-        override fun setA(src: LongArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun setP(src: Array<Long>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun setT(src: ObservableLongArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.set(src, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoA(dest: LongArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoP(dest: Array<Long>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override fun copyIntoT(dest: ObservableLongArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
-        }
-
-        override operator fun get(index: Int): Long {
-            return this.array[index]
-        }
-
-        override fun toArray(): LongArray {
-            return this.array.toLongArray()
-        }
-
-        override fun toArray(startIndex: Int, endIndex: Int): LongArray {
-            return this.array.toLongArray(startIndex, endIndex)
-        }
-
-        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): LongArray {
-            return if (fillWithData) LongArray(size) { this.nextValueState++ } else LongArray(size)
-        }
-
-        override fun createArray(size: Int, fillWithData: Boolean): Array<Long> {
-            return Array(size) { if (fillWithData) this.nextValueState++ else 0L }
-        }
-
-        override fun clonePrimitiveArray(array: LongArray): LongArray {
-            return array.copyOf()
-        }
-
-        override fun cloneArray(array: Array<Long>): Array<Long> {
-            return array.copyOf()
-        }
-
-        override fun arraySize(array: LongArray): Int {
-            return array.size
-        }
-
-        override fun get(array: LongArray, index: Int): Long {
-            return array[index]
-        }
-
-        override fun assertElementsEqual(actual: LongArray, from: Int, to: Int, expected: LongArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: LongArray, from: Int, to: Int, expected: Array<Long>, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Long>, from: Int, to: Int, expected: LongArray, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun assertElementsEqual(actual: Array<Long>, from: Int, to: Int, expected: Array<Long>, expFrom: Int) {
-            var j = expFrom
-            for (i in from until to) {
-                assertEquals(expected[j], actual[i])
-                j++
-            }
-        }
-
-        override fun primitiveArrayToString(array: LongArray): String {
-            return array.contentToString()
         }
 
     }
@@ -4107,10 +2856,8 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         @JvmStatic
         fun createParameters(): List<Array<out Any?>> {
             return listOf(
-                    arrayOf(DoubleArrayWrapper()),
-                    arrayOf(FloatArrayWrapper()),
-                    arrayOf(IntArrayWrapper()),
-                    arrayOf(LongArrayWrapper())
+                    arrayOf(StringWrapper()),
+                    arrayOf(NullableStringWrapper())
             )
         }
 

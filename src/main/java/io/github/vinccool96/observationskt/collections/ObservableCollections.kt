@@ -377,6 +377,47 @@ object ObservableCollections {
     }
 
     /**
+     * Creates a new empty observable array.
+     *
+     * @param baseArray the base array of size `1` containing the base element
+     *
+     * @return a newly created ObservableObjectArray
+     *
+     * @throws IllegalArgumentException if [baseArray] isn't of size `1`
+     */
+    fun <T> observableObjectArray(baseArray: Array<T>): ObservableObjectArray<T> {
+        return ObservableObjectArrayImpl(baseArray)
+    }
+
+    /**
+     * Creates a new observable array with `values` set to it.
+     *
+     * @param baseArray the base array of size `1` containing the base element
+     * @param values the values that will be in the new observable array
+     *
+     * @return a newly created ObservableObjectArray
+     *
+     * @throws IllegalArgumentException if [baseArray] isn't of size `1`
+     */
+    fun <T> observableObjectArray(baseArray: Array<T>, vararg values: T): ObservableObjectArray<T> {
+        return ObservableObjectArrayImpl(baseArray, *values)
+    }
+
+    /**
+     * Creates a new observable array with copy of elements in given `array`.
+     *
+     * @param baseArray the base array of size `1` containing the base element
+     * @param array observable array to copy
+     *
+     * @return a newly created ObservableObjectArray
+     *
+     * @throws IllegalArgumentException if [baseArray] isn't of size `1`
+     */
+    fun <T> observableObjectArray(baseArray: Array<T>, array: ObservableObjectArray<T>): ObservableObjectArray<T> {
+        return ObservableObjectArrayImpl(baseArray, array)
+    }
+
+    /**
      * Creates a new empty observable list that is backed by an arraylist.
      *
      * @param E the list element type
