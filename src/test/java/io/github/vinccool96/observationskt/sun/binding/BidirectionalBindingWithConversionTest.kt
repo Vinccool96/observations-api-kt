@@ -54,7 +54,7 @@ class BidirectionalBindingWithConversionTest<S, T>(private val func: Functions<S
     @Test
     fun testBind() {
         this.func.bind(this.op0, this.op1)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         this.func.check0(this.v0[1], this.op0.value)
         this.func.check1(this.v1[1], this.op1.value)
 
@@ -74,7 +74,7 @@ class BidirectionalBindingWithConversionTest<S, T>(private val func: Functions<S
 
         // unbind properties of different beans
         this.func.bind(this.op0, this.op1)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         this.func.check0(this.v0[1], this.op0.value)
         this.func.check1(this.v1[1], this.op1.value)
 

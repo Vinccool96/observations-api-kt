@@ -8,10 +8,7 @@ import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.beans.value.ObservableBooleanValue
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.fail
+import kotlin.test.*
 
 @Suppress("SimplifyBooleanWithConstants", "UNUSED_VALUE", "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
 class BindingsBooleanTest {
@@ -385,6 +382,19 @@ class BindingsBooleanTest {
         assertNull(op2.listener)
     }
 
+    @Test
+    fun testDefaultDependencies() {
+        assertTrue(BooleanBindingMock().dependencies.isEmpty())
+    }
+
+    private class BooleanBindingMock : BooleanBinding() {
+
+        override fun computeValue(): Boolean {
+            return false
+        }
+
+    }
+
     private class ObservableBooleanValueMock : ObservableBooleanValue {
 
         var listener: InvalidationListener? = null
@@ -435,6 +445,7 @@ class BindingsBooleanTest {
             // not used
             return false
         }
+
     }
 
 }

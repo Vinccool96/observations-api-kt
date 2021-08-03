@@ -106,7 +106,7 @@ class ListBindingTest {
     fun testNoDependency_ListChangeListener() {
         this.binding0.value
         this.binding0.addListener(this.listener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding0.valid)
 
         // calling value's getter
@@ -121,7 +121,7 @@ class ListBindingTest {
     fun testSingleDependency_ListChangeListener() {
         this.binding1.value
         this.binding1.addListener(this.listener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding1.valid)
 
         // fire single change event
@@ -223,6 +223,27 @@ class ListBindingTest {
         assertEquals(0, this.binding1.computeValueCounter)
         this.listener.check(oldSize, newObject, 1)
         assertTrue(this.binding1.valid)
+
+        this.binding1.removeListener(this.listener)
+        this.binding1.reset()
+        this.listener.reset()
+        this.list2.add(newObject)
+        assertEquals(0, this.binding1.computeValueCounter)
+        this.listener.checkNotCalled()
+        assertTrue(this.binding1.valid)
+    }
+
+    @Test
+    fun testDefaultDependencies() {
+        assertTrue(ListBindingMock().dependencies.isEmpty())
+    }
+
+    private class ListBindingMock : ListBinding<String>() {
+
+        override fun computeValue(): ObservableList<String>? {
+            return null
+        }
+
     }
 
     private class ObservableStub : ObservableValueBase<Any>() {

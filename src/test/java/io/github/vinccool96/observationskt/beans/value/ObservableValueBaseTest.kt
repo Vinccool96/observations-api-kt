@@ -30,7 +30,7 @@ class ObservableValueBaseTest {
     fun testOneInvalidationListener() {
         // adding one observer
         this.valueModel.addListener(this.invalidationListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         this.valueModel.set(V1)
         this.invalidationListener.check(this.valueModel, 1)
 
@@ -49,7 +49,7 @@ class ObservableValueBaseTest {
     fun testOneChangeListener() {
         // adding one observer
         this.valueModel.addListener(this.changeListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         this.valueModel.set(V1)
         this.changeListener.check(this.valueModel, DEFAULT_VALUE, V1, 1)
 
@@ -81,7 +81,7 @@ class ObservableValueBaseTest {
         // adding two observers
         this.valueModel.addListener(this.invalidationListener)
         this.valueModel.addListener(observer2)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         this.valueModel.fireChange()
         this.invalidationListener.check(this.valueModel, 1)
         observer2.check(this.valueModel, 1)

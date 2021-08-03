@@ -130,12 +130,13 @@ class BooleanExpressionTest {
         assertEquals(true, exp.get())
         valueModel.set(false)
         assertEquals(false, exp.get())
+        (exp as ObjectBinding<Boolean>).dispose()
     }
 
     @Test
     fun testFactory() {
         val valueModel = ObservableBooleanValueStub()
-        val exp: BooleanExpression = BooleanExpression.booleanExpression(valueModel as ObservableValue<Boolean?>)
+        val exp: BooleanExpression = BooleanExpression.booleanExpression(valueModel)
 
         assertTrue(exp is BooleanBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
@@ -148,6 +149,7 @@ class BooleanExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, BooleanExpression.booleanExpression(this.op1 as ObservableValue<Boolean?>))
+        exp.dispose()
     }
 
     @Test
@@ -166,6 +168,7 @@ class BooleanExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, BooleanExpression.booleanExpression(this.op1 as ObservableValue<Boolean?>))
+        exp.dispose()
     }
 
 }

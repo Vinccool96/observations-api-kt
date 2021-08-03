@@ -2,15 +2,13 @@ package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.SetProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleSetProperty
+import io.github.vinccool96.observationskt.beans.value.ObservableSetValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
 import org.junit.Before
 import org.junit.Test
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import kotlin.test.fail
+import kotlin.test.*
 
 class SetExpressionTest {
 
@@ -183,6 +181,30 @@ class SetExpressionTest {
             }
             else -> fail()
         }
+    }
+
+    @Test
+    fun testObservableListValueToExpression() {
+        val valueModel: ObservableSetValueStub<Any> = ObservableSetValueStub()
+        val exp: SetExpression<Any> = SetExpression.setExpression(valueModel)
+        val o1 = Any()
+        val o2 = Any()
+        val o3 = Any()
+
+        assertTrue(exp is SetBinding)
+        assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
+
+        assertEquals(null, exp.get())
+        valueModel.set(ObservableCollections.observableSet(o1))
+        assertEquals(ObservableCollections.observableSet(o1), exp.get())
+        valueModel.get()!!.add(o2)
+        assertEquals(ObservableCollections.observableSet(mutableSetOf(o1, o2)), exp.get())
+        exp.get()!!.add(o3)
+        assertEquals(ObservableCollections.observableSet(mutableSetOf(o1, o2, o3)), valueModel.get())
+
+        // make sure we do not create unnecessary bindings
+        assertSame(this.op1, SetExpression.setExpression(this.op1))
+        exp.dispose()
     }
 
     companion object {

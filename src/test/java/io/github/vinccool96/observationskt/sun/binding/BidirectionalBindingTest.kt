@@ -53,7 +53,7 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
     fun testBind() {
         Bindings.bindBidirectional(this.op1, this.op2)
         Bindings.bindBidirectional(this.op1, this.op2)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(this.v[1], this.op1.value)
         assertEquals(this.v[1], this.op2.value)
 
@@ -73,7 +73,7 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
 
         // unbind properties of different beans
         Bindings.bindBidirectional(this.op1, this.op2)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(this.v[1], this.op1.value)
         assertEquals(this.v[1], this.op2.value)
 
@@ -93,7 +93,7 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
         this.op3.value = this.v[2]
         Bindings.bindBidirectional(this.op1, this.op2)
         Bindings.bindBidirectional(this.op2, this.op3)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(this.v[2], this.op1.value)
         assertEquals(this.v[2], this.op2.value)
         assertEquals(this.v[2], this.op3.value)
@@ -115,7 +115,7 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
 
         // now unbind
         Bindings.unbindBidirectional(this.op1, this.op2)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(this.v[1], this.op1.value)
         assertEquals(this.v[1], this.op2.value)
         assertEquals(this.v[1], this.op3.value)

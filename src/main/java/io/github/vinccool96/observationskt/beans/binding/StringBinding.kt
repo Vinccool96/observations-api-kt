@@ -112,8 +112,7 @@ abstract class StringBinding : StringExpression(), Binding<String?> {
      * @return an empty `ObservableList`
      */
     @get:ReturnsUnmodifiableCollection
-    override val dependencies: ObservableList<*>
-        get() = ObservableCollections.emptyObservableList<Any>()
+    override val dependencies: ObservableList<*> = ObservableCollections.emptyObservableList<Any>()
 
     /**
      * Returns the result of [computeValue]. The method `computeValue()` is only called if the binding is invalid. The

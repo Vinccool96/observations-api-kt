@@ -1,13 +1,8 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.property.DoubleProperty
-import io.github.vinccool96.observationskt.beans.property.IntProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleDoubleProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleIntProperty
-import io.github.vinccool96.observationskt.beans.value.ObservableDoubleValueStub
-import io.github.vinccool96.observationskt.beans.value.ObservableFloatValueStub
-import io.github.vinccool96.observationskt.beans.value.ObservableIntValueStub
-import io.github.vinccool96.observationskt.beans.value.ObservableLongValueStub
+import io.github.vinccool96.observationskt.beans.InvalidationListener
+import io.github.vinccool96.observationskt.beans.property.*
+import io.github.vinccool96.observationskt.beans.value.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import org.junit.Before
 import org.junit.Test
@@ -17,6 +12,7 @@ import kotlin.math.PI
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class AbstractNumberExpressionTest {
 
@@ -42,346 +38,483 @@ class AbstractNumberExpressionTest {
 
     @Before
     fun setUp() {
-        data1 = 90224.8923
-        data2 = -13
-        op1 = SimpleDoubleProperty(data1)
-        op2 = SimpleIntProperty(data2)
-        double1 = -234.234
-        float1 = 111.9F
-        long1 = 2009234L
-        int1 = -234734
-        short1 = 9824
-        byte1 = -123
+        this.data1 = 90224.8923
+        this.data2 = -13
+        this.op1 = SimpleDoubleProperty(this.data1)
+        this.op2 = SimpleIntProperty(this.data2)
+        this.double1 = -234.234
+        this.float1 = 111.9F
+        this.long1 = 2009234L
+        this.int1 = -234734
+        this.short1 = 9824
+        this.byte1 = -123
+    }
+
+    private fun testArithmetic(op1: NumberExpressionBase, op2: NumberExpressionBase, binding: NumberBinding, op: OP) {
+        val expected = when (op) {
+            OP.PL -> when (op1) {
+                is SimpleDoubleProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.double1 + this.double1
+                    is SimpleFloatProperty -> this.double1 + this.float1
+                    is SimpleIntProperty -> this.double1 + this.int1
+                    is SimpleLongProperty -> this.double1 + this.long1
+                    else -> 0.0
+                }
+                is SimpleFloatProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.float1 + this.double1
+                    is SimpleFloatProperty -> this.float1 + this.float1
+                    is SimpleIntProperty -> this.float1 + this.int1
+                    is SimpleLongProperty -> this.float1 + this.long1
+                    else -> 0.0
+                }
+                is SimpleIntProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.int1 + this.double1
+                    is SimpleFloatProperty -> this.int1 + this.float1
+                    is SimpleIntProperty -> this.int1 + this.int1
+                    is SimpleLongProperty -> this.int1 + this.long1
+                    else -> 0.0
+                }
+                is SimpleLongProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.long1 + this.double1
+                    is SimpleFloatProperty -> this.long1 + this.float1
+                    is SimpleIntProperty -> this.long1 + this.int1
+                    is SimpleLongProperty -> this.long1 + this.long1
+                    else -> 0.0
+                }
+                else -> 0.0
+            }
+            OP.MI -> when (op1) {
+                is SimpleDoubleProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.double1 - this.double1
+                    is SimpleFloatProperty -> this.double1 - this.float1
+                    is SimpleIntProperty -> this.double1 - this.int1
+                    is SimpleLongProperty -> this.double1 - this.long1
+                    else -> 0.0
+                }
+                is SimpleFloatProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.float1 - this.double1
+                    is SimpleFloatProperty -> this.float1 - this.float1
+                    is SimpleIntProperty -> this.float1 - this.int1
+                    is SimpleLongProperty -> this.float1 - this.long1
+                    else -> 0.0
+                }
+                is SimpleIntProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.int1 - this.double1
+                    is SimpleFloatProperty -> this.int1 - this.float1
+                    is SimpleIntProperty -> this.int1 - this.int1
+                    is SimpleLongProperty -> this.int1 - this.long1
+                    else -> 0.0
+                }
+                is SimpleLongProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.long1 - this.double1
+                    is SimpleFloatProperty -> this.long1 - this.float1
+                    is SimpleIntProperty -> this.long1 - this.int1
+                    is SimpleLongProperty -> this.long1 - this.long1
+                    else -> 0.0
+                }
+                else -> 0.0
+            }
+            OP.MU -> when (op1) {
+                is SimpleDoubleProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.double1 * this.double1
+                    is SimpleFloatProperty -> this.double1 * this.float1
+                    is SimpleIntProperty -> this.double1 * this.int1
+                    is SimpleLongProperty -> this.double1 * this.long1
+                    else -> 0.0
+                }
+                is SimpleFloatProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.float1 * this.double1
+                    is SimpleFloatProperty -> this.float1 * this.float1
+                    is SimpleIntProperty -> this.float1 * this.int1
+                    is SimpleLongProperty -> this.float1 * this.long1
+                    else -> 0.0
+                }
+                is SimpleIntProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.int1 * this.double1
+                    is SimpleFloatProperty -> this.int1 * this.float1
+                    is SimpleIntProperty -> this.int1 * this.int1
+                    is SimpleLongProperty -> this.int1 * this.long1
+                    else -> 0.0
+                }
+                is SimpleLongProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.long1 * this.double1
+                    is SimpleFloatProperty -> this.long1 * this.float1
+                    is SimpleIntProperty -> this.long1 * this.int1
+                    is SimpleLongProperty -> this.long1 * this.long1
+                    else -> 0.0
+                }
+                else -> 0.0
+            }
+            OP.DI -> when (op1) {
+                is SimpleDoubleProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.double1 / this.double1
+                    is SimpleFloatProperty -> this.double1 / this.float1
+                    is SimpleIntProperty -> this.double1 / this.int1
+                    is SimpleLongProperty -> this.double1 / this.long1
+                    else -> 0.0
+                }
+                is SimpleFloatProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.float1 / this.double1
+                    is SimpleFloatProperty -> this.float1 / this.float1
+                    is SimpleIntProperty -> this.float1 / this.int1
+                    is SimpleLongProperty -> this.float1 / this.long1
+                    else -> 0.0
+                }
+                is SimpleIntProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.int1 / this.double1
+                    is SimpleFloatProperty -> this.int1 / this.float1
+                    is SimpleIntProperty -> this.int1 / this.int1
+                    is SimpleLongProperty -> this.int1 / this.long1
+                    else -> 0.0
+                }
+                is SimpleLongProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.long1 / this.double1
+                    is SimpleFloatProperty -> this.long1 / this.float1
+                    is SimpleIntProperty -> this.long1 / this.int1
+                    is SimpleLongProperty -> this.long1 / this.long1
+                    else -> 0.0
+                }
+                else -> 0.0
+            }
+        }
+        when (binding) {
+            is DoubleBinding -> assertEquals(expected.toDouble(), binding.get(), EPSILON)
+            is FloatBinding -> assertEquals(expected.toFloat(), binding.get(), EPSILON_FLOAT)
+            is IntBinding -> assertEquals(expected.toInt(), binding.get())
+            is LongBinding -> assertEquals(expected.toLong(), binding.get())
+        }
     }
 
     @Test
     fun testArithmetic() {
-        var binding: NumberBinding = op1 + op2
-        assertEquals(data1 + data2, binding.doubleValue, EPSILON)
+        val ops = listOf(SimpleDoubleProperty(this.double1), SimpleFloatProperty(this.float1),
+                SimpleIntProperty(this.int1), SimpleLongProperty(this.long1))
+        for (op1 in ops) {
+            for (op2 in ops) {
+                testArithmetic(op1, op2, op1 + op2, OP.PL)
 
-        binding = op1 - op2
-        assertEquals(data1 - data2, binding.doubleValue, EPSILON)
+                testArithmetic(op1, op2, op1 - op2, OP.MI)
 
-        binding = op1 * op2
-        assertEquals(data1 * data2, binding.doubleValue, EPSILON)
+                testArithmetic(op1, op2, op1 * op2, OP.MU)
 
-        binding = op1 / op2
-        assertEquals(data1 / data2, binding.doubleValue, EPSILON)
+                testArithmetic(op1, op2, op1 / op2, OP.DI)
+            }
+        }
     }
 
     @Test
     fun testEquals() {
-        var binding: BooleanBinding = op1.isEqualTo(op1, EPSILON)
+        var binding: BooleanBinding = this.op1.isEqualTo(this.op1, EPSILON)
         assertTrue(binding.get())
 
-        binding = op2.isEqualTo(op2)
+        binding = this.op2.isEqualTo(this.op2)
         assertTrue(binding.get())
 
-        binding = op1.isEqualTo(op2, EPSILON)
+        binding = this.op1.isEqualTo(this.op2, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(data1, EPSILON)
+        binding = this.op1.isEqualTo(this.data1, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isEqualTo(data2, EPSILON)
+        binding = this.op1.isEqualTo(this.data2, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(double1, EPSILON)
+        binding = this.op1.isEqualTo(this.double1, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(float1, EPSILON)
+        binding = this.op1.isEqualTo(this.float1, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(long1, EPSILON)
+        binding = this.op1.isEqualTo(this.long1, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(long1)
+        binding = this.op1.isEqualTo(this.long1)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(int1, EPSILON)
+        binding = this.op1.isEqualTo(this.int1, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(int1)
+        binding = this.op1.isEqualTo(this.int1)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(short1.toInt(), EPSILON)
+        binding = this.op1.isEqualTo(this.short1.toInt(), EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(short1.toInt())
+        binding = this.op1.isEqualTo(this.short1.toInt())
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(byte1.toInt(), EPSILON)
+        binding = this.op1.isEqualTo(this.byte1.toInt(), EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isEqualTo(byte1.toInt())
+        binding = this.op1.isEqualTo(this.byte1.toInt())
         assertFalse(binding.get())
     }
 
     @Test
     fun testNotEquals() {
-        var binding: BooleanBinding = op1.isNotEqualTo(op1, EPSILON)
+        var binding: BooleanBinding = this.op1.isNotEqualTo(this.op1, EPSILON)
         assertFalse(binding.get())
 
-        binding = op2.isNotEqualTo(op2)
+        binding = this.op2.isNotEqualTo(this.op2)
         assertFalse(binding.get())
 
-        binding = op1.isNotEqualTo(op2, EPSILON)
+        binding = this.op1.isNotEqualTo(this.op2, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(data1, EPSILON)
+        binding = this.op1.isNotEqualTo(this.data1, EPSILON)
         assertFalse(binding.get())
 
-        binding = op1.isNotEqualTo(data2, EPSILON)
+        binding = this.op1.isNotEqualTo(this.data2, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(double1, EPSILON)
+        binding = this.op1.isNotEqualTo(this.double1, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(float1, EPSILON)
+        binding = this.op1.isNotEqualTo(this.float1, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(long1, EPSILON)
+        binding = this.op1.isNotEqualTo(this.long1, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(long1)
+        binding = this.op1.isNotEqualTo(this.long1)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(int1, EPSILON)
+        binding = this.op1.isNotEqualTo(this.int1, EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(int1)
+        binding = this.op1.isNotEqualTo(this.int1)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(short1.toInt(), EPSILON)
+        binding = this.op1.isNotEqualTo(this.short1.toInt(), EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(short1.toInt())
+        binding = this.op1.isNotEqualTo(this.short1.toInt())
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(byte1.toInt(), EPSILON)
+        binding = this.op1.isNotEqualTo(this.byte1.toInt(), EPSILON)
         assertTrue(binding.get())
 
-        binding = op1.isNotEqualTo(byte1.toInt())
+        binding = this.op1.isNotEqualTo(this.byte1.toInt())
         assertTrue(binding.get())
     }
 
     @Test
     fun testGreater() {
-        var binding: BooleanBinding = op1.greaterThan(op1)
-        assertEquals(data1 > data1, binding.get())
+        var binding: BooleanBinding = this.op1.greaterThan(this.op1)
+        assertEquals(this.data1 > this.data1, binding.get())
 
-        binding = op1.greaterThan(op2)
-        assertEquals(data1 > data2, binding.get())
+        binding = this.op1.greaterThan(this.op2)
+        assertEquals(this.data1 > this.data2, binding.get())
 
-        binding = op2.greaterThan(op1)
-        assertEquals(data2 > data1, binding.get())
+        binding = this.op2.greaterThan(this.op1)
+        assertEquals(this.data2 > this.data1, binding.get())
 
-        binding = op2.greaterThan(op2)
-        assertEquals(data2 > data2, binding.get())
+        binding = this.op2.greaterThan(this.op2)
+        assertEquals(this.data2 > this.data2, binding.get())
 
-        binding = op1.greaterThan(data1)
-        assertEquals(data1 > data1, binding.get())
+        binding = this.op1.greaterThan(this.data1)
+        assertEquals(this.data1 > this.data1, binding.get())
 
-        binding = op1.greaterThan(data2)
-        assertEquals(data1 > data2, binding.get())
+        binding = this.op1.greaterThan(this.data2)
+        assertEquals(this.data1 > this.data2, binding.get())
 
-        binding = op2.greaterThan(data1)
-        assertEquals(data2 > data1, binding.get())
+        binding = this.op2.greaterThan(this.data1)
+        assertEquals(this.data2 > this.data1, binding.get())
 
-        binding = op2.greaterThan(data2)
-        assertEquals(data2 > data2, binding.get())
+        binding = this.op2.greaterThan(this.data2)
+        assertEquals(this.data2 > this.data2, binding.get())
 
-        binding = op1.greaterThan(double1)
-        assertEquals(data1 > double1, binding.get())
+        binding = this.op1.greaterThan(this.double1)
+        assertEquals(this.data1 > this.double1, binding.get())
 
-        binding = op1.greaterThan(float1)
-        assertEquals(data1 > float1, binding.get())
+        binding = this.op1.greaterThan(this.float1)
+        assertEquals(this.data1 > this.float1, binding.get())
 
-        binding = op1.greaterThan(long1)
-        assertEquals(data1 > long1, binding.get())
+        binding = this.op1.greaterThan(this.long1)
+        assertEquals(this.data1 > this.long1, binding.get())
 
-        binding = op1.greaterThan(int1)
-        assertEquals(data1 > int1, binding.get())
+        binding = this.op1.greaterThan(this.int1)
+        assertEquals(this.data1 > this.int1, binding.get())
 
-        binding = op1.greaterThan(short1.toInt())
-        assertEquals(data1 > short1, binding.get())
+        binding = this.op1.greaterThan(this.short1.toInt())
+        assertEquals(this.data1 > this.short1, binding.get())
 
-        binding = op1.greaterThan(byte1.toInt())
-        assertEquals(data1 > byte1, binding.get())
+        binding = this.op1.greaterThan(this.byte1.toInt())
+        assertEquals(this.data1 > this.byte1, binding.get())
     }
 
     @Test
     fun testLesser() {
-        var binding: BooleanBinding = op1.lessThan(op1)
-        assertEquals(data1 < data1, binding.get())
+        var binding: BooleanBinding = this.op1.lessThan(this.op1)
+        assertEquals(this.data1 < this.data1, binding.get())
 
-        binding = op1.lessThan(op2)
-        assertEquals(data1 < data2, binding.get())
+        binding = this.op1.lessThan(this.op2)
+        assertEquals(this.data1 < this.data2, binding.get())
 
-        binding = op2.lessThan(op1)
-        assertEquals(data2 < data1, binding.get())
+        binding = this.op2.lessThan(this.op1)
+        assertEquals(this.data2 < this.data1, binding.get())
 
-        binding = op2.lessThan(op2)
-        assertEquals(data2 < data2, binding.get())
+        binding = this.op2.lessThan(this.op2)
+        assertEquals(this.data2 < this.data2, binding.get())
 
-        binding = op1.lessThan(data1)
-        assertEquals(data1 < data1, binding.get())
+        binding = this.op1.lessThan(this.data1)
+        assertEquals(this.data1 < this.data1, binding.get())
 
-        binding = op1.lessThan(data2)
-        assertEquals(data1 < data2, binding.get())
+        binding = this.op1.lessThan(this.data2)
+        assertEquals(this.data1 < this.data2, binding.get())
 
-        binding = op2.lessThan(data1)
-        assertEquals(data2 < data1, binding.get())
+        binding = this.op2.lessThan(this.data1)
+        assertEquals(this.data2 < this.data1, binding.get())
 
-        binding = op2.lessThan(data2)
-        assertEquals(data2 < data2, binding.get())
+        binding = this.op2.lessThan(this.data2)
+        assertEquals(this.data2 < this.data2, binding.get())
 
-        binding = op1.lessThan(double1)
-        assertEquals(data1 < double1, binding.get())
+        binding = this.op1.lessThan(this.double1)
+        assertEquals(this.data1 < this.double1, binding.get())
 
-        binding = op1.lessThan(float1)
-        assertEquals(data1 < float1, binding.get())
+        binding = this.op1.lessThan(this.float1)
+        assertEquals(this.data1 < this.float1, binding.get())
 
-        binding = op1.lessThan(long1)
-        assertEquals(data1 < long1, binding.get())
+        binding = this.op1.lessThan(this.long1)
+        assertEquals(this.data1 < this.long1, binding.get())
 
-        binding = op1.lessThan(int1)
-        assertEquals(data1 < int1, binding.get())
+        binding = this.op1.lessThan(this.int1)
+        assertEquals(this.data1 < this.int1, binding.get())
 
-        binding = op1.lessThan(short1.toInt())
-        assertEquals(data1 < short1, binding.get())
+        binding = this.op1.lessThan(this.short1.toInt())
+        assertEquals(this.data1 < this.short1, binding.get())
 
-        binding = op1.lessThan(byte1.toInt())
-        assertEquals(data1 < byte1, binding.get())
+        binding = this.op1.lessThan(this.byte1.toInt())
+        assertEquals(this.data1 < this.byte1, binding.get())
     }
 
     @Test
     fun testGreaterOrEqual() {
-        var binding: BooleanBinding = op1.greaterThanOrEqualTo(op1)
-        assertEquals(data1 >= data1, binding.get())
+        var binding: BooleanBinding = this.op1.greaterThanOrEqualTo(this.op1)
+        assertEquals(this.data1 >= this.data1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(op2)
-        assertEquals(data1 >= data2, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.op2)
+        assertEquals(this.data1 >= this.data2, binding.get())
 
-        binding = op2.greaterThanOrEqualTo(op1)
-        assertEquals(data2 >= data1, binding.get())
+        binding = this.op2.greaterThanOrEqualTo(this.op1)
+        assertEquals(this.data2 >= this.data1, binding.get())
 
-        binding = op2.greaterThanOrEqualTo(op2)
-        assertEquals(data2 >= data2, binding.get())
+        binding = this.op2.greaterThanOrEqualTo(this.op2)
+        assertEquals(this.data2 >= this.data2, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(data1)
-        assertEquals(data1 >= data1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.data1)
+        assertEquals(this.data1 >= this.data1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(data2)
-        assertEquals(data1 >= data2, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.data2)
+        assertEquals(this.data1 >= this.data2, binding.get())
 
-        binding = op2.greaterThanOrEqualTo(data1)
-        assertEquals(data2 >= data1, binding.get())
+        binding = this.op2.greaterThanOrEqualTo(this.data1)
+        assertEquals(this.data2 >= this.data1, binding.get())
 
-        binding = op2.greaterThanOrEqualTo(data2)
-        assertEquals(data2 >= data2, binding.get())
+        binding = this.op2.greaterThanOrEqualTo(this.data2)
+        assertEquals(this.data2 >= this.data2, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(double1)
-        assertEquals(data1 >= double1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.double1)
+        assertEquals(this.data1 >= this.double1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(float1)
-        assertEquals(data1 >= float1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.float1)
+        assertEquals(this.data1 >= this.float1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(long1)
-        assertEquals(data1 >= long1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.long1)
+        assertEquals(this.data1 >= this.long1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(int1)
-        assertEquals(data1 >= int1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.int1)
+        assertEquals(this.data1 >= this.int1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(short1.toInt())
-        assertEquals(data1 >= short1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.short1.toInt())
+        assertEquals(this.data1 >= this.short1, binding.get())
 
-        binding = op1.greaterThanOrEqualTo(byte1.toInt())
-        assertEquals(data1 >= byte1, binding.get())
+        binding = this.op1.greaterThanOrEqualTo(this.byte1.toInt())
+        assertEquals(this.data1 >= this.byte1, binding.get())
     }
 
     @Test
     fun testLesserOrEqual() {
-        var binding: BooleanBinding = op1.lessThanOrEqualTo(op1)
-        assertEquals(data1 <= data1, binding.get())
+        var binding: BooleanBinding = this.op1.lessThanOrEqualTo(this.op1)
+        assertEquals(this.data1 <= this.data1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(op2)
-        assertEquals(data1 <= data2, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.op2)
+        assertEquals(this.data1 <= this.data2, binding.get())
 
-        binding = op2.lessThanOrEqualTo(op1)
-        assertEquals(data2 <= data1, binding.get())
+        binding = this.op2.lessThanOrEqualTo(this.op1)
+        assertEquals(this.data2 <= this.data1, binding.get())
 
-        binding = op2.lessThanOrEqualTo(op2)
-        assertEquals(data2 <= data2, binding.get())
+        binding = this.op2.lessThanOrEqualTo(this.op2)
+        assertEquals(this.data2 <= this.data2, binding.get())
 
-        binding = op1.lessThanOrEqualTo(data1)
-        assertEquals(data1 <= data1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.data1)
+        assertEquals(this.data1 <= this.data1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(data2)
-        assertEquals(data1 <= data2, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.data2)
+        assertEquals(this.data1 <= this.data2, binding.get())
 
-        binding = op2.lessThanOrEqualTo(data1)
-        assertEquals(data2 <= data1, binding.get())
+        binding = this.op2.lessThanOrEqualTo(this.data1)
+        assertEquals(this.data2 <= this.data1, binding.get())
 
-        binding = op2.lessThanOrEqualTo(data2)
-        assertEquals(data2 <= data2, binding.get())
+        binding = this.op2.lessThanOrEqualTo(this.data2)
+        assertEquals(this.data2 <= this.data2, binding.get())
 
-        binding = op1.lessThanOrEqualTo(double1)
-        assertEquals(data1 <= double1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.double1)
+        assertEquals(this.data1 <= this.double1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(float1)
-        assertEquals(data1 <= float1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.float1)
+        assertEquals(this.data1 <= this.float1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(long1)
-        assertEquals(data1 <= long1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.long1)
+        assertEquals(this.data1 <= this.long1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(int1)
-        assertEquals(data1 <= int1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.int1)
+        assertEquals(this.data1 <= this.int1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(short1.toInt())
-        assertEquals(data1 <= short1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.short1.toInt())
+        assertEquals(this.data1 <= this.short1, binding.get())
 
-        binding = op1.lessThanOrEqualTo(byte1.toInt())
-        assertEquals(data1 <= byte1, binding.get())
+        binding = this.op1.lessThanOrEqualTo(this.byte1.toInt())
+        assertEquals(this.data1 <= this.byte1, binding.get())
     }
 
     @Test
     fun testFactory() {
-        assertEquals(op1, NumberExpressionBase.numberExpression(op1))
+        assertEquals(this.op1, NumberExpressionBase.numberExpression(this.op1))
 
         val double2 = ObservableDoubleValueStub()
-        double2.set(double1)
+        double2.set(this.double1)
         var exp: NumberExpression = NumberExpressionBase.numberExpression(double2)
         assertTrue(exp is DoubleBinding)
         assertEquals(ObservableCollections.singletonObservableList(double2), exp.dependencies)
-        assertEquals(double1, exp.doubleValue, EPSILON)
+        assertEquals(this.double1, exp.doubleValue, EPSILON)
         double2.set(0.0)
         assertEquals(0.0, exp.doubleValue, EPSILON)
 
         val float2 = ObservableFloatValueStub()
-        float2.set(float1)
+        float2.set(this.float1)
         exp = NumberExpressionBase.numberExpression(float2)
         assertTrue(exp is FloatBinding)
         assertEquals(ObservableCollections.singletonObservableList(float2), exp.dependencies)
-        assertEquals(float1, exp.floatValue, EPSILON.toFloat())
+        assertEquals(this.float1, exp.floatValue, EPSILON.toFloat())
         float2.set(0.0F)
         assertEquals(0.0F, exp.floatValue, EPSILON.toFloat())
 
         val long2 = ObservableLongValueStub()
-        long2.set(long1)
+        long2.set(this.long1)
         exp = NumberExpressionBase.numberExpression(long2)
         assertTrue(exp is LongBinding)
         assertEquals(ObservableCollections.singletonObservableList(long2), exp.dependencies)
-        assertEquals(long1, exp.longValue)
+        assertEquals(this.long1, exp.longValue)
         long2.set(0L)
         assertEquals(0L, exp.longValue)
 
         val int2 = ObservableIntValueStub()
-        int2.set(int1)
+        int2.set(this.int1)
         exp = NumberExpressionBase.numberExpression(int2)
         assertTrue(exp is IntBinding)
         assertEquals(ObservableCollections.singletonObservableList(int2), exp.dependencies)
-        assertEquals(int1, exp.intValue)
+        assertEquals(this.int1, exp.intValue)
         int2.set(0)
         assertEquals(0, exp.intValue)
     }
@@ -439,9 +572,71 @@ class AbstractNumberExpressionTest {
         assertEquals("2.7183", s.get())
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun testFactoryOther() {
+        NumberExpressionBase.numberExpression(OtherNumberValue())
+    }
+
+    private enum class OP {
+
+        PL,
+
+        MI,
+
+        MU,
+
+        DI
+
+    }
+
+    private class OtherNumberValue : ObservableNumberValue {
+
+        override val doubleValue: Double
+            get() = fail("Not in use")
+
+        override val floatValue: Float
+            get() = fail("Not in use")
+
+        override val intValue: Int
+            get() = fail("Not in use")
+
+        override val longValue: Long
+            get() = fail("Not in use")
+
+        override val value: Number
+            get() = fail("Not in use")
+
+        override fun addListener(listener: InvalidationListener) {
+            fail("Not in use")
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+            fail("Not in use")
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            fail("Not in use")
+        }
+
+        override fun addListener(listener: ChangeListener<in Number?>) {
+            fail("Not in use")
+        }
+
+        override fun removeListener(listener: ChangeListener<in Number?>) {
+            fail("Not in use")
+        }
+
+        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+            fail("Not in use")
+        }
+
+    }
+
     companion object {
 
         private const val EPSILON: Double = 1e-6
+
+        private const val EPSILON_FLOAT: Float = 1e-6f
 
     }
 

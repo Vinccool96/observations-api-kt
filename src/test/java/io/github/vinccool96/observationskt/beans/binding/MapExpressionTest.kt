@@ -237,6 +237,7 @@ class MapExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, MapExpression.mapExpression(this.op1))
+        exp.dispose()
     }
 
     companion object {

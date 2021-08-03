@@ -25,10 +25,7 @@ class WeakInvalidationListener : InvalidationListener, WeakListener {
      * @param listener The original listener that should be notified
      */
     @Suppress("ConvertSecondaryConstructorToPrimary")
-    constructor(@NamedArg("listener") listener: InvalidationListener?) {
-        if (listener == null) {
-            throw NullPointerException("Listener must be specified.")
-        }
+    constructor(@NamedArg("listener") listener: InvalidationListener) {
         this.ref = WeakReference(listener)
     }
 

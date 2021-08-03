@@ -119,6 +119,7 @@ class FloatExpressionTest {
         assertEquals(this.data, exp.value, EPSILON)
         valueModel.set(this.float1)
         assertEquals(this.float1, exp.value, EPSILON)
+        (exp as ObjectBinding<Float>).dispose()
     }
 
     @Test
@@ -137,6 +138,7 @@ class FloatExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, FloatExpression.floatExpression(this.op1))
+        exp.dispose()
     }
 
     @Test
@@ -155,6 +157,7 @@ class FloatExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, FloatExpression.floatExpression(this.op1))
+        exp.dispose()
     }
 
     companion object {

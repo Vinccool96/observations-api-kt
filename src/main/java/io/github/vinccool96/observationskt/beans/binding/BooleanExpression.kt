@@ -119,10 +119,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
          *
          * @return A `BooleanExpression` that wraps the `ObservableBooleanValue` if necessary
          */
-        fun booleanExpression(value: ObservableBooleanValue?): BooleanExpression {
-            if (value == null) {
-                throw NullPointerException("Value must be specified.")
-            }
+        fun booleanExpression(value: ObservableBooleanValue): BooleanExpression {
             return if (value is BooleanExpression) value else object : BooleanBinding() {
                 override fun dispose() {
                     super.unbind(value)

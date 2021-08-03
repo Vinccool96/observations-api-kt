@@ -203,6 +203,7 @@ object Bindings {
      * Helper function to create a custom [ObjectBinding].
      *
      * @param func The function that calculates the value of this binding
+     * @param default the default value
      * @param dependencies The dependencies of this binding
      *
      * @return The generated binding
@@ -259,6 +260,112 @@ object Bindings {
                 } catch (e: Exception) {
                     Logging.getLogger().warning("Exception while evaluating binding", e)
                     ""
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [ListBinding].
+     *
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun <E> createListBinding(func: Callable<ObservableList<E>?>, vararg dependencies: Observable): ListBinding<E> {
+        return object : ListBinding<E>() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): ObservableList<E>? {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    null
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [MapBinding].
+     *
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun <K, V> createMapBinding(func: Callable<ObservableMap<K, V>?>, vararg dependencies: Observable):
+            MapBinding<K, V> {
+        return object : MapBinding<K, V>() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): ObservableMap<K, V>? {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    null
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [SetBinding].
+     *
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun <E> createSetBinding(func: Callable<ObservableSet<E>?>, vararg dependencies: Observable): SetBinding<E> {
+        return object : SetBinding<E>() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): ObservableSet<E>? {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    null
                 }
             }
 
@@ -3420,7 +3527,7 @@ object Bindings {
 
     /**
      * Returns a [StringExpression] that wraps a [ObservableValue]. If the `ObservableValue` is already a
-     * `StringExpression`, it will be returned. Otherwise a new [StringBinding] is created that holds the value of the
+     * `StringExpression`, it will be returned. Otherwise, a new [StringBinding] is created that holds the value of the
      * `ObservableValue` converted to a `String`.
      *
      * @param observableValue The source `ObservableValue`

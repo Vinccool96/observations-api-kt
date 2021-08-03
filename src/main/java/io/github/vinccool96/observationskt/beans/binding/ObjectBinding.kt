@@ -109,8 +109,7 @@ abstract class ObjectBinding<T> : ObjectExpression<T>(), Binding<T> {
     }
 
     @get:ReturnsUnmodifiableCollection
-    override val dependencies: ObservableList<*>
-        get() = ObservableCollections.emptyObservableList<Observable>()
+    override val dependencies: ObservableList<*> = ObservableCollections.emptyObservableList<Observable>()
 
     final override fun get(): T {
         if (!this.validState) {

@@ -117,7 +117,7 @@ abstract class SetExpressionHelper<E>(protected val observable: ObservableSetVal
         override fun fireValueChangedEvent() {
             val oldValue = this.currentValue
             this.currentValue = this.observable.value
-            if (this.currentValue != oldValue) {
+            if (this.currentValue !== oldValue) {
                 this.listener.changed(this.observable, oldValue, this.currentValue)
             }
         }

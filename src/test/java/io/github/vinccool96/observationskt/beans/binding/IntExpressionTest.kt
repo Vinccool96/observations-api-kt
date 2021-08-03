@@ -102,11 +102,11 @@ class IntExpressionTest {
         val binding2: FloatBinding = this.op1 / this.float1
         assertEquals(this.data / this.float1, binding2.floatValue, EPSILON)
 
-        val binding3: LongBinding = this.op1 * this.long1
-        assertEquals(this.data * this.long1, binding3.longValue)
+        val binding3: LongBinding = this.op1 / this.long1
+        assertEquals(this.data / this.long1, binding3.longValue)
 
-        val binding4: IntBinding = this.op1 * this.int1
-        assertEquals(this.data * this.int1, binding4.intValue)
+        val binding4: IntBinding = this.op1 / this.int1
+        assertEquals(this.data / this.int1, binding4.intValue)
     }
 
     @Test
@@ -119,6 +119,7 @@ class IntExpressionTest {
         assertEquals(this.data, exp.value)
         valueModel.set(this.int1)
         assertEquals(this.int1, exp.value)
+        (exp as ObjectBinding<Int>).dispose()
     }
 
     @Test
@@ -137,6 +138,7 @@ class IntExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, IntExpression.intExpression(this.op1))
+        exp.dispose()
     }
 
     @Test
@@ -155,6 +157,7 @@ class IntExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, IntExpression.intExpression(this.op1))
+        exp.dispose()
     }
 
     companion object {

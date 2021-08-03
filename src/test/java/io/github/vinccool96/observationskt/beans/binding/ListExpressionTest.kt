@@ -1,9 +1,6 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.property.IntProperty
-import io.github.vinccool96.observationskt.beans.property.ListProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleIntProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleListProperty
+import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.ObservableListValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
@@ -93,6 +90,47 @@ class ListExpressionTest {
         assertEquals(data2_1, this.op2.valueAt(index).get())
 
         index.set(2)
+        assertNull(this.opNull.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.opEmpty.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.op1.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.op2.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+    }
+
+    @Test
+    fun testValueAt_Number() {
+        val index: DoubleProperty = SimpleDoubleProperty(-1.1)
+
+        assertNull(this.opNull.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.opEmpty.valueAt(index).get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertNull(this.op1.valueAt(index).get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertNull(this.op2.valueAt(index).get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        index.set(0.5)
+        assertNull(this.opNull.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.opEmpty.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(data1_0, this.op1.valueAt(index).get())
+        assertEquals(data2_0, this.op2.valueAt(index).get())
+
+        index.set(1.8)
+        assertNull(this.opNull.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.opEmpty.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertNull(this.op1.valueAt(index).get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(data2_1, this.op2.valueAt(index).get())
+
+        index.set(2.0000001)
         assertNull(this.opNull.valueAt(index).get())
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
@@ -233,6 +271,29 @@ class ListExpressionTest {
     }
 
     @Test
+    fun testContainsAll() {
+        assertTrue(this.opNull.containsAll(listOf()))
+        assertFalse(this.opNull.containsAll(listOf(data1_0)))
+        assertFalse(this.opNull.containsAll(setOf(data2_0, data2_1)))
+        assertFalse(this.opNull.containsAll(listOf(data1_0, data2_0, data2_1)))
+
+        assertTrue(this.opEmpty.containsAll(listOf()))
+        assertFalse(this.opEmpty.containsAll(listOf(data1_0)))
+        assertFalse(this.opEmpty.containsAll(setOf(data2_0, data2_1)))
+        assertFalse(this.opEmpty.containsAll(listOf(data1_0, data2_0, data2_1)))
+
+        assertTrue(this.op1.containsAll(listOf()))
+        assertTrue(this.op1.containsAll(listOf(data1_0)))
+        assertFalse(this.op1.containsAll(setOf(data2_0, data2_1)))
+        assertFalse(this.op1.containsAll(listOf(data1_0, data2_0, data2_1)))
+
+        assertTrue(this.op2.containsAll(listOf()))
+        assertFalse(this.op2.containsAll(listOf(data1_0)))
+        assertTrue(this.op2.containsAll(setOf(data2_0, data2_1)))
+        assertFalse(this.op2.containsAll(listOf(data1_0, data2_0, data2_1)))
+    }
+
+    @Test
     fun testIterator() {
         assertFalse(this.opNull.iterator().hasNext())
         assertFalse(this.opEmpty.iterator().hasNext())
@@ -279,6 +340,7 @@ class ListExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, ListExpression.listExpression(this.op1))
+        exp.dispose()
     }
 
     companion object {

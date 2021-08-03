@@ -1,13 +1,11 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.property.ReadOnlyBooleanProperty
 import io.github.vinccool96.observationskt.beans.property.ReadOnlyIntProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableSetValue
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableSet
-import io.github.vinccool96.observationskt.collections.SetChangeListener
 import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 
@@ -26,64 +24,7 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
 @Suppress("PrivatePropertyName")
 abstract class SetExpression<E> : ObservableSetValue<E> {
 
-    private val EMPTY_SET: ObservableSet<E> = EmptyObservableSet()
-
-    private class EmptyObservableSet<E> : AbstractMutableSet<E>(), ObservableSet<E> {
-
-        private val iterator: MutableIterator<E> = object : MutableIterator<E> {
-
-            override fun hasNext(): Boolean {
-                return false
-            }
-
-            override fun next(): E {
-                throw NoSuchElementException()
-            }
-
-            override fun remove() {
-                throw UnsupportedOperationException()
-            }
-
-        }
-
-        override fun iterator(): MutableIterator<E> {
-            return this.iterator
-        }
-
-        override val size: Int
-            get() = 0
-
-        override fun addListener(listener: InvalidationListener) {
-            // no-op
-        }
-
-        override fun removeListener(listener: InvalidationListener) {
-            // no-op
-        }
-
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
-            // no-op
-            return false
-        }
-
-        override fun addListener(listener: SetChangeListener<in E>) {
-            // no-op
-        }
-
-        override fun removeListener(listener: SetChangeListener<in E>) {
-            // no-op
-        }
-
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
-            // no-op
-            return false
-        }
-
-        override fun add(element: E): Boolean {
-            throw UnsupportedOperationException()
-        }
-
-    }
+    private val EMPTY_SET: ObservableSet<E> = ObservableCollections.emptyObservableSet()
 
     override val value: ObservableSet<E>?
         get() = this.get()

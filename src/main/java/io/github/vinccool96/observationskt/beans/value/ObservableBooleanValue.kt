@@ -13,4 +13,5 @@ interface ObservableBooleanValue : ObservableValue<Boolean?> {
      * @return The current value
      */
     fun get(): Boolean
+
 }

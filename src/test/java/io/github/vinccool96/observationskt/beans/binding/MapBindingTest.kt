@@ -14,7 +14,6 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
 import org.junit.Before
 import org.junit.Test
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.test.*
 
 @Suppress("RedundantNullableReturnType")
@@ -103,7 +102,7 @@ class MapBindingTest {
     fun testNoDependency_MapChangeListener() {
         this.binding0.value
         this.binding0.addListener(this.listener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding0.valid)
 
         // calling value
@@ -118,7 +117,7 @@ class MapBindingTest {
     fun testSingleDependency_MapChangeListener() {
         this.binding1.value
         this.binding1.addListener(this.listener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding1.valid)
 
         // fire single change event
@@ -231,6 +230,27 @@ class MapBindingTest {
         assertEquals(0, this.binding1.computeValueCounter)
         this.listener.assertAdded(Tuple.tup(newKey, newData))
         assertTrue(this.binding1.valid)
+
+        this.binding1.removeListener(this.listener)
+        this.binding1.reset()
+        this.listener.clear()
+        this.map2[newData] = newKey
+        assertEquals(0, this.binding1.computeValueCounter)
+        this.listener.check0()
+        assertTrue(this.binding1.valid)
+    }
+
+    @Test
+    fun testDefaultDependencies() {
+        assertTrue(MapBindingMock().dependencies.isEmpty())
+    }
+
+    private class MapBindingMock : MapBinding<String, String>() {
+
+        override fun computeValue(): ObservableMap<String, String>? {
+            return null
+        }
+
     }
 
     private class ObservableStub : ObservableValueBase<Any?>() {

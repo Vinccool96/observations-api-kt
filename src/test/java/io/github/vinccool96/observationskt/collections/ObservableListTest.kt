@@ -8,6 +8,7 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 @RunWith(Parameterized::class)
@@ -127,6 +128,13 @@ class ObservableListTest(private val listFactory: Callable<ObservableList<String
     }
 
     @Test
+    fun testRemove_Range() {
+        useListData("one", "two", "three", "four", "five")
+        this.list.remove(1, 3)
+        this.mlo.check1AddRemove(this.list, listOf("two", "three"), 1, 1)
+    }
+
+    @Test
     fun testRemoveNull() {
         useListData("one", "two", null, "three")
         val b = this.list.remove(null)
@@ -183,6 +191,15 @@ class ObservableListTest(private val listFactory: Callable<ObservableList<String
     }
 
     @Test
+    fun testRetainAll_Collection() {
+        useListData("one", "two", "three", "four", "five")
+        this.list.retainAll(listOf("two", "five", "six"))
+        assertEquals(2, this.mlo.calls.size)
+        this.mlo.checkAddRemove(0, this.list, listOf("one"), 0, 0)
+        this.mlo.checkAddRemove(1, this.list, listOf("three", "four"), 1, 1)
+    }
+
+    @Test
     fun testRemoveNonexistent() {
         useListData("one", "two", "x", "three")
         val b = this.list.remove("four")
@@ -195,6 +212,32 @@ class ObservableListTest(private val listFactory: Callable<ObservableList<String
         val r = this.list.set(1, "fnord")
         this.mlo.check1AddRemove(this.list, listOf("two"), 1, 2)
         assertEquals("two", r)
+    }
+
+    @Test
+    fun testSetAll_Collection() {
+        this.list.setAll(listOf("foo", "bar"))
+        this.mlo.check1AddRemove(this.list, listOf("one", "two", "three"), 0, 2)
+    }
+
+    @Test
+    fun testSetAll_Elements() {
+        this.list.setAll("foo", "bar")
+        this.mlo.check1AddRemove(this.list, listOf("one", "two", "three"), 0, 2)
+    }
+
+    @Test
+    fun testIndexOf() {
+        useListData("zero", "one", "two", "three", "four", "five", "two")
+        assertEquals(2, this.list.indexOf("two"))
+        assertNotEquals(6, this.list.indexOf("two"))
+    }
+
+    @Test
+    fun testLastIndexOf() {
+        useListData("zero", "one", "two", "three", "four", "five", "two")
+        assertEquals(6, this.list.lastIndexOf("two"))
+        assertNotEquals(2, this.list.lastIndexOf("two"))
     }
 
     @Test
@@ -216,10 +259,39 @@ class ObservableListTest(private val listFactory: Callable<ObservableList<String
     }
 
     @Test
+    fun testListIterator() {
+        useListData("zero", "one", "two", "three", "four", "five")
+        val listIterator = this.list.listIterator()
+        val seq = StringSequence()
+        while (listIterator.hasNext()) {
+            assertEquals(seq.nextElement, listIterator.next())
+        }
+    }
+
+    @Test
+    fun testListIterator_Index() {
+        useListData("zero", "one", "two", "three", "four", "five")
+        val listIterator = this.list.listIterator(3)
+        val seq = StringSequence(3)
+        while (listIterator.hasNext()) {
+            assertEquals(seq.nextElement, listIterator.next())
+        }
+    }
+
+    @Test
     fun testEqualsAndHashCode() {
         val other = listOf("one", "two", "three")
         assertTrue(this.list == other)
         assertEquals(other.hashCode(), this.list.hashCode())
+    }
+
+    private class StringSequence(private var index: Int = 0) {
+
+        private val elements = listOf("zero", "one", "two", "three", "four", "five")
+
+        val nextElement: String
+            get() = this.elements[this.index++]
+
     }
 
     private class StringListChangeListener : ListChangeListener<String?> {

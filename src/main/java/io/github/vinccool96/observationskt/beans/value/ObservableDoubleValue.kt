@@ -15,4 +15,5 @@ interface ObservableDoubleValue : ObservableNumberValue {
      * @return The current value
      */
     fun get(): Double
+
 }

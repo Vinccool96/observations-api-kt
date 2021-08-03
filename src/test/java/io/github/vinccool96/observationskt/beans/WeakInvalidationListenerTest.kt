@@ -13,12 +13,12 @@ class WeakInvalidationListenerTest {
     @Test
     fun testHandle() {
         var listener: InvalidationListenerMock? = InvalidationListenerMock()
-        val weakListener = WeakInvalidationListener(listener)
+        val weakListener = WeakInvalidationListener(listener!!)
         val o = ObservableMock()
 
         // regular call
         weakListener.invalidated(o)
-        listener!!.check(o, 1)
+        listener.check(o, 1)
         assertFalse(weakListener.wasGarbageCollected)
 
         // GC-ed call

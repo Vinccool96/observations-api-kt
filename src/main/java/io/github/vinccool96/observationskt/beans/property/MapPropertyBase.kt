@@ -25,7 +25,6 @@ import java.lang.ref.WeakReference
  * @constructor The constructor of the `MapPropertyBase`.
  *
  * @param initialValue the initial value of the wrapped value
- *
  */
 @Suppress("RedundantNullableReturnType")
 abstract class MapPropertyBase<K, V>(initialValue: ObservableMap<K, V>?) : MapProperty<K, V>() {

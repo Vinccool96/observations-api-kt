@@ -97,7 +97,7 @@ class SetBindingTest {
     fun testNoDependency_SetChangeListener() {
         this.binding0.value
         this.binding0.addListener(this.listener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding0.valid)
 
         // calling value
@@ -112,7 +112,7 @@ class SetBindingTest {
     fun testSingleDependency_SetChangeListener() {
         this.binding1.value
         this.binding1.addListener(this.listener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding1.valid)
 
         // fire single change event
@@ -222,6 +222,27 @@ class SetBindingTest {
         assertEquals(0, this.binding1.computeValueCounter)
         this.listener.assertAdded(Tuple.tup(newObject))
         assertTrue(this.binding1.valid)
+
+        this.binding1.removeListener(this.listener)
+        this.binding1.reset()
+        this.listener.clear()
+        this.set2.add(Any())
+        assertEquals(0, this.binding1.computeValueCounter)
+        this.listener.check0()
+        assertTrue(this.binding1.valid)
+    }
+
+    @Test
+    fun testDefaultDependencies() {
+        assertTrue(SetBindingMock().dependencies.isEmpty())
+    }
+
+    private class SetBindingMock : SetBinding<String>() {
+
+        override fun computeValue(): ObservableSet<String>? {
+            return null
+        }
+
     }
 
     private class ObservableStub : ObservableValueBase<Any>() {

@@ -15,4 +15,5 @@ interface ObservableFloatValue : ObservableNumberValue {
      * @return The current value
      */
     fun get(): Float
+
 }

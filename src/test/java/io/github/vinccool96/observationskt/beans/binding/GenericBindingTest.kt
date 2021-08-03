@@ -6,6 +6,8 @@ import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableValueBase
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.collections.ObservableMap
+import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 import org.junit.After
 import org.junit.Assert
@@ -48,7 +50,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
     fun testNoDependencyLazy() {
         this.binding0.value
         this.binding0.addListener(this.invalidationListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
         assertEquals(true, this.binding0.valid)
 
         // calling value
@@ -63,7 +65,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
     fun testNoDependencyEager() {
         this.binding0.value
         this.binding0.addListener(this.changeListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
 
         assertEquals(true, this.binding0.valid)
 
@@ -79,7 +81,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
     fun testSingleDependencyLazy() {
         this.binding1.value
         this.binding1.addListener(this.invalidationListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
 
         assertEquals(true, this.binding1.valid)
 
@@ -142,7 +144,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
     fun testSingleDependencyEager() {
         this.binding1.value
         this.binding1.addListener(this.changeListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
 
         assertEquals(true, this.binding1.valid)
 
@@ -205,7 +207,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
     fun testTwoDependencies() {
         this.binding2.value
         this.binding2.addListener(this.invalidationListener)
-        System.gc() // making sure we did not not overdo weak references
+        System.gc() // making sure we did not overdo weak references
 
         assertEquals(true, this.binding2.valid)
 
@@ -275,14 +277,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class DoubleBindingImpl(vararg dep: Observable) : DoubleBinding(), BindingMock<Number?> {
+    class DoubleBindingImpl(vararg deps: Observable) : DoubleBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
         private var valueState = 0.0
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: Number?
@@ -313,14 +315,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class FloatBindingImpl(vararg dep: Observable) : FloatBinding(), BindingMock<Number?> {
+    class FloatBindingImpl(vararg deps: Observable) : FloatBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
         private var valueState = 0.0f
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: Number?
@@ -351,14 +353,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class LongBindingImpl(vararg dep: Observable) : LongBinding(), BindingMock<Number?> {
+    class LongBindingImpl(vararg deps: Observable) : LongBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
         private var valueState = 0L
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: Number?
@@ -389,14 +391,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class IntBindingImpl(vararg dep: Observable) : IntBinding(), BindingMock<Number?> {
+    class IntBindingImpl(vararg deps: Observable) : IntBinding(), BindingMock<Number?> {
 
         private var computeValueCounterState = 0
 
         private var valueState = 0
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: Number?
@@ -427,14 +429,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class BooleanBindingImpl(vararg dep: Observable) : BooleanBinding(), BindingMock<Boolean?> {
+    class BooleanBindingImpl(vararg deps: Observable) : BooleanBinding(), BindingMock<Boolean?> {
 
         private var computeValueCounterState = 0
 
         private var valueState = false
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: Boolean?
@@ -465,14 +467,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class ObjectBindingImpl(vararg dep: Observable) : ObjectBinding<Any?>(), BindingMock<Any?> {
+    class ObjectBindingImpl(vararg deps: Observable) : ObjectBinding<Any?>(), BindingMock<Any?> {
 
         private var computeValueCounterState = 0
 
         private var valueState: Any? = null
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: Any?
@@ -503,14 +505,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class StringBindingImpl(vararg dep: Observable) : StringBinding(), BindingMock<String?> {
+    class StringBindingImpl(vararg deps: Observable) : StringBinding(), BindingMock<String?> {
 
         private var computeValueCounterState = 0
 
         private var valueState: String? = null
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: String?
@@ -541,14 +543,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
-    class ListBindingImpl(vararg dep: Observable) : ListBinding<Any>(), BindingMock<ObservableList<Any>?> {
+    class ListBindingImpl(vararg deps: Observable) : ListBinding<Any>(), BindingMock<ObservableList<Any>?> {
 
         private var computeValueCounterState = 0
 
         private var valueState: ObservableList<Any>? = null
 
         init {
-            super.bind(*dep)
+            super.bind(*deps)
         }
 
         override var value: ObservableList<Any>?
@@ -569,6 +571,82 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
         }
 
         override fun computeValue(): ObservableList<Any>? {
+            this.computeValueCounterState++
+            return this.valueState
+        }
+
+        @get:ReturnsUnmodifiableCollection
+        override val dependencies: ObservableList<*>
+            get() = fail("Should not reach here")
+
+    }
+
+    class MapBindingImpl(vararg deps: Observable) : MapBinding<Any, Any>(), BindingMock<ObservableMap<Any, Any>?> {
+
+        private var computeValueCounterState = 0
+
+        private var valueState: ObservableMap<Any, Any>? = null
+
+        init {
+            super.bind(*deps)
+        }
+
+        override var value: ObservableMap<Any, Any>?
+            get() = this.get()
+            set(value) {
+                this.valueState = value
+            }
+
+        override val computeValueCounter: Int
+            get() {
+                val result = this.computeValueCounterState
+                reset()
+                return result
+            }
+
+        override fun reset() {
+            this.computeValueCounterState = 0
+        }
+
+        override fun computeValue(): ObservableMap<Any, Any>? {
+            this.computeValueCounterState++
+            return this.valueState
+        }
+
+        @get:ReturnsUnmodifiableCollection
+        override val dependencies: ObservableList<*>
+            get() = fail("Should not reach here")
+
+    }
+
+    class SetBindingImpl(vararg deps: Observable) : SetBinding<Any>(), BindingMock<ObservableSet<Any>?> {
+
+        private var computeValueCounterState = 0
+
+        private var valueState: ObservableSet<Any>? = null
+
+        init {
+            super.bind(*deps)
+        }
+
+        override var value: ObservableSet<Any>?
+            get() = this.get()
+            set(value) {
+                this.valueState = value
+            }
+
+        override val computeValueCounter: Int
+            get() {
+                val result = this.computeValueCounterState
+                reset()
+                return result
+            }
+
+        override fun reset() {
+            this.computeValueCounterState = 0
+        }
+
+        override fun computeValue(): ObservableSet<Any>? {
             this.computeValueCounterState++
             return this.valueState
         }
@@ -645,6 +723,22 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
                             ListBindingImpl(),
                             ListBindingImpl(dependency1),
                             ListBindingImpl(dependency1, dependency2)
+                    ),
+                    arrayOf(
+                            ObservableCollections.observableHashMap<Any, Any>(),
+                            ObservableCollections.observableHashMap<Any, Any>(),
+                            dependency1, dependency2,
+                            MapBindingImpl(),
+                            MapBindingImpl(dependency1),
+                            MapBindingImpl(dependency1, dependency2)
+                    ),
+                    arrayOf(
+                            ObservableCollections.observableSet<Any>(),
+                            ObservableCollections.observableSet<Any>(),
+                            dependency1, dependency2,
+                            SetBindingImpl(),
+                            SetBindingImpl(dependency1),
+                            SetBindingImpl(dependency1, dependency2)
                     )
             )
         }

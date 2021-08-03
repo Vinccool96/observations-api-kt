@@ -6,7 +6,9 @@ import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
@@ -94,6 +96,7 @@ class ObjectExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, ObjectExpression.objectExpression(this.op1))
+        exp.dispose()
     }
 
     @Test
@@ -125,6 +128,16 @@ class ObjectExpressionTest {
 
         })
         assertEquals(Integer.toHexString(this.op1.get().hashCode()), binding.get())
+    }
+
+    @Test
+    fun testAsString_Format_Locale() {
+        val op: ObjectProperty<Float> = SimpleObjectProperty(1.1f)
+        val binding1 = op.asString(Locale.FRENCH, "%f")
+        val binding2 = op.asString(Locale.ENGLISH, "%f")
+        DependencyUtils.checkDependencies(binding1.dependencies, op)
+        DependencyUtils.checkDependencies(binding2.dependencies, op)
+        assertNotEquals(binding1.get(), binding2.get())
     }
 
 }

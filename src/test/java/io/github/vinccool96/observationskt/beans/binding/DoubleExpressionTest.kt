@@ -119,6 +119,7 @@ class DoubleExpressionTest {
         assertEquals(this.data, exp.value, EPSILON)
         valueModel.set(this.double1)
         assertEquals(this.double1, exp.value, EPSILON)
+        (exp as ObjectBinding<Double>).dispose()
     }
 
     @Test
@@ -137,6 +138,7 @@ class DoubleExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, DoubleExpression.doubleExpression(this.op1))
+        exp.dispose()
     }
 
     @Test
@@ -155,6 +157,7 @@ class DoubleExpressionTest {
 
         // make sure we do not create unnecessary bindings
         assertSame(this.op1, DoubleExpression.doubleExpression(this.op1))
+        exp.dispose()
     }
 
     companion object {

@@ -15,4 +15,5 @@ interface ObservableIntValue : ObservableNumberValue {
      * @return The current value
      */
     fun get(): Int
+
 }

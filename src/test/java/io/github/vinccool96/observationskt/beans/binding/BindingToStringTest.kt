@@ -3,6 +3,8 @@ package io.github.vinccool96.observationskt.beans.binding
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
+import io.github.vinccool96.observationskt.collections.ObservableMap
+import io.github.vinccool96.observationskt.collections.ObservableSet
 import org.junit.Test
 import kotlin.math.E
 import kotlin.math.PI
@@ -223,6 +225,58 @@ class BindingToStringTest {
         assertEquals("ListBinding [invalid]", binding.toString())
         binding.get()
         assertEquals("ListBinding [value: $value2]", binding.toString())
+    }
+
+    @Test
+    fun testMapToString() {
+        val value1 = ObservableCollections.observableHashMap(Any() to Any())
+        val value2 = ObservableCollections.observableHashMap(Any() to Any(), Any() to Any())
+        val v: MapProperty<Any, Any> = SimpleMapProperty(value1)
+        val binding: MapBinding<Any, Any> = object : MapBinding<Any, Any>() {
+
+            init {
+                super.bind(v)
+            }
+
+            override fun computeValue(): ObservableMap<Any, Any>? {
+                return v.get()
+            }
+
+        }
+
+        assertEquals("MapBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("MapBinding [value: $value1]", binding.toString())
+        v.set(value2)
+        assertEquals("MapBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("MapBinding [value: $value2]", binding.toString())
+    }
+
+    @Test
+    fun testSetToString() {
+        val value1 = ObservableCollections.observableSet(Any())
+        val value2 = ObservableCollections.observableSet(Any(), Any())
+        val v: SetProperty<Any> = SimpleSetProperty(value1)
+        val binding: SetBinding<Any> = object : SetBinding<Any>() {
+
+            init {
+                super.bind(v)
+            }
+
+            override fun computeValue(): ObservableSet<Any>? {
+                return v.get()
+            }
+
+        }
+
+        assertEquals("SetBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("SetBinding [value: $value1]", binding.toString())
+        v.set(value2)
+        assertEquals("SetBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("SetBinding [value: $value2]", binding.toString())
     }
 
 }

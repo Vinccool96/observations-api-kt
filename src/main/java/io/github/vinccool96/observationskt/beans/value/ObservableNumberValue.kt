@@ -18,6 +18,22 @@ package io.github.vinccool96.observationskt.beans.value
 interface ObservableNumberValue : ObservableValue<Number?> {
 
     /**
+     * Returns the value of this `ObservableNumberValue` as a `double`. If the value is not a `double`, a standard cast
+     * is performed.
+     *
+     * @return The value of this `ObservableNumberValue` as a `double`
+     */
+    val doubleValue: Double
+
+    /**
+     * Returns the value of this `ObservableNumberValue` as a `float`. If the value is not a `float`, a standard cast is
+     * performed.
+     *
+     * @return The value of this `ObservableNumberValue` as a `float`
+     */
+    val floatValue: Float
+
+    /**
      * Returns the value of this `ObservableNumberValue` as an `int` . If the value is not an `int`, a standard cast is
      * performed.
      *
@@ -33,19 +49,4 @@ interface ObservableNumberValue : ObservableValue<Number?> {
      */
     val longValue: Long
 
-    /**
-     * Returns the value of this `ObservableNumberValue` as a `float`. If the value is not a `float`, a standard cast is
-     * performed.
-     *
-     * @return The value of this `ObservableNumberValue` as a `float`
-     */
-    val floatValue: Float
-
-    /**
-     * Returns the value of this `ObservableNumberValue` as a `double`. If the value is not a `double`, a standard cast
-     * is performed.
-     *
-     * @return The value of this `ObservableNumberValue` as a `double`
-     */
-    val doubleValue: Double
 }

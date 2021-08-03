@@ -1,17 +1,14 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.property.ReadOnlyBooleanProperty
 import io.github.vinccool96.observationskt.beans.property.ReadOnlyIntProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableMapValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
-import io.github.vinccool96.observationskt.collections.MapChangeListener
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.sun.binding.StringFormatter
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
-import java.util.*
 
 /**
  * A `MapExpression` is a [ObservableMapValue] plus additional convenience methods to generate bindings in a fluent
@@ -29,45 +26,7 @@ import java.util.*
 @Suppress("PrivatePropertyName")
 abstract class MapExpression<K, V> : ObservableMapValue<K, V> {
 
-    private val EMPTY_MAP: ObservableMap<K, V> = EmptyObservableMap()
-
-    private class EmptyObservableMap<K, V> : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
-
-        override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
-            get() = Collections.emptySet()
-
-        override fun put(key: K, value: V): V? {
-            // no-op
-            return null
-        }
-
-        override fun addListener(listener: InvalidationListener) {
-            // no-op
-        }
-
-        override fun removeListener(listener: InvalidationListener) {
-            // no-op
-        }
-
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
-            // no-op
-            return false
-        }
-
-        override fun addListener(listener: MapChangeListener<in K, in V>) {
-            // no-op
-        }
-
-        override fun removeListener(listener: MapChangeListener<in K, in V>) {
-            // no-op
-        }
-
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
-            // no-op
-            return false
-        }
-
-    }
+    private val EMPTY_MAP: ObservableMap<K, V> = ObservableCollections.emptyObservableMap()
 
     override val value: ObservableMap<K, V>?
         get() = this.get()

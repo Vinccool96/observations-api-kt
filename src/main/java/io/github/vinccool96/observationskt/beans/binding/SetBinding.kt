@@ -251,7 +251,7 @@ abstract class SetBinding<E> : SetExpression<E>(), Binding<ObservableSet<E>?> {
     abstract fun computeValue(): ObservableSet<E>?
 
     override fun toString(): String {
-        return if (this.validState) "SetBinding [${get()}]" else "SetBinding [invalid]"
+        return if (this.validState) "SetBinding [value: ${get()}]" else "SetBinding [invalid]"
     }
 
 }
