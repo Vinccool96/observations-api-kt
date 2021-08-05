@@ -53,6 +53,7 @@ class BindingsListTest {
         assertEquals(2, size.get())
         property.set(null)
         assertEquals(0, size.get())
+        size.dispose()
     }
 
     @Test
@@ -71,6 +72,7 @@ class BindingsListTest {
         assertFalse(empty.get())
         property.set(null)
         assertTrue(empty.get())
+        empty.dispose()
     }
 
     @Test
@@ -89,6 +91,7 @@ class BindingsListTest {
         assertTrue(notEmpty.get())
         property.set(null)
         assertFalse(notEmpty.get())
+        notEmpty.dispose()
     }
 
     @Test
@@ -141,6 +144,14 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertNull(binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testValueAt_Constant_() {
+
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -209,6 +220,7 @@ class BindingsListTest {
         this.index.set(0)
         assertNull(binding.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -247,6 +259,10 @@ class BindingsListTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
 
+        localProperty[0] = null
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+
         localProperty.set(localList2)
         assertEquals(defaultData, binding0.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
@@ -268,6 +284,9 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -355,6 +374,7 @@ class BindingsListTest {
         this.index.set(0)
         assertEquals(defaultData, binding.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -393,6 +413,10 @@ class BindingsListTest {
         assertEquals(defaultData, binding2.get(), EPSILON_DOUBLE)
         log.checkFine(IndexOutOfBoundsException::class.java)
 
+        localProperty[0] = null
+        assertEquals(defaultData, binding0.get(), EPSILON_DOUBLE)
+        log.checkFine(NullPointerException::class.java)
+
         localProperty.set(localList2)
         assertEquals(defaultData, binding0.get(), EPSILON_DOUBLE)
         log.checkFine(IndexOutOfBoundsException::class.java)
@@ -414,6 +438,9 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertEquals(defaultData, binding2.get(), EPSILON_DOUBLE)
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -501,6 +528,7 @@ class BindingsListTest {
         this.index.set(0)
         assertEquals(defaultData, binding.get(), EPSILON_DOUBLE)
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -539,6 +567,10 @@ class BindingsListTest {
         assertEquals(defaultData, binding2.get(), EPSILON_FLOAT)
         log.checkFine(IndexOutOfBoundsException::class.java)
 
+        localProperty[0] = null
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+
         localProperty.set(localList2)
         assertEquals(defaultData, binding0.get(), EPSILON_FLOAT)
         log.checkFine(IndexOutOfBoundsException::class.java)
@@ -560,6 +592,9 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertEquals(defaultData, binding2.get(), EPSILON_FLOAT)
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -647,6 +682,7 @@ class BindingsListTest {
         this.index.set(0)
         assertEquals(defaultData, binding.get(), EPSILON_FLOAT)
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -685,6 +721,10 @@ class BindingsListTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
 
+        localProperty[0] = null
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+
         localProperty.set(localList2)
         assertEquals(defaultData, binding0.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
@@ -706,6 +746,9 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -793,6 +836,7 @@ class BindingsListTest {
         this.index.set(0)
         assertEquals(defaultData, binding.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -831,6 +875,10 @@ class BindingsListTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
 
+        localProperty[0] = null
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+
         localProperty.set(localList2)
         assertEquals(defaultData, binding0.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
@@ -852,6 +900,9 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -939,6 +990,7 @@ class BindingsListTest {
         this.index.set(0)
         assertEquals(defaultData, binding.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -998,6 +1050,9 @@ class BindingsListTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -1074,6 +1129,7 @@ class BindingsListTest {
         this.index.set(0)
         assertEquals(defaultData, binding.get())
         log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
     }
 
     companion object {

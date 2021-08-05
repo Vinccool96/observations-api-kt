@@ -42,6 +42,7 @@ class BindingsSetTest {
         assertEquals(1, size.get())
         this.property.set(null)
         assertEquals(0, size.get())
+        size.dispose()
     }
 
     @Test
@@ -61,6 +62,7 @@ class BindingsSetTest {
         assertFalse(empty.get())
         this.property.set(null)
         assertTrue(empty.get())
+        empty.dispose()
     }
 
     @Test
@@ -80,6 +82,7 @@ class BindingsSetTest {
         assertTrue(notEmpty.get())
         this.property.set(null)
         assertFalse(notEmpty.get())
+        notEmpty.dispose()
     }
 
     companion object {

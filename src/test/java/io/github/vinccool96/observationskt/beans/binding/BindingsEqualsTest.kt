@@ -6,6 +6,7 @@ import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
 import io.github.vinccool96.observationskt.beans.value.ObservableStringValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +20,8 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
         private val func: Functions<T>, private vararg val v: T) {
 
     private lateinit var observer: InvalidationListenerMock
+
+    private lateinit var binding: BooleanBinding
 
     interface Functions<T> {
 
@@ -43,88 +46,93 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
         this.observer = InvalidationListenerMock()
     }
 
+    @After
+    fun tearDown() {
+        this.binding.dispose()
+    }
+
     @Test
     fun test_Expression_Expression() {
-        val binding = this.func.generateExpressionExpression(this.op1, this.op2)
-        binding.addListener(this.observer)
+        this.binding = this.func.generateExpressionExpression(this.op1, this.op2)
+        this.binding.addListener(this.observer)
 
         // check initial value
-        this.func.check(this.v[0], this.v[1], binding)
-        DependencyUtils.checkDependencies(binding.dependencies, this.op1, this.op2)
+        this.func.check(this.v[0], this.v[1], this.binding)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op1, this.op2)
 
         // change first operand
         this.observer.reset()
         this.func.setOp1(this.v[1])
-        this.func.check(this.v[1], this.v[1], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[1], this.v[1], this.binding)
+        this.observer.check(this.binding, 1)
 
         // change second operand
         this.func.setOp2(this.v[0])
-        this.func.check(this.v[1], this.v[0], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[1], this.v[0], this.binding)
+        this.observer.check(this.binding, 1)
 
         // change both operands
         this.func.setOp1(this.v[0])
         this.func.setOp2(this.v[1])
-        this.func.check(this.v[0], this.v[1], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[0], this.v[1], this.binding)
+        this.observer.check(this.binding, 1)
     }
 
     @Test
     fun test_Self() {
         // using same FloatValue twice
-        val binding = this.func.generateExpressionExpression(this.op1, this.op1)
-        binding.addListener(this.observer)
+        this.binding = this.func.generateExpressionExpression(this.op1, this.op1)
+        this.binding.addListener(this.observer)
 
         // check initial value
-        this.func.check(this.v[0], this.v[0], binding)
+        this.func.check(this.v[0], this.v[0], this.binding)
 
         // change value
         this.func.setOp1(this.v[1])
-        this.func.check(this.v[1], this.v[1], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[1], this.v[1], this.binding)
+        this.observer.check(this.binding, 1)
     }
 
     @Test
     fun test_Expression_Primitive() {
-        val binding = this.func.generateExpressionPrimitive(this.op1, this.v[1])
-        binding.addListener(this.observer)
+        this.binding = this.func.generateExpressionPrimitive(this.op1, this.v[1])
+        this.binding.addListener(this.observer)
 
         // check initial value
-        this.func.check(this.v[0], this.v[1], binding)
-        DependencyUtils.checkDependencies(binding.dependencies, this.op1)
+        this.func.check(this.v[0], this.v[1], this.binding)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op1)
 
         // change first operand
         this.observer.reset()
         this.func.setOp1(this.v[1])
-        this.func.check(this.v[1], this.v[1], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[1], this.v[1], this.binding)
+        this.observer.check(this.binding, 1)
 
         // change to highest value
         this.func.setOp1(this.v[2])
-        this.func.check(this.v[2], this.v[1], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[2], this.v[1], this.binding)
+        this.observer.check(this.binding, 1)
     }
 
     @Test
     fun test_Primitive_Expression() {
-        val binding = this.func.generatePrimitiveExpression(this.v[1], this.op1)
-        binding.addListener(this.observer)
+        this.binding = this.func.generatePrimitiveExpression(this.v[1], this.op1)
+        this.binding.addListener(this.observer)
 
         // check initial value
-        this.func.check(this.v[1], this.v[0], binding)
-        DependencyUtils.checkDependencies(binding.dependencies, this.op1)
+        this.func.check(this.v[1], this.v[0], this.binding)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op1)
 
         // change first operand
         this.observer.reset()
         this.func.setOp1(this.v[1])
-        this.func.check(this.v[1], this.v[1], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[1], this.v[1], this.binding)
+        this.observer.check(this.binding, 1)
 
         // change to highest value
         this.func.setOp1(this.v[2])
-        this.func.check(this.v[1], this.v[2], binding)
-        this.observer.check(binding, 1)
+        this.func.check(this.v[1], this.v[2], this.binding)
+        this.observer.check(this.binding, 1)
     }
 
     companion object {

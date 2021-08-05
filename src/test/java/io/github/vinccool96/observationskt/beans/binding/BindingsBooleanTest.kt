@@ -53,6 +53,7 @@ class BindingsBooleanTest {
         this.op1.set(false)
         assertEquals(false && true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -69,6 +70,7 @@ class BindingsBooleanTest {
         // check short circuit invalidation
         this.op2.set(false)
         this.observer.check(null, 0)
+        binding.dispose()
     }
 
     @Test
@@ -90,6 +92,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true && true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -133,6 +136,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true || true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -149,6 +153,7 @@ class BindingsBooleanTest {
         // check short circuit invalidation
         this.op2.set(false)
         this.observer.check(null, 0)
+        binding.dispose()
     }
 
     @Test
@@ -170,6 +175,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true || true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -208,6 +214,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(!true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -220,6 +227,7 @@ class BindingsBooleanTest {
         this.op1.set(false)
         this.op1.set(true)
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -246,6 +254,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true == true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -262,6 +271,7 @@ class BindingsBooleanTest {
         // check short circuit invalidation
         this.op2.set(false)
         this.observer.check(null, 0)
+        binding.dispose()
     }
 
     @Test
@@ -283,6 +293,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true == true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -326,6 +337,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true != true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test
@@ -342,6 +354,7 @@ class BindingsBooleanTest {
         // check short circuit invalidation
         this.op2.set(false)
         this.observer.check(null, 0)
+        binding.dispose()
     }
 
     @Test
@@ -363,6 +376,7 @@ class BindingsBooleanTest {
         this.op1.set(true)
         assertEquals(true != true, binding.get())
         this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test

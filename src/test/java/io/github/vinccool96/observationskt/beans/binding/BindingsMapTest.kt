@@ -7,10 +7,12 @@ import io.github.vinccool96.observationskt.beans.property.StringProperty
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
+import io.github.vinccool96.observationskt.sun.collections.ObservableMapWrapper
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import java.util.logging.Level
 import kotlin.math.E
 import kotlin.math.PI
 import kotlin.test.assertEquals
@@ -53,6 +55,7 @@ class BindingsMapTest {
         assertEquals(2, size.get())
         this.property.set(null)
         assertEquals(0, size.get())
+        size.dispose()
     }
 
     @Test
@@ -72,6 +75,7 @@ class BindingsMapTest {
         assertFalse(empty.get())
         this.property.set(null)
         assertTrue(empty.get())
+        empty.dispose()
     }
 
     @Test
@@ -91,6 +95,7 @@ class BindingsMapTest {
         assertTrue(notEmpty.get())
         this.property.set(null)
         assertFalse(notEmpty.get())
+        notEmpty.dispose()
     }
 
     @Test
@@ -130,6 +135,27 @@ class BindingsMapTest {
         assertNull(binding0.get())
         assertNull(binding1.get())
         assertNull(binding2.get())
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testValueAt_Constant_Exception() {
+        val localMap1: ObservableMap<String?, Any> = MapClassCastException()
+        val localMap2: ObservableMap<String?, Any> = MapNullPointerException()
+
+        val binding = Bindings.valueAt(this.property, key1)
+        DependencyUtils.checkDependencies(binding.dependencies, this.property)
+
+        this.property.set(localMap1)
+        assertNull(binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+
+        this.property.set(localMap2)
+        assertNull(binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -182,6 +208,25 @@ class BindingsMapTest {
         assertNull(binding.get())
         this.index.set(key1)
         assertNull(binding.get())
+        binding.dispose()
+    }
+
+    @Test
+    fun testValueAt_Variable_Exception() {
+        val localMap1: ObservableMap<String?, Any> = MapClassCastException()
+        val localMap2: ObservableMap<String?, Any> = MapNullPointerException()
+
+        val binding = Bindings.valueAt(this.property, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, this.property, this.index)
+
+        this.property.set(localMap1)
+        assertNull(binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+
+        this.property.set(localMap2)
+        assertNull(binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -243,6 +288,29 @@ class BindingsMapTest {
         log.checkFine(NullPointerException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testBooleanValueAt_Constant_Exception() {
+        val defaultData = false
+        val localProperty: MapProperty<String?, Boolean> = SimpleMapProperty()
+        val localMap1: ObservableMap<String?, Boolean> = MapClassCastException()
+        val localMap2: ObservableMap<String?, Boolean> = MapNullPointerException()
+
+        val binding = Bindings.booleanValueAt(localProperty, key1)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty)
+
+        localProperty.set(localMap1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+
+        localProperty.set(localMap2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -316,6 +384,27 @@ class BindingsMapTest {
         this.index.set(key1)
         assertEquals(defaultData, binding.get())
         log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testBooleanValueAt_Variable_Exception() {
+        val defaultData = false
+        val localProperty: MapProperty<String?, Boolean> = SimpleMapProperty()
+        val localMap1: ObservableMap<String?, Boolean> = MapClassCastException()
+        val localMap2: ObservableMap<String?, Boolean> = MapNullPointerException()
+
+        val binding = Bindings.booleanValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        localProperty.set(localMap1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+
+        localProperty.set(localMap2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -377,6 +466,31 @@ class BindingsMapTest {
         log.checkFine(NullPointerException::class.java)
         assertEquals(defaultData, binding2.get(), EPSILON_DOUBLE)
         log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testDoubleValueAt_Constant_Exception() {
+        val defaultData = 0.0
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding0 = Bindings.doubleValueAt(localProperty, key1)
+        val binding1 = Bindings.doubleValueAt(localProperty, key2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get(), EPSILON_DOUBLE)
+        log.check(Level.WARNING, ClassCastException::class.java)
+        assertEquals(defaultData, binding1.get(), EPSILON_DOUBLE)
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
     }
 
     @Test
@@ -450,6 +564,28 @@ class BindingsMapTest {
         this.index.set(key1)
         assertEquals(defaultData, binding.get(), EPSILON_DOUBLE)
         log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testDoubleValueAt_Variable_Exception() {
+        val defaultData = 0.0
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding = Bindings.doubleValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get(), EPSILON_DOUBLE)
+        log.check(Level.WARNING, ClassCastException::class.java)
+        this.index.set(key2)
+        assertEquals(defaultData, binding.get(), EPSILON_DOUBLE)
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -511,6 +647,31 @@ class BindingsMapTest {
         log.checkFine(NullPointerException::class.java)
         assertEquals(defaultData, binding2.get(), EPSILON_FLOAT)
         log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testFloatValueAt_Constant_Exception() {
+        val defaultData = 0.0f
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding0 = Bindings.floatValueAt(localProperty, key1)
+        val binding1 = Bindings.floatValueAt(localProperty, key2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get(), EPSILON_FLOAT)
+        log.check(Level.WARNING, ClassCastException::class.java)
+        assertEquals(defaultData, binding1.get(), EPSILON_FLOAT)
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
     }
 
     @Test
@@ -584,6 +745,28 @@ class BindingsMapTest {
         this.index.set(key1)
         assertEquals(defaultData, binding.get(), EPSILON_FLOAT)
         log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testFloatValueAt_Variable_Exception() {
+        val defaultData = 0.0f
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding = Bindings.floatValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get(), EPSILON_FLOAT)
+        log.check(Level.WARNING, ClassCastException::class.java)
+        this.index.set(key2)
+        assertEquals(defaultData, binding.get(), EPSILON_FLOAT)
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -645,6 +828,31 @@ class BindingsMapTest {
         log.checkFine(NullPointerException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testIntValueAt_Constant_Exception() {
+        val defaultData = 0
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding0 = Bindings.intValueAt(localProperty, key1)
+        val binding1 = Bindings.intValueAt(localProperty, key2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
     }
 
     @Test
@@ -718,6 +926,28 @@ class BindingsMapTest {
         this.index.set(key1)
         assertEquals(defaultData, binding.get())
         log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testIntValueAt_Variable_Exception() {
+        val defaultData = 0
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding = Bindings.intValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+        this.index.set(key2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -779,6 +1009,31 @@ class BindingsMapTest {
         log.checkFine(NullPointerException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testLongValueAt_Constant_Exception() {
+        val defaultData = 0L
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding0 = Bindings.longValueAt(localProperty, key1)
+        val binding1 = Bindings.longValueAt(localProperty, key2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
     }
 
     @Test
@@ -852,6 +1107,28 @@ class BindingsMapTest {
         this.index.set(key1)
         assertEquals(defaultData, binding.get())
         log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testLongValueAt_Variable_Exception() {
+        val defaultData = 0L
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding = Bindings.longValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+        this.index.set(key2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -913,6 +1190,29 @@ class BindingsMapTest {
         log.checkFine(NullPointerException::class.java)
         assertEquals(defaultData, binding2.get())
         log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testStringValueAt_Constant_Exception() {
+        val defaultData: String? = null
+        val localProperty: MapProperty<String?, String?> = SimpleMapProperty()
+        val localMap1: ObservableMap<String?, String?> = MapClassCastException()
+        val localMap2: ObservableMap<String?, String?> = MapNullPointerException()
+
+        val binding = Bindings.stringValueAt(localProperty, key1)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty)
+
+        localProperty.set(localMap1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+
+        localProperty.set(localMap2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
     }
 
     @Test
@@ -986,6 +1286,107 @@ class BindingsMapTest {
         this.index.set(key1)
         assertEquals(defaultData, binding.get())
         log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testStringValueAt_Variable_Exception() {
+        val defaultData: String? = null
+        val localProperty: MapProperty<String?, String?> = SimpleMapProperty()
+        val localMap1: ObservableMap<String?, String?> = MapClassCastException()
+        val localMap2: ObservableMap<String?, String?> = MapNullPointerException()
+
+        val binding = Bindings.stringValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        localProperty.set(localMap1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+
+        localProperty.set(localMap2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    private class NumberClassCastException : Number() {
+
+        override fun toDouble(): Double {
+            throw ClassCastException("For the test")
+        }
+
+        override fun toFloat(): Float {
+            throw ClassCastException("For the test")
+        }
+
+        override fun toInt(): Int {
+            throw ClassCastException("For the test")
+        }
+
+        override fun toLong(): Long {
+            throw ClassCastException("For the test")
+        }
+
+        override fun toShort(): Short {
+            throw ClassCastException("For the test")
+        }
+
+        override fun toByte(): Byte {
+            throw ClassCastException("For the test")
+        }
+
+        override fun toChar(): Char {
+            throw ClassCastException("For the test") // unused
+        }
+
+    }
+
+    private class NumberNullPointerException : Number() {
+
+        override fun toDouble(): Double {
+            throw NullPointerException("For the test")
+        }
+
+        override fun toFloat(): Float {
+            throw NullPointerException("For the test")
+        }
+
+        override fun toInt(): Int {
+            throw NullPointerException("For the test")
+        }
+
+        override fun toLong(): Long {
+            throw NullPointerException("For the test")
+        }
+
+        override fun toShort(): Short {
+            throw NullPointerException("For the test")
+        }
+
+        override fun toByte(): Byte {
+            throw NullPointerException("For the test")
+        }
+
+        override fun toChar(): Char {
+            throw NullPointerException("For the test") // unused
+        }
+
+    }
+
+    private class MapClassCastException<V> : ObservableMapWrapper<String?, V>(HashMap()) {
+
+        override fun get(key: String?): V? {
+            throw ClassCastException("For the test")
+        }
+
+    }
+
+    private class MapNullPointerException<V> : ObservableMapWrapper<String?, V>(HashMap()) {
+
+        override fun get(key: String?): V? {
+            throw NullPointerException("For the test")
+        }
+
     }
 
     companion object {

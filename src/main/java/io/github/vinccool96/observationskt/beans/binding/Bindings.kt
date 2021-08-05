@@ -5439,7 +5439,7 @@ object Bindings {
      *
      * @return the new `ObjectBinding`
      */
-    fun <K, V> valueAt(op: ObservableMap<K, V>, key: ObservableValue<K>): ObjectBinding<V?> {
+    fun <K, V> valueAt(op: ObservableMap<K, V>, key: ObservableValue<out K>): ObjectBinding<V?> {
         return object : ObjectBinding<V?>() {
 
             init {
@@ -5480,7 +5480,7 @@ object Bindings {
      *
      * @return the new `BooleanBinding`
      */
-    fun <K> booleanValueAt(op: ObservableMap<K, Boolean>, key: K): BooleanBinding {
+    fun <K> booleanValueAt(op: ObservableMap<K, out Boolean?>, key: K): BooleanBinding {
         return object : BooleanBinding() {
 
             init {
@@ -5527,7 +5527,7 @@ object Bindings {
      *
      * @return the new `BooleanBinding`
      */
-    fun <K> booleanValueAt(op: ObservableMap<K, Boolean>, key: ObservableValue<K>): BooleanBinding {
+    fun <K> booleanValueAt(op: ObservableMap<K, out Boolean?>, key: ObservableValue<K>): BooleanBinding {
         return object : BooleanBinding() {
 
             init {
@@ -5574,8 +5574,9 @@ object Bindings {
      *
      * @return the new `DoubleBinding`
      */
-    fun <K> doubleValueAt(op: ObservableMap<K, Double>, key: K): DoubleBinding {
+    fun <K> doubleValueAt(op: ObservableMap<K, out Number?>, key: K): DoubleBinding {
         return object : DoubleBinding() {
+
             init {
                 super.bind(op)
             }
@@ -5588,7 +5589,7 @@ object Bindings {
                 try {
                     val value = op[key]
                     if (value != null) {
-                        return value
+                        return value.toDouble()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5606,6 +5607,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ObservableCollections.singletonObservableList(op)
+
         }
     }
 
@@ -5619,8 +5621,9 @@ object Bindings {
      *
      * @return the new `DoubleBinding`
      */
-    fun <K> doubleValueAt(op: ObservableMap<K, Double>, key: ObservableValue<K>): DoubleBinding {
+    fun <K> doubleValueAt(op: ObservableMap<K, out Number?>, key: ObservableValue<K>): DoubleBinding {
         return object : DoubleBinding() {
+
             init {
                 super.bind(op, key)
             }
@@ -5633,7 +5636,7 @@ object Bindings {
                 try {
                     val value = op[key.value]
                     if (value != null) {
-                        return value
+                        return value.toDouble()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5651,6 +5654,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ImmutableObservableList(op, key)
+
         }
     }
 
@@ -5664,8 +5668,9 @@ object Bindings {
      *
      * @return the new `FloatBinding`
      */
-    fun <K> floatValueAt(op: ObservableMap<K, Float>, key: K): FloatBinding {
+    fun <K> floatValueAt(op: ObservableMap<K, out Number?>, key: K): FloatBinding {
         return object : FloatBinding() {
+
             init {
                 super.bind(op)
             }
@@ -5678,7 +5683,7 @@ object Bindings {
                 try {
                     val value = op[key]
                     if (value != null) {
-                        return value
+                        return value.toFloat()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5696,6 +5701,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ObservableCollections.singletonObservableList(op)
+
         }
     }
 
@@ -5709,8 +5715,9 @@ object Bindings {
      *
      * @return the new `FloatBinding`
      */
-    fun <K> floatValueAt(op: ObservableMap<K, Float>, key: ObservableValue<K>): FloatBinding {
+    fun <K> floatValueAt(op: ObservableMap<K, out Number?>, key: ObservableValue<K>): FloatBinding {
         return object : FloatBinding() {
+
             init {
                 super.bind(op, key)
             }
@@ -5723,7 +5730,7 @@ object Bindings {
                 try {
                     val value = op[key.value]
                     if (value != null) {
-                        return value
+                        return value.toFloat()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5741,6 +5748,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ImmutableObservableList(op, key)
+
         }
     }
 
@@ -5754,8 +5762,9 @@ object Bindings {
      *
      * @return the new `IntBinding`
      */
-    fun <K> intValueAt(op: ObservableMap<K, Int>, key: K): IntBinding {
+    fun <K> intValueAt(op: ObservableMap<K, out Number?>, key: K): IntBinding {
         return object : IntBinding() {
+
             init {
                 super.bind(op)
             }
@@ -5768,7 +5777,7 @@ object Bindings {
                 try {
                     val value = op[key]
                     if (value != null) {
-                        return value
+                        return value.toInt()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5786,6 +5795,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ObservableCollections.singletonObservableList(op)
+
         }
     }
 
@@ -5799,8 +5809,9 @@ object Bindings {
      *
      * @return the new `IntBinding`
      */
-    fun <K> intValueAt(op: ObservableMap<K, Int>, key: ObservableValue<K>): IntBinding {
+    fun <K> intValueAt(op: ObservableMap<K, out Number?>, key: ObservableValue<K>): IntBinding {
         return object : IntBinding() {
+
             init {
                 super.bind(op, key)
             }
@@ -5813,7 +5824,7 @@ object Bindings {
                 try {
                     val value = op[key.value]
                     if (value != null) {
-                        return value
+                        return value.toInt()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5831,6 +5842,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ImmutableObservableList(op, key)
+
         }
     }
 
@@ -5844,8 +5856,9 @@ object Bindings {
      *
      * @return the new `LongBinding`
      */
-    fun <K> longValueAt(op: ObservableMap<K, Long>, key: K): LongBinding {
+    fun <K> longValueAt(op: ObservableMap<K, out Number?>, key: K): LongBinding {
         return object : LongBinding() {
+
             init {
                 super.bind(op)
             }
@@ -5858,7 +5871,7 @@ object Bindings {
                 try {
                     val value = op[key]
                     if (value != null) {
-                        return value
+                        return value.toLong()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5876,6 +5889,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ObservableCollections.singletonObservableList(op)
+
         }
     }
 
@@ -5889,8 +5903,9 @@ object Bindings {
      *
      * @return the new `LongBinding`
      */
-    fun <K> longValueAt(op: ObservableMap<K, Long>, key: ObservableValue<K>): LongBinding {
+    fun <K> longValueAt(op: ObservableMap<K, out Number?>, key: ObservableValue<K>): LongBinding {
         return object : LongBinding() {
+
             init {
                 super.bind(op, key)
             }
@@ -5903,7 +5918,7 @@ object Bindings {
                 try {
                     val value = op[key.value]
                     if (value != null) {
-                        return value
+                        return value.toLong()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())
@@ -5921,6 +5936,7 @@ object Bindings {
             @get:ReturnsUnmodifiableCollection
             override val dependencies: ObservableList<*>
                 get() = ImmutableObservableList(op, key)
+
         }
     }
 
