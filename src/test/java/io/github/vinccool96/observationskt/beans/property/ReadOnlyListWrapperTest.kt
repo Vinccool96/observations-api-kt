@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class ReadOnlyListWrapperTest {
@@ -121,6 +122,12 @@ class ReadOnlyListWrapperTest {
         assertEquals(VALUE_1, r1.value)
         assertEquals(bean, r1.bean)
         assertEquals(name, r1.name)
+    }
+
+    @Test
+    fun testProperties() {
+        assertSame(this.property.sizeProperty, this.readOnlyProperty.sizeProperty)
+        assertSame(this.property.emptyProperty, this.readOnlyProperty.emptyProperty)
     }
 
     @Test
@@ -722,6 +729,16 @@ class ReadOnlyListWrapperTest {
 
         mLOInternal.check1AddRemove(this.property, emptyList(), 0, 1)
         mLOPublic.check1AddRemove(this.readOnlyProperty, emptyList(), 0, 1)
+
+        this.property.removeListener(mLOInternal)
+        this.readOnlyProperty.removeListener(mLOPublic)
+        mLOInternal.clear()
+        mLOPublic.clear()
+
+        this.property.add(Any())
+
+        mLOInternal.check0()
+        mLOPublic.check0()
     }
 
     private class ReadOnlyListWrapperMock : ReadOnlyListWrapper<Any>() {

@@ -58,6 +58,21 @@ class ReadOnlyMapPropertyTest {
     }
 
     @Test
+    fun testEquals() {
+        val model1: ObservableMap<String?, String?> = ObservableCollections.observableHashMap("A" to null, "B" to "b")
+        val model2: ObservableMap<String?, String?> = ObservableCollections.observableHashMap("A" to "a", "B" to "b")
+        val map1: ReadOnlyMapProperty<String?, String?> = SimpleMapProperty(model1)
+        val map2: ReadOnlyMapProperty<String?, String?> = SimpleMapProperty(model2)
+        val map3: Map<String?, String?> = mapOf("A" to "A", "B" to "b")
+        val map4 = MapClassCastException()
+        val map5 = MapNullPointerException()
+        assertNotEquals(map1, map3)
+        assertNotEquals(map2, map3)
+        assertNotEquals(map1, map4)
+        assertNotEquals(map1, map5)
+    }
+
+    @Test
     fun testToString() {
         val v1: ReadOnlyMapProperty<Any, Any> = ReadOnlyMapPropertyStub(null, "")
         assertEquals("ReadOnlyMapProperty [value: $DEFAULT]", v1.toString())
@@ -78,6 +93,24 @@ class ReadOnlyMapPropertyTest {
 
         val v6: ReadOnlyMapProperty<Any, Any> = ReadOnlyMapPropertyStub(null, name)
         assertEquals("ReadOnlyMapProperty [name: My name, value: $DEFAULT]", v6.toString())
+    }
+
+    private class MapClassCastException :
+            SimpleMapProperty<String?, String?>(ObservableCollections.observableHashMap("A" to "a", "B" to "b")) {
+
+        override operator fun get(key: String?): String? {
+            throw ClassCastException("For the test")
+        }
+
+    }
+
+    private class MapNullPointerException :
+            SimpleMapProperty<String?, String?>(ObservableCollections.observableHashMap("A" to "a", "B" to "b")) {
+
+        override operator fun get(key: String?): String? {
+            throw NullPointerException("For the test")
+        }
+
     }
 
     private class ReadOnlyMapPropertyStub(override val bean: Any?, override val name: String?) :

@@ -2,6 +2,7 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
+import io.github.vinccool96.observationskt.beans.value.ObservableListValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
 import io.github.vinccool96.observationskt.collections.MockListObserver
 import io.github.vinccool96.observationskt.collections.ObservableCollections
@@ -607,6 +608,36 @@ class ListPropertyBaseTest {
         assertEquals(VALUE_1b, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
+    }
+
+    @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: ListPropertyMock? = ListPropertyMock()
+        val v = ObservableListValueStub(VALUE_1a)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1a, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        v.set(VALUE_2a)
+        publicListener.reset()
+        privateListener.reset()
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2b)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
     }
 
     @Test

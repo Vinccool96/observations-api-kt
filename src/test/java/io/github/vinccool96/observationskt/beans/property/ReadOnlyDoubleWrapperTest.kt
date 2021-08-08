@@ -73,6 +73,22 @@ class ReadOnlyDoubleWrapperTest {
     }
 
     @Test
+    fun testConstructor_Bean_Name() {
+        val bean = Any()
+        val name = "My name"
+        val p = ReadOnlyDoubleWrapper(bean, name)
+        assertEquals(bean, p.bean)
+        assertEquals(name, p.name)
+        assertEquals(DEFAULT, p.get())
+        assertEquals(DEFAULT, p.value)
+        val r: ReadOnlyDoubleProperty = p.readOnlyProperty
+        assertEquals(DEFAULT, r.get())
+        assertEquals(DEFAULT, r.value)
+        assertEquals(bean, r.bean)
+        assertEquals(name, r.name)
+    }
+
+    @Test
     fun testConstructor_Bean_Name_InitialValue() {
         val bean = Any()
         val name = "My name"

@@ -2,6 +2,7 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
+import io.github.vinccool96.observationskt.beans.value.ObservableMapValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
 import io.github.vinccool96.observationskt.collections.MockMapObserver
 import io.github.vinccool96.observationskt.collections.MockMapObserver.Call
@@ -11,7 +12,6 @@ import io.github.vinccool96.observationskt.collections.ObservableMap
 import org.junit.Before
 import org.junit.Test
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.test.*
 
 class MapPropertyBaseTest {
@@ -609,6 +609,37 @@ class MapPropertyBaseTest {
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: MapPropertyMock? = MapPropertyMock()
+        val v = ObservableMapValueStub(VALUE_1a)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1a, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        property = null
+        v.set(VALUE_2a)
+        publicListener.reset()
+        privateListener.reset()
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2b)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
         val v: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1a)
         val listener2 = InvalidationListenerMock()
@@ -691,7 +722,7 @@ class MapPropertyBaseTest {
 
         var counter: Int = 0
 
-        constructor(bean: Any?, name: String?) : super(null) {
+        constructor(bean: Any?, name: String?) : super() {
             this.bean = bean
             this.name = name
         }

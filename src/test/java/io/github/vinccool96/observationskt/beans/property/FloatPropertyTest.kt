@@ -10,6 +10,8 @@ import org.junit.Test
 import kotlin.math.E
 import kotlin.math.PI
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.fail
 
 class FloatPropertyTest {
@@ -85,6 +87,8 @@ class FloatPropertyTest {
     fun testAsObject() {
         val valueModel: FloatProperty = SimpleFloatProperty(2.0f)
         val exp: ObjectProperty<Float> = valueModel.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(2.0f, exp.get(), EPSILON)
         valueModel.set(-4354.3f)
@@ -100,6 +104,8 @@ class FloatPropertyTest {
     fun testObjectToFloat() {
         val valueModel: ObjectProperty<Float?> = SimpleObjectProperty(null)
         val exp: FloatProperty = FloatProperty.floatProperty(valueModel)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0.0f, exp.get(), EPSILON)
         valueModel.set(-4354.3f)

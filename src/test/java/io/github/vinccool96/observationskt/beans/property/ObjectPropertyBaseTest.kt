@@ -308,6 +308,33 @@ class ObjectPropertyBaseTest {
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: ObjectPropertyMock? = ObjectPropertyMock()
+        val v = ObservableObjectValueStub(VALUE_1a)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1a, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2b)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
         val v: ObservableObjectValueStub<Any?> = ObservableObjectValueStub(VALUE_1a)
         val listener2 = InvalidationListenerMock()
@@ -332,8 +359,8 @@ class ObjectPropertyBaseTest {
 
     @Test
     fun testToString() {
-        val value1: Any? = Any()
-        val value2: Any? = Any()
+        val value1 = Any()
+        val value2 = Any()
         val v: ObjectProperty<Any?> = SimpleObjectProperty(value2)
 
         this.property.set(value1)
@@ -401,15 +428,15 @@ class ObjectPropertyBaseTest {
 
         private const val NO_NAME_2: String = ""
 
-        private val UNDEFINED: Any? = Any()
+        private val UNDEFINED: Any = Any()
 
-        private val VALUE_1a: Any? = Any()
+        private val VALUE_1a: Any = Any()
 
-        private val VALUE_1b: Any? = Any()
+        private val VALUE_1b: Any = Any()
 
-        private val VALUE_2a: Any? = Any()
+        private val VALUE_2a: Any = Any()
 
-        private val VALUE_2b: Any? = Any()
+        private val VALUE_2b: Any = Any()
 
     }
 

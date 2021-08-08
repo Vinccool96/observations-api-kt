@@ -8,6 +8,8 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.fail
 
 class LongPropertyTest {
@@ -83,6 +85,8 @@ class LongPropertyTest {
     fun testAsObject() {
         val valueModel: LongProperty = SimpleLongProperty()
         val exp: ObjectProperty<Long> = valueModel.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0L, exp.get())
         valueModel.set(-4354L)
@@ -98,6 +102,8 @@ class LongPropertyTest {
     fun testObjectToLong() {
         val valueModel: ObjectProperty<Long?> = SimpleObjectProperty(null)
         val exp: LongProperty = LongProperty.longProperty(valueModel)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0L, exp.get())
         valueModel.set(-4354L)

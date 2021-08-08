@@ -14,6 +14,7 @@ import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class ReadOnlyMapWrapperTest {
@@ -123,6 +124,12 @@ class ReadOnlyMapWrapperTest {
         assertEquals(VALUE_2, r1.value)
         assertEquals(bean, r1.bean)
         assertEquals(name, r1.name)
+    }
+
+    @Test
+    fun testProperties() {
+        assertSame(this.property.sizeProperty, this.readOnlyProperty.sizeProperty)
+        assertSame(this.property.emptyProperty, this.readOnlyProperty.emptyProperty)
     }
 
     @Test
@@ -726,6 +733,16 @@ class ReadOnlyMapWrapperTest {
 
         mMOInternal.assertAdded(Tuple.tup(k, v))
         mMOPublic.assertAdded(Tuple.tup(k, v))
+
+        this.property.removeListener(mMOInternal)
+        this.readOnlyProperty.removeListener(mMOPublic)
+        mMOInternal.clear()
+        mMOPublic.clear()
+
+        this.property[v] = k
+
+        mMOInternal.check0()
+        mMOPublic.check0()
     }
 
     private class ReadOnlyMapWrapperMock : ReadOnlyMapWrapper<Any, Any>() {

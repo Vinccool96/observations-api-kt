@@ -47,31 +47,31 @@ class DoublePropertyBaseTest {
         assertEquals(0.0, p1.value)
         assertFalse(p1.bound)
 
-        val p2: DoubleProperty = SimpleDoubleProperty(PI)
-        assertEquals(PI, p2.get())
-        assertEquals(PI, p2.value)
+        val p2: DoubleProperty = SimpleDoubleProperty(VALUE_1)
+        assertEquals(VALUE_1, p2.get())
+        assertEquals(VALUE_1, p2.value)
         assertFalse(p2.bound)
     }
 
     @Test
     fun testInvalidationListener() {
         attachInvalidationListener()
-        this.property.set(PI)
+        this.property.set(VALUE_1)
         this.invalidationListener.check(this.property, 1)
         this.property.removeListener(this.invalidationListener)
         this.invalidationListener.reset()
-        this.property.set(-E)
+        this.property.set(-VALUE_2)
         this.invalidationListener.check(null, 0)
     }
 
     @Test
     fun testChangeListener() {
         attachChangeListener()
-        this.property.set(PI)
-        this.changeListener.check(this.property, 0.0, PI, 1)
+        this.property.set(VALUE_1)
+        this.changeListener.check(this.property, 0.0, VALUE_1, 1)
         this.property.removeListener(this.changeListener)
         this.changeListener.reset()
-        this.property.set(-E)
+        this.property.set(-VALUE_2)
         this.changeListener.check(null, UNDEFINED, UNDEFINED, 0)
     }
 
@@ -80,21 +80,21 @@ class DoublePropertyBaseTest {
         attachInvalidationListener()
 
         // set value once
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // set same value again
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(0)
         this.invalidationListener.check(null, 0)
 
         // set value twice without reading
-        this.property.set(-E)
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(-VALUE_2)
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
     }
@@ -104,23 +104,23 @@ class DoublePropertyBaseTest {
         attachChangeListener()
 
         // set value once
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
-        this.changeListener.check(this.property, 0.0, PI, 1)
+        this.changeListener.check(this.property, 0.0, VALUE_1, 1)
 
         // set same value again
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(0)
         this.changeListener.check(null, UNDEFINED, UNDEFINED, 0)
 
         // set value twice without reading
-        this.property.set(-E)
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(-VALUE_2)
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(2)
-        this.changeListener.check(this.property, -E, PI, 2)
+        this.changeListener.check(this.property, -VALUE_2, VALUE_1, 2)
     }
 
     @Test
@@ -128,21 +128,21 @@ class DoublePropertyBaseTest {
         attachInvalidationListener()
 
         // set value once
-        this.property.value = PI
-        assertEquals(PI, this.property.value)
+        this.property.value = VALUE_1
+        assertEquals(VALUE_1, this.property.value)
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // set same value again
-        this.property.value = PI
-        assertEquals(PI, this.property.value)
+        this.property.value = VALUE_1
+        assertEquals(VALUE_1, this.property.value)
         this.property.check(0)
         this.invalidationListener.check(null, 0)
 
         // set value twice without reading
-        this.property.value = -E
-        this.property.value = PI
-        assertEquals(PI, this.property.value)
+        this.property.value = -VALUE_2
+        this.property.value = VALUE_1
+        assertEquals(VALUE_1, this.property.value)
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
     }
@@ -152,67 +152,67 @@ class DoublePropertyBaseTest {
         attachChangeListener()
 
         // set value once
-        this.property.value = PI
-        assertEquals(PI, this.property.value)
+        this.property.value = VALUE_1
+        assertEquals(VALUE_1, this.property.value)
         this.property.check(1)
-        this.changeListener.check(this.property, 0.0, PI, 1)
+        this.changeListener.check(this.property, 0.0, VALUE_1, 1)
 
         // set same value again
-        this.property.value = PI
-        assertEquals(PI, this.property.value)
+        this.property.value = VALUE_1
+        assertEquals(VALUE_1, this.property.value)
         this.property.check(0)
         this.changeListener.check(null, UNDEFINED, UNDEFINED, 0)
 
         // set value twice without reading
-        this.property.value = -E
-        this.property.value = PI
-        assertEquals(PI, this.property.value)
+        this.property.value = -VALUE_2
+        this.property.value = VALUE_1
+        assertEquals(VALUE_1, this.property.value)
         this.property.check(2)
-        this.changeListener.check(this.property, -E, PI, 2)
+        this.changeListener.check(this.property, -VALUE_2, VALUE_1, 2)
     }
 
     @Test(expected = RuntimeException::class)
     fun testSetBound() {
-        val v: DoubleProperty = SimpleDoubleProperty(PI)
+        val v: DoubleProperty = SimpleDoubleProperty(VALUE_1)
         this.property.bind(v)
-        this.property.set(PI)
+        this.property.set(VALUE_1)
     }
 
     @Test(expected = RuntimeException::class)
     fun testValueSetBound() {
-        val v: DoubleProperty = SimpleDoubleProperty(PI)
+        val v: DoubleProperty = SimpleDoubleProperty(VALUE_1)
         this.property.bind(v)
-        this.property.value = PI
+        this.property.value = VALUE_1
     }
 
     @Test
     fun testLazyBind_primitive() {
         attachInvalidationListener()
-        val v = ObservableDoubleValueStub(PI)
+        val v = ObservableDoubleValueStub(VALUE_1)
         this.property.bind(v)
 
-        assertEquals(PI, this.property.get())
+        assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change binding once
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change binding twice without reading
-        v.set(PI)
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(VALUE_1)
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change binding twice to same value
-        v.set(PI)
-        v.set(PI)
-        assertEquals(PI, this.property.get())
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
     }
@@ -220,63 +220,63 @@ class DoublePropertyBaseTest {
     @Test
     fun testEagerBind_primitive() {
         attachChangeListener()
-        val v = ObservableDoubleValueStub(PI)
+        val v = ObservableDoubleValueStub(VALUE_1)
         this.property.bind(v)
 
-        assertEquals(PI, this.property.get())
+        assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
-        this.changeListener.check(this.property, 0.0, PI, 1)
+        this.changeListener.check(this.property, 0.0, VALUE_1, 1)
 
         // change binding once
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(1)
-        this.changeListener.check(this.property, PI, -E, 1)
+        this.changeListener.check(this.property, VALUE_1, -VALUE_2, 1)
 
         // change binding twice without reading
-        v.set(PI)
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(VALUE_1)
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(2)
-        this.changeListener.check(this.property, PI, -E, 2)
+        this.changeListener.check(this.property, VALUE_1, -VALUE_2, 2)
 
         // change binding twice to same value
-        v.set(PI)
-        v.set(PI)
-        assertEquals(PI, this.property.get())
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(2)
-        this.changeListener.check(this.property, -E, PI, 1)
+        this.changeListener.check(this.property, -VALUE_2, VALUE_1, 1)
     }
 
     @Test
     fun testLazyBind_generic() {
         attachInvalidationListener()
-        val v: ObservableObjectValueStub<Double> = ObservableObjectValueStub(PI)
+        val v: ObservableObjectValueStub<Double> = ObservableObjectValueStub(VALUE_1)
         this.property.bind(v)
 
-        assertEquals(PI, this.property.get())
+        assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change binding once
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change binding twice without reading
-        v.set(PI)
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(VALUE_1)
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change binding twice to same value
-        v.set(PI)
-        v.set(PI)
-        assertEquals(PI, this.property.get())
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
     }
@@ -284,40 +284,40 @@ class DoublePropertyBaseTest {
     @Test
     fun testEagerBind_generic() {
         attachChangeListener()
-        val v: ObservableObjectValueStub<Double> = ObservableObjectValueStub(PI)
+        val v: ObservableObjectValueStub<Double> = ObservableObjectValueStub(VALUE_1)
         this.property.bind(v)
 
-        assertEquals(PI, this.property.get())
+        assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
-        this.changeListener.check(this.property, 0.0, PI, 1)
+        this.changeListener.check(this.property, 0.0, VALUE_1, 1)
 
         // change binding once
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(1)
-        this.changeListener.check(this.property, PI, -E, 1)
+        this.changeListener.check(this.property, VALUE_1, -VALUE_2, 1)
 
         // change binding twice without reading
-        v.set(PI)
-        v.set(-E)
-        assertEquals(-E, this.property.get())
+        v.set(VALUE_1)
+        v.set(-VALUE_2)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(2)
-        this.changeListener.check(this.property, PI, -E, 2)
+        this.changeListener.check(this.property, VALUE_1, -VALUE_2, 2)
 
         // change binding twice to same value
-        v.set(PI)
-        v.set(PI)
-        assertEquals(PI, this.property.get())
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(2)
-        this.changeListener.check(this.property, -E, PI, 1)
+        this.changeListener.check(this.property, -VALUE_2, VALUE_1, 1)
     }
 
     @Test
     fun testRebind() {
         attachInvalidationListener()
-        val v1 = ObservableDoubleValueStub(-E)
-        val v2 = ObservableDoubleValueStub(PI)
+        val v1 = ObservableDoubleValueStub(-VALUE_2)
+        val v2 = ObservableDoubleValueStub(VALUE_1)
         this.property.bind(v1)
         this.property.get()
         this.property.reset()
@@ -326,26 +326,26 @@ class DoublePropertyBaseTest {
 
         // rebind causes invalidation event
         this.property.bind(v2)
-        assertEquals(PI, this.property.get())
+        assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // change old binding
-        v1.set(PI)
-        assertEquals(PI, this.property.get())
+        v1.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(0)
         this.invalidationListener.check(null, 0)
 
         // change new binding
-        v2.set(PI)
-        assertEquals(PI, this.property.get())
+        v2.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
 
         // rebind to same observable should have no effect
         this.property.bind(v2)
-        assertEquals(PI, this.property.get())
+        assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(0)
         this.invalidationListener.check(null, 0)
@@ -354,87 +354,114 @@ class DoublePropertyBaseTest {
     @Test
     fun testUnbind() {
         attachInvalidationListener()
-        val v = ObservableDoubleValueStub(-E)
+        val v = ObservableDoubleValueStub(-VALUE_2)
         this.property.bind(v)
         this.property.unbind()
-        assertEquals(-E, this.property.get())
+        assertEquals(-VALUE_2, this.property.get())
         assertFalse(this.property.bound)
         this.property.reset()
         this.invalidationListener.reset()
 
         // change binding
-        v.set(PI)
-        assertEquals(-E, this.property.get())
+        v.set(VALUE_1)
+        assertEquals(-VALUE_2, this.property.get())
         this.property.check(0)
         this.invalidationListener.check(null, 0)
 
         // set value
-        this.property.set(PI)
-        assertEquals(PI, this.property.get())
+        this.property.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
         this.invalidationListener.check(this.property, 1)
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: DoublePropertyMock? = DoublePropertyMock()
+        val v = ObservableDoubleValueStub(VALUE_1)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
-        val v = ObservableDoubleValueStub(-E)
+        val v = ObservableDoubleValueStub(-VALUE_2)
         val listener2 = InvalidationListenerMock()
         val listener3 = InvalidationListenerMock()
 
         // setting the property
-        this.property.set(-E)
+        this.property.set(-VALUE_2)
         this.property.addListener(listener2)
         listener2.reset()
-        this.property.set(PI)
+        this.property.set(VALUE_1)
         listener2.check(this.property, 1)
 
         // binding the property
         this.property.bind(v)
-        v.set(PI)
+        v.set(VALUE_1)
         this.property.addListener(listener3)
         v.get()
         listener3.reset()
-        v.set(PI)
+        v.set(VALUE_1)
         listener3.check(this.property, 1)
     }
 
     @Test
     fun testToString() {
-        val v: DoubleProperty = SimpleDoubleProperty(PI)
+        val v: DoubleProperty = SimpleDoubleProperty(VALUE_1)
 
-        this.property.set(PI)
-        assertEquals("DoubleProperty [value: $PI]", this.property.toString())
+        this.property.set(VALUE_1)
+        assertEquals("DoubleProperty [value: $VALUE_1]", this.property.toString())
 
         this.property.bind(v)
         assertEquals("DoubleProperty [bound, invalid]", this.property.toString())
         this.property.get()
-        assertEquals("DoubleProperty [bound, value: $PI]", this.property.toString())
-        v.set(-E)
+        assertEquals("DoubleProperty [bound, value: $VALUE_1]", this.property.toString())
+        v.set(-VALUE_2)
         assertEquals("DoubleProperty [bound, invalid]", this.property.toString())
         this.property.get()
-        assertEquals("DoubleProperty [bound, value: ${-E}]", this.property.toString())
+        assertEquals("DoubleProperty [bound, value: ${-VALUE_2}]", this.property.toString())
 
         val bean = Any()
         val name = "My name"
         val v1: DoublePropertyBase = DoublePropertyMock(bean, name)
         assertEquals("DoubleProperty [bean: $bean, name: My name, value: 0.0]", v1.toString())
-        v1.set(PI)
-        assertEquals("DoubleProperty [bean: $bean, name: My name, value: $PI]", v1.toString())
+        v1.set(VALUE_1)
+        assertEquals("DoubleProperty [bean: $bean, name: My name, value: $VALUE_1]", v1.toString())
 
         val v2: DoublePropertyBase = DoublePropertyMock(bean, NO_NAME_1)
         assertEquals("DoubleProperty [bean: $bean, value: 0.0]", v2.toString())
-        v2.set(PI)
-        assertEquals("DoubleProperty [bean: $bean, value: $PI]", v2.toString())
+        v2.set(VALUE_1)
+        assertEquals("DoubleProperty [bean: $bean, value: $VALUE_1]", v2.toString())
 
         val v3: DoublePropertyBase = DoublePropertyMock(bean, NO_NAME_2)
         assertEquals("DoubleProperty [bean: $bean, value: 0.0]", v3.toString())
-        v3.set(PI)
-        assertEquals("DoubleProperty [bean: $bean, value: $PI]", v3.toString())
+        v3.set(VALUE_1)
+        assertEquals("DoubleProperty [bean: $bean, value: $VALUE_1]", v3.toString())
 
         val v4: DoublePropertyBase = DoublePropertyMock(NO_BEAN, name)
         assertEquals("DoubleProperty [name: My name, value: 0.0]", v4.toString())
-        v4.set(PI)
-        assertEquals("DoubleProperty [name: My name, value: $PI]", v4.toString())
+        v4.set(VALUE_1)
+        assertEquals("DoubleProperty [name: My name, value: $VALUE_1]", v4.toString())
     }
 
     private class DoublePropertyMock(override val bean: Any?, override val name: String?) : DoublePropertyBase(0.0) {
@@ -466,7 +493,11 @@ class DoublePropertyBaseTest {
 
         private const val NO_NAME_2: String = ""
 
-        private val UNDEFINED: Double? = Double.MAX_VALUE
+        private const val UNDEFINED: Double = Double.MAX_VALUE
+
+        private const val VALUE_1: Double = E
+
+        private const val VALUE_2: Double = PI
 
     }
 

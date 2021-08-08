@@ -8,6 +8,8 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.fail
 
 class BooleanPropertyTest {
@@ -83,6 +85,8 @@ class BooleanPropertyTest {
     fun testAsObject() {
         val valueModel: BooleanProperty = SimpleBooleanProperty()
         val exp: ObjectProperty<Boolean> = valueModel.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(false, exp.get())
         valueModel.set(true)
@@ -98,6 +102,8 @@ class BooleanPropertyTest {
     fun testObjectToBoolean() {
         val valueModel: ObjectProperty<Boolean?> = SimpleObjectProperty(null)
         val exp: BooleanProperty = BooleanProperty.booleanProperty(valueModel)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(false, exp.get())
         valueModel.set(true)

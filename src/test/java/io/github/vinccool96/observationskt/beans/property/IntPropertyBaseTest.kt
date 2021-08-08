@@ -374,6 +374,33 @@ class IntPropertyBaseTest {
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: IntPropertyMock? = IntPropertyMock()
+        val v = ObservableIntValueStub(VALUE_1)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
         val v = ObservableIntValueStub(VALUE_2)
         val listener2 = InvalidationListenerMock()
@@ -464,7 +491,7 @@ class IntPropertyBaseTest {
 
         private const val NO_NAME_2: String = ""
 
-        private val UNDEFINED: Double? = Double.MAX_VALUE
+        private const val UNDEFINED: Int = Int.MAX_VALUE
 
         private const val VALUE_1: Int = 42
 

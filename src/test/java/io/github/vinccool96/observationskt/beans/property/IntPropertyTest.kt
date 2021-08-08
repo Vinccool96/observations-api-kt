@@ -8,6 +8,8 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.fail
 
 class IntPropertyTest {
@@ -83,6 +85,8 @@ class IntPropertyTest {
     fun testAsObject() {
         val valueModel: IntProperty = SimpleIntProperty()
         val exp: ObjectProperty<Int> = valueModel.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0, exp.get())
         valueModel.set(-4354)
@@ -98,6 +102,8 @@ class IntPropertyTest {
     fun testObjectToInt() {
         val valueModel: ObjectProperty<Int?> = SimpleObjectProperty(null)
         val exp: IntProperty = IntProperty.intProperty(valueModel)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0, exp.get())
         valueModel.set(-4354)

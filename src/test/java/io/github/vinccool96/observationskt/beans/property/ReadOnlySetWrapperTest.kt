@@ -2,31 +2,37 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
-import io.github.vinccool96.observationskt.beans.value.ObservableStringValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableSetValueStub
+import io.github.vinccool96.observationskt.collections.MockSetObserver
+import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple
+import io.github.vinccool96.observationskt.collections.ObservableCollections
+import io.github.vinccool96.observationskt.collections.ObservableSet
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
-class ReadOnlyStringWrapperTest {
+class ReadOnlySetWrapperTest {
 
-    private lateinit var property: ReadOnlyStringWrapperMock
+    private lateinit var property: ReadOnlySetWrapperMock
 
-    private lateinit var readOnlyProperty: ReadOnlyStringProperty
+    private lateinit var readOnlyProperty: ReadOnlySetProperty<Any>
 
     private lateinit var internalInvalidationListener: InvalidationListenerMock
 
     private lateinit var publicInvalidationListener: InvalidationListenerMock
 
-    private lateinit var internalChangeListener: ChangeListenerMock<String?>
+    private lateinit var internalChangeListener: ChangeListenerMock<Any?>
 
-    private lateinit var publicChangeListener: ChangeListenerMock<String?>
+    private lateinit var publicChangeListener: ChangeListenerMock<Any?>
 
     @Before
     fun setUp() {
-        this.property = ReadOnlyStringWrapperMock()
+        this.property = ReadOnlySetWrapperMock()
         this.readOnlyProperty = this.property.readOnlyProperty
         this.internalInvalidationListener = InvalidationListenerMock()
         this.publicInvalidationListener = InvalidationListenerMock()
@@ -56,51 +62,79 @@ class ReadOnlyStringWrapperTest {
     }
 
     @Test
+    fun testConstructor_NoArguments() {
+        val p1 = ReadOnlySetWrapper<Any>()
+        assertEquals(DEFAULT, p1.get())
+        assertEquals(DEFAULT, p1.value)
+        assertFalse(this.property.bound)
+        assertEquals(null, p1.bean)
+        assertEquals("", p1.name)
+        val r1 = p1.readOnlyProperty
+        assertEquals(DEFAULT, r1.get())
+        assertEquals(DEFAULT, r1.value)
+        assertEquals(null, r1.bean)
+        assertEquals("", r1.name)
+    }
+
+    @Test
     fun testConstructor_InitialValue() {
-        val p = ReadOnlyStringWrapper(VALUE_1)
-        assertEquals(VALUE_1, p.get())
-        assertEquals(VALUE_1, p.value)
-        assertFalse(p.bound)
-        assertEquals(null, p.bean)
-        assertEquals("", p.name)
-        val r: ReadOnlyStringProperty = p.readOnlyProperty
-        assertEquals(VALUE_1, r.get())
-        assertEquals(VALUE_1, r.value)
-        assertEquals(null, r.bean)
-        assertEquals("", r.name)
+        val p1 = ReadOnlySetWrapper(VALUE_1)
+        assertEquals(VALUE_1, p1.get())
+        assertEquals(VALUE_1, p1.value)
+        assertFalse(this.property.bound)
+        assertEquals(null, p1.bean)
+        assertEquals("", p1.name)
+        val r1 = p1.readOnlyProperty
+        assertEquals(VALUE_1, r1.get())
+        assertEquals(VALUE_1, r1.value)
+        assertEquals(null, r1.bean)
+        assertEquals("", r1.name)
+        assertSame(p1.sizeProperty, r1.sizeProperty)
+        assertSame(p1.emptyProperty, r1.emptyProperty)
     }
 
     @Test
     fun testConstructor_Bean_Name() {
         val bean = Any()
-        val name = "My name"
-        val p = ReadOnlyStringWrapper(bean, name)
-        assertEquals(bean, p.bean)
-        assertEquals(name, p.name)
-        assertEquals(UNDEFINED, p.get())
-        assertEquals(UNDEFINED, p.value)
-        val r: ReadOnlyStringProperty = p.readOnlyProperty
-        assertEquals(UNDEFINED, r.get())
-        assertEquals(UNDEFINED, r.value)
-        assertEquals(bean, r.bean)
-        assertEquals(name, r.name)
+        val name = "General Kenobi"
+        val p1 = ReadOnlySetWrapper<Any>(bean, name)
+        assertEquals(DEFAULT, p1.get())
+        assertEquals(DEFAULT, p1.value)
+        assertFalse(this.property.bound)
+        assertEquals(bean, p1.bean)
+        assertEquals(name, p1.name)
+        val r1 = p1.readOnlyProperty
+        assertEquals(DEFAULT, r1.get())
+        assertEquals(DEFAULT, r1.value)
+        assertEquals(bean, r1.bean)
+        assertEquals(name, r1.name)
+        assertSame(p1.sizeProperty, r1.sizeProperty)
+        assertSame(p1.emptyProperty, r1.emptyProperty)
     }
 
     @Test
     fun testConstructor_Bean_Name_InitialValue() {
         val bean = Any()
-        val name = "My name"
-        val p = ReadOnlyStringWrapper(bean, name, VALUE_1)
-        assertEquals(VALUE_1, p.get())
-        assertEquals(VALUE_1, p.value)
-        assertFalse(p.bound)
-        assertEquals(bean, p.bean)
-        assertEquals(name, p.name)
-        val r: ReadOnlyStringProperty = p.readOnlyProperty
-        assertEquals(VALUE_1, r.get())
-        assertEquals(VALUE_1, r.value)
-        assertEquals(bean, r.bean)
-        assertEquals(name, r.name)
+        val name = "General Kenobi"
+        val p1 = ReadOnlySetWrapper(bean, name, VALUE_1)
+        assertEquals(VALUE_1, p1.get())
+        assertEquals(VALUE_1, p1.value)
+        assertFalse(this.property.bound)
+        assertEquals(bean, p1.bean)
+        assertEquals(name, p1.name)
+        val r1 = p1.readOnlyProperty
+        assertEquals(VALUE_1, r1.get())
+        assertEquals(VALUE_1, r1.value)
+        assertEquals(bean, r1.bean)
+        assertEquals(name, r1.name)
+        assertSame(p1.sizeProperty, r1.sizeProperty)
+        assertSame(p1.emptyProperty, r1.emptyProperty)
+    }
+
+    @Test
+    fun testProperties() {
+        assertSame(this.property.sizeProperty, this.readOnlyProperty.sizeProperty)
+        assertSame(this.property.emptyProperty, this.readOnlyProperty.emptyProperty)
     }
 
     @Test
@@ -271,10 +305,17 @@ class ReadOnlyStringWrapperTest {
         this.publicChangeListener.check(this.readOnlyProperty, VALUE_2, VALUE_1, 2)
     }
 
+    @Test(expected = RuntimeException::class)
+    fun testSetBoundValue() {
+        val v: SetProperty<Any> = SimpleSetProperty(VALUE_1)
+        this.property.bind(v)
+        this.property.set(VALUE_2)
+    }
+
     @Test
-    fun testLazyBind() {
+    fun testLazyBind_primitive() {
         attachInvalidationListeners()
-        val v = ObservableStringValueStub(VALUE_1)
+        val v = ObservableSetValueStub(VALUE_1)
 
         this.property.bind(v)
         assertEquals(VALUE_1, this.property.get())
@@ -312,9 +353,9 @@ class ReadOnlyStringWrapperTest {
     }
 
     @Test
-    fun testInternalEagerBind() {
+    fun testInternalEagerBind_primitive() {
         attachInternalChangeListener()
-        val v = ObservableStringValueStub(VALUE_1)
+        val v = ObservableSetValueStub(VALUE_1)
 
         this.property.bind(v)
         assertEquals(VALUE_1, this.property.get())
@@ -348,9 +389,121 @@ class ReadOnlyStringWrapperTest {
     }
 
     @Test
-    fun testPublicEagerBind() {
+    fun testPublicEagerBind_primitive() {
         attachPublicChangeListener()
-        val v = ObservableStringValueStub(VALUE_1)
+        val v = ObservableSetValueStub(VALUE_1)
+
+        this.property.bind(v)
+        assertEquals(VALUE_1, this.property.get())
+        assertTrue(this.property.bound)
+        this.property.check(1)
+        assertEquals(VALUE_1, this.readOnlyProperty.get())
+        this.publicChangeListener.check(this.readOnlyProperty, DEFAULT, VALUE_1, 1)
+
+        // change binding once
+        v.set(VALUE_2)
+        assertEquals(VALUE_2, this.property.get())
+        this.property.check(1)
+        assertEquals(VALUE_2, this.readOnlyProperty.get())
+        this.publicChangeListener.check(this.readOnlyProperty, VALUE_1, VALUE_2, 1)
+
+        // change binding twice without reading
+        v.set(VALUE_1)
+        v.set(VALUE_2)
+        assertEquals(VALUE_2, this.property.get())
+        this.property.check(2)
+        assertEquals(VALUE_2, this.readOnlyProperty.get())
+        this.publicChangeListener.check(this.readOnlyProperty, VALUE_1, VALUE_2, 2)
+
+        // change binding twice to same value
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
+        this.property.check(2)
+        assertEquals(VALUE_1, this.readOnlyProperty.get())
+        this.publicChangeListener.check(this.readOnlyProperty, VALUE_2, VALUE_1, 1)
+    }
+
+    @Test
+    fun testLazyBind_generic() {
+        attachInvalidationListeners()
+        val v = ObservableObjectValueStub(VALUE_1)
+
+        this.property.bind(v)
+        assertEquals(VALUE_1, this.property.get())
+        assertTrue(this.property.bound)
+        this.property.check(1)
+        this.internalInvalidationListener.check(this.property, 1)
+        assertEquals(VALUE_1, this.readOnlyProperty.get())
+        this.publicInvalidationListener.check(this.readOnlyProperty, 1)
+
+        // change binding once
+        v.set(VALUE_2)
+        assertEquals(VALUE_2, this.property.get())
+        this.property.check(1)
+        this.internalInvalidationListener.check(this.property, 1)
+        assertEquals(VALUE_2, this.readOnlyProperty.get())
+        this.publicInvalidationListener.check(this.readOnlyProperty, 1)
+
+        // change binding twice without reading
+        v.set(VALUE_1)
+        v.set(VALUE_2)
+        assertEquals(VALUE_2, this.property.get())
+        this.property.check(1)
+        this.internalInvalidationListener.check(this.property, 1)
+        assertEquals(VALUE_2, this.readOnlyProperty.get())
+        this.publicInvalidationListener.check(this.readOnlyProperty, 1)
+
+        // change binding twice to same value
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
+        this.property.check(1)
+        this.internalInvalidationListener.check(this.property, 1)
+        assertEquals(VALUE_1, this.readOnlyProperty.get())
+        this.publicInvalidationListener.check(this.readOnlyProperty, 1)
+    }
+
+    @Test
+    fun testInternalEagerBind_generic() {
+        attachInternalChangeListener()
+        val v = ObservableObjectValueStub(VALUE_1)
+
+        this.property.bind(v)
+        assertEquals(VALUE_1, this.property.get())
+        assertTrue(this.property.bound)
+        this.property.check(1)
+        this.internalChangeListener.check(this.property, DEFAULT, VALUE_1, 1)
+        assertEquals(VALUE_1, this.readOnlyProperty.get())
+
+        // change binding once
+        v.set(VALUE_2)
+        assertEquals(VALUE_2, this.property.get())
+        this.property.check(1)
+        this.internalChangeListener.check(this.property, VALUE_1, VALUE_2, 1)
+        assertEquals(VALUE_2, this.readOnlyProperty.get())
+
+        // change binding twice without reading
+        v.set(VALUE_1)
+        v.set(VALUE_2)
+        assertEquals(VALUE_2, this.property.get())
+        this.property.check(2)
+        this.internalChangeListener.check(this.property, VALUE_1, VALUE_2, 2)
+        assertEquals(VALUE_2, this.readOnlyProperty.get())
+
+        // change binding twice to same value
+        v.set(VALUE_1)
+        v.set(VALUE_1)
+        assertEquals(VALUE_1, this.property.get())
+        this.property.check(2)
+        this.internalChangeListener.check(this.property, VALUE_2, VALUE_1, 1)
+        assertEquals(VALUE_1, this.readOnlyProperty.get())
+    }
+
+    @Test
+    fun testPublicEagerBind_generic() {
+        attachPublicChangeListener()
+        val v = ObservableObjectValueStub(VALUE_1)
 
         this.property.bind(v)
         assertEquals(VALUE_1, this.property.get())
@@ -386,8 +539,8 @@ class ReadOnlyStringWrapperTest {
     @Test
     fun testRebind() {
         attachInvalidationListeners()
-        val v1: StringProperty = SimpleStringProperty(VALUE_1)
-        val v2: StringProperty = SimpleStringProperty(VALUE_2)
+        val v1: SetProperty<Any> = SimpleSetProperty(VALUE_1)
+        val v2: SetProperty<Any> = SimpleSetProperty(VALUE_2)
         this.property.bind(v1)
         this.property.get()
         this.readOnlyProperty.get()
@@ -433,7 +586,7 @@ class ReadOnlyStringWrapperTest {
     @Test
     fun testUnbind() {
         attachInvalidationListeners()
-        val v: StringProperty = SimpleStringProperty(VALUE_1)
+        val v: SetProperty<Any> = SimpleSetProperty(VALUE_1)
         this.property.bind(v)
         this.property.unbind()
         assertEquals(VALUE_1, this.property.get())
@@ -462,7 +615,7 @@ class ReadOnlyStringWrapperTest {
 
     @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
-        val v: StringProperty = SimpleStringProperty(VALUE_1)
+        val v: SetProperty<Any> = SimpleSetProperty(VALUE_1)
         val internalListener2 = InvalidationListenerMock()
         val internalListener3 = InvalidationListenerMock()
         val publicListener2 = InvalidationListenerMock()
@@ -516,15 +669,15 @@ class ReadOnlyStringWrapperTest {
         this.internalChangeListener.check(null, UNDEFINED, UNDEFINED, 0)
 
         // no read only property created => no-op
-        val v = ReadOnlyStringWrapper(null)
+        val v = ReadOnlySetWrapper<Any>()
         v.removeListener(this.internalInvalidationListener)
         v.removeListener(this.internalChangeListener)
     }
 
     @Test
     fun testNoReadOnlyPropertyCreated() {
-        val v1: StringProperty = SimpleStringProperty(VALUE_1)
-        val p1 = ReadOnlyStringWrapper(null)
+        val v1: SetProperty<Any> = SimpleSetProperty(VALUE_1)
+        val p1 = ReadOnlySetWrapper<Any>()
 
         p1.set(VALUE_1)
         p1.bind(v1)
@@ -535,42 +688,68 @@ class ReadOnlyStringWrapperTest {
 
     @Test
     fun testToString() {
-        val v1: StringProperty = SimpleStringProperty(VALUE_1)
+        val v1: SetProperty<Any> = SimpleSetProperty(VALUE_1)
 
         this.property.set(VALUE_1)
-        Assert.assertEquals("StringProperty [value: $VALUE_1]", this.property.toString())
-        assertEquals("ReadOnlyStringProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
+        Assert.assertEquals("SetProperty [value: $VALUE_1]", this.property.toString())
+        assertEquals("ReadOnlySetProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
 
         this.property.bind(v1)
-        Assert.assertEquals("StringProperty [bound, invalid]", this.property.toString())
-        assertEquals("ReadOnlyStringProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
+        Assert.assertEquals("SetProperty [bound, invalid]", this.property.toString())
+        assertEquals("ReadOnlySetProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
         this.property.get()
-        Assert.assertEquals("StringProperty [bound, value: $VALUE_1]", this.property.toString())
-        assertEquals("ReadOnlyStringProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
+        Assert.assertEquals("SetProperty [bound, value: $VALUE_1]", this.property.toString())
+        assertEquals("ReadOnlySetProperty [value: $VALUE_1]", this.readOnlyProperty.toString())
         v1.set(VALUE_2)
-        Assert.assertEquals("StringProperty [bound, invalid]", this.property.toString())
-        assertEquals("ReadOnlyStringProperty [value: $VALUE_2]", this.readOnlyProperty.toString())
+        Assert.assertEquals("SetProperty [bound, invalid]", this.property.toString())
+        assertEquals("ReadOnlySetProperty [value: ${VALUE_2}]", this.readOnlyProperty.toString())
         this.property.get()
-        Assert.assertEquals("StringProperty [bound, value: $VALUE_2]", this.property.toString())
-        assertEquals("ReadOnlyStringProperty [value: $VALUE_2]", this.readOnlyProperty.toString())
+        Assert.assertEquals("SetProperty [bound, value: ${VALUE_2}]", this.property.toString())
+        assertEquals("ReadOnlySetProperty [value: ${VALUE_2}]", this.readOnlyProperty.toString())
 
         val bean = Any()
         val name = "My name"
-        val v2 = ReadOnlyStringWrapper(bean, name, DEFAULT)
-        assertEquals("StringProperty [bean: $bean, name: My name, value: $DEFAULT]", v2.toString())
-        assertEquals("ReadOnlyStringProperty [bean: $bean, name: My name, value: $DEFAULT]",
+        val v2 = ReadOnlySetWrapper(bean, name, DEFAULT)
+        assertEquals("SetProperty [bean: $bean, name: My name, value: $DEFAULT]", v2.toString())
+        assertEquals("ReadOnlySetProperty [bean: $bean, name: My name, value: $DEFAULT]",
                 v2.readOnlyProperty.toString())
 
-        val v3 = ReadOnlyStringWrapper(bean, "", DEFAULT)
-        assertEquals("StringProperty [bean: $bean, value: $DEFAULT]", v3.toString())
-        assertEquals("ReadOnlyStringProperty [bean: $bean, value: $DEFAULT]", v3.readOnlyProperty.toString())
+        val v3 = ReadOnlySetWrapper(bean, "", DEFAULT)
+        assertEquals("SetProperty [bean: $bean, value: $DEFAULT]", v3.toString())
+        assertEquals("ReadOnlySetProperty [bean: $bean, value: $DEFAULT]", v3.readOnlyProperty.toString())
 
-        val v4 = ReadOnlyStringWrapper(null, name, DEFAULT)
-        assertEquals("StringProperty [name: My name, value: $DEFAULT]", v4.toString())
-        assertEquals("ReadOnlyStringProperty [name: My name, value: $DEFAULT]", v4.readOnlyProperty.toString())
+        val v4 = ReadOnlySetWrapper(null, name, DEFAULT)
+        assertEquals("SetProperty [name: My name, value: $DEFAULT]", v4.toString())
+        assertEquals("ReadOnlySetProperty [name: My name, value: $DEFAULT]", v4.readOnlyProperty.toString())
     }
 
-    private class ReadOnlyStringWrapperMock : ReadOnlyStringWrapper() {
+    @Test
+    fun testBothSetChangeListeners() {
+        this.property.set(ObservableCollections.observableSet())
+
+        val mLOInternal = MockSetObserver<Any>()
+        val mLOPublic = MockSetObserver<Any>()
+        this.property.addListener(mLOInternal)
+        this.readOnlyProperty.addListener(mLOPublic)
+        val v = Any()
+
+        this.property.add(v)
+
+        mLOInternal.assertAdded(Tuple.tup(v))
+        mLOPublic.assertAdded(Tuple.tup(v))
+
+        this.property.removeListener(mLOInternal)
+        this.readOnlyProperty.removeListener(mLOPublic)
+        mLOInternal.clear()
+        mLOPublic.clear()
+
+        this.property.add(Any())
+
+        mLOInternal.check0()
+        mLOPublic.check0()
+    }
+
+    private class ReadOnlySetWrapperMock : ReadOnlySetWrapper<Any>() {
 
         private var counter: Int = 0
 
@@ -591,13 +770,13 @@ class ReadOnlyStringWrapperTest {
 
     companion object {
 
-        private val UNDEFINED: String? = null
+        private val UNDEFINED: Any? = null
 
-        private val DEFAULT: String? = null
+        private val DEFAULT: ObservableSet<Any>? = null
 
-        private const val VALUE_1: String = "Hello World!"
+        private val VALUE_1: ObservableSet<Any> = ObservableCollections.observableSet()
 
-        private const val VALUE_2: String = "Goodbye World!"
+        private val VALUE_2: ObservableSet<Any> = ObservableCollections.observableSet(Any())
 
     }
 

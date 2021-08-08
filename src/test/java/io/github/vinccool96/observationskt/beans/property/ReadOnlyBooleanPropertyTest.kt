@@ -5,6 +5,8 @@ import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class ReadOnlyBooleanPropertyTest {
 
@@ -36,6 +38,8 @@ class ReadOnlyBooleanPropertyTest {
     fun testAsObject() {
         val valueModel = ReadOnlyBooleanWrapper()
         val exp: ReadOnlyObjectProperty<Boolean> = valueModel.readOnlyProperty.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(false, exp.get())
         valueModel.set(true)
@@ -48,6 +52,8 @@ class ReadOnlyBooleanPropertyTest {
     fun testObjectToBoolean() {
         val valueModel: ReadOnlyObjectWrapper<Boolean?> = ReadOnlyObjectWrapper(null)
         val exp: ReadOnlyBooleanProperty = ReadOnlyBooleanProperty.readOnlyBooleanProperty(valueModel.readOnlyProperty)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertFalse(exp.get())
         valueModel.set(true)

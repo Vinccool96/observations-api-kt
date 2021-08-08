@@ -83,7 +83,7 @@ abstract class ReadOnlySetProperty<E> : SetExpression<E>(), ReadOnlyProperty<Obs
             return false
         }
         return try {
-            this.containsAll(other)
+            this.containsAll(other) && other.containsAll(this)
         } catch (_: ClassCastException) {
             false
         } catch (_: NullPointerException) {

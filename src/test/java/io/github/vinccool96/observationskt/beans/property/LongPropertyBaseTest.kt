@@ -374,6 +374,33 @@ class LongPropertyBaseTest {
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: LongPropertyMock? = LongPropertyMock()
+        val v = ObservableLongValueStub(VALUE_1)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
         val v = ObservableLongValueStub(VALUE_2)
         val listener2 = InvalidationListenerMock()
@@ -464,7 +491,7 @@ class LongPropertyBaseTest {
 
         private const val NO_NAME_2: String = ""
 
-        private val UNDEFINED: Double? = Double.MAX_VALUE
+        private const val UNDEFINED: Double = Double.MAX_VALUE
 
         private const val VALUE_1: Long = 42L
 

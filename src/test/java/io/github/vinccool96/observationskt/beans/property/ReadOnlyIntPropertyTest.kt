@@ -4,6 +4,8 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class ReadOnlyIntPropertyTest {
 
@@ -35,6 +37,8 @@ class ReadOnlyIntPropertyTest {
     fun testAsObject() {
         val valueModel = ReadOnlyIntWrapper()
         val exp: ReadOnlyObjectProperty<Int> = valueModel.readOnlyProperty.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0, exp.get())
         valueModel.set(-4354)
@@ -47,6 +51,8 @@ class ReadOnlyIntPropertyTest {
     fun testObjectToDouble() {
         val valueModel: ReadOnlyObjectWrapper<Int?> = ReadOnlyObjectWrapper(null)
         val exp: ReadOnlyIntProperty = ReadOnlyIntProperty.readOnlyIntProperty(valueModel.readOnlyProperty)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0, exp.get())
         valueModel.set(-4354)

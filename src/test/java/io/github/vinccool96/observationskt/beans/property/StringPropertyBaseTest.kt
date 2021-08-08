@@ -308,6 +308,33 @@ class StringPropertyBaseTest {
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: StringPropertyMock? = StringPropertyMock()
+        val v = ObservableStringValueStub(VALUE_1a)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1a, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2b)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
         val v = ObservableStringValueStub(VALUE_1a)
         val listener2 = InvalidationListenerMock()
@@ -371,10 +398,19 @@ class StringPropertyBaseTest {
         assertEquals("StringProperty [name: My name, value: $value1]", v4.toString())
     }
 
-    private class StringPropertyMock(override val bean: String?, override val name: String?) :
-            StringPropertyBase(null) {
+    private class StringPropertyMock :
+            StringPropertyBase {
 
-        private var counter: Int = 0
+        override val bean: Any?
+
+        override val name: String?
+
+        var counter: Int = 0
+
+        constructor(bean: Any?, name: String?) : super() {
+            this.bean = bean
+            this.name = name
+        }
 
         constructor() : this(NO_BEAN, NO_NAME_1)
 
@@ -401,15 +437,15 @@ class StringPropertyBaseTest {
 
         private const val NO_NAME_2: String = ""
 
-        private val UNDEFINED: String? = "UNDEFINED"
+        private const val UNDEFINED: String = "UNDEFINED"
 
-        private val VALUE_1a: String? = "Hello World"
+        private const val VALUE_1a: String = "Hello World"
 
-        private val VALUE_1b: String? = "HELLO WORLD"
+        private const val VALUE_1b: String = "HELLO WORLD"
 
-        private val VALUE_2a: String? = "Goodbye"
+        private const val VALUE_2a: String = "Goodbye"
 
-        private val VALUE_2b: String? = "GOODBYE"
+        private const val VALUE_2b: String = "GOODBYE"
 
     }
 

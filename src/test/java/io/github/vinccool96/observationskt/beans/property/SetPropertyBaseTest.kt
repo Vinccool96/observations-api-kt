@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableSetValueStub
 import io.github.vinccool96.observationskt.collections.MockSetObserver
 import io.github.vinccool96.observationskt.collections.MockSetObserver.Call
 import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple
@@ -560,6 +561,36 @@ class SetPropertyBaseTest {
     }
 
     @Test
+    @Suppress("UNUSED_VALUE")
+    fun testBindNull() {
+        var property: SetPropertyMock? = SetPropertyMock()
+        val v = ObservableSetValueStub(VALUE_1a)
+        val publicListener = InvalidationListenerMock()
+        val privateListener = InvalidationListenerMock()
+        property!!.addListener(publicListener)
+        v.addListener(privateListener)
+        property.bind(v)
+        assertEquals(VALUE_1a, property.get())
+        assertTrue(property.bound)
+        property.reset()
+        publicListener.reset()
+        privateListener.reset()
+
+        // GC-ed call
+        property = null
+        v.set(VALUE_2a)
+        publicListener.reset()
+        privateListener.reset()
+        System.gc()
+        publicListener.reset()
+        privateListener.reset()
+        v.set(VALUE_2b)
+        v.get()
+        publicListener.check(null, 0)
+        privateListener.check(v, 1)
+    }
+
+    @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
         val v: SetProperty<Any> = SimpleSetProperty(VALUE_1a)
         val listener2 = InvalidationListenerMock()
@@ -632,16 +663,25 @@ class SetPropertyBaseTest {
         assertEquals("SetProperty [name: My name, value: $value1]", v4.toString())
     }
 
-    private class SetPropertyMock(override val bean: Any?, override val name: String?,
-            initialValue: ObservableSet<Any>?) : SetPropertyBase<Any>(initialValue) {
+    private class SetPropertyMock : SetPropertyBase<Any> {
 
-        private var counter: Int = 0
+        override val bean: Any?
 
-        constructor(bean: Any?, name: String?) : this(bean, name, null)
+        override val name: String?
 
-        constructor(initialValue: ObservableSet<Any>?) : this(NO_BEAN, NO_NAME_1, initialValue)
+        var counter: Int = 0
 
-        constructor() : this(null)
+        constructor(bean: Any?, name: String?) : super() {
+            this.bean = bean
+            this.name = name
+        }
+
+        constructor(initialValue: ObservableSet<Any>) : super(initialValue) {
+            this.bean = NO_BEAN
+            this.name = NO_NAME_1
+        }
+
+        constructor() : this(NO_BEAN, NO_NAME_1)
 
         override fun invalidated() {
             this.counter++

@@ -10,6 +10,8 @@ import org.junit.Test
 import kotlin.math.E
 import kotlin.math.PI
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.fail
 
 class DoublePropertyTest {
@@ -85,6 +87,8 @@ class DoublePropertyTest {
     fun testAsObject() {
         val valueModel: DoubleProperty = SimpleDoubleProperty(2.0)
         val exp: ObjectProperty<Double> = valueModel.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(2.0, exp.get(), EPSILON)
         valueModel.set(-4354.3)
@@ -100,6 +104,8 @@ class DoublePropertyTest {
     fun testObjectToDouble() {
         val valueModel: ObjectProperty<Double?> = SimpleObjectProperty(null)
         val exp: DoubleProperty = DoubleProperty.doubleProperty(valueModel)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0.0, exp.get(), EPSILON)
         valueModel.set(-4354.3)

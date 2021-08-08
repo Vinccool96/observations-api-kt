@@ -5,6 +5,8 @@ import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import org.junit.Assert
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class ReadOnlyFloatPropertyTest {
 
@@ -36,6 +38,8 @@ class ReadOnlyFloatPropertyTest {
     fun testAsObject() {
         val valueModel = ReadOnlyFloatWrapper()
         val exp: ReadOnlyObjectProperty<Float> = valueModel.readOnlyProperty.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         Assert.assertEquals(0.0f, exp.get(), EPSILON)
         valueModel.set(-4354.3f)
@@ -48,6 +52,8 @@ class ReadOnlyFloatPropertyTest {
     fun testObjectToDouble() {
         val valueModel: ReadOnlyObjectWrapper<Float?> = ReadOnlyObjectWrapper(null)
         val exp: ReadOnlyFloatProperty = ReadOnlyFloatProperty.readOnlyFloatProperty(valueModel.readOnlyProperty)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         Assert.assertEquals(0.0f, exp.get(), EPSILON)
         valueModel.set(-4354.3f)

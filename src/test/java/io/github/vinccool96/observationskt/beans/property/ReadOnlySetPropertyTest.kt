@@ -52,6 +52,16 @@ class ReadOnlySetPropertyTest {
     }
 
     @Test
+    fun testEquals() {
+        val model: ObservableSet<Any> = ObservableCollections.observableSet()
+        val set1: ReadOnlySetProperty<Any> = SimpleSetProperty(model)
+        val set2 = SetClassCastException()
+        val set3 = SetNullPointerException()
+        assertNotEquals(set1, set2)
+        assertNotEquals(set1, set3)
+    }
+
+    @Test
     fun testToString() {
         val v1: ReadOnlySetProperty<Any> = ReadOnlySetPropertyStub(null, "")
         assertEquals("ReadOnlySetProperty [value: $DEFAULT]", v1.toString())
@@ -72,6 +82,22 @@ class ReadOnlySetPropertyTest {
 
         val v6: ReadOnlySetProperty<Any> = ReadOnlySetPropertyStub(null, name)
         assertEquals("ReadOnlySetProperty [name: My name, value: $DEFAULT]", v6.toString())
+    }
+
+    private class SetClassCastException : SimpleSetProperty<Any>() {
+
+        override fun iterator(): MutableIterator<Any> {
+            throw ClassCastException("For the test")
+        }
+
+    }
+
+    private class SetNullPointerException : SimpleSetProperty<Any>() {
+
+        override fun iterator(): MutableIterator<Any> {
+            throw NullPointerException("For the test")
+        }
+
     }
 
     private class ReadOnlySetPropertyStub(override val bean: Any?, override val name: String?) :

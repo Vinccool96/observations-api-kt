@@ -4,6 +4,8 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class ReadOnlyLongPropertyTest {
 
@@ -35,6 +37,8 @@ class ReadOnlyLongPropertyTest {
     fun testAsObject() {
         val valueModel = ReadOnlyLongWrapper()
         val exp: ReadOnlyObjectProperty<Long> = valueModel.readOnlyProperty.asObject()
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0L, exp.get())
         valueModel.set(-4354L)
@@ -47,6 +51,8 @@ class ReadOnlyLongPropertyTest {
     fun testObjectToDouble() {
         val valueModel: ReadOnlyObjectWrapper<Long?> = ReadOnlyObjectWrapper(null)
         val exp: ReadOnlyLongProperty = ReadOnlyLongProperty.readOnlyLongProperty(valueModel.readOnlyProperty)
+        assertNull(exp.bean)
+        assertSame(valueModel.name, exp.name)
 
         assertEquals(0L, exp.get())
         valueModel.set(-4354L)
