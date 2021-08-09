@@ -6,8 +6,44 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class TransformationListTest {
+
+    private lateinit var list1: TransformationList<String, String>
+
+    private lateinit var list2: TransformationList<String, String>
+
+    private lateinit var list3: ObservableList<String>
+
+    private lateinit var list4: ObservableList<String>
+
+    @Before
+    fun setUp() {
+        this.list4 = ObservableCollections.observableArrayList()
+        this.list3 = ObservableCollections.observableArrayList()
+        this.list2 = TransformationListImpl(list3)
+        this.list1 = TransformationListImpl(list2)
+    }
+
+    @Test
+    fun testDirect() {
+        assertEquals(list2, list1.source)
+        assertEquals(list3, list2.source)
+    }
+
+    @Test
+    fun testIsInTransformationChain() {
+        assertTrue(this.list1.isInTransformationChain(this.list2))
+        assertTrue(this.list1.isInTransformationChain(this.list3))
+        assertFalse(this.list1.isInTransformationChain(this.list4))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun testGetSourceIndexFor_Exception() {
+        this.list1.getSourceIndexFor(this.list4, 0)
+    }
 
     private class TransformationListImpl(list: ObservableList<String>) : TransformationList<String, String>(list) {
 
@@ -50,25 +86,6 @@ class TransformationListTest {
             throw UnsupportedOperationException("Not supported yet.")
         }
 
-    }
-
-    private lateinit var list1: TransformationList<String, String>
-
-    private lateinit var list2: TransformationList<String, String>
-
-    private lateinit var list3: ObservableList<String>
-
-    @Before
-    fun setUp() {
-        this.list3 = ObservableCollections.observableArrayList()
-        this.list2 = TransformationListImpl(list3)
-        this.list1 = TransformationListImpl(list2)
-    }
-
-    @Test
-    fun testDirect() {
-        assertEquals(list2, list1.source)
-        assertEquals(list3, list2.source)
     }
 
 }

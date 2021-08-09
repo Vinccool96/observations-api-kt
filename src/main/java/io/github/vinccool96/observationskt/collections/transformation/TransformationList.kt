@@ -47,7 +47,7 @@ abstract class TransformationList<E, F>(source: ObservableList<out F>) : Observa
      * Checks whether the provided list is in the chain under this `TransformationList`.
      *
      * This means the list is either the direct source as returned by [source] or the direct source is a
-     * `TransformationList`, and the list is in it's transformation chain.
+     * `TransformationList`, and the list is in its transformation chain.
      *
      * @param list the list to check
      *

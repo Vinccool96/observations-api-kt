@@ -16,21 +16,21 @@ fun interface ListChangeListener<E> {
      * Each change must be one of the following:
      *
      * * **Permutation change** : [wasPermutated] returns `true` in this case. The permutation happened at range between
-     * [from]\(inclusive\) and [to]\(exclusive\) and can be queried by calling [getPermutation] method.
+     * [from] (inclusive) and [to] (exclusive) and can be queried by calling [getPermutation] method.
      * * **Add or remove change** : In this case, at least one of the [wasAdded], [wasRemoved] returns `true`. If both
      * methods return `true`, [wasReplaced] will also return `true`.
      *
      * The [wasRemoved] value returns a list of elements that have been replaced or removed from the list.
      *
-     * The range between [from]\(inclusive\) and [to]\(exclusive\) denotes the sublist of the list that contain new
+     * The range between [from] (inclusive) and [to] (exclusive) denotes the sublist of the list that contain new
      * elements. Note that this is a half-open interval, so if no elements were added, `from` is equal to `to`.
      *
      * It is possible to get a list of added elements by calling [addedSubList].
      *
      * Note that in order to maintain correct indexes of the separate add/remove changes, these changes **must** be
      * sorted by their `from` index.
-     * * **Update change** : [wasUpdated] return true on an update change. All elements between [from]\(inclusive\) and
-     * [to]\(exclusive\) were updated.
+     * * **Update change** : [wasUpdated] return true on an update change. All elements between [from] (inclusive) and
+     * [to] (exclusive) were updated.
      *
      * **Important:** It's necessary to call [next] method before calling any other method of `Change`. The same applies
      * after calling [reset]. The only methods that works at any time is [list].
@@ -88,7 +88,7 @@ fun interface ListChangeListener<E> {
     abstract class Change<E>(val list: ObservableList<E>) {
 
         /**
-         * Go to the next change. The `Change` in the initial state is invalid a requires a call to `next()` before
+         * Go to the next change. The `Change` in the initial state is invalid and requires a call to `next()` before
          * calling other methods. The first `next()` call will make this object represent the first change.
          *
          * @return `true` if switched to the next change, false if this is the last change.
@@ -107,19 +107,18 @@ fun interface ListChangeListener<E> {
          *
          * @return a beginning (inclusive) of an interval related to the change
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         abstract val from: Int
 
         /**
          * The end of the change interval.
          *
-         * @return a end (exclusive) of an interval related to the change.
+         * @return an end (exclusive) of an interval related to the change.
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
-         * @see .getFrom
+         * @throws IllegalStateException if this `Change` is in initial state
+         *
+         * @see from
          */
         abstract val to: Int
 
@@ -129,8 +128,7 @@ fun interface ListChangeListener<E> {
          *
          * @return a list with all the removed elements
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         abstract val removed: MutableList<E>
 
@@ -139,8 +137,7 @@ fun interface ListChangeListener<E> {
          *
          * @return `true` if the change was just a permutation.
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         val wasPermutated: Boolean
             get() = this.permutation.isNotEmpty()
@@ -162,8 +159,7 @@ fun interface ListChangeListener<E> {
          *
          * @return `true` if something was removed from the list
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         open val wasRemoved: Boolean
             get() = this.removed.isNotEmpty()
@@ -177,8 +173,7 @@ fun interface ListChangeListener<E> {
          *
          * @return same as `added && removed`
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         val wasReplaced: Boolean
             get() = this.wasAdded && this.wasRemoved
@@ -204,8 +199,7 @@ fun interface ListChangeListener<E> {
          *
          * @return the newly created sublist view that contains all the added elements.
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         val addedSubList: List<E>
             get() {
@@ -213,12 +207,11 @@ fun interface ListChangeListener<E> {
             }
 
         /**
-         * Size of getRemoved() list.
+         * Size of [removed] list.
          *
          * @return the number of removed items
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         val removedSize: Int
             get() {
@@ -230,8 +223,7 @@ fun interface ListChangeListener<E> {
          *
          * @return the number of added items
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         val addedSize: Int
             get() {
@@ -239,21 +231,19 @@ fun interface ListChangeListener<E> {
             }
 
         /**
-         * If this change is an permutation, it returns an int array that describes the permutation. This array maps
+         * If this change is a permutation, it returns an int array that describes the permutation. This array maps
          * directly from the previous indexes to the new ones. This method is not publicly accessible and therefore can
-         * return an array safely. The 0 index of the array corresponds to index [from] of the list. The
-         * same applies for the last index and [to]. The method is used by [wasPermutated] and
-         * [getPermutation] methods.
+         * return an array safely. The 0 index of the array corresponds to index [from] of the list. The same applies
+         * for the last index and [to]. The method is used by [wasPermutated] and [getPermutation] methods.
          *
          * @return empty array if this is not permutation or an int array containing the permutation
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         protected abstract val permutation: IntArray
 
         /**
-         * By calling these method, you can observe the permutation that happened. In order to get the new position of
+         * By calling these methods, you can observe the permutation that happened. In order to get the new position of
          * an element, you must call:
          * ```
          * change.getPermutation(oldIndex)
@@ -266,13 +256,11 @@ fun interface ListChangeListener<E> {
          *
          * @return the new index of the same element
          *
-         * @throws IndexOutOfBoundsException
-         * if i is out of the bounds of the list
-         * @throws IllegalStateException
-         * if this is not a permutation change
+         * @throws IndexOutOfBoundsException if `i` is out of the bounds of the list
+         * @throws IllegalStateException if this is not a permutation change
          */
         fun getPermutation(i: Int): Int {
-            check(this.wasPermutated) {"Not a permutation change"}
+            check(this.wasPermutated) { "Not a permutation change" }
             return this.permutation[i - this.from]
         }
     }

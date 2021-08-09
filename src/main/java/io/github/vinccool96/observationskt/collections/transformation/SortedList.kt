@@ -3,7 +3,7 @@ package io.github.vinccool96.observationskt.collections.transformation
 import io.github.vinccool96.observationskt.beans.NamedArg
 import io.github.vinccool96.observationskt.beans.property.ObjectProperty
 import io.github.vinccool96.observationskt.beans.property.ObjectPropertyBase
-import io.github.vinccool96.observationskt.collections.ListChangeListener
+import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.NonIterableChange.SimplePermutationChange
 import io.github.vinccool96.observationskt.sun.collections.SortHelper
@@ -19,7 +19,7 @@ import io.github.vinccool96.observationskt.sun.collections.SourceAdapterChange
  * @see TransformationList
  */
 @Suppress("UNCHECKED_CAST")
-class SortedList<E> : TransformationList<E, E> {
+open class SortedList<E> : TransformationList<E, E> {
 
     private var elementComparator: Comparator<Element<E>>? = null
 
@@ -29,8 +29,7 @@ class SortedList<E> : TransformationList<E, E> {
 
     private var sizeState = 0
 
-    private val helper =
-            SortHelper()
+    private val helper = SortHelper()
 
     private lateinit var tempElement: Element<E>
 
@@ -41,8 +40,8 @@ class SortedList<E> : TransformationList<E, E> {
      * @param source a list to wrap
      * @param comparator a comparator to use or `null` for unordered List
      */
-    constructor(@NamedArg("source") source: ObservableList<E>,
-            @NamedArg("comparator") comparator: Comparator<in E>?) : super(source) {
+    constructor(@NamedArg("source") source: ObservableList<E>, @NamedArg("comparator") comparator: Comparator<in E>?) :
+            super(source) {
         this.sorted = arrayOfNulls<Element<E>?>(source.size * 3 / 2 + 1)
         this.perm = IntArray(sorted.size)
         this.sizeState = source.size
@@ -63,8 +62,7 @@ class SortedList<E> : TransformationList<E, E> {
     constructor(@NamedArg("source") source: ObservableList<E>) : this(source, null)
 
     @Suppress("CascadeIf")
-    override fun sourceChanged(
-            c: ListChangeListener.Change<out E>) {
+    override fun sourceChanged(c: Change<out E>) {
         if (this.elementComparator != null) {
             beginChange()
             while (c.next()) {
@@ -98,10 +96,10 @@ class SortedList<E> : TransformationList<E, E> {
                     doSortWithPermutationChange()
                 }
 
-                override val bean: Any?
+                override val bean: Any
                     get() = this@SortedList
 
-                override val name: String?
+                override val name: String
                     get() = "comparator"
 
             }
@@ -177,7 +175,7 @@ class SortedList<E> : TransformationList<E, E> {
         return this.sorted[index]!!.index
     }
 
-    private fun updatePermutationIndexes(change: ListChangeListener.Change<out E>) {
+    private fun updatePermutationIndexes(change: Change<out E>) {
         for (i in 0 until size) {
             val p = change.getPermutation(this.sorted[i]!!.index)
             this.sorted[i]!!.index = p
@@ -185,8 +183,7 @@ class SortedList<E> : TransformationList<E, E> {
         }
     }
 
-    private fun updateUnsorted(
-            c: ListChangeListener.Change<out E>) {
+    private fun updateUnsorted(c: Change<out E>) {
         while (c.next()) {
             if (c.wasPermutated) {
                 val sortedTmp = arrayOfNulls<Element<E>?>(this.sorted.size)
@@ -225,7 +222,7 @@ class SortedList<E> : TransformationList<E, E> {
 
     private class Element<E>(var e: E, var index: Int)
 
-    private class ElementComparator<E>(internal val comparator: Comparator<E>) : Comparator<Element<E>> {
+    private class ElementComparator<E>(val comparator: Comparator<E>) : Comparator<Element<E>> {
 
         override fun compare(o1: Element<E>, o2: Element<E>): Int {
             return this.comparator.compare(o1.e, o2.e)
@@ -306,7 +303,7 @@ class SortedList<E> : TransformationList<E, E> {
         nextRemove(0, removed)
     }
 
-    private fun update(c: ListChangeListener.Change<out E>) {
+    private fun update(c: Change<out E>) {
         val perm = helper.sort(this.sorted, 0, size, this.elementComparator as Comparator<in Element<E>?>)
         for (i in this.indices) {
             this.perm[this.sorted[i]!!.index] = i
@@ -320,7 +317,7 @@ class SortedList<E> : TransformationList<E, E> {
         }
     }
 
-    private fun addRemove(c: ListChangeListener.Change<out E>) {
+    private fun addRemove(c: Change<out E>) {
         if (c.from == 0 && c.removedSize == this.sizeState) {
             removeAllFromMapping()
         } else {

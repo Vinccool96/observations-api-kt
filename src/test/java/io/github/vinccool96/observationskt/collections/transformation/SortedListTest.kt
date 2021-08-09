@@ -8,10 +8,7 @@ import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
 import io.github.vinccool96.observationskt.util.Callback
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class SortedListTest {
 
@@ -31,11 +28,35 @@ class SortedListTest {
     }
 
     @Test
+    fun testBaseComparator() {
+        assertNotNull(this.sortedList.comparator)
+    }
+
+    @Test
+    fun testComparatorProperty() {
+        val comparator = this.sortedList.comparatorProperty
+        assertSame(this.sortedList, comparator.bean)
+        assertEquals("comparator", comparator.name)
+    }
+
+    @Test
     fun testNoChange() {
         assertEquals(listOf("a", "c", "c", "d"), this.sortedList)
         this.mockListObserver.check0()
 
         compareIndices()
+    }
+
+    @Test(expected = IndexOutOfBoundsException::class)
+    fun testGet() {
+        this.sortedList[8]
+    }
+
+    @Test
+    fun testGetSourceIndexFor() {
+        val sortedList2 = this.sortedList.sorted { o1, o2 -> o2.compareTo(o1) }
+        assertEquals(3, sortedList2.getSourceIndexFor(this.sortedList, 0))
+        assertEquals(2, sortedList2.getSourceIndexFor(this.list, 0))
     }
 
     @Test
@@ -156,7 +177,7 @@ class SortedListTest {
         compareIndices()
 
         this.sortedList.addListener(this.mockListObserver)
-        op.set(Comparator {o1, o2 -> -o1.compareTo(o2)})
+        op.set(Comparator { o1, o2 -> -o1.compareTo(o2) })
         assertEquals(listOf("d", "c", "c", "a"), this.sortedList)
         this.mockListObserver.check1Permutation(this.sortedList, intArrayOf(3, 1, 2, 0))
         // could be also 3, 2, 1, 0, but the algorithm goes this way
@@ -175,13 +196,13 @@ class SortedListTest {
     @Test
     fun testSourceIndex() {
         val sourceList: ObservableList<Double> = ObservableCollections.observableArrayList(1300.0, 400.0, 600.0)
-        // the list to be removed again, note that its highest value is greater then the highest in the base list before
+        // the list to be removed again, note that its highest value is greater than the highest in the base list before
         // adding
         val other: List<Double> = listOf(50.0, -300.0, 4000.0)
         sourceList.addAll(other)
         // wrap into a sorted list and add a listener to the sorted
         val sorted: SortedList<Double> = sourceList.sorted()
-        val listener: ListChangeListener<Double> = ListChangeListener {change ->
+        val listener: ListChangeListener<Double> = ListChangeListener { change ->
             assertEquals(listOf(400.0, 600.0, 1300.0), change.list)
 
             change.next()
@@ -260,15 +281,15 @@ class SortedListTest {
 
     @Test
     fun testMutableElementSortedFilteredChain() {
-        val extractor: Callback<Person, Array<Observable>> = Callback {param -> arrayOf(param.name)}
+        val extractor: Callback<Person, Array<Observable>> = Callback { param -> arrayOf(param.name) }
         val items: ObservableList<Person> = ObservableCollections.observableArrayList(extractor)
         items.addAll(Person("b"), Person("c"), Person("a"), Person("f"), Person("e"), Person("d"))
 
-        val filtered: FilteredList<Person> = items.filtered {e: Person -> !e.name.valueSafe.startsWith("z")}
+        val filtered: FilteredList<Person> = items.filtered { e: Person -> !e.name.valueSafe.startsWith("z") }
         val filterListener: MockListObserver<Person> = MockListObserver()
         filtered.addListener(filterListener)
 
-        val sorted: SortedList<Person> = filtered.sorted(Comparator.comparing {t: Person -> t.name.valueSafe})
+        val sorted: SortedList<Person> = filtered.sorted(Comparator.comparing { t: Person -> t.name.valueSafe })
         val sortListener: MockListObserver<Person> = MockListObserver()
         sorted.addListener(sortListener)
         items[2].name.set("z") // "a" -> "z"
@@ -282,7 +303,7 @@ class SortedListTest {
     }
 
     private fun createPersonsList(): ObservableList<Person> {
-        val list: ObservableList<Person> = ObservableCollections.observableArrayList {param -> arrayOf(param.name)}
+        val list: ObservableList<Person> = ObservableCollections.observableArrayList { param -> arrayOf(param.name) }
         list.addAll(Person("one"), Person("two"), Person("three"), Person("four"), Person("five"))
         return list
     }
@@ -335,7 +356,7 @@ class SortedListTest {
     }
 
     /**
-     * SortedList cant cope with permutations.
+     * SortedList can't cope with permutations.
      */
     @Test
     fun testPermutate() {
@@ -422,7 +443,7 @@ class SortedListTest {
         val sortedList: SortedList<String> = SortedList(data)
 
         val pMap: HashMap<Int, Int> = HashMap()
-        sortedList.addListener(ListChangeListener {change ->
+        sortedList.addListener(ListChangeListener { change ->
             while (change.next()) {
                 if (change.wasPermutated) {
                     for (i in change.from until change.to) {
