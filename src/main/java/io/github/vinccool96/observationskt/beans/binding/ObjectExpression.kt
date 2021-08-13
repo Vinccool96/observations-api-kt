@@ -131,7 +131,7 @@ abstract class ObjectExpression<T> : ObservableObjectValue<T> {
 
         /**
          * Returns an `ObjectExpression` that wraps an [ObservableObjectValue]. If the `ObservableObjectValue` is
-         * already an `ObjectExpression`, it will be returned. Otherwise a new [ObjectBinding] is created that is bound
+         * already an `ObjectExpression`, it will be returned. Otherwise, a new [ObjectBinding] is created that is bound
          * to the `ObservableObjectValue`.
          *
          * @param value The source `ObservableObjectValue`

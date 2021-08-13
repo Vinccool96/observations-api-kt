@@ -1,22 +1,22 @@
 package io.github.vinccool96.observationskt.beans.value
 
-class ObservableIntValueStub(initialValue: Int) : ObservableValueBase<Number?>(), ObservableIntValue {
+class ObservableShortValueStub(initialValue: Short) : ObservableValueBase<Number?>(), ObservableShortValue {
 
-    private var valueState: Int = initialValue
+    private var valueState: Short = initialValue
 
     constructor() : this(0)
 
-    override fun get(): Int {
+    override fun get(): Short {
         return this.valueState
     }
 
-    fun set(int: Int) {
-        this.valueState = int
+    fun set(short: Short) {
+        this.valueState = short
         this.fireValueChangedEvent()
     }
 
     override val intValue: Int
-        get() = this.get()
+        get() = this.get().toInt()
 
     override val longValue: Long
         get() = this.get().toLong()
@@ -28,7 +28,7 @@ class ObservableIntValueStub(initialValue: Int) : ObservableValueBase<Number?>()
         get() = this.get().toDouble()
 
     override val shortValue: Short
-        get() = this.get().toShort()
+        get() = this.get()
 
     override val byteValue: Byte
         get() = this.get().toByte()

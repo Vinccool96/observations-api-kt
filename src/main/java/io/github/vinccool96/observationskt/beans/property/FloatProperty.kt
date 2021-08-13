@@ -11,7 +11,7 @@ import java.security.PrivilegedAction
 /**
  * This class defines a [Property] wrapping a `Float` value.
  *
- * The value of a `FloatProperty` can be get and set with [get], [set], and [value].
+ * The value of a `FloatProperty` can be got and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].
@@ -110,7 +110,7 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, Writa
 
         /**
          * Returns a `FloatProperty` that wraps a [Property]. If the `Property` is already a `FloatProperty`, it will be
-         * returned. Otherwise a new `FloatProperty` is created that is bound to the `Property`.
+         * returned. Otherwise, a new `FloatProperty` is created that is bound to the `Property`.
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Float> and a FloatProperty.
          * ```

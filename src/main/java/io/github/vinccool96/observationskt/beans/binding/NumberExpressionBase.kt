@@ -18,19 +18,19 @@ import java.util.*
  */
 abstract class NumberExpressionBase : NumberExpression {
 
-    override fun plus(other: ObservableNumberValue): NumberBinding {
+    override operator fun plus(other: ObservableNumberValue): NumberBinding {
         return Bindings.add(this, other)
     }
 
-    override fun minus(other: ObservableNumberValue): NumberBinding {
+    override operator fun minus(other: ObservableNumberValue): NumberBinding {
         return Bindings.subtract(this, other)
     }
 
-    override fun times(other: ObservableNumberValue): NumberBinding {
+    override operator fun times(other: ObservableNumberValue): NumberBinding {
         return Bindings.multiply(this, other)
     }
 
-    override fun div(other: ObservableNumberValue): NumberBinding {
+    override operator fun div(other: ObservableNumberValue): NumberBinding {
         return Bindings.divide(this, other)
     }
 
@@ -69,6 +69,14 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.equal(this, other, epsilon)
     }
 
+    override fun isEqualTo(other: Short): BooleanBinding {
+        return Bindings.equal(this, other)
+    }
+
+    override fun isEqualTo(other: Short, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
     // ===============================================================
     // IsNotEqualTo
 
@@ -104,6 +112,14 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.notEqual(this, other, epsilon)
     }
 
+    override fun isNotEqualTo(other: Short): BooleanBinding {
+        return Bindings.notEqual(this, other)
+    }
+
+    override fun isNotEqualTo(other: Short, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
     // ===============================================================
     // IsGreaterThan
 
@@ -124,6 +140,10 @@ abstract class NumberExpressionBase : NumberExpression {
     }
 
     override fun greaterThan(other: Int): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    override fun greaterThan(other: Short): BooleanBinding {
         return Bindings.greaterThan(this, other)
     }
 
@@ -150,6 +170,10 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.lessThan(this, other)
     }
 
+    override fun lessThan(other: Short): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
     // ===============================================================
     // IsGreaterThanOrEqualTo
 
@@ -170,6 +194,10 @@ abstract class NumberExpressionBase : NumberExpression {
     }
 
     override fun greaterThanOrEqualTo(other: Int): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
+    override fun greaterThanOrEqualTo(other: Short): BooleanBinding {
         return Bindings.greaterThanOrEqual(this, other)
     }
 
@@ -196,6 +224,10 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.lessThanOrEqual(this, other)
     }
 
+    override fun lessThanOrEqualTo(other: Short): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
     // ===============================================================
     // String conversions
 
@@ -215,7 +247,7 @@ abstract class NumberExpressionBase : NumberExpression {
 
         /**
          * Returns a `NumberExpressionBase` that wraps a [ObservableNumberValue]. If the `ObservableNumberValue` is
-         * already an instance of `NumberExpressionBase`, it will be returned. Otherwise a new [NumberBinding] is
+         * already an instance of `NumberExpressionBase`, it will be returned. Otherwise, a new [NumberBinding] is
          * created that is bound to the `ObservableNumberValue`.
          *
          * @param value The source `ObservableNumberValue`
@@ -229,6 +261,7 @@ abstract class NumberExpressionBase : NumberExpression {
                 is ObservableDoubleValue -> DoubleExpression.doubleExpression(value)
                 is ObservableFloatValue -> FloatExpression.floatExpression(value)
                 is ObservableLongValue -> LongExpression.longExpression(value)
+                is ObservableShortValue -> ShortExpression.shortExpression(value)
                 else -> null
             } ?: throw IllegalArgumentException("Unsupported Type")
         }

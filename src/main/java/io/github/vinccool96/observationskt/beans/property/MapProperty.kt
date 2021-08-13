@@ -7,7 +7,7 @@ import io.github.vinccool96.observationskt.collections.ObservableMap
 /**
  * This class provides a full implementation of a [Property] wrapping a [ObservableMap].
  *
- * The value of a `MapProperty` can be get and set with [get], [set], and [value].
+ * The value of a `MapProperty` can be got and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].

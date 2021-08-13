@@ -305,7 +305,7 @@ abstract class StringExpression : ObservableStringValue {
 
         /**
          * Returns a `StringExpression` that wraps a [ObservableValue]. If the `ObservableValue` is already a
-         * `StringExpression`, it will be returned. Otherwise a new [StringBinding] is created that holds the value of
+         * `StringExpression`, it will be returned. Otherwise, a new [StringBinding] is created that holds the value of
          * the `ObservableValue` converted to a `String`.
          *
          * @param value The source `ObservableValue`

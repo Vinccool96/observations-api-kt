@@ -5,7 +5,7 @@ import io.github.vinccool96.observationskt.beans.WeakInvalidationListener
 import io.github.vinccool96.observationskt.beans.binding.IntExpression
 
 /**
- * Super class for all readonly properties wrapping a `Int`.
+ * Super class for all readonly properties wrapping an `Int`.
  *
  * @see io.github.vinccool96.observationskt.beans.value.ObservableIntValue
  * @see IntExpression
@@ -71,7 +71,7 @@ abstract class ReadOnlyIntProperty : IntExpression(), ReadOnlyProperty<Number?> 
 
         /**
          * Returns a `ReadOnlyIntProperty` that wraps a [ReadOnlyProperty]. If the `ReadOnlyProperty` is already a
-         * `ReadOnlyIntProperty`, it will be returned. Otherwise a new `ReadOnlyIntProperty` is created that is
+         * `ReadOnlyIntProperty`, it will be returned. Otherwise, a new `ReadOnlyIntProperty` is created that is
          * bound to the `ReadOnlyProperty`.
          *
          * Note: null values will be interpreted as `0`

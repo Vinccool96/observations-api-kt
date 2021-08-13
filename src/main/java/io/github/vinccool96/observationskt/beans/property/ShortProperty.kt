@@ -1,7 +1,7 @@
 package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.binding.Bindings
-import io.github.vinccool96.observationskt.beans.value.WritableDoubleValue
+import io.github.vinccool96.observationskt.beans.value.WritableShortValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
 import java.security.AccessControlContext
@@ -9,31 +9,31 @@ import java.security.AccessController
 import java.security.PrivilegedAction
 
 /**
- * This class defines a [Property] wrapping a `Double` value.
+ * This class defines a [Property] wrapping a `Short` value.
  *
- * The value of a `DoubleProperty` can be got and set with [get], [set], and [value].
+ * The value of a `ShortProperty` can be got and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].
  *
  * The context of a `ObjectProperty` can be read with [bean] and [name].
  *
- * @see io.github.vinccool96.observationskt.beans.value.ObservableDoubleValue
- * @see WritableDoubleValue
- * @see ReadOnlyDoubleProperty
+ * @see io.github.vinccool96.observationskt.beans.value.ObservableShortValue
+ * @see WritableShortValue
+ * @see ReadOnlyShortProperty
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, WritableDoubleValue {
+abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, WritableShortValue {
 
     override var value: Number?
-        get() = this.get()
+        get() = super.value
         set(value) {
             if (value == null) {
-                Logging.getLogger().fine("Attempt to set double property to null, using default value instead.",
+                Logging.getLogger().fine("Attempt to set short property to null, using default value instead.",
                         NullPointerException())
             }
-            this.set(value?.toDouble() ?: 0.0)
+            this.set(value?.toShort() ?: 0)
         }
 
     override fun bindBidirectional(other: Property<Number?>) {
@@ -45,14 +45,14 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
     }
 
     /**
-     * Returns a string representation of this `DoubleProperty` object.
+     * Returns a string representation of this `ShortProperty` object.
      *
-     * @return a string representation of this `DoubleProperty` object.
+     * @return a string representation of this `ShortProperty` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("DoubleProperty [")
+        val result = StringBuilder("ShortProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -64,40 +64,40 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `DoubleProperty`. If the value of this
-     * `DoubleProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
+     * Creates an [ObjectProperty] that bidirectionally bound to this `ShortProperty`. If the value of this
+     * `ShortProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
-     * Can be used for binding an ObjectProperty to DoubleProperty.
+     * Can be used for binding an ObjectProperty to ShortProperty.
      *
      * ```
-     * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1.0)
-     * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0)
+     * val shortProperty: ShortProperty = SimpleShortProperty(1)
+     * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty(2)
      *
-     * objectProperty.bind(doubleProperty.asObject())
+     * objectProperty.bind(shortProperty.asObject())
      * ```
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Double> {
-        return object : ObjectPropertyBase<Double>(this@DoubleProperty.doubleValue) {
+    override fun asObject(): ObjectProperty<Short> {
+        return object : ObjectPropertyBase<Short>(this@ShortProperty.shortValue) {
 
             private val acc: AccessControlContext = AccessController.getContext()
 
             init {
-                BidirectionalBinding.bind(this as Property<Number?>, this@DoubleProperty)
+                BidirectionalBinding.bind(this as Property<Number?>, this@ShortProperty)
             }
 
             override val bean: Any?
                 get() = null // Virtual property, does not exist on a bean
 
             override val name: String?
-                get() = this@DoubleProperty.name
+                get() = this@ShortProperty.name
 
             @Throws(Throwable::class)
             protected fun finalize() {
                 try {
                     AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@DoubleProperty)
+                        BidirectionalBinding.unbind(this, this@ShortProperty)
                     }, this.acc)
                 } finally {
                 }
@@ -109,28 +109,28 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
     companion object {
 
         /**
-         * Returns a `DoubleProperty` that wraps a [Property]. If the `Property` is already a `DoubleProperty`, it will
-         * be returned. Otherwise, a new `DoubleProperty` is created that is bound to the `Property`.
+         * Returns a `ShortProperty` that wraps a [Property]. If the `Property` is already a `ShortProperty`, it
+         * will be returned. Otherwise, a new `ShortProperty` is created that is bound to the `Property`.
          *
-         * This is very useful when bidirectionally binding an ObjectProperty<Double> and a DoubleProperty.
+         * This is very useful when bidirectionally binding an ObjectProperty<Short> and an ShortProperty.
          * ```
-         * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1.0)
-         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0)
+         * val shortProperty: ShortProperty = SimpleShortProperty(1)
+         * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty(2)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
-         * val objectAsDouble: DoubleProperty = DoubleProperty.doubleProperty(objectProperty)
+         * val objectAsShort: ShortProperty = ShortProperty.shortProperty(objectProperty)
          *
-         * doubleProperty.bindBidirectional(objectAsDouble)
+         * shortProperty.bindBidirectional(objectAsShort)
          * ```
          *
-         * Another approach is to convert the DoubleProperty to ObjectProperty using [asObject] method.
+         * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
          *
          * @param property The source `Property`
          *
-         * @return A `DoubleProperty` that wraps the `Property` if necessary
+         * @return A `ShortProperty` that wraps the `Property` if necessary
          */
-        fun doubleProperty(property: Property<Double?>): DoubleProperty {
-            return if (property is DoubleProperty) property else object : DoublePropertyBase() {
+        fun shortProperty(property: Property<Short?>): ShortProperty {
+            return if (property is ShortProperty) property else object : ShortPropertyBase() {
 
                 private val acc: AccessControlContext = AccessController.getContext()
 

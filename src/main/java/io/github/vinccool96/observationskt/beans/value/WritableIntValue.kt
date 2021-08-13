@@ -9,8 +9,7 @@ package io.github.vinccool96.observationskt.beans.value
 interface WritableIntValue : WritableNumberValue {
 
     /**
-     * Get the wrapped value. Unlike [value], this method returns primitive `int`. Needs to be
-     * identical to [value].
+     * Get the wrapped value. Unlike [value], this method returns primitive `int`. Needs to be identical to [value].
      *
      * @return The current value
      */

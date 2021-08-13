@@ -171,6 +171,20 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
 
                             }, Long.MAX_VALUE, Long.MIN_VALUE, 0L),
                     arrayOf(
+                            SimpleShortProperty(), SimpleShortProperty(),
+                            object : Functions<Number?> {
+
+                                override fun create(func: Callable<Number?>,
+                                        vararg dependencies: Observable): Binding<Number?> {
+                                    return Bindings.createShortBinding(func as Callable<Short>, *dependencies)
+                                }
+
+                                override fun check(value0: Number?, value1: Any?) {
+                                    assertEquals(value0!!.toShort(), (value1 as Number).toShort())
+                                }
+
+                            }, Short.MAX_VALUE, Short.MIN_VALUE, (0).toShort()),
+                    arrayOf(
                             SimpleObjectProperty<Any?>(null), SimpleObjectProperty<Any?>(null),
                             object : Functions<Any?> {
 

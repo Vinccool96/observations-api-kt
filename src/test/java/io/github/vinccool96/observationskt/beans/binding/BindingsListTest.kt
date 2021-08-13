@@ -149,11 +149,6 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test
-    fun testValueAt_Constant_() {
-
-    }
-
     @Test(expected = IllegalArgumentException::class)
     fun testValueAt_Constant_NegativeIndex() {
         Bindings.valueAt(this.property, -1)

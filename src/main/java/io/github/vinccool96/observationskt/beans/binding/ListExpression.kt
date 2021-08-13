@@ -248,7 +248,7 @@ abstract class ListExpression<E> : ObservableListValue<E> {
 
         /**
          * Returns a `ListExpression` that wraps a [ObservableListValue]. If the `ObservableListValue` is already a
-         * `ListExpression`, it will be returned. Otherwise a new [ListBinding] is created that is bound to the
+         * `ListExpression`, it will be returned. Otherwise, a new [ListBinding] is created that is bound to the
          * `ObservableListValue`.
          *
          * @param value The source `ObservableListValue`

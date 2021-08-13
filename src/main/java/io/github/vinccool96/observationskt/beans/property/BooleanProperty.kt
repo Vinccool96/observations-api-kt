@@ -11,7 +11,7 @@ import java.security.PrivilegedAction
 /**
  * This class provides a full implementation of a [Property] wrapping a `Boolean` value.
  *
- * The value of a `BooleanProperty` can be get and set with [get], [set], and [value].
+ * The value of a `BooleanProperty` can be got and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].
@@ -101,7 +101,7 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, 
 
         /**
          * Returns a `BooleanProperty` that wraps a [Property]. If the `Property` is already a `BooleanProperty`, it
-         * will be returned. Otherwise a new `BooleanProperty` is created that is bound to the `Property`.
+         * will be returned. Otherwise, a new `BooleanProperty` is created that is bound to the `Property`.
          *
          * Note: null values in the source property will be interpreted as `false`
          *

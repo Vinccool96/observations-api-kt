@@ -2,30 +2,30 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
-import io.github.vinccool96.observationskt.beans.binding.IntBinding
+import io.github.vinccool96.observationskt.beans.binding.ShortBinding
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
-import io.github.vinccool96.observationskt.beans.value.ObservableIntValue
+import io.github.vinccool96.observationskt.beans.value.ObservableShortValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 import java.lang.ref.WeakReference
 
 /**
- * The class `IntPropertyBase` is the base class for a property wrapping an `Int` value.
+ * The class `ShortPropertyBase` is the base class for a property wrapping a `Short` value.
  *
  * It provides all the functionality required for a property except for the [bean] and [name] values, which must be
  * implemented by extending classes.
  *
- * @see IntProperty
+ * @see ShortProperty
  *
- * @constructor The constructor of the `IntPropertyBase` that sets an initial value.
+ * @constructor The constructor of the `ShortPropertyBase` that sets an initial value.
  *
  * @param initialValue the initial value of the wrapped value
  */
-abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
+abstract class ShortPropertyBase(initialValue: Short) : ShortProperty() {
 
-    private var valueState: Int = initialValue
+    private var valueState: Short = initialValue
 
-    private var observable: ObservableIntValue? = null
+    private var observable: ObservableShortValue? = null
 
     private var listener: InvalidationListener? = null
 
@@ -34,7 +34,7 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
     private var helper: ExpressionHelper<Number?>? = null
 
     /**
-     * The constructor of the `IntPropertyBase`. The initial value is `0`
+     * The constructor of the `ShortPropertyBase`. The initial value is `0`
      */
     constructor() : this(0)
 
@@ -100,12 +100,12 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
     protected open fun invalidated() {
     }
 
-    override fun get(): Int {
+    override fun get(): Short {
         this.valid = true
         return this.observable?.get() ?: this.valueState
     }
 
-    override fun set(value: Int) {
+    override fun set(value: Short) {
         if (this.bound) {
             val curBean = this.bean
             throw RuntimeException((if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
@@ -121,15 +121,15 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
         get() = this.observable != null
 
     override fun bind(observable: ObservableValue<out Number?>) {
-        val newObservable: ObservableIntValue = if (observable is ObservableIntValue) observable
-        else object : IntBinding() {
+        val newObservable: ObservableShortValue = if (observable is ObservableShortValue) observable
+        else object : ShortBinding() {
 
             init {
                 super.bind(observable)
             }
 
-            override fun computeValue(): Int {
-                return observable.value?.toInt() ?: 0
+            override fun computeValue(): Short {
+                return observable.value?.toShort() ?: 0
             }
 
         }
@@ -148,21 +148,21 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
 
     override fun unbind() {
         if (this.observable != null) {
-            this.valueState = this.observable!!.value?.toInt() ?: 0
+            this.valueState = this.observable!!.value?.toShort() ?: 0
             this.observable!!.removeListener(this.listener!!)
             this.observable = null
         }
     }
 
     /**
-     * Returns a string representation of this `IntPropertyBase` object.
+     * Returns a string representation of this `ShortPropertyBase` object.
      *
-     * @return a string representation of this `IntPropertyBase` object.
+     * @return a string representation of this `ShortPropertyBase` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("IntProperty [")
+        val result = StringBuilder("ShortProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -183,12 +183,12 @@ abstract class IntPropertyBase(initialValue: Int) : IntProperty() {
         return result.toString()
     }
 
-    private class Listener(ref: IntPropertyBase) : InvalidationListener {
+    private class Listener(ref: ShortPropertyBase) : InvalidationListener {
 
-        private val wref: WeakReference<IntPropertyBase> = WeakReference(ref)
+        private val wref: WeakReference<ShortPropertyBase> = WeakReference(ref)
 
         override fun invalidated(observable: Observable) {
-            val ref: IntPropertyBase? = this.wref.get()
+            val ref: ShortPropertyBase? = this.wref.get()
             if (ref == null) {
                 observable.removeListener(this)
             } else {

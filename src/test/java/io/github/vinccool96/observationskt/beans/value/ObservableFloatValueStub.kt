@@ -27,7 +27,13 @@ class ObservableFloatValueStub(initialValue: Float) : ObservableValueBase<Number
     override val doubleValue: Double
         get() = this.get().toDouble()
 
-    override val value: Number?
+    override val shortValue: Short
+        get() = this.intValue.toShort()
+
+    override val byteValue: Byte
+        get() = this.intValue.toByte()
+
+    override val value: Number
         get() = this.get()
 
 }

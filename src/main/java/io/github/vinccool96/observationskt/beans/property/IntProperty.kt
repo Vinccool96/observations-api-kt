@@ -9,9 +9,9 @@ import java.security.AccessController
 import java.security.PrivilegedAction
 
 /**
- * This class defines a [Property] wrapping a `Int` value.
+ * This class defines a [Property] wrapping an `Int` value.
  *
- * The value of a `IntProperty` can be get and set with [get], [set], and [value].
+ * The value of a `IntProperty` can be got and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].
@@ -110,7 +110,7 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
 
         /**
          * Returns a `IntProperty` that wraps a [Property]. If the `Property` is already a `IntProperty`, it
-         * will be returned. Otherwise a new `IntProperty` is created that is bound to the `Property`.
+         * will be returned. Otherwise, a new `IntProperty` is created that is bound to the `Property`.
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Int> and an IntProperty.
          * ```

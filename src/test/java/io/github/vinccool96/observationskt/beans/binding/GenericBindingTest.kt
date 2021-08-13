@@ -429,6 +429,44 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
+    class ShortBindingImpl(vararg deps: Observable) : ShortBinding(), BindingMock<Number?> {
+
+        private var computeValueCounterState = 0
+
+        private var valueState: Short = 0
+
+        init {
+            super.bind(*deps)
+        }
+
+        override var value: Number?
+            get() = this.get()
+            set(value) {
+                this.valueState = value?.toShort() ?: 0
+            }
+
+        override val computeValueCounter: Int
+            get() {
+                val result = this.computeValueCounterState
+                reset()
+                return result
+            }
+
+        override fun reset() {
+            this.computeValueCounterState = 0
+        }
+
+        override fun computeValue(): Short {
+            this.computeValueCounterState++
+            return this.valueState
+        }
+
+        @get:ReturnsUnmodifiableCollection
+        override val dependencies: ObservableList<*>
+            get() = fail("Should not reach here")
+
+    }
+
     class BooleanBindingImpl(vararg deps: Observable) : BooleanBinding(), BindingMock<Boolean?> {
 
         private var computeValueCounterState = 0
@@ -694,6 +732,13 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
                             IntBindingImpl(),
                             IntBindingImpl(dependency1),
                             IntBindingImpl(dependency1, dependency2)
+                    ),
+                    arrayOf(
+                            Short.MIN_VALUE, Short.MAX_VALUE,
+                            dependency1, dependency2,
+                            ShortBindingImpl(),
+                            ShortBindingImpl(dependency1),
+                            ShortBindingImpl(dependency1, dependency2)
                     ),
                     arrayOf(
                             true, false,

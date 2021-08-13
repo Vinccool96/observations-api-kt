@@ -51,6 +51,12 @@ class FloatConstant private constructor(override val value: Float) : ObservableF
     override val doubleValue: Double
         get() = this.value.toDouble()
 
+    override val shortValue: Short
+        get() = this.intValue.toShort()
+
+    override val byteValue: Byte
+        get() = this.intValue.toByte()
+
     companion object {
 
         fun valueOf(value: Float): FloatConstant {

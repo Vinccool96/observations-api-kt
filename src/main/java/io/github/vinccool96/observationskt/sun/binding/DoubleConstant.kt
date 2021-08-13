@@ -51,6 +51,12 @@ class DoubleConstant private constructor(override val value: Double) : Observabl
     override val doubleValue: Double
         get() = this.value
 
+    override val shortValue: Short
+        get() = this.longValue.toShort()
+
+    override val byteValue: Byte
+        get() = this.longValue.toByte()
+
     companion object {
 
         fun valueOf(value: Double): DoubleConstant {

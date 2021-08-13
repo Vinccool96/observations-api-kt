@@ -58,6 +58,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.double1 + this.float1
                     is SimpleIntProperty -> this.double1 + this.int1
                     is SimpleLongProperty -> this.double1 + this.long1
+                    is SimpleShortProperty -> this.double1 + this.short1
                     else -> 0.0
                 }
                 is SimpleFloatProperty -> when (op2) {
@@ -65,6 +66,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.float1 + this.float1
                     is SimpleIntProperty -> this.float1 + this.int1
                     is SimpleLongProperty -> this.float1 + this.long1
+                    is SimpleShortProperty -> this.float1 + this.short1
                     else -> 0.0
                 }
                 is SimpleIntProperty -> when (op2) {
@@ -72,6 +74,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.int1 + this.float1
                     is SimpleIntProperty -> this.int1 + this.int1
                     is SimpleLongProperty -> this.int1 + this.long1
+                    is SimpleShortProperty -> this.int1 + this.short1
                     else -> 0.0
                 }
                 is SimpleLongProperty -> when (op2) {
@@ -79,6 +82,15 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.long1 + this.float1
                     is SimpleIntProperty -> this.long1 + this.int1
                     is SimpleLongProperty -> this.long1 + this.long1
+                    is SimpleShortProperty -> this.long1 + this.short1
+                    else -> 0.0
+                }
+                is SimpleShortProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.short1 + this.double1
+                    is SimpleFloatProperty -> this.short1 + this.float1
+                    is SimpleIntProperty -> this.short1 + this.int1
+                    is SimpleLongProperty -> this.short1 + this.long1
+                    is SimpleShortProperty -> this.short1 + this.short1
                     else -> 0.0
                 }
                 else -> 0.0
@@ -89,6 +101,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.double1 - this.float1
                     is SimpleIntProperty -> this.double1 - this.int1
                     is SimpleLongProperty -> this.double1 - this.long1
+                    is SimpleShortProperty -> this.double1 - this.short1
                     else -> 0.0
                 }
                 is SimpleFloatProperty -> when (op2) {
@@ -96,6 +109,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.float1 - this.float1
                     is SimpleIntProperty -> this.float1 - this.int1
                     is SimpleLongProperty -> this.float1 - this.long1
+                    is SimpleShortProperty -> this.float1 - this.short1
                     else -> 0.0
                 }
                 is SimpleIntProperty -> when (op2) {
@@ -103,6 +117,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.int1 - this.float1
                     is SimpleIntProperty -> this.int1 - this.int1
                     is SimpleLongProperty -> this.int1 - this.long1
+                    is SimpleShortProperty -> this.int1 - this.short1
                     else -> 0.0
                 }
                 is SimpleLongProperty -> when (op2) {
@@ -110,6 +125,15 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.long1 - this.float1
                     is SimpleIntProperty -> this.long1 - this.int1
                     is SimpleLongProperty -> this.long1 - this.long1
+                    is SimpleShortProperty -> this.long1 - this.short1
+                    else -> 0.0
+                }
+                is SimpleShortProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.short1 - this.double1
+                    is SimpleFloatProperty -> this.short1 - this.float1
+                    is SimpleIntProperty -> this.short1 - this.int1
+                    is SimpleLongProperty -> this.short1 - this.long1
+                    is SimpleShortProperty -> this.short1 - this.short1
                     else -> 0.0
                 }
                 else -> 0.0
@@ -120,6 +144,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.double1 * this.float1
                     is SimpleIntProperty -> this.double1 * this.int1
                     is SimpleLongProperty -> this.double1 * this.long1
+                    is SimpleShortProperty -> this.double1 * this.short1
                     else -> 0.0
                 }
                 is SimpleFloatProperty -> when (op2) {
@@ -127,6 +152,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.float1 * this.float1
                     is SimpleIntProperty -> this.float1 * this.int1
                     is SimpleLongProperty -> this.float1 * this.long1
+                    is SimpleShortProperty -> this.float1 * this.short1
                     else -> 0.0
                 }
                 is SimpleIntProperty -> when (op2) {
@@ -134,6 +160,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.int1 * this.float1
                     is SimpleIntProperty -> this.int1 * this.int1
                     is SimpleLongProperty -> this.int1 * this.long1
+                    is SimpleShortProperty -> this.int1 * this.short1
                     else -> 0.0
                 }
                 is SimpleLongProperty -> when (op2) {
@@ -141,6 +168,15 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.long1 * this.float1
                     is SimpleIntProperty -> this.long1 * this.int1
                     is SimpleLongProperty -> this.long1 * this.long1
+                    is SimpleShortProperty -> this.long1 * this.short1
+                    else -> 0.0
+                }
+                is SimpleShortProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.short1 * this.double1
+                    is SimpleFloatProperty -> this.short1 * this.float1
+                    is SimpleIntProperty -> this.short1 * this.int1
+                    is SimpleLongProperty -> this.short1 * this.long1
+                    is SimpleShortProperty -> this.short1 * this.short1
                     else -> 0.0
                 }
                 else -> 0.0
@@ -151,6 +187,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.double1 / this.float1
                     is SimpleIntProperty -> this.double1 / this.int1
                     is SimpleLongProperty -> this.double1 / this.long1
+                    is SimpleShortProperty -> this.double1 / this.short1
                     else -> 0.0
                 }
                 is SimpleFloatProperty -> when (op2) {
@@ -158,6 +195,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.float1 / this.float1
                     is SimpleIntProperty -> this.float1 / this.int1
                     is SimpleLongProperty -> this.float1 / this.long1
+                    is SimpleShortProperty -> this.float1 / this.short1
                     else -> 0.0
                 }
                 is SimpleIntProperty -> when (op2) {
@@ -165,6 +203,7 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.int1 / this.float1
                     is SimpleIntProperty -> this.int1 / this.int1
                     is SimpleLongProperty -> this.int1 / this.long1
+                    is SimpleShortProperty -> this.int1 / this.short1
                     else -> 0.0
                 }
                 is SimpleLongProperty -> when (op2) {
@@ -172,6 +211,15 @@ class AbstractNumberExpressionTest {
                     is SimpleFloatProperty -> this.long1 / this.float1
                     is SimpleIntProperty -> this.long1 / this.int1
                     is SimpleLongProperty -> this.long1 / this.long1
+                    is SimpleShortProperty -> this.long1 / this.short1
+                    else -> 0.0
+                }
+                is SimpleShortProperty -> when (op2) {
+                    is SimpleDoubleProperty -> this.short1 / this.double1
+                    is SimpleFloatProperty -> this.short1 / this.float1
+                    is SimpleIntProperty -> this.short1 / this.int1
+                    is SimpleLongProperty -> this.short1 / this.long1
+                    is SimpleShortProperty -> this.short1 / this.short1
                     else -> 0.0
                 }
                 else -> 0.0
@@ -188,7 +236,7 @@ class AbstractNumberExpressionTest {
     @Test
     fun testArithmetic() {
         val ops = listOf(SimpleDoubleProperty(this.double1), SimpleFloatProperty(this.float1),
-                SimpleIntProperty(this.int1), SimpleLongProperty(this.long1))
+                SimpleIntProperty(this.int1), SimpleLongProperty(this.long1), SimpleShortProperty(this.short1))
         for (op1 in ops) {
             for (op2 in ops) {
                 testArithmetic(op1, op2, op1 + op2, OP.PL)
@@ -237,10 +285,10 @@ class AbstractNumberExpressionTest {
         binding = this.op1.isEqualTo(this.int1)
         assertFalse(binding.get())
 
-        binding = this.op1.isEqualTo(this.short1.toInt(), EPSILON)
+        binding = this.op1.isEqualTo(this.short1, EPSILON)
         assertFalse(binding.get())
 
-        binding = this.op1.isEqualTo(this.short1.toInt())
+        binding = this.op1.isEqualTo(this.short1)
         assertFalse(binding.get())
 
         binding = this.op1.isEqualTo(this.byte1.toInt(), EPSILON)
@@ -285,10 +333,10 @@ class AbstractNumberExpressionTest {
         binding = this.op1.isNotEqualTo(this.int1)
         assertTrue(binding.get())
 
-        binding = this.op1.isNotEqualTo(this.short1.toInt(), EPSILON)
+        binding = this.op1.isNotEqualTo(this.short1, EPSILON)
         assertTrue(binding.get())
 
-        binding = this.op1.isNotEqualTo(this.short1.toInt())
+        binding = this.op1.isNotEqualTo(this.short1)
         assertTrue(binding.get())
 
         binding = this.op1.isNotEqualTo(this.byte1.toInt(), EPSILON)
@@ -336,7 +384,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.greaterThan(this.int1)
         assertEquals(this.data1 > this.int1, binding.get())
 
-        binding = this.op1.greaterThan(this.short1.toInt())
+        binding = this.op1.greaterThan(this.short1)
         assertEquals(this.data1 > this.short1, binding.get())
 
         binding = this.op1.greaterThan(this.byte1.toInt())
@@ -381,7 +429,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.lessThan(this.int1)
         assertEquals(this.data1 < this.int1, binding.get())
 
-        binding = this.op1.lessThan(this.short1.toInt())
+        binding = this.op1.lessThan(this.short1)
         assertEquals(this.data1 < this.short1, binding.get())
 
         binding = this.op1.lessThan(this.byte1.toInt())
@@ -426,7 +474,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.greaterThanOrEqualTo(this.int1)
         assertEquals(this.data1 >= this.int1, binding.get())
 
-        binding = this.op1.greaterThanOrEqualTo(this.short1.toInt())
+        binding = this.op1.greaterThanOrEqualTo(this.short1)
         assertEquals(this.data1 >= this.short1, binding.get())
 
         binding = this.op1.greaterThanOrEqualTo(this.byte1.toInt())
@@ -471,7 +519,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.lessThanOrEqualTo(this.int1)
         assertEquals(this.data1 <= this.int1, binding.get())
 
-        binding = this.op1.lessThanOrEqualTo(this.short1.toInt())
+        binding = this.op1.lessThanOrEqualTo(this.short1)
         assertEquals(this.data1 <= this.short1, binding.get())
 
         binding = this.op1.lessThanOrEqualTo(this.byte1.toInt())
@@ -517,6 +565,15 @@ class AbstractNumberExpressionTest {
         assertEquals(this.int1, exp.intValue)
         int2.set(0)
         assertEquals(0, exp.intValue)
+
+        val short2 = ObservableShortValueStub()
+        short2.set(this.short1)
+        exp = NumberExpressionBase.numberExpression(short2)
+        assertTrue(exp is ShortBinding)
+        assertEquals(ObservableCollections.singletonObservableList(short2), exp.dependencies)
+        assertEquals(this.short1, exp.shortValue)
+        short2.set(0)
+        assertEquals(0, exp.shortValue)
     }
 
     @Test
@@ -601,6 +658,12 @@ class AbstractNumberExpressionTest {
             get() = fail("Not in use")
 
         override val longValue: Long
+            get() = fail("Not in use")
+
+        override val shortValue: Short
+            get() = fail("Not in use")
+
+        override val byteValue: Byte
             get() = fail("Not in use")
 
         override val value: Number

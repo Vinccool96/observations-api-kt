@@ -25,6 +25,8 @@ class IntExpressionTest {
 
     private var int1 = 0
 
+    private var short1: Short = 0
+
     @Before
     fun setUp() {
         this.data = 3425
@@ -33,6 +35,7 @@ class IntExpressionTest {
         this.float1 = 111.9f
         this.long1 = 2009234L
         this.int1 = -234734
+        this.short1 = 9824
     }
 
     @Test
@@ -41,6 +44,8 @@ class IntExpressionTest {
         assertEquals(this.data.toFloat(), this.op1.floatValue, EPSILON)
         assertEquals(this.data.toLong(), this.op1.longValue)
         assertEquals(this.data, this.op1.intValue)
+        assertEquals(this.data.toShort(), this.op1.shortValue)
+        assertEquals(this.data.toByte(), this.op1.byteValue)
     }
 
     @Test
@@ -62,6 +67,9 @@ class IntExpressionTest {
 
         val binding4: IntBinding = this.op1 + this.int1
         assertEquals(this.data + this.int1, binding4.intValue)
+
+        val binding5: IntBinding = this.op1 + this.short1
+        assertEquals(this.data + this.short1, binding5.intValue)
     }
 
     @Test
@@ -77,6 +85,9 @@ class IntExpressionTest {
 
         val binding4: IntBinding = this.op1 - this.int1
         assertEquals(this.data - this.int1, binding4.intValue)
+
+        val binding5: IntBinding = this.op1 - this.short1
+        assertEquals(this.data - this.short1, binding5.intValue)
     }
 
     @Test
@@ -92,6 +103,9 @@ class IntExpressionTest {
 
         val binding4: IntBinding = this.op1 * this.int1
         assertEquals(this.data * this.int1, binding4.intValue)
+
+        val binding5: IntBinding = this.op1 * this.short1
+        assertEquals(this.data * this.short1, binding5.intValue)
     }
 
     @Test
@@ -107,6 +121,9 @@ class IntExpressionTest {
 
         val binding4: IntBinding = this.op1 / this.int1
         assertEquals(this.data / this.int1, binding4.intValue)
+
+        val binding5: IntBinding = this.op1 / this.short1
+        assertEquals(this.data / this.short1, binding5.intValue)
     }
 
     @Test

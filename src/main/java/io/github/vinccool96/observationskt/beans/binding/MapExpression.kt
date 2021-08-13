@@ -165,7 +165,7 @@ abstract class MapExpression<K, V> : ObservableMapValue<K, V> {
 
         /**
          * Returns a `MapExpression` that wraps a [ObservableMapValue]. If the `ObservableMapValue` is already a
-         * `MapExpression`, it will be returned. Otherwise a new [MapBinding] is created that is bound to the
+         * `MapExpression`, it will be returned. Otherwise, a new [MapBinding] is created that is bound to the
          * `ObservableMapValue`.
          *
          * @param value The source `ObservableMapValue`

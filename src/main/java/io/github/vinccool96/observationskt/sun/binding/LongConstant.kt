@@ -48,6 +48,12 @@ class LongConstant private constructor(override val value: Long) : ObservableLon
     override val doubleValue: Double
         get() = this.value.toDouble()
 
+    override val shortValue: Short
+        get() = this.value.toShort()
+
+    override val byteValue: Byte
+        get() = this.value.toByte()
+
     companion object {
 
         fun valueOf(value: Long): LongConstant {

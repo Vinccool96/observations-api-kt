@@ -4,10 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.property.Property
 import io.github.vinccool96.observationskt.beans.value.*
-import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.collections.ObservableMap
-import io.github.vinccool96.observationskt.collections.ObservableSet
+import io.github.vinccool96.observationskt.collections.*
 import io.github.vinccool96.observationskt.sun.binding.*
 import io.github.vinccool96.observationskt.sun.collections.ImmutableObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
@@ -18,6 +15,41 @@ import java.util.*
 import java.util.concurrent.Callable
 import kotlin.math.abs
 
+/**
+ * Bindings is a helper class with a lot of utility functions to create simple bindings.
+ *
+ * Usually there are two possibilities to define the same operation: the Fluent API and the factory methods in this
+ * class. This allows a developer to define complex expression in a way that is most easy to understand. For instance
+ * the expression `result = a*b + c*d` can be defined using only the Fluent API:
+ *
+ * ```
+ * val result = a*b + c*d
+ * ```
+ *
+ * Or using only factory methods in Bindings:
+ *
+ * ```
+ * val result = add(multiply(a, b), multiply(c,d))
+ * ```
+ *
+ * Or mixing both possibilities:
+ *
+ * ```
+ * val result = add(a * b, c * d)
+ * ```
+ *
+ * The main difference between using the Fluent API and using the factory methods in this class is that the Fluent API
+ * requires that at least one of the operands is an Expression (see
+ * [io.github.vinccool96.observationskt.beans.binding]). (Every Expression contains a static method that generates an
+ * Expression from an [ObservableValue]).
+ *
+ * Also, if you watched closely, you might have noticed that the return type of the Fluent API is different in the
+ * examples above. In a lot of cases the Fluent API allows to be more specific about the returned type (see
+ * [NumberExpression] for more details about implicit casting).
+ *
+ * @see Binding
+ * @see NumberBinding
+ */
 @Suppress("DuplicatedCode", "MemberVisibilityCanBePrivate")
 object Bindings {
 
@@ -189,6 +221,41 @@ object Bindings {
                 } catch (e: Exception) {
                     Logging.getLogger().warning("Exception while evaluating binding", e)
                     0L
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
+     * Helper function to create a custom [ShortBinding].
+     *
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createShortBinding(func: Callable<Short>, vararg dependencies: Observable): ShortBinding {
+        return object : ShortBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Short {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    0
                 }
             }
 
@@ -947,6 +1014,32 @@ object Bindings {
         return add(IntConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: ObservableNumberValue, op2: Short): NumberBinding {
+        return add(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: Short, op2: ObservableNumberValue): NumberBinding {
+        return add(ShortConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Diff
 
@@ -1152,6 +1245,32 @@ object Bindings {
      */
     fun subtract(op1: Int, op2: ObservableNumberValue): NumberBinding {
         return subtract(IntConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: Short): NumberBinding {
+        return subtract(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: Short, op2: ObservableNumberValue): NumberBinding {
+        return subtract(ShortConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -1361,6 +1480,32 @@ object Bindings {
         return multiply(IntConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: Short): NumberBinding {
+        return multiply(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: Short, op2: ObservableNumberValue): NumberBinding {
+        return multiply(ShortConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Divide
 
@@ -1566,6 +1711,32 @@ object Bindings {
      */
     fun divide(op1: Int, op2: ObservableNumberValue): NumberBinding {
         return divide(IntConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: Short): NumberBinding {
+        return divide(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: Short, op2: ObservableNumberValue): NumberBinding {
+        return divide(ShortConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -1895,6 +2066,72 @@ object Bindings {
         return equal(IntConstant.valueOf(op1), op2, 0.0, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Short, epsilon: Double): BooleanBinding {
+        return equal(op1, ShortConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Short, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(ShortConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Short): BooleanBinding {
+        return equal(op1, ShortConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Short, op2: ObservableNumberValue): BooleanBinding {
+        return equal(ShortConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
     // =================================================================================================================
     // Not Equal
 
@@ -2222,6 +2459,72 @@ object Bindings {
         return notEqual(IntConstant.valueOf(op1), op2, 0.0, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Short, epsilon: Double): BooleanBinding {
+        return notEqual(op1, ShortConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Short, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(ShortConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Short): BooleanBinding {
+        return notEqual(op1, ShortConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Short, op2: ObservableNumberValue): BooleanBinding {
+        return notEqual(ShortConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
     // =================================================================================================================
     // Greater Than
 
@@ -2429,6 +2732,32 @@ object Bindings {
         return greaterThan(IntConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: Short): BooleanBinding {
+        return greaterThan(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: Short, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(ShortConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Less Than
 
@@ -2552,6 +2881,32 @@ object Bindings {
      */
     fun lessThan(op1: Int, op2: ObservableNumberValue): BooleanBinding {
         return lessThan(IntConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: Short): BooleanBinding {
+        return lessThan(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: Short, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(ShortConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -2761,6 +3116,32 @@ object Bindings {
         return greaterThanOrEqual(IntConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
+     * equal to a constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Short): BooleanBinding {
+        return greaterThanOrEqual(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: Short, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(ShortConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Less Than or Equal
 
@@ -2886,6 +3267,32 @@ object Bindings {
         return lessThanOrEqual(IntConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
+     * to a constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: Short): BooleanBinding {
+        return lessThanOrEqual(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: Short, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(ShortConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Minimum
 
@@ -2955,7 +3362,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : IntBinding() {
+            op1 is ObservableIntValue || op2 is ObservableIntValue -> object : IntBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -2967,6 +3374,26 @@ object Bindings {
 
                 override fun computeValue(): Int {
                     return kotlin.math.min(op1.intValue, op2.intValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : ShortBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Short {
+                    return minOf(op1.shortValue, op2.shortValue)
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -3096,6 +3523,32 @@ object Bindings {
         return min(IntConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: Short): NumberBinding {
+        return min(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: Short, op2: ObservableNumberValue): NumberBinding {
+        return min(ShortConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Maximum
 
@@ -3165,7 +3618,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : IntBinding() {
+            op1 is ObservableIntValue || op2 is ObservableIntValue -> object : IntBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -3177,6 +3630,26 @@ object Bindings {
 
                 override fun computeValue(): Int {
                     return kotlin.math.max(op1.intValue, op2.intValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : ShortBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Short {
+                    return maxOf(op1.shortValue, op2.shortValue)
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -3308,6 +3781,34 @@ object Bindings {
      */
     fun max(op1: Int, op2: ObservableNumberValue): NumberBinding {
         return max(IntConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: Short): NumberBinding {
+        return max(op1, ShortConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: Short, op2: ObservableNumberValue): NumberBinding {
+        return max(ShortConstant.valueOf(op1), op2, op2)
     }
 
     // boolean

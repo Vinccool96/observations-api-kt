@@ -6,6 +6,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.junit.runners.Parameterized.Parameters
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -120,7 +121,7 @@ class BindingsNumberCastTest(private val func: Functions) {
 
         private const val EPSILON: Double = 1e-5
 
-        @Parameterized.Parameters
+        @Parameters
         @JvmStatic
         fun parameters(): Collection<Array<Any>> {
             return listOf(

@@ -71,7 +71,7 @@ abstract class ReadOnlyDoubleProperty : DoubleExpression(), ReadOnlyProperty<Num
 
         /**
          * Returns a `ReadOnlyDoubleProperty` that wraps a [ReadOnlyProperty]. If the `ReadOnlyProperty` is already a
-         * `ReadOnlyDoubleProperty`, it will be returned. Otherwise a new `ReadOnlyDoubleProperty` is created that is
+         * `ReadOnlyDoubleProperty`, it will be returned. Otherwise, a new `ReadOnlyDoubleProperty` is created that is
          * bound to the `ReadOnlyProperty`.
          *
          * Note: null values will be interpreted as `0.0`

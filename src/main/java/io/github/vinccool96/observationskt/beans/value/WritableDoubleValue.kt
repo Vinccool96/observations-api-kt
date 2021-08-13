@@ -9,8 +9,7 @@ package io.github.vinccool96.observationskt.beans.value
 interface WritableDoubleValue : WritableNumberValue {
 
     /**
-     * Get the wrapped value. Unlike [value], this method returns not-nullable `Double`. Needs to be identical to
-     * [value].
+     * Get the wrapped value. Unlike [value], this method returns primitive `Double`. Needs to be identical to [value].
      *
      * @return The current value
      */

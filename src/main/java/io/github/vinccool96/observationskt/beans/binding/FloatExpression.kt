@@ -27,74 +27,96 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
     override val doubleValue: Double
         get() = this.get().toDouble()
 
+    override val shortValue: Short
+        get() = this.intValue.toShort()
+
+    override val byteValue: Byte
+        get() = this.intValue.toByte()
+
     override val value: Number?
         get() = this.get()
 
-    override fun unaryMinus(): FloatBinding {
+    override operator fun unaryMinus(): FloatBinding {
         return Bindings.negate(this) as FloatBinding
     }
 
-    override fun plus(other: Double): DoubleBinding {
+    override operator fun plus(other: Double): DoubleBinding {
         return Bindings.add(this, other)
     }
 
-    override fun plus(other: Float): FloatBinding {
+    override operator fun plus(other: Float): FloatBinding {
         return Bindings.add(this, other) as FloatBinding
     }
 
-    override fun plus(other: Long): FloatBinding {
+    override operator fun plus(other: Long): FloatBinding {
         return Bindings.add(this, other) as FloatBinding
     }
 
-    override fun plus(other: Int): FloatBinding {
+    override operator fun plus(other: Int): FloatBinding {
         return Bindings.add(this, other) as FloatBinding
     }
 
-    override fun minus(other: Double): DoubleBinding {
+    override operator fun plus(other: Short): FloatBinding {
+        return Bindings.add(this, other) as FloatBinding
+    }
+
+    override operator fun minus(other: Double): DoubleBinding {
         return Bindings.subtract(this, other)
     }
 
-    override fun minus(other: Float): FloatBinding {
+    override operator fun minus(other: Float): FloatBinding {
         return Bindings.subtract(this, other) as FloatBinding
     }
 
-    override fun minus(other: Long): FloatBinding {
+    override operator fun minus(other: Long): FloatBinding {
         return Bindings.subtract(this, other) as FloatBinding
     }
 
-    override fun minus(other: Int): FloatBinding {
+    override operator fun minus(other: Int): FloatBinding {
         return Bindings.subtract(this, other) as FloatBinding
     }
 
-    override fun times(other: Double): DoubleBinding {
+    override operator fun minus(other: Short): FloatBinding {
+        return Bindings.subtract(this, other) as FloatBinding
+    }
+
+    override operator fun times(other: Double): DoubleBinding {
         return Bindings.multiply(this, other)
     }
 
-    override fun times(other: Float): FloatBinding {
+    override operator fun times(other: Float): FloatBinding {
         return Bindings.multiply(this, other) as FloatBinding
     }
 
-    override fun times(other: Long): FloatBinding {
+    override operator fun times(other: Long): FloatBinding {
         return Bindings.multiply(this, other) as FloatBinding
     }
 
-    override fun times(other: Int): FloatBinding {
+    override operator fun times(other: Int): FloatBinding {
         return Bindings.multiply(this, other) as FloatBinding
     }
 
-    override fun div(other: Double): DoubleBinding {
+    override operator fun times(other: Short): FloatBinding {
+        return Bindings.multiply(this, other) as FloatBinding
+    }
+
+    override operator fun div(other: Double): DoubleBinding {
         return Bindings.divide(this, other)
     }
 
-    override fun div(other: Float): FloatBinding {
+    override operator fun div(other: Float): FloatBinding {
         return Bindings.divide(this, other) as FloatBinding
     }
 
-    override fun div(other: Long): FloatBinding {
+    override operator fun div(other: Long): FloatBinding {
         return Bindings.divide(this, other) as FloatBinding
     }
 
-    override fun div(other: Int): FloatBinding {
+    override operator fun div(other: Int): FloatBinding {
+        return Bindings.divide(this, other) as FloatBinding
+    }
+
+    override operator fun div(other: Short): FloatBinding {
         return Bindings.divide(this, other) as FloatBinding
     }
 
@@ -126,7 +148,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
 
         /**
          * Returns a `FloatExpression` that wraps a [ObservableFloatValue]. If the `ObservableFloatValue` is already
-         * a `FloatExpression`, it will be returned. Otherwise a new [FloatBinding] is created that is bound to the
+         * a `FloatExpression`, it will be returned. Otherwise, a new [FloatBinding] is created that is bound to the
          * `ObservableFloatValue`.
          *
          * @param value The source `ObservableFloatValue`
@@ -157,7 +179,7 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
 
         /**
          * Returns a `FloatExpression` that wraps an [ObservableValue]. If the `ObservableValue` is already a
-         * `FloatExpression`, it will be returned. Otherwise a new [FloatBinding] is created that is bound to the
+         * `FloatExpression`, it will be returned. Otherwise, a new [FloatBinding] is created that is bound to the
          * `ObservableValue`.
          *
          * Note: this method can be used to convert an [ObjectExpression] or

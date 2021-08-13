@@ -10,10 +10,10 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 
 /**
- * Base class that provides most of the functionality needed to implement a [Binding] of an `Int` value.
+ * Base class that provides most of the functionality needed to implement a [Binding] of a `Short` value.
  *
- * `IntBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
- * [bind]. If one of the registered dependencies becomes invalid, this `IntBinding` is marked as invalid. With
+ * `ShortBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
+ * [bind]. If one of the registered dependencies becomes invalid, this `ShortBinding` is marked as invalid. With
  * [unbind] listening to dependencies can be stopped.
  *
  * To provide a concrete implementation of this class, the method [computeValue] has to be implemented to calculate the
@@ -24,11 +24,11 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  *
  * @see Binding
  * @see NumberBinding
- * @see IntExpression
+ * @see ShortExpression
  */
-abstract class IntBinding : IntExpression(), NumberBinding {
+abstract class ShortBinding : ShortExpression(), NumberBinding {
 
-    private var valueState: Int = 0
+    private var valueState: Short = 0
 
     private var validState: Boolean = false
 
@@ -109,9 +109,7 @@ abstract class IntBinding : IntExpression(), NumberBinding {
 
     @get:ReturnsUnmodifiableCollection
     override val dependencies: ObservableList<*>
-        get() {
-            return ObservableCollections.emptyObservableList<Observable>()
-        }
+        get() = ObservableCollections.emptyObservableList<Observable>()
 
     /**
      * Returns the result of [computeValue]. The method `computeValue()` is only called if the binding is invalid. The
@@ -119,7 +117,7 @@ abstract class IntBinding : IntExpression(), NumberBinding {
      *
      * @return the current value
      */
-    final override fun get(): Int {
+    final override fun get(): Short {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
@@ -148,19 +146,19 @@ abstract class IntBinding : IntExpression(), NumberBinding {
     /**
      * Calculates the current value of this binding.
      *
-     * Classes extending `IntBinding` have to provide an implementation of `computeValue`.
+     * Classes extending `ShortBinding` have to provide an implementation of `computeValue`.
      *
      * @return the current value
      */
-    protected abstract fun computeValue(): Int
+    protected abstract fun computeValue(): Short
 
     /**
-     * Returns a string representation of this `IntBinding` object.
+     * Returns a string representation of this `ShortBinding` object.
      *
-     * @return a string representation of this `IntBinding` object.
+     * @return a string representation of this `ShortBinding` object.
      */
     override fun toString(): String {
-        return if (this.validState) "IntBinding [value: ${get()}]" else "IntBinding [invalid]"
+        return if (this.validState) "ShortBinding [value: ${get()}]" else "ShortBinding [invalid]"
     }
 
 }

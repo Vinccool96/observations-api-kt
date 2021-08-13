@@ -140,7 +140,7 @@ abstract class SetExpression<E> : ObservableSetValue<E> {
 
         /**
          * Returns a `SetExpression` that wraps a [ObservableSetValue]. If the `ObservableSetValue` is already a
-         * `SetExpression`, it will be returned. Otherwise a new [SetBinding] is created that is bound to the
+         * `SetExpression`, it will be returned. Otherwise, a new [SetBinding] is created that is bound to the
          * `ObservableSetValue`.
          *
          * @param value The source `ObservableSetValue`

@@ -112,8 +112,8 @@ abstract class BooleanExpression : ObservableBooleanValue {
 
         /**
          * Returns a `BooleanExpression` that wraps a [ObservableBooleanValue]. If the `ObservableBooleanValue` is
-         * already a `BooleanExpression`, it will be returned. Otherwise a new [BooleanBinding] is created that is bound
-         * to the `ObservableBooleanValue`.
+         * already a `BooleanExpression`, it will be returned. Otherwise, a new [BooleanBinding] is created that is
+         * bound to the `ObservableBooleanValue`.
          *
          * @param value The source `ObservableBooleanValue`
          *
@@ -141,7 +141,7 @@ abstract class BooleanExpression : ObservableBooleanValue {
 
         /**
          * Returns a `BooleanExpression` that wraps an [ObservableValue]. If the `ObservableValue` is already a
-         * `BooleanExpression`, it will be returned. Otherwise a new [BooleanBinding] is created that is bound to the
+         * `BooleanExpression`, it will be returned. Otherwise, a new [BooleanBinding] is created that is bound to the
          * `ObservableValue`.
          *
          * Note: null values will be interpreted as "false".

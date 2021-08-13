@@ -28,90 +28,112 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
     override val doubleValue: Double
         get() = this.get()
 
+    override val shortValue: Short
+        get() = this.longValue.toShort()
+
+    override val byteValue: Byte
+        get() = this.longValue.toByte()
+
     override val value: Number?
         get() = this.get()
 
-    override fun unaryMinus(): DoubleBinding {
+    override operator fun unaryMinus(): DoubleBinding {
         return Bindings.negate(this) as DoubleBinding
     }
 
-    override fun plus(other: ObservableNumberValue): DoubleBinding {
+    override operator fun plus(other: ObservableNumberValue): DoubleBinding {
         return Bindings.add(this, other) as DoubleBinding
     }
 
-    override fun plus(other: Double): DoubleBinding {
+    override operator fun plus(other: Double): DoubleBinding {
         return Bindings.add(this, other)
     }
 
-    override fun plus(other: Float): DoubleBinding {
+    override operator fun plus(other: Float): DoubleBinding {
         return Bindings.add(this, other) as DoubleBinding
     }
 
-    override fun plus(other: Long): DoubleBinding {
+    override operator fun plus(other: Long): DoubleBinding {
         return Bindings.add(this, other) as DoubleBinding
     }
 
-    override fun plus(other: Int): DoubleBinding {
+    override operator fun plus(other: Int): DoubleBinding {
         return Bindings.add(this, other) as DoubleBinding
     }
 
-    override fun minus(other: ObservableNumberValue): DoubleBinding {
+    override operator fun plus(other: Short): DoubleBinding {
+        return Bindings.add(this, other) as DoubleBinding
+    }
+
+    override operator fun minus(other: ObservableNumberValue): DoubleBinding {
         return Bindings.subtract(this, other) as DoubleBinding
     }
 
-    override fun minus(other: Double): DoubleBinding {
+    override operator fun minus(other: Double): DoubleBinding {
         return Bindings.subtract(this, other)
     }
 
-    override fun minus(other: Float): DoubleBinding {
+    override operator fun minus(other: Float): DoubleBinding {
         return Bindings.subtract(this, other) as DoubleBinding
     }
 
-    override fun minus(other: Long): DoubleBinding {
+    override operator fun minus(other: Long): DoubleBinding {
         return Bindings.subtract(this, other) as DoubleBinding
     }
 
-    override fun minus(other: Int): DoubleBinding {
+    override operator fun minus(other: Int): DoubleBinding {
         return Bindings.subtract(this, other) as DoubleBinding
     }
 
-    override fun times(other: ObservableNumberValue): DoubleBinding {
+    override operator fun minus(other: Short): DoubleBinding {
+        return Bindings.subtract(this, other) as DoubleBinding
+    }
+
+    override operator fun times(other: ObservableNumberValue): DoubleBinding {
         return Bindings.multiply(this, other) as DoubleBinding
     }
 
-    override fun times(other: Double): DoubleBinding {
+    override operator fun times(other: Double): DoubleBinding {
         return Bindings.multiply(this, other)
     }
 
-    override fun times(other: Float): DoubleBinding {
+    override operator fun times(other: Float): DoubleBinding {
         return Bindings.multiply(this, other) as DoubleBinding
     }
 
-    override fun times(other: Long): DoubleBinding {
+    override operator fun times(other: Long): DoubleBinding {
         return Bindings.multiply(this, other) as DoubleBinding
     }
 
-    override fun times(other: Int): DoubleBinding {
+    override operator fun times(other: Int): DoubleBinding {
         return Bindings.multiply(this, other) as DoubleBinding
     }
 
-    override fun div(other: ObservableNumberValue): DoubleBinding {
+    override operator fun times(other: Short): DoubleBinding {
+        return Bindings.multiply(this, other) as DoubleBinding
+    }
+
+    override operator fun div(other: ObservableNumberValue): DoubleBinding {
         return Bindings.divide(this, other) as DoubleBinding
     }
 
-    override fun div(other: Double): DoubleBinding {
+    override operator fun div(other: Double): DoubleBinding {
         return Bindings.divide(this, other)
     }
 
-    override fun div(other: Float): DoubleBinding {
+    override operator fun div(other: Float): DoubleBinding {
         return Bindings.divide(this, other) as DoubleBinding
     }
 
-    override fun div(other: Long): DoubleBinding {
+    override operator fun div(other: Long): DoubleBinding {
         return Bindings.divide(this, other) as DoubleBinding
     }
 
-    override fun div(other: Int): DoubleBinding {
+    override operator fun div(other: Int): DoubleBinding {
+        return Bindings.divide(this, other) as DoubleBinding
+    }
+
+    override operator fun div(other: Short): DoubleBinding {
         return Bindings.divide(this, other) as DoubleBinding
     }
 
@@ -143,7 +165,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
 
         /**
          * Returns a `DoubleExpression` that wraps a [ObservableDoubleValue]. If the `ObservableDoubleValue` is already
-         * a `DoubleExpression`, it will be returned. Otherwise a new [DoubleBinding] is created that is bound to the
+         * a `DoubleExpression`, it will be returned. Otherwise, a new [DoubleBinding] is created that is bound to the
          * `ObservableDoubleValue`.
          *
          * @param value The source `ObservableDoubleValue`
@@ -174,7 +196,7 @@ abstract class DoubleExpression : NumberExpressionBase(), ObservableDoubleValue 
 
         /**
          * Returns a `DoubleExpression` that wraps an [ObservableValue]. If the `ObservableValue` is already a
-         * `DoubleExpression`, it will be returned. Otherwise a new [DoubleBinding] is created that is bound to the
+         * `DoubleExpression`, it will be returned. Otherwise, a new [DoubleBinding] is created that is bound to the
          * `ObservableValue`.
          *
          * Note: this method can be used to convert an [ObjectExpression] or

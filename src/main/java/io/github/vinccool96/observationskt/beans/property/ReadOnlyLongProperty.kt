@@ -71,7 +71,7 @@ abstract class ReadOnlyLongProperty : LongExpression(), ReadOnlyProperty<Number?
 
         /**
          * Returns a `ReadOnlyLongProperty` that wraps a [ReadOnlyProperty]. If the `ReadOnlyProperty` is already a
-         * `ReadOnlyLongProperty`, it will be returned. Otherwise a new `ReadOnlyLongProperty` is created that is
+         * `ReadOnlyLongProperty`, it will be returned. Otherwise, a new `ReadOnlyLongProperty` is created that is
          * bound to the `ReadOnlyProperty`.
          *
          * Note: null values will be interpreted as `0L`

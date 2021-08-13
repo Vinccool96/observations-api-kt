@@ -71,7 +71,7 @@ abstract class ReadOnlyBooleanProperty : BooleanExpression(), ReadOnlyProperty<B
 
         /**
          * Returns a `ReadOnlyBooleanProperty` that wraps a [ReadOnlyProperty]. If the `ReadOnlyProperty` is already a
-         * `ReadOnlyBooleanProperty`, it will be returned. Otherwise a new `ReadOnlyBooleanProperty` is created that is
+         * `ReadOnlyBooleanProperty`, it will be returned. Otherwise, a new `ReadOnlyBooleanProperty` is created that is
          * bound to the `ReadOnlyProperty`.
          *
          * Note: null values will be interpreted as "false"

@@ -148,6 +148,33 @@ class BindingToStringTest {
     }
 
     @Test
+    fun testShortToString() {
+        val value1: Short = -9876
+        val value2: Short = 12345
+
+        val v: ShortProperty = SimpleShortProperty(value1)
+        val binding: ShortBinding = object : ShortBinding() {
+
+            init {
+                super.bind(v)
+            }
+
+            override fun computeValue(): Short {
+                return v.get()
+            }
+
+        }
+
+        assertEquals("ShortBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ShortBinding [value: $value1]", binding.toString())
+        v.set(value2)
+        assertEquals("ShortBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ShortBinding [value: $value2]", binding.toString())
+    }
+
+    @Test
     fun testObjectToString() {
         val value1 = Any()
         val value2 = Any()

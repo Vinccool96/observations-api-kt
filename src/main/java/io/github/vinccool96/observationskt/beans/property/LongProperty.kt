@@ -11,7 +11,7 @@ import java.security.PrivilegedAction
 /**
  * This class defines a [Property] wrapping a `Long` value.
  *
- * The value of a `LongProperty` can be get and set with [get], [set], and [value].
+ * The value of a `LongProperty` can be got and set with [get], [set], and [value].
  *
  * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
  * and removed with [bindBidirectional] and [unbindBidirectional].
@@ -110,7 +110,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, Writabl
 
         /**
          * Returns a `LongProperty` that wraps a [Property]. If the `Property` is already a `LongProperty`, it will be
-         * returned. Otherwise a new `LongProperty` is created that is bound to the `Property`.
+         * returned. Otherwise, a new `LongProperty` is created that is bound to the `Property`.
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Long> and a LongProperty.
          * ```

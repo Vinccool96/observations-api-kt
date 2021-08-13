@@ -14,6 +14,10 @@ package io.github.vinccool96.observationskt.beans.value
  * @see ObservableIntValue
  *
  * @see ObservableLongValue
+ *
+ * @see ObservableShortValue
+ *
+ * @see ObservableByteValue
  */
 interface ObservableNumberValue : ObservableValue<Number?> {
 
@@ -48,5 +52,21 @@ interface ObservableNumberValue : ObservableValue<Number?> {
      * @return The value of this `ObservableNumberValue` as a `long`
      */
     val longValue: Long
+
+    /**
+     * Returns the value of this `ObservableNumberValue` as a `long` . If the value is not a `long`, a standard cast is
+     * performed.
+     *
+     * @return The value of this `ObservableNumberValue` as a `long`
+     */
+    val shortValue: Short
+
+    /**
+     * Returns the value of this `ObservableNumberValue` as a `long` . If the value is not a `long`, a standard cast is
+     * performed.
+     *
+     * @return The value of this `ObservableNumberValue` as a `long`
+     */
+    val byteValue: Byte
 
 }

@@ -27,7 +27,13 @@ class ObservableDoubleValueStub(initialValue: Double) : ObservableValueBase<Numb
     override val doubleValue: Double
         get() = this.get()
 
-    override val value: Number?
+    override val shortValue: Short
+        get() = this.longValue.toShort()
+
+    override val byteValue: Byte
+        get() = this.longValue.toByte()
+
+    override val value: Number
         get() = this.get()
 
 }

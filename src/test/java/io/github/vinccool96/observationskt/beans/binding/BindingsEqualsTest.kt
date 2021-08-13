@@ -11,6 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.junit.runners.Parameterized.Parameters
 import kotlin.math.abs
 import kotlin.test.assertEquals
 
@@ -108,7 +109,7 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
         this.func.check(this.v[1], this.v[1], this.binding)
         this.observer.check(this.binding, 1)
 
-        // change to highest value
+        // change to the highest value
         this.func.setOp1(this.v[2])
         this.func.check(this.v[2], this.v[1], this.binding)
         this.observer.check(this.binding, 1)
@@ -129,7 +130,7 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
         this.func.check(this.v[1], this.v[1], this.binding)
         this.observer.check(this.binding, 1)
 
-        // change to highest value
+        // change to the highest value
         this.func.setOp1(this.v[2])
         this.func.check(this.v[1], this.v[2], this.binding)
         this.observer.check(this.binding, 1)
@@ -143,7 +144,7 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
 
         fun makeSafe(value: String?): String = value ?: ""
 
-        @Parameterized.Parameters
+        @Parameters
         @JvmStatic
         fun parameters(): Collection<Array<Any>> {
             val float1: FloatProperty = SimpleFloatProperty()
@@ -161,6 +162,10 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
             val long1: LongProperty = SimpleLongProperty()
             val long2: LongProperty = SimpleLongProperty()
             val longData = arrayOf(-1L, 0L, 1L)
+
+            val short1: ShortProperty = SimpleShortProperty()
+            val short2: ShortProperty = SimpleShortProperty()
+            val shortData = arrayOf((-1).toShort(), (0).toShort(), (1).toShort())
 
             val string1: StringProperty = SimpleStringProperty()
             val string2: StringProperty = SimpleStringProperty()
@@ -1021,6 +1026,247 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
 
                     },
                     longData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.equal(op1 as ObservableNumberValue, op2)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.equal(op1, op2 as ObservableNumberValue)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(op1 == op2, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(abs(op1 - op2) <= 1, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.notEqual(op1 as ObservableNumberValue, op2)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.notEqual(op1, op2 as ObservableNumberValue)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(op1 != op2, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(abs(op1 - op2) > 1, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(op1 > op2, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(op1 < op2, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings
+                                    .greaterThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(op1 >= op2, exp.get())
+                        }
+
+                    },
+                    shortData
+            ), arrayOf(
+                    short1, short2,
+                    object : Functions<Short> {
+
+                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                        }
+
+                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                        }
+
+                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                            return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                        }
+
+                        override fun setOp1(value: Short) {
+                            short1.set(value)
+                        }
+
+                        override fun setOp2(value: Short) {
+                            short2.set(value)
+                        }
+
+                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                            assertEquals(op1 <= op2, exp.get())
+                        }
+
+                    },
+                    shortData
             ), arrayOf(
                     string1, string2,
                     object : Functions<String?> {
