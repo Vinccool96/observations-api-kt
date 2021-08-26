@@ -5612,6 +5612,107 @@ object Bindings {
     }
 
     /**
+     * Creates a new [ShortBinding] that contains the element of an [ObservableList] at the specified position. The
+     * `ShortBinding` will hold `0`, if the `index` points behind the `ObservableList`.
+     *
+     * @param op the `ObservableList`
+     * @param index the position in the `List`
+     *
+     * @return the new `ShortBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun shortValueAt(op: ObservableList<out Number?>, index: Int): ShortBinding {
+        require(index >= 0) { "Index cannot be negative" }
+
+        return object : ShortBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Short {
+                try {
+                    val value = op[index]
+                    if (value == null) {
+                        Logging.getLogger().fine("List element is null, returning default value instead.",
+                                NullPointerException())
+                    } else {
+                        return value.toShort()
+                    }
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the element of an [ObservableList] at the specified position. The
+     * `ShortBinding` will hold `0`, if the `index` points behind the `ObservableList`.
+     *
+     * @param op the `ObservableList`
+     * @param index the position in the `List`
+     *
+     * @return the new `ShortBinding`
+     */
+    fun shortValueAt(op: ObservableList<out Number?>, index: ObservableIntValue): ShortBinding {
+        return shortValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the element of an [ObservableList] at the specified position. The
+     * `ShortBinding` will hold `0`, if the `index` points behind the `ObservableList`.
+     *
+     * @param op the `ObservableList`
+     * @param index the position in the `List`
+     *
+     * @return the new `ShortBinding`
+     */
+    fun shortValueAt(op: ObservableList<out Number?>, index: ObservableNumberValue): ShortBinding {
+        return object : ShortBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Short {
+                try {
+                    val value = op[index.intValue]
+                    if (value == null) {
+                        Logging.getLogger().fine("List element is null, returning default value instead.",
+                                NullPointerException())
+                    } else {
+                        return value.toShort()
+                    }
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
      * Creates a new [StringBinding] that contains the element of an [ObservableList] at the specified position. The
      * `StringBinding` will hold `null`, if the `index` points behind the `ObservableList`.
      *
@@ -7345,6 +7446,100 @@ object Bindings {
                     // ignore
                 }
                 return 0L
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+
+        }
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `ShortBinding` will hold `0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `ShortBinding`
+     */
+    fun <K> shortValueAt(op: ObservableMap<K, out Number?>, key: K): ShortBinding {
+        return object : ShortBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Short {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value.toShort()
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the mapping of a specific key in an [ObservableMap]. The
+     * `ShortBinding` will hold `0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `ShortBinding`
+     */
+    fun <K> shortValueAt(op: ObservableMap<K, out Number?>, key: ObservableValue<K>): ShortBinding {
+        return object : ShortBinding() {
+
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Short {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value.toShort()
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0
             }
 
             @get:ReturnsUnmodifiableCollection
