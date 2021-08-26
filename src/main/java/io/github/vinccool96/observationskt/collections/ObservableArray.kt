@@ -5,7 +5,7 @@ import io.github.vinccool96.observationskt.beans.Observable
 /**
  * `ObservableArray` is an array that allows listeners to track changes when they occur. In order to track changes, the
  * internal array is encapsulated and there is no direct access available from the outside. Bulk operations are
- * supported but they always do a copy of the data range. You can find them in subclasses as they deal with primitive
+ * supported, but they always do a copy of the data range. You can find them in subclasses as they deal with primitive
  * arrays directly.
  *
  * Implementations have both `capacity`, which is internal array length, and `size`. If size needs to be increased
@@ -43,7 +43,7 @@ interface ObservableArray<T : ObservableArray<T>> : Observable {
 
     /**
      * Sets new length of data in this array. This method grows capacity if necessary but never shrinks it. Resulting
-     * array will contain existing data for indexes that are less than the current size and zeroes for indexes that are
+     * array will contain existing data for indexes that are less than the current size and `false` for indexes that are
      * greater than the current size.
      *
      * @param size new length of data in this array

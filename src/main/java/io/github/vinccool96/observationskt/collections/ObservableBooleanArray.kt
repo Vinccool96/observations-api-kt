@@ -1,13 +1,13 @@
 package io.github.vinccool96.observationskt.collections
 
 /**
- * `ObservableIntArray` is a `Int` array that allows listeners to track changes when they occur. In order to track
+ * `ObservableBooleanArray` is a `Boolean` array that allows listeners to track changes when they occur. In order to track
  * changes, the internal array is encapsulated and there is no direct access available from the outside. Bulk operations
  * are supported, but they always do a copy of the data range.
  *
  * @see ArrayChangeListener
  */
-interface ObservableIntArray : ObservableArray<ObservableIntArray> {
+interface ObservableBooleanArray : ObservableArray<ObservableBooleanArray> {
 
     /**
      * Copies specified portion of array into `dest` array. Throws the same exceptions as [Array.copyInto] method.
@@ -17,7 +17,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in the observable array, 0 by default
      * @param endIndex the end (exclusive) of the subrange to copy, size of this array by default.
      */
-    fun copyInto(destination: IntArray, destinationOffset: Int = 0, startIndex: Int = 0, endIndex: Int = this.size)
+    fun copyInto(destination: BooleanArray, destinationOffset: Int = 0, startIndex: Int = 0, endIndex: Int = this.size)
 
     /**
      * Copies specified portion of array into `dest` array. Throws the same exceptions as [Array.copyInto] method.
@@ -27,7 +27,8 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in the observable array, 0 by default
      * @param endIndex the end (exclusive) of the subrange to copy, size of this array by default.
      */
-    fun copyInto(destination: Array<Int>, destinationOffset: Int = 0, startIndex: Int = 0, endIndex: Int = this.size)
+    fun copyInto(destination: Array<Boolean>, destinationOffset: Int = 0, startIndex: Int = 0,
+            endIndex: Int = this.size)
 
     /**
      * Copies specified portion of array into `dest` observable array. Throws the same exceptions as [Array.copyInto]
@@ -38,7 +39,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in the observable array, 0 by default
      * @param endIndex the end (exclusive) of the subrange to copy, size of this array by default.
      */
-    fun copyInto(destination: ObservableIntArray, destinationOffset: Int = 0, startIndex: Int = 0,
+    fun copyInto(destination: ObservableBooleanArray, destinationOffset: Int = 0, startIndex: Int = 0,
             endIndex: Int = this.size)
 
     /**
@@ -51,7 +52,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @throws ArrayIndexOutOfBoundsException if `index` is outside array bounds
      */
-    operator fun get(index: Int): Int
+    operator fun get(index: Int): Boolean
 
     /**
      * Appends given `elements` to the end of this array. Capacity is increased if necessary to match the new size of
@@ -59,25 +60,25 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @param elements elements to append
      */
-    fun addAll(vararg elements: Int)
+    fun addAll(vararg elements: Boolean)
 
     /**
      * Appends content of a given array to the end of this array. Capacity is increased if necessary to match the new
      * size of the data.
      *
-     * @param src observable array with elements to append
+     * @param src array with elements to append
      */
-    fun addAll(src: Array<Int>) {
-        addAll(*src.toIntArray())
+    fun addAll(src: Array<Boolean>) {
+        addAll(*src.toBooleanArray())
     }
 
     /**
      * Appends content of a given observable array to the end of this array. Capacity is increased if necessary to match
      * the new size of the data.
      *
-     * @param src array with elements to append
+     * @param src observable array with elements to append
      */
-    fun addAll(src: ObservableIntArray)
+    fun addAll(src: ObservableBooleanArray)
 
     /**
      * Appends a portion of given array to the end of this array. Capacity is increased if necessary to match the new
@@ -87,7 +88,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source array
      * @param endIndex the end (exclusive) of the subrange to add
      */
-    fun addAll(src: IntArray, startIndex: Int, endIndex: Int)
+    fun addAll(src: BooleanArray, startIndex: Int, endIndex: Int)
 
     /**
      * Appends a portion of given array to the end of this array. Capacity is increased if necessary to match the new
@@ -97,8 +98,8 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source array
      * @param endIndex the end (exclusive) of the subrange to add
      */
-    fun addAll(src: Array<Int>, startIndex: Int, endIndex: Int) {
-        addAll(src.toIntArray(), startIndex, endIndex)
+    fun addAll(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
+        addAll(src.toBooleanArray(), startIndex, endIndex)
     }
 
     /**
@@ -109,13 +110,13 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source observable array
      * @param endIndex the end (exclusive) of the subrange to add
      */
-    fun addAll(src: ObservableIntArray, startIndex: Int, endIndex: Int)
+    fun addAll(src: ObservableBooleanArray, startIndex: Int, endIndex: Int)
 
     /**
      * Utility function that uses [addAll]
      */
-    operator fun plusAssign(ints: IntArray) {
-        addAll(*ints)
+    operator fun plusAssign(booleans: BooleanArray) {
+        addAll(*booleans)
     }
 
     /**
@@ -123,14 +124,14 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @param src array with elements to append
      */
-    operator fun plusAssign(src: Array<Int>) {
-        addAll(*src.toIntArray())
+    operator fun plusAssign(src: Array<Boolean>) {
+        addAll(*src.toBooleanArray())
     }
 
     /**
      * Utility function that uses [addAll]
      */
-    operator fun plusAssign(src: ObservableIntArray) {
+    operator fun plusAssign(src: ObservableBooleanArray) {
         addAll(src)
     }
 
@@ -140,7 +141,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @param elements elements to put into array content
      */
-    fun setAll(vararg elements: Int)
+    fun setAll(vararg elements: Boolean)
 
     /**
      * Replaces this observable array content with a copy of given array. Capacity is increased if necessary to match
@@ -148,8 +149,8 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @param src source observable array to copy.
      */
-    fun setAll(src: Array<Int>) {
-        setAll(*src.toIntArray())
+    fun setAll(src: Array<Boolean>) {
+        setAll(*src.toBooleanArray())
     }
 
     /**
@@ -158,7 +159,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @param src source observable array to copy.
      */
-    fun setAll(src: ObservableIntArray)
+    fun setAll(src: ObservableBooleanArray)
 
     /**
      * Replaces this observable array content with a copy of portion of a given array. Capacity is increased if
@@ -168,7 +169,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source array
      * @param endIndex the end (exclusive) of the subrange to copy
      */
-    fun setAll(src: IntArray, startIndex: Int, endIndex: Int)
+    fun setAll(src: BooleanArray, startIndex: Int, endIndex: Int)
 
     /**
      * Replaces this observable array content with a copy of portion of a given array. Capacity is increased if
@@ -178,8 +179,8 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source array
      * @param endIndex the end (exclusive) of the subrange to copy
      */
-    fun setAll(src: Array<Int>, startIndex: Int, endIndex: Int) {
-        setAll(src.toIntArray(), startIndex, endIndex)
+    fun setAll(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
+        setAll(src.toBooleanArray(), startIndex, endIndex)
     }
 
     /**
@@ -190,7 +191,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source observable array
      * @param endIndex the end (exclusive) of the subrange to copy
      */
-    fun setAll(src: ObservableIntArray, startIndex: Int, endIndex: Int)
+    fun setAll(src: ObservableBooleanArray, startIndex: Int, endIndex: Int)
 
     /**
      * Copies a portion of specified array into this observable array. Throws the same exceptions as [Array.copyInto]
@@ -201,7 +202,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source array
      * @param endIndex the end (exclusive) of the subrange to copy
      */
-    fun set(src: IntArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
+    fun set(src: BooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
     /**
      * Copies a portion of specified array into this observable array. Throws the same exceptions as [Array.copyInto]
@@ -212,8 +213,8 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source array
      * @param endIndex the end (exclusive) of the subrange to copy
      */
-    fun set(src: Array<Int>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        set(src.toIntArray(), destinationOffset, startIndex, endIndex)
+    fun set(src: Array<Boolean>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        set(src.toBooleanArray(), destinationOffset, startIndex, endIndex)
     }
 
     /**
@@ -225,7 +226,7 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in source observable array
      * @param endIndex the end (exclusive) of the subrange to copy
      */
-    fun set(src: ObservableIntArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
+    fun set(src: ObservableBooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
     /**
      * Sets a single value in the array. Avoid using this method if many values are updated, use [set] update method
@@ -236,14 +237,14 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      *
      * @throws ArrayIndexOutOfBoundsException if `index` is outside array bounds
      */
-    operator fun set(index: Int, value: Int)
+    operator fun set(index: Int, value: Boolean)
 
     /**
      * Returns an array containing copy of the observable array.
      *
-     * @return an int array containing the copy of the observable array
+     * @return a boolean array containing the copy of the observable array
      */
-    fun toIntArray(): IntArray
+    fun toBooleanArray(): BooleanArray
 
     /**
      * Returns an array containing copy of specified portion of the observable array.
@@ -251,8 +252,8 @@ interface ObservableIntArray : ObservableArray<ObservableIntArray> {
      * @param startIndex starting position in this array
      * @param endIndex the end (exclusive) of the subrange to copy
      *
-     * @return an int array containing the copy of specified portion the observable array
+     * @return a boolean array containing the copy of specified portion the observable array
      */
-    fun toIntArray(startIndex: Int, endIndex: Int): IntArray
+    fun toBooleanArray(startIndex: Int, endIndex: Int): BooleanArray
 
 }

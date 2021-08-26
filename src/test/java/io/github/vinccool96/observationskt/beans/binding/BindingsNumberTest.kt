@@ -1,9 +1,6 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.property.SimpleDoubleProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleFloatProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleIntProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleLongProperty
+import io.github.vinccool96.observationskt.beans.property.*
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -365,6 +362,13 @@ class BindingsNumberTest(private val op: NumberExpression) {
     }
 
     @Test
+    fun testMin_Short() {
+        this.binding = Bindings.min(this.op, SHORT)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
+        assertEquals(min(this.op.value, SHORT), this.binding.value)
+    }
+
+    @Test
     fun testMax_Double() {
         this.binding = Bindings.max(this.op, DOUBLE)
         DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
@@ -390,6 +394,13 @@ class BindingsNumberTest(private val op: NumberExpression) {
         this.binding = Bindings.max(this.op, LONG)
         DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
         assertEquals(max(this.op.value, LONG), this.binding.value)
+    }
+
+    @Test
+    fun testMax_Short() {
+        this.binding = Bindings.max(this.op, SHORT)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
+        assertEquals(max(this.op.value, SHORT), this.binding.value)
     }
 
     private fun negate(value: Number?): Number? {
@@ -509,7 +520,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
             value1 is Double || value2 is Double -> kotlin.math.min(value1.toDouble(), value2.toDouble())
             value1 is Float || value2 is Float -> kotlin.math.min(value1.toFloat(), value2.toFloat())
             value1 is Long || value2 is Long -> kotlin.math.min(value1.toLong(), value2.toLong())
-            else -> kotlin.math.min(value1.toInt(), value2.toInt())
+            value1 is Int || value2 is Int -> kotlin.math.min(value1.toInt(), value2.toInt())
+            else -> minOf(value1.toShort(), value2.toShort())
         }
     }
 
@@ -519,7 +531,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
             value1 is Double || value2 is Double -> kotlin.math.max(value1.toDouble(), value2.toDouble())
             value1 is Float || value2 is Float -> kotlin.math.max(value1.toFloat(), value2.toFloat())
             value1 is Long || value2 is Long -> kotlin.math.max(value1.toLong(), value2.toLong())
-            else -> kotlin.math.max(value1.toInt(), value2.toInt())
+            value1 is Int || value2 is Int -> kotlin.math.max(value1.toInt(), value2.toInt())
+            else -> maxOf(value1.toShort(), value2.toShort())
         }
     }
 
@@ -533,6 +546,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
 
         private const val LONG: Long = 42L
 
+        private const val SHORT: Short = 4
+
         private const val EPSILON: Double = 1e-12
 
         @Parameters
@@ -542,7 +557,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
                     arrayOf(SimpleDoubleProperty(DOUBLE)),
                     arrayOf(SimpleFloatProperty(FLOAT)),
                     arrayOf(SimpleIntProperty(INT)),
-                    arrayOf(SimpleLongProperty(LONG))
+                    arrayOf(SimpleLongProperty(LONG)),
+                    arrayOf(SimpleShortProperty(SHORT))
             )
         }
 

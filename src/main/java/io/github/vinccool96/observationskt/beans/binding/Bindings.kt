@@ -5793,6 +5793,919 @@ object Bindings {
         }
     }
 
+    // Array
+    // =================================================================================================================
+
+    /**
+     * Creates a new [IntBinding] that contains the size of an [ObservableArray].
+     *
+     * @param op the `ObservableArray`
+     * @param T actual array instance type
+     *
+     * @return the new `IntBinding`
+     */
+    fun <T : ObservableArray<T>> size(op: ObservableArray<T>): IntBinding {
+        return object : IntBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                return op.size
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a given [ObservableArray] is empty.
+     *
+     * @param op the `ObservableArray`
+     * @param T actual array instance type
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <T : ObservableArray<T>> isEmpty(op: ObservableArray<T>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return op.size == 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a given [ObservableArray] is not empty.
+     *
+     * @param op the `ObservableArray`
+     * @param T actual array instance type
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun <T : ObservableArray<T>> isNotEmpty(op: ObservableArray<T>): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                return op.size != 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ObjectBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ObjectBinding` will contain `null`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     * @param T the type of the objects in the array
+     *
+     * @return the new `ObjectBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun <T> valueAt(op: ObservableObjectArray<T>, index: Int): ObjectBinding<T?> {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : ObjectBinding<T?>() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): T? {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [ObjectBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ObjectBinding` will contain `null`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `Array`
+     * @param T the type of the objects in the array
+     *
+     * @return the new `ObjectBinding`
+     */
+    fun <T> valueAt(op: ObservableObjectArray<T>, index: ObservableIntValue): ObjectBinding<T?> {
+        return valueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [ObjectBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ObjectBinding` will contain `null`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `Array`, converted to int
+     * @param T the type of the objects in the array
+     *
+     * @return the new `ObjectBinding`
+     */
+    fun <T> valueAt(op: ObservableObjectArray<T>, index: ObservableNumberValue): ObjectBinding<T?> {
+        return object : ObjectBinding<T?>() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): T? {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `BooleanBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `BooleanBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun booleanValueAt(op: ObservableBooleanArray, index: Int): BooleanBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Boolean {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return false
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `BooleanBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun booleanValueAt(op: ObservableBooleanArray, index: ObservableIntValue): BooleanBinding {
+        return booleanValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `BooleanBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun booleanValueAt(op: ObservableBooleanArray, index: ObservableNumberValue): BooleanBinding {
+        return object : BooleanBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Boolean {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return false
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `DoubleBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun doubleValueAt(op: ObservableDoubleArray, index: Int): DoubleBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : DoubleBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Double {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0.0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun doubleValueAt(op: ObservableDoubleArray, index: ObservableIntValue): DoubleBinding {
+        return doubleValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `DoubleBinding`
+     */
+    fun doubleValueAt(op: ObservableDoubleArray, index: ObservableNumberValue): DoubleBinding {
+        return object : DoubleBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Double {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0.0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [FloatBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `FloatBinding` will hold `0.0f`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `FloatBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun floatValueAt(op: ObservableFloatArray, index: Int): FloatBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : FloatBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Float {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0.0f
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [FloatBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `FloatBinding` will hold `0.0f`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `FloatBinding`
+     */
+    fun floatValueAt(op: ObservableFloatArray, index: ObservableIntValue): FloatBinding {
+        return floatValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [FloatBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `FloatBinding` will hold `0.0f`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `FloatBinding`
+     */
+    fun floatValueAt(op: ObservableFloatArray, index: ObservableNumberValue): FloatBinding {
+        return object : FloatBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Float {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0.0f
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [IntBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `IntBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `IntBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun intValueAt(op: ObservableIntArray, index: Int): IntBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : IntBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Int {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [IntBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `IntBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `IntBinding`
+     */
+    fun intValueAt(op: ObservableIntArray, index: ObservableIntValue): IntBinding {
+        return intValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [IntBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `IntBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `IntBinding`
+     */
+    fun intValueAt(op: ObservableIntArray, index: ObservableNumberValue): IntBinding {
+        return object : IntBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Int {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [LongBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `LongBinding` will hold `0L`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `LongBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun longValueAt(op: ObservableLongArray, index: Int): LongBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : LongBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Long {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0L
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [LongBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `LongBinding` will hold `0L`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `LongBinding`
+     */
+    fun longValueAt(op: ObservableLongArray, index: ObservableIntValue): LongBinding {
+        return longValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [LongBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `LongBinding` will hold `0L`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `LongBinding`
+     */
+    fun longValueAt(op: ObservableLongArray, index: ObservableNumberValue): LongBinding {
+        return object : LongBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Long {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0L
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `IntBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `ShortBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun shortValueAt(op: ObservableShortArray, index: Int): ShortBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : ShortBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Short {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ShortBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `ShortBinding`
+     */
+    fun shortValueAt(op: ObservableShortArray, index: ObservableIntValue): ShortBinding {
+        return shortValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [ShortBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ShortBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `ShortBinding`
+     */
+    fun shortValueAt(op: ObservableShortArray, index: ObservableNumberValue): ShortBinding {
+        return object : ShortBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Short {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+//    /**
+//     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
+//     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+//     *
+//     * @param op the `ObservableArray`
+//     * @param index the position in the `ObservableArray`
+//     *
+//     * @return the new `DoubleBinding`
+//     *
+//     * @throws IllegalArgumentException if `index < 0`
+//     */
+//    fun byteValueAt(op:ObservableDoubleArray,index: Int):DoubleBinding{
+//        if (index<0){
+//            throw IllegalArgumentException()
+//        }
+//
+//        return object :DoubleBinding(){
+//
+//            init {
+//                super.bind(op)
+//            }
+//
+//            override fun dispose() {
+//                super.unbind(op)
+//            }
+//
+//            override fun computeValue(): Double {
+//                try {
+//                    return op[index]
+//                }catch (ex:IndexOutOfBoundsException){
+//                    Logging.getLogger().fine("Exception while evaluating binding",ex)
+//                }
+//                return 0.0
+//            }
+//
+//            @get:ReturnsUnmodifiableCollection
+//            override val dependencies: ObservableList<*>
+//                get() = ObservableCollections.singletonObservableList(op)
+//
+//        }
+//    }
+//
+//    /**
+//     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
+//     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+//     *
+//     * @param op the `ObservableArray`
+//     * @param index the position in the `ObservableArray`
+//     *
+//     * @return the new `DoubleBinding`
+//     */
+//    fun byteValueAt(op:ObservableDoubleArray,index: ObservableIntValue):DoubleBinding{
+//        return byteValueAt(op, index as ObservableNumberValue)
+//    }
+//
+//    /**
+//     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
+//     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
+//     *
+//     * @param op the `ObservableArray`
+//     * @param index the position in the `ObservableArray`
+//     *
+//     * @return the new `DoubleBinding`
+//     */
+//    fun byteValueAt(op:ObservableDoubleArray,index: ObservableNumberValue):DoubleBinding{
+//        return object :DoubleBinding(){
+//
+//            init {
+//                super.bind(op, index)
+//            }
+//
+//            override fun dispose() {
+//                super.unbind(op, index)
+//            }
+//
+//            override fun computeValue(): Double {
+//                try {
+//                    return op[index.intValue]
+//                }catch (ex:IndexOutOfBoundsException){
+//                    Logging.getLogger().fine("Exception while evaluating binding",ex)
+//                }
+//                return 0.0
+//            }
+//
+//            @get:ReturnsUnmodifiableCollection
+//            override val dependencies: ObservableList<*>
+//                get() = ImmutableObservableList(op, index)
+//
+//        }
+//    }
+
+    /**
+     * Creates a new [StringBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `StringBinding` will hold `null`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `StringBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun stringValueAt(op: ObservableObjectArray<String?>, index: Int): StringBinding {
+        require(index >= 0) { "Index cannot be negative" }
+
+        return object : StringBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): String? {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [StringBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `StringBinding` will hold `null`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `StringBinding`
+     */
+    fun stringValueAt(op: ObservableObjectArray<String?>, index: ObservableIntValue): StringBinding {
+        return stringValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [StringBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `StringBinding` will hold `null`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `StringBinding`
+     */
+    fun stringValueAt(op: ObservableObjectArray<String?>, index: ObservableNumberValue): StringBinding {
+        return object : StringBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): String? {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return null
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
     // Map
     // =================================================================================================================
 

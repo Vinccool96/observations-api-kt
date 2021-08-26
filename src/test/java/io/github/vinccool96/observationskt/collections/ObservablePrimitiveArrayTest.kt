@@ -3225,8 +3225,15 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         val actual = this.array.toString()
         val expected = this.wrapper.primitiveArrayToString(this.wrapper.toArray())
         assertEquals(expected, actual)
-        val regex = "\\[(-)?[0-9]+(\\.[0-9]+)?(, (-)?[0-9]+(.[0-9]+)?){${this.initialSize - 1}}]"
-        assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
+        if (this.wrapper is BooleanArrayWrapper) {
+            val regex = "\\[(false|true)(, (false|true)){${this.initialSize - 1}}]"
+            assertTrue(actual.matches(regex.toRegex()),
+                    "toString() output matches to regex '$regex'. Actual = '$actual'")
+        } else {
+            val regex = "\\[(-)?[0-9]+(\\.[0-9]+)?(, (-)?[0-9]+(.[0-9]+)?){${this.initialSize - 1}}]"
+            assertTrue(actual.matches(regex.toRegex()),
+                    "toString() output matches to regex '$regex'. Actual = '$actual'")
+        }
     }
 
     @Test
@@ -3235,8 +3242,15 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         val actual = this.array.toString()
         val expected = this.wrapper.primitiveArrayToString(this.wrapper.toArray())
         assertEquals(expected, actual)
-        val regex = "\\[(-)?[0-9]+(\\.[0-9]+)?(, (-)?[0-9]+(.[0-9]+)?){${this.array.size - 1}}]"
-        assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
+        if (this.wrapper is BooleanArrayWrapper) {
+            val regex = "\\[(false|true)(, (false|true)){${this.array.size - 1}}]"
+            assertTrue(actual.matches(regex.toRegex()),
+                    "toString() output matches to regex '$regex'. Actual = '$actual'")
+        } else {
+            val regex = "\\[(-)?[0-9]+(\\.[0-9]+)?(, (-)?[0-9]+(.[0-9]+)?){${this.array.size - 1}}]"
+            assertTrue(actual.matches(regex.toRegex()),
+                    "toString() output matches to regex '$regex'. Actual = '$actual'")
+        }
     }
 
     @Test
@@ -3344,6 +3358,205 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         abstract fun assertElementsEqual(actual: Array<P>, from: Int, to: Int, expected: Array<P>, expFrom: Int)
 
         abstract fun primitiveArrayToString(array: A): String
+
+    }
+
+    private class BooleanArrayWrapper : ArrayWrapper<ObservableBooleanArray, BooleanArray, Boolean>() {
+
+        private var counter = 0
+
+        private var nextValueState: Boolean = false
+
+        override fun createEmptyArray(): ObservableBooleanArray {
+            return ObservableCollections.observableBooleanArray().also { this.array = it }
+        }
+
+        override fun createNotEmptyArray(src: BooleanArray): ObservableBooleanArray {
+            return when (this.counter % 3) {
+                0 -> ObservableCollections.observableBooleanArray(*src)
+                1 -> ObservableCollections.observableBooleanArray(src.toTypedArray())
+                else -> ObservableCollections.observableBooleanArray(ObservableCollections.observableBooleanArray(*src))
+            }.also { this.array = it }
+        }
+
+        override fun newInstance(): ArrayWrapper<ObservableBooleanArray, BooleanArray, Boolean> {
+            return BooleanArrayWrapper()
+        }
+
+        override val nextValue: Boolean
+            get() {
+                this.counter++
+                this.nextValueState = !this.nextValueState
+                return this.nextValueState
+            }
+
+        override operator fun set(index: Int, value: Boolean) {
+            this.array[index] = value
+        }
+
+        override fun setAllA(src: BooleanArray) {
+            this.array.setAll(*src)
+        }
+
+        override fun setAllP(src: Array<Boolean>) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllT(src: ObservableBooleanArray) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllA(src: BooleanArray, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllP(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllT(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllA(src: BooleanArray) {
+            this.array.addAll(*src)
+        }
+
+        override fun addAllP(src: Array<Boolean>) {
+            this.array.addAll(src)
+        }
+
+        override fun addAllT(src: ObservableBooleanArray) {
+            this.array.addAll(src)
+        }
+
+        override operator fun plusAssign(src: BooleanArray) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: Array<Boolean>) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: ObservableBooleanArray) {
+            this.array += src
+        }
+
+        override fun addAllA(src: BooleanArray, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllP(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllT(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun setA(src: BooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setP(src: Array<Boolean>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setT(src: ObservableBooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoA(dest: BooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoP(dest: Array<Boolean>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoT(dest: ObservableBooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override operator fun get(index: Int): Boolean {
+            return this.array[index]
+        }
+
+        override fun toArray(): BooleanArray {
+            return this.array.toBooleanArray()
+        }
+
+        override fun toArray(startIndex: Int, endIndex: Int): BooleanArray {
+            return this.array.toBooleanArray(startIndex, endIndex)
+        }
+
+        override fun createPrimitiveArray(size: Int, fillWithData: Boolean): BooleanArray {
+            return if (fillWithData) BooleanArray(size) { this.nextValue } else BooleanArray(size)
+        }
+
+        override fun createArray(size: Int, fillWithData: Boolean): Array<Boolean> {
+            return Array(size) { if (fillWithData) this.nextValue else false }
+        }
+
+        override fun clonePrimitiveArray(array: BooleanArray): BooleanArray {
+            return array.copyOf()
+        }
+
+        override fun cloneArray(array: Array<Boolean>): Array<Boolean> {
+            return array.copyOf()
+        }
+
+        override fun arraySize(array: BooleanArray): Int {
+            return array.size
+        }
+
+        override fun get(array: BooleanArray, index: Int): Boolean {
+            return array[index]
+        }
+
+        override fun assertElementsEqual(actual: BooleanArray, from: Int, to: Int, expected: BooleanArray,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected boolean = ${expected[j]}, actual boolean = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: BooleanArray, from: Int, to: Int, expected: Array<Boolean>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected boolean = ${expected[j]}, actual boolean = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: Array<Boolean>, from: Int, to: Int, expected: BooleanArray,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected boolean = ${expected[j]}, actual boolean = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun assertElementsEqual(actual: Array<Boolean>, from: Int, to: Int, expected: Array<Boolean>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected boolean = ${expected[j]}, actual boolean = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun primitiveArrayToString(array: BooleanArray): String {
+            return array.contentToString()
+        }
 
     }
 
@@ -4491,6 +4704,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         @JvmStatic
         fun createParameters(): List<Array<out Any?>> {
             return listOf(
+                    arrayOf(BooleanArrayWrapper()),
                     arrayOf(DoubleArrayWrapper()),
                     arrayOf(FloatArrayWrapper()),
                     arrayOf(IntArrayWrapper()),

@@ -209,6 +209,48 @@ object ObservableCollections {
     }
 
     /**
+     * Creates a new empty observable boolean array.
+     *
+     * @return a newly created ObservableBooleanArray
+     */
+    fun observableBooleanArray(): ObservableBooleanArray {
+        return ObservableBooleanArrayImpl()
+    }
+
+    /**
+     * Creates a new observable boolean array with `values` set to it.
+     *
+     * @param values the values that will be in the new observable boolean array
+     *
+     * @return a newly created ObservableBooleanArray
+     */
+    fun observableBooleanArray(vararg values: Boolean): ObservableBooleanArray {
+        return ObservableBooleanArrayImpl(*values)
+    }
+
+    /**
+     * Creates a new observable boolean array with copy of elements in given `array`.
+     *
+     * @param array observable boolean array to copy
+     *
+     * @return a newly created ObservableBooleanArray
+     */
+    fun observableBooleanArray(array: Array<Boolean>): ObservableBooleanArray {
+        return ObservableBooleanArrayImpl(array)
+    }
+
+    /**
+     * Creates a new observable boolean array with copy of elements in given `array`.
+     *
+     * @param array observable boolean array to copy
+     *
+     * @return a newly created ObservableBooleanArray
+     */
+    fun observableBooleanArray(array: ObservableBooleanArray): ObservableBooleanArray {
+        return ObservableBooleanArrayImpl(array)
+    }
+
+    /**
      * Creates a new empty observable double array.
      *
      * @return a newly created ObservableDoubleArray

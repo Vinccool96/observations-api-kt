@@ -9,6 +9,5 @@ import io.github.vinccool96.observationskt.collections.ObservableList
  *
  * @see ObservableList
  * @see WritableObjectValue
- * @see WritableListValue
  */
 interface WritableListValue<E> : WritableObjectValue<ObservableList<E>?>, ObservableList<E>
