@@ -95,6 +95,15 @@ interface NumberExpression : ObservableNumberValue {
      */
     operator fun plus(other: Short): NumberBinding
 
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun plus(other: Byte): NumberBinding
+
     // ===============================================================
     // Minus
 
@@ -154,6 +163,15 @@ interface NumberExpression : ObservableNumberValue {
      */
     operator fun minus(other: Short): NumberBinding
 
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun minus(other: Byte): NumberBinding
+
     // ===============================================================
     // Times
 
@@ -211,6 +229,15 @@ interface NumberExpression : ObservableNumberValue {
      * @return the new `NumberBinding`
      */
     operator fun times(other: Short): NumberBinding
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun times(other: Byte): NumberBinding
 
     // ===============================================================
     // DividedBy
@@ -270,13 +297,22 @@ interface NumberExpression : ObservableNumberValue {
      */
     operator fun div(other: Short): NumberBinding
 
+    /**
+     * Creates a new [NumberBinding] that calculates the division of this `NumberExpression` and a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    operator fun div(other: Byte): NumberBinding
+
     // ===============================================================
     // IsEqualTo
 
     /**
      * Creates a new [BooleanBinding] that holds `true` if this and another [ObservableNumberValue] are equal.
      *
-     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * When comparing floating-point numbers it is recommended to use the [isEqualTo] method that allows a small
      * tolerance.
      *
      * @param other the second `ObservableNumberValue`
@@ -333,7 +369,7 @@ interface NumberExpression : ObservableNumberValue {
     /**
      * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
      *
-     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * When comparing floating-point numbers it is recommended to use the [isEqualTo] method that allows a small
      * tolerance.
      *
      * @param other the constant value
@@ -360,7 +396,7 @@ interface NumberExpression : ObservableNumberValue {
     /**
      * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
      *
-     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * When comparing floating-point numbers it is recommended to use the [isEqualTo] method that allows a small
      * tolerance.
      *
      * @param other the constant value
@@ -387,7 +423,7 @@ interface NumberExpression : ObservableNumberValue {
     /**
      * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
      *
-     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * When comparing floating-point numbers it is recommended to use the [isEqualTo] method that allows a small
      * tolerance.
      *
      * @param other the constant value
@@ -410,6 +446,33 @@ interface NumberExpression : ObservableNumberValue {
      * @return the new `BooleanBinding`
      */
     fun isEqualTo(other: Short, epsilon: Double): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Byte): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is equal to a constant value (with a
+     * tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isEqualTo(other: Byte, epsilon: Double): BooleanBinding
 
     // ===============================================================
     // IsNotEqualTo
@@ -556,6 +619,34 @@ interface NumberExpression : ObservableNumberValue {
      */
     fun isNotEqualTo(other: Short, epsilon: Double): BooleanBinding
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a
+     * constant value.
+     *
+     * When comparing floating-point numbers it is recommended to use the [isNotEqualTo] method that allows a small
+     * tolerance.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Byte): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is not equal to a constant value
+     * (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered not equal if `abs(a-b) > epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers.
+     *
+     * @param other the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun isNotEqualTo(other: Byte, epsilon: Double): BooleanBinding
+
     // ===============================================================
     // IsGreaterThan
 
@@ -614,6 +705,15 @@ interface NumberExpression : ObservableNumberValue {
      */
     fun greaterThan(other: Short): BooleanBinding
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(other: Byte): BooleanBinding
+
     // ===============================================================
     // IsLesserThan
 
@@ -671,6 +771,15 @@ interface NumberExpression : ObservableNumberValue {
      * @return the new `BooleanBinding`
      */
     fun lessThan(other: Short): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is lesser than a constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(other: Byte): BooleanBinding
 
     // ===============================================================
     // IsGreaterThanOrEqualTo
@@ -735,6 +844,16 @@ interface NumberExpression : ObservableNumberValue {
      */
     fun greaterThanOrEqualTo(other: Short): BooleanBinding
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is greater than or equal to a
+     * constant value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqualTo(other: Byte): BooleanBinding
+
     // ===============================================================
     // IsLessThanOrEqualTo
 
@@ -797,6 +916,16 @@ interface NumberExpression : ObservableNumberValue {
      * @return the new `BooleanBinding`
      */
     fun lessThanOrEqualTo(other: Short): BooleanBinding
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if this `NumberExpression` is less than or equal to a constant
+     * value.
+     *
+     * @param other the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqualTo(other: Byte): BooleanBinding
 
     // ===============================================================
     // String conversions

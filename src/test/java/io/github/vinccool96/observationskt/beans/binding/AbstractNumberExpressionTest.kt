@@ -291,10 +291,10 @@ class AbstractNumberExpressionTest {
         binding = this.op1.isEqualTo(this.short1)
         assertFalse(binding.get())
 
-        binding = this.op1.isEqualTo(this.byte1.toInt(), EPSILON)
+        binding = this.op1.isEqualTo(this.byte1, EPSILON)
         assertFalse(binding.get())
 
-        binding = this.op1.isEqualTo(this.byte1.toInt())
+        binding = this.op1.isEqualTo(this.byte1)
         assertFalse(binding.get())
     }
 
@@ -339,10 +339,10 @@ class AbstractNumberExpressionTest {
         binding = this.op1.isNotEqualTo(this.short1)
         assertTrue(binding.get())
 
-        binding = this.op1.isNotEqualTo(this.byte1.toInt(), EPSILON)
+        binding = this.op1.isNotEqualTo(this.byte1, EPSILON)
         assertTrue(binding.get())
 
-        binding = this.op1.isNotEqualTo(this.byte1.toInt())
+        binding = this.op1.isNotEqualTo(this.byte1)
         assertTrue(binding.get())
     }
 
@@ -387,7 +387,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.greaterThan(this.short1)
         assertEquals(this.data1 > this.short1, binding.get())
 
-        binding = this.op1.greaterThan(this.byte1.toInt())
+        binding = this.op1.greaterThan(this.byte1)
         assertEquals(this.data1 > this.byte1, binding.get())
     }
 
@@ -432,7 +432,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.lessThan(this.short1)
         assertEquals(this.data1 < this.short1, binding.get())
 
-        binding = this.op1.lessThan(this.byte1.toInt())
+        binding = this.op1.lessThan(this.byte1)
         assertEquals(this.data1 < this.byte1, binding.get())
     }
 
@@ -477,7 +477,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.greaterThanOrEqualTo(this.short1)
         assertEquals(this.data1 >= this.short1, binding.get())
 
-        binding = this.op1.greaterThanOrEqualTo(this.byte1.toInt())
+        binding = this.op1.greaterThanOrEqualTo(this.byte1)
         assertEquals(this.data1 >= this.byte1, binding.get())
     }
 
@@ -522,7 +522,7 @@ class AbstractNumberExpressionTest {
         binding = this.op1.lessThanOrEqualTo(this.short1)
         assertEquals(this.data1 <= this.short1, binding.get())
 
-        binding = this.op1.lessThanOrEqualTo(this.byte1.toInt())
+        binding = this.op1.lessThanOrEqualTo(this.byte1)
         assertEquals(this.data1 <= this.byte1, binding.get())
     }
 

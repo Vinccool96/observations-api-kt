@@ -34,6 +34,7 @@ class BindingsNumberCastTest(private val func: Functions) {
 
     interface Functions {
 
+
         fun generateExpression(op1: ObservableNumberValue, op2: ObservableNumberValue): Binding<*>
 
         fun check(op1: Double, op2: Double, binding: Binding<*>)
@@ -127,6 +128,7 @@ class BindingsNumberCastTest(private val func: Functions) {
             return listOf(
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.add(op1, op2)
@@ -136,10 +138,12 @@ class BindingsNumberCastTest(private val func: Functions) {
                                     assertTrue(binding is NumberExpression)
                                     assertEquals(op1 + op2, (binding as NumberExpression).doubleValue, EPSILON)
                                 }
+
                             }
                     ),
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.multiply(op1, op2)
@@ -149,10 +153,12 @@ class BindingsNumberCastTest(private val func: Functions) {
                                     assertTrue(binding is NumberExpression)
                                     assertEquals(op1 * op2, (binding as NumberExpression).doubleValue, EPSILON)
                                 }
+
                             }
                     ),
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.divide(op1, op2)
@@ -168,10 +174,12 @@ class BindingsNumberCastTest(private val func: Functions) {
                                                 (binding as NumberExpression).longValue)
                                     }
                                 }
+
                             }
                     ),
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.min(op1, op2)
@@ -181,10 +189,12 @@ class BindingsNumberCastTest(private val func: Functions) {
                                     assertTrue(binding is NumberExpression)
                                     assertEquals(min(op1, op2), (binding as NumberExpression).doubleValue, EPSILON)
                                 }
+
                             }
                     ),
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.max(op1, op2)
@@ -194,10 +204,12 @@ class BindingsNumberCastTest(private val func: Functions) {
                                     assertTrue(binding is NumberExpression)
                                     assertEquals(max(op1, op2), (binding as NumberExpression).doubleValue, EPSILON)
                                 }
+
                             }
                     ),
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.equal(op1, op2)
@@ -207,10 +219,12 @@ class BindingsNumberCastTest(private val func: Functions) {
                                     assertTrue(binding is BooleanExpression)
                                     assertEquals(abs(op1 - op2) < EPSILON, (binding as BooleanExpression).get())
                                 }
+
                             }
                     ),
                     arrayOf(
                             object : Functions {
+
                                 override fun generateExpression(op1: ObservableNumberValue,
                                         op2: ObservableNumberValue): Binding<*> {
                                     return Bindings.greaterThan(op1, op2)
@@ -220,8 +234,10 @@ class BindingsNumberCastTest(private val func: Functions) {
                                     assertTrue(binding is BooleanExpression)
                                     assertEquals(op1 > op2, (binding as BooleanExpression).get())
                                 }
+
                             }
-                    ))
+                    )
+            )
         }
 
     }

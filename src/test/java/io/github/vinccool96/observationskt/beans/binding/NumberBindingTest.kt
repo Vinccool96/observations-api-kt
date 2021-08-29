@@ -54,6 +54,14 @@ class NumberBindingTest(private val numberBinding: NumberBinding) {
 
     }
 
+    private class ByteBindingMock : ByteBinding() {
+
+        override fun computeValue(): Byte {
+            return 0
+        }
+
+    }
+
     companion object {
 
         @Parameters
@@ -65,6 +73,7 @@ class NumberBindingTest(private val numberBinding: NumberBinding) {
                     arrayOf(IntBindingMock()),
                     arrayOf(LongBindingMock()),
                     arrayOf(ShortBindingMock()),
+                    arrayOf(ByteBindingMock())
             )
         }
 

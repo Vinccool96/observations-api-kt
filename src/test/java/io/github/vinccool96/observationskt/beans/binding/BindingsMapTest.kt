@@ -1313,6 +1313,187 @@ class BindingsMapTest {
     }
 
     @Test
+    fun testByteValueAt_Constant() {
+        val defaultData: Byte = 0
+        val localData1: Byte = 123
+        val localData2: Byte = -98
+        val localProperty: MapProperty<String?, Byte> = SimpleMapProperty()
+        val localMap1: ObservableMap<String?, Byte> = ObservableCollections.observableHashMap()
+        localMap1[key1] = localData1
+        localMap1[key2] = localData2
+        val localMap2: ObservableMap<String?, Byte> = ObservableCollections.observableHashMap()
+
+        val binding0 = Bindings.byteValueAt(localProperty, key1)
+        val binding1 = Bindings.byteValueAt(localProperty, key2)
+        val binding2 = Bindings.byteValueAt(localProperty, key3)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding2.dependencies, localProperty)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(localMap1)
+        assertEquals(localData1, binding0.get())
+        assertEquals(localData2, binding1.get())
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.remove(key2)
+        assertEquals(localData1, binding0.get())
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(localMap2)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty[key1] = localData2
+        localProperty[key2] = localData2
+        assertEquals(localData2, binding0.get())
+        assertEquals(localData2, binding1.get())
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(null)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(NullPointerException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test
+    fun testByteValueAt_Constant_Exception() {
+        val defaultData: Byte = 0
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding0 = Bindings.byteValueAt(localProperty, key1)
+        val binding1 = Bindings.byteValueAt(localProperty, key2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+    }
+
+    @Test
+    fun testByteValueAt_Variable() {
+        val defaultData: Byte = 0
+        val localData1: Byte = 123
+        val localData2: Byte = -98
+        val localProperty: MapProperty<String?, Byte> = SimpleMapProperty()
+        val localMap1: ObservableMap<String?, Byte> = ObservableCollections.observableHashMap()
+        localMap1[key1] = localData1
+        localMap1[key2] = localData2
+        val localMap2: ObservableMap<String?, Byte> = ObservableCollections.observableHashMap()
+
+        val binding = Bindings.byteValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(null)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(localMap1)
+        this.index.set(null)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(key1)
+        assertEquals(localData1, binding.get())
+        this.index.set(key2)
+        assertEquals(localData2, binding.get())
+        this.index.set(key3)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.remove(key2)
+        this.index.set(null)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(key1)
+        assertEquals(localData1, binding.get())
+        this.index.set(key2)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(localMap2)
+        this.index.set(null)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty[key1] = localData2
+        localProperty[key2] = localData2
+        this.index.set(null)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(key1)
+        assertEquals(localData2, binding.get())
+        this.index.set(key2)
+        assertEquals(localData2, binding.get())
+        this.index.set(key3)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(null)
+        this.index.set(null)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testByteValueAt_Variable_Exception() {
+        val defaultData: Byte = 0
+        val localProperty: MapProperty<String?, Number> = SimpleMapProperty()
+        val localMap: ObservableMap<String?, Number> = ObservableCollections.observableHashMap()
+        localMap[key1] = NumberClassCastException()
+        localMap[key2] = NumberNullPointerException()
+        localProperty.set(localMap)
+
+        val binding = Bindings.byteValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(key1)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, ClassCastException::class.java)
+        this.index.set(key2)
+        assertEquals(defaultData, binding.get())
+        log.check(Level.WARNING, NullPointerException::class.java)
+        binding.dispose()
+    }
+
+    @Test
     fun testStringValueAt_Constant() {
         val defaultData: String? = null
         val localData1 = "Goodbye"

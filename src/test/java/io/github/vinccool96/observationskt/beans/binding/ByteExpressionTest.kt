@@ -1,8 +1,8 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.property.ShortProperty
-import io.github.vinccool96.observationskt.beans.property.SimpleShortProperty
-import io.github.vinccool96.observationskt.beans.value.ObservableShortValueStub
+import io.github.vinccool96.observationskt.beans.property.ByteProperty
+import io.github.vinccool96.observationskt.beans.property.SimpleByteProperty
+import io.github.vinccool96.observationskt.beans.value.ObservableByteValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import org.junit.Before
@@ -11,11 +11,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
-class ShortExpressionTest {
+class ByteExpressionTest {
 
-    private var data: Short = 0
+    private var data: Byte = 0
 
-    private lateinit var op1: ShortProperty
+    private lateinit var op1: ByteProperty
 
     private var double1 = 0.0
 
@@ -31,8 +31,8 @@ class ShortExpressionTest {
 
     @Before
     fun setUp() {
-        this.data = 3425
-        this.op1 = SimpleShortProperty(this.data)
+        this.data = 25
+        this.op1 = SimpleByteProperty(this.data)
         this.double1 = -234.234
         this.float1 = 111.9f
         this.long1 = 2009234L
@@ -47,8 +47,8 @@ class ShortExpressionTest {
         assertEquals(this.data.toFloat(), this.op1.floatValue, EPSILON)
         assertEquals(this.data.toLong(), this.op1.longValue)
         assertEquals(this.data.toInt(), this.op1.intValue)
-        assertEquals(this.data, this.op1.shortValue)
-        assertEquals(this.data.toByte(), this.op1.byteValue)
+        assertEquals(this.data.toShort(), this.op1.shortValue)
+        assertEquals(this.data, this.op1.byteValue)
     }
 
     @Test
@@ -143,52 +143,52 @@ class ShortExpressionTest {
 
     @Test
     fun testAsObject() {
-        val valueModel = ObservableShortValueStub()
-        val exp: ObjectExpression<Short> = ShortExpression.shortExpression(valueModel).asObject()
+        val valueModel = ObservableByteValueStub()
+        val exp: ObjectExpression<Byte> = ByteExpression.byteExpression(valueModel).asObject()
 
         assertEquals(0, exp.value)
         valueModel.set(this.data)
         assertEquals(this.data, exp.value)
-        valueModel.set(this.short1)
-        assertEquals(this.short1, exp.value)
-        (exp as ObjectBinding<Short>).dispose()
+        valueModel.set(this.byte1)
+        assertEquals(this.byte1, exp.value)
+        (exp as ObjectBinding<Byte>).dispose()
     }
 
     @Test
     fun testFactory() {
-        val valueModel = ObservableShortValueStub()
-        val exp: ShortExpression = ShortExpression.shortExpression(valueModel)
+        val valueModel = ObservableByteValueStub()
+        val exp: ByteExpression = ByteExpression.byteExpression(valueModel)
 
-        assertTrue(exp is ShortBinding)
+        assertTrue(exp is ByteBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
 
-        assertEquals((0).toShort(), exp.value)
+        assertEquals((0).toByte(), exp.value)
         valueModel.set(this.data)
         assertEquals(this.data, exp.value)
-        valueModel.set(this.short1)
-        assertEquals(this.short1, exp.value)
+        valueModel.set(this.byte1)
+        assertEquals(this.byte1, exp.value)
 
         // make sure we do not create unnecessary bindings
-        assertSame(this.op1, ShortExpression.shortExpression(this.op1))
+        assertSame(this.op1, ByteExpression.byteExpression(this.op1))
         exp.dispose()
     }
 
     @Test
-    fun testObjectToShort() {
-        val valueModel: ObservableValueStub<Short?> = ObservableValueStub(null)
-        val exp: ShortExpression = ShortExpression.shortExpression(valueModel)
+    fun testObjectToByte() {
+        val valueModel: ObservableValueStub<Byte?> = ObservableValueStub(null)
+        val exp: ByteExpression = ByteExpression.byteExpression(valueModel)
 
-        assertTrue(exp is ShortBinding)
+        assertTrue(exp is ByteBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
 
-        assertEquals((0).toShort(), exp.value)
+        assertEquals((0).toByte(), exp.value)
         valueModel.set(this.data)
         assertEquals(this.data, exp.value)
-        valueModel.set(this.short1)
-        assertEquals(this.short1, exp.value)
+        valueModel.set(this.byte1)
+        assertEquals(this.byte1, exp.value)
 
         // make sure we do not create unnecessary bindings
-        assertSame(this.op1, ShortExpression.shortExpression(this.op1))
+        assertSame(this.op1, ByteExpression.byteExpression(this.op1))
         exp.dispose()
     }
 

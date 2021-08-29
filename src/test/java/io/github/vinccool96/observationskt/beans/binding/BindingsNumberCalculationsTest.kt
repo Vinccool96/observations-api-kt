@@ -149,6 +149,10 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
             val short2: ShortProperty = SimpleShortProperty()
             val shortData = arrayOf<Short>(15, -586, -14, -2, -28175, 21396, 1486, -5577, -820, 420)
 
+            val byte1: ByteProperty = SimpleByteProperty()
+            val byte2: ByteProperty = SimpleByteProperty()
+            val byteData = arrayOf<Byte>(15, -56, -14, -2, -28, 96, 86, -77, -20, 42)
+
             return listOf(
                     // float
                     arrayOf(
@@ -1088,6 +1092,194 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
 
                             },
                             shortData
+                    ),
+
+                    // byte
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): Binding<Number?> {
+                                    return Bindings.add(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): Binding<Number?> {
+                                    return Bindings.add(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: ObservableValue<in Byte>) {
+                                    assertEquals(op1 + op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): Binding<Number?> {
+                                    return Bindings.subtract(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): Binding<Number?> {
+                                    return Bindings.subtract(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: ObservableValue<in Byte>) {
+                                    assertEquals(op1 - op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): Binding<Number?> {
+                                    return Bindings.multiply(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): Binding<Number?> {
+                                    return Bindings.multiply(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: ObservableValue<in Byte>) {
+                                    assertEquals(op1 * op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): Binding<Number?> {
+                                    return Bindings.divide(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): Binding<Number?> {
+                                    return Bindings.divide(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: ObservableValue<in Byte>) {
+                                    assertEquals(op1 / op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): Binding<Number?> {
+                                    return Bindings.min(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): Binding<Number?> {
+                                    return Bindings.min(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: ObservableValue<in Byte>) {
+                                    assertEquals(minOf(op1, op2), (exp as ObservableByteValue).get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): Binding<Number?> {
+                                    return Bindings.max(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): Binding<Number?> {
+                                    return Bindings.max(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: ObservableValue<in Byte>) {
+                                    assertEquals(maxOf(op1, op2), (exp as ObservableByteValue).get())
+                                }
+
+                            },
+                            byteData
                     )
             )
         }

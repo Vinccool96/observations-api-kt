@@ -935,8 +935,8 @@ class BindingsArrayTest {
     @Test
     fun testShortValueAt_Constant() {
         val defaultData: Short = 0
-        val localData1: Short = 4
-        val localData2: Short = -13
+        val localData1: Short = 12345
+        val localData2: Short = -9876
         val localProperty: ObservableShortArray = ObservableCollections.observableShortArray()
         val localArray1: ObservableShortArray = ObservableCollections.observableShortArray(localData1, localData2)
         val localArray2: ObservableShortArray = ObservableCollections.observableShortArray()
@@ -1003,13 +1003,152 @@ class BindingsArrayTest {
     @Test
     fun testShortValueAt_Variable() {
         val defaultData: Short = 0
-        val localData1: Short = 4
-        val localData2: Short = -13
+        val localData1: Short = 12345
+        val localData2: Short = -9876
         val localProperty: ObservableShortArray = ObservableCollections.observableShortArray()
         val localArray1: ObservableShortArray = ObservableCollections.observableShortArray(localData1, localData2)
         val localArray2: ObservableShortArray = ObservableCollections.observableShortArray()
 
         val binding = Bindings.shortValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        setAs(localProperty, localArray1)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(localData1, binding.get())
+        this.index.set(1)
+        assertEquals(localData2, binding.get())
+        this.index.set(2)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        localProperty.resize(1)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(localData1, binding.get())
+        this.index.set(1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        setAs(localProperty, localArray2)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        localProperty.addAll(localData2, localData2)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(localData2, binding.get())
+        this.index.set(1)
+        assertEquals(localData2, binding.get())
+        this.index.set(2)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        setAs(localProperty, null)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        binding.dispose()
+    }
+
+    @Test
+    fun testByteValueAt_Constant() {
+        val defaultData: Byte = 0
+        val localData1: Byte = 123
+        val localData2: Byte = -98
+        val localProperty: ObservableByteArray = ObservableCollections.observableByteArray()
+        val localArray1: ObservableByteArray = ObservableCollections.observableByteArray(localData1, localData2)
+        val localArray2: ObservableByteArray = ObservableCollections.observableByteArray()
+
+        val binding0 = Bindings.byteValueAt(localProperty, 0)
+        val binding1 = Bindings.byteValueAt(localProperty, 1)
+        val binding2 = Bindings.byteValueAt(localProperty, 2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding2.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        setAs(localProperty, localArray1)
+        assertEquals(localData1, binding0.get())
+        assertEquals(localData2, binding1.get())
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        localProperty.resize(1)
+        assertEquals(localData1, binding0.get())
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        setAs(localProperty, localArray2)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        localProperty.addAll(localData2, localData2)
+        assertEquals(localData2, binding0.get())
+        assertEquals(localData2, binding1.get())
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+
+        setAs(localProperty, null)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun testByteValueAt_Constant_NegativeIndex() {
+        val localProperty: ObservableByteArray = ObservableCollections.observableByteArray()
+        Bindings.byteValueAt(localProperty, -1)
+    }
+
+    @Test
+    fun testByteValueAt_Variable() {
+        val defaultData: Byte = 0
+        val localData1: Byte = 123
+        val localData2: Byte = -98
+        val localProperty: ObservableByteArray = ObservableCollections.observableByteArray()
+        val localArray1: ObservableByteArray = ObservableCollections.observableByteArray(localData1, localData2)
+        val localArray2: ObservableByteArray = ObservableCollections.observableByteArray()
+
+        val binding = Bindings.byteValueAt(localProperty, this.index)
         DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
 
         this.index.set(-1)

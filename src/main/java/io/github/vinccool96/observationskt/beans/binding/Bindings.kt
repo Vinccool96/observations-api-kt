@@ -267,6 +267,41 @@ object Bindings {
     }
 
     /**
+     * Helper function to create a custom [ByteBinding].
+     *
+     * @param func The function that calculates the value of this binding
+     * @param dependencies The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun createByteBinding(func: Callable<Byte>, vararg dependencies: Observable): ByteBinding {
+        return object : ByteBinding() {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): Byte {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    0
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
+    /**
      * Helper function to create a custom [ObjectBinding].
      *
      * @param func The function that calculates the value of this binding
@@ -1040,6 +1075,32 @@ object Bindings {
         return add(ShortConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: ObservableNumberValue, op2: Byte): NumberBinding {
+        return add(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the sum of the value of a [ObservableNumberValue] and a constant
+     * value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun add(op1: Byte, op2: ObservableNumberValue): NumberBinding {
+        return add(ByteConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Diff
 
@@ -1271,6 +1332,32 @@ object Bindings {
      */
     fun subtract(op1: Short, op2: ObservableNumberValue): NumberBinding {
         return subtract(ShortConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: ObservableNumberValue, op2: Byte): NumberBinding {
+        return subtract(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the difference of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun subtract(op1: Byte, op2: ObservableNumberValue): NumberBinding {
+        return subtract(ByteConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -1506,6 +1593,32 @@ object Bindings {
         return multiply(ShortConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: ObservableNumberValue, op2: Byte): NumberBinding {
+        return multiply(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the product of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun multiply(op1: Byte, op2: ObservableNumberValue): NumberBinding {
+        return multiply(ByteConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Divide
 
@@ -1737,6 +1850,32 @@ object Bindings {
      */
     fun divide(op1: Short, op2: ObservableNumberValue): NumberBinding {
         return divide(ShortConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: ObservableNumberValue, op2: Byte): NumberBinding {
+        return divide(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the division of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun divide(op1: Byte, op2: ObservableNumberValue): NumberBinding {
+        return divide(ByteConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -2132,6 +2271,72 @@ object Bindings {
         return equal(ShortConstant.valueOf(op1), op2, 0.0, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Byte, epsilon: Double): BooleanBinding {
+        return equal(op1, ByteConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Byte, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return equal(ByteConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: ObservableNumberValue, op2: Byte): BooleanBinding {
+        return equal(op1, ByteConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is equal to a constant
+     * value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun equal(op1: Byte, op2: ObservableNumberValue): BooleanBinding {
+        return equal(ByteConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
     // =================================================================================================================
     // Not Equal
 
@@ -2525,6 +2730,72 @@ object Bindings {
         return notEqual(ShortConstant.valueOf(op1), op2, 0.0, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Byte, epsilon: Double): BooleanBinding {
+        return notEqual(op1, ByteConstant.valueOf(op2), epsilon, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value (with a tolerance).
+     *
+     * Two operands `a` and `b` are considered equal if `abs(a-b) <= epsilon`.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     * @param epsilon the permitted tolerance
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Byte, op2: ObservableNumberValue, epsilon: Double): BooleanBinding {
+        return notEqual(ByteConstant.valueOf(op1), op2, epsilon, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: ObservableNumberValue, op2: Byte): BooleanBinding {
+        return notEqual(op1, ByteConstant.valueOf(op2), 0.0, op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is not equal to a
+     * constant value.
+     *
+     * Allowing a small tolerance is recommended when comparing floating-point numbers because of rounding-errors.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun notEqual(op1: Byte, op2: ObservableNumberValue): BooleanBinding {
+        return notEqual(ByteConstant.valueOf(op1), op2, 0.0, op2)
+    }
+
     // =================================================================================================================
     // Greater Than
 
@@ -2758,6 +3029,32 @@ object Bindings {
         return greaterThan(ShortConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: ObservableNumberValue, op2: Byte): BooleanBinding {
+        return greaterThan(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThan(op1: Byte, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThan(ByteConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Less Than
 
@@ -2907,6 +3204,32 @@ object Bindings {
      */
     fun lessThan(op1: Short, op2: ObservableNumberValue): BooleanBinding {
         return lessThan(ShortConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: ObservableNumberValue, op2: Byte): BooleanBinding {
+        return lessThan(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThan(op1: Byte, op2: ObservableNumberValue): BooleanBinding {
+        return lessThan(ByteConstant.valueOf(op1), op2, op2)
     }
 
     // =================================================================================================================
@@ -3142,6 +3465,32 @@ object Bindings {
         return greaterThanOrEqual(ShortConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is greater than or
+     * equal to a constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: ObservableNumberValue, op2: Byte): BooleanBinding {
+        return greaterThanOrEqual(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is greater than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun greaterThanOrEqual(op1: Byte, op2: ObservableNumberValue): BooleanBinding {
+        return greaterThanOrEqual(ByteConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Less Than or Equal
 
@@ -3293,6 +3642,32 @@ object Bindings {
         return lessThanOrEqual(ShortConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if the value of a [ObservableNumberValue] is less than or equal
+     * to a constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: ObservableNumberValue, op2: Byte): BooleanBinding {
+        return lessThanOrEqual(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [BooleanBinding] that holds `true` if a constant value is less than or equal to the value of a
+     * [ObservableNumberValue].
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `BooleanBinding`
+     */
+    fun lessThanOrEqual(op1: Byte, op2: ObservableNumberValue): BooleanBinding {
+        return lessThanOrEqual(ByteConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Minimum
 
@@ -3382,7 +3757,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : ShortBinding() {
+            op1 is ObservableShortValue || op2 is ObservableShortValue -> object : ShortBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -3394,6 +3769,26 @@ object Bindings {
 
                 override fun computeValue(): Short {
                     return minOf(op1.shortValue, op2.shortValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : ByteBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Byte {
+                    return minOf(op1.byteValue, op2.byteValue)
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -3549,6 +3944,32 @@ object Bindings {
         return min(ShortConstant.valueOf(op1), op2, op2)
     }
 
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: ObservableNumberValue, op2: Byte): NumberBinding {
+        return min(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the minimum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the constant value
+     * @param op2 the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun min(op1: Byte, op2: ObservableNumberValue): NumberBinding {
+        return min(ByteConstant.valueOf(op1), op2, op2)
+    }
+
     // =================================================================================================================
     // Maximum
 
@@ -3638,7 +4059,7 @@ object Bindings {
                     else ImmutableObservableList(*dependencies)
 
             }
-            else -> object : ShortBinding() {
+            op1 is ObservableShortValue || op2 is ObservableShortValue -> object : ShortBinding() {
 
                 init {
                     super.bind(*dependencies)
@@ -3650,6 +4071,26 @@ object Bindings {
 
                 override fun computeValue(): Short {
                     return maxOf(op1.shortValue, op2.shortValue)
+                }
+
+                @get:ReturnsUnmodifiableCollection
+                override val dependencies: ObservableList<*>
+                    get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                    else ImmutableObservableList(*dependencies)
+
+            }
+            else -> object : ByteBinding() {
+
+                init {
+                    super.bind(*dependencies)
+                }
+
+                override fun dispose() {
+                    super.unbind(*dependencies)
+                }
+
+                override fun computeValue(): Byte {
+                    return maxOf(op1.byteValue, op2.byteValue)
                 }
 
                 @get:ReturnsUnmodifiableCollection
@@ -3809,6 +4250,34 @@ object Bindings {
      */
     fun max(op1: Short, op2: ObservableNumberValue): NumberBinding {
         return max(ShortConstant.valueOf(op1), op2, op2)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1 the `ObservableNumberValue`
+     * @param op2 the constant value
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: ObservableNumberValue, op2: Byte): NumberBinding {
+        return max(op1, ByteConstant.valueOf(op2), op1)
+    }
+
+    /**
+     * Creates a new [NumberBinding] that calculates the maximum of the value of a [ObservableNumberValue] and a
+     * constant value.
+     *
+     * @param op1
+     *         the constant value
+     * @param op2
+     *         the `ObservableNumberValue`
+     *
+     * @return the new `NumberBinding`
+     */
+    fun max(op1: Byte, op2: ObservableNumberValue): NumberBinding {
+        return max(ByteConstant.valueOf(op1), op2, op2)
     }
 
     // boolean
@@ -5713,6 +6182,107 @@ object Bindings {
     }
 
     /**
+     * Creates a new [ByteBinding] that contains the element of an [ObservableList] at the specified position. The
+     * `ByteBinding` will hold `0`, if the `index` points behind the `ObservableList`.
+     *
+     * @param op the `ObservableList`
+     * @param index the position in the `List`
+     *
+     * @return the new `ByteBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun byteValueAt(op: ObservableList<out Number?>, index: Int): ByteBinding {
+        require(index >= 0) { "Index cannot be negative" }
+
+        return object : ByteBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Byte {
+                try {
+                    val value = op[index]
+                    if (value == null) {
+                        Logging.getLogger().fine("List element is null, returning default value instead.",
+                                NullPointerException())
+                    } else {
+                        return value.toByte()
+                    }
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ByteBinding] that contains the element of an [ObservableList] at the specified position. The
+     * `ByteBinding` will hold `0`, if the `index` points behind the `ObservableList`.
+     *
+     * @param op the `ObservableList`
+     * @param index the position in the `List`
+     *
+     * @return the new `ByteBinding`
+     */
+    fun byteValueAt(op: ObservableList<out Number?>, index: ObservableIntValue): ByteBinding {
+        return byteValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [ByteBinding] that contains the element of an [ObservableList] at the specified position. The
+     * `ByteBinding` will hold `0`, if the `index` points behind the `ObservableList`.
+     *
+     * @param op the `ObservableList`
+     * @param index the position in the `List`
+     *
+     * @return the new `ByteBinding`
+     */
+    fun byteValueAt(op: ObservableList<out Number?>, index: ObservableNumberValue): ByteBinding {
+        return object : ByteBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Byte {
+                try {
+                    val value = op[index.intValue]
+                    if (value == null) {
+                        Logging.getLogger().fine("List element is null, returning default value instead.",
+                                NullPointerException())
+                    } else {
+                        return value.toByte()
+                    }
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
+
+    /**
      * Creates a new [StringBinding] that contains the element of an [ObservableList] at the specified position. The
      * `StringBinding` will hold `null`, if the `index` points behind the `ObservableList`.
      *
@@ -6627,96 +7197,96 @@ object Bindings {
         }
     }
 
-//    /**
-//     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
-//     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
-//     *
-//     * @param op the `ObservableArray`
-//     * @param index the position in the `ObservableArray`
-//     *
-//     * @return the new `DoubleBinding`
-//     *
-//     * @throws IllegalArgumentException if `index < 0`
-//     */
-//    fun byteValueAt(op:ObservableDoubleArray,index: Int):DoubleBinding{
-//        if (index<0){
-//            throw IllegalArgumentException()
-//        }
-//
-//        return object :DoubleBinding(){
-//
-//            init {
-//                super.bind(op)
-//            }
-//
-//            override fun dispose() {
-//                super.unbind(op)
-//            }
-//
-//            override fun computeValue(): Double {
-//                try {
-//                    return op[index]
-//                }catch (ex:IndexOutOfBoundsException){
-//                    Logging.getLogger().fine("Exception while evaluating binding",ex)
-//                }
-//                return 0.0
-//            }
-//
-//            @get:ReturnsUnmodifiableCollection
-//            override val dependencies: ObservableList<*>
-//                get() = ObservableCollections.singletonObservableList(op)
-//
-//        }
-//    }
-//
-//    /**
-//     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
-//     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
-//     *
-//     * @param op the `ObservableArray`
-//     * @param index the position in the `ObservableArray`
-//     *
-//     * @return the new `DoubleBinding`
-//     */
-//    fun byteValueAt(op:ObservableDoubleArray,index: ObservableIntValue):DoubleBinding{
-//        return byteValueAt(op, index as ObservableNumberValue)
-//    }
-//
-//    /**
-//     * Creates a new [DoubleBinding] that contains the element of an [ObservableArray] at the specified position. The
-//     * `DoubleBinding` will hold `0.0`, if the `index` points behind the `ObservableArray`.
-//     *
-//     * @param op the `ObservableArray`
-//     * @param index the position in the `ObservableArray`
-//     *
-//     * @return the new `DoubleBinding`
-//     */
-//    fun byteValueAt(op:ObservableDoubleArray,index: ObservableNumberValue):DoubleBinding{
-//        return object :DoubleBinding(){
-//
-//            init {
-//                super.bind(op, index)
-//            }
-//
-//            override fun dispose() {
-//                super.unbind(op, index)
-//            }
-//
-//            override fun computeValue(): Double {
-//                try {
-//                    return op[index.intValue]
-//                }catch (ex:IndexOutOfBoundsException){
-//                    Logging.getLogger().fine("Exception while evaluating binding",ex)
-//                }
-//                return 0.0
-//            }
-//
-//            @get:ReturnsUnmodifiableCollection
-//            override val dependencies: ObservableList<*>
-//                get() = ImmutableObservableList(op, index)
-//
-//        }
-//    }
+    /**
+     * Creates a new [ByteBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ByteBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `ByteBinding`
+     *
+     * @throws IllegalArgumentException if `index < 0`
+     */
+    fun byteValueAt(op: ObservableByteArray, index: Int): ByteBinding {
+        if (index < 0) {
+            throw IllegalArgumentException()
+        }
+
+        return object : ByteBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Byte {
+                try {
+                    return op[index]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ByteBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ByteBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `ByteBinding`
+     */
+    fun byteValueAt(op: ObservableByteArray, index: ObservableIntValue): ByteBinding {
+        return byteValueAt(op, index as ObservableNumberValue)
+    }
+
+    /**
+     * Creates a new [ByteBinding] that contains the element of an [ObservableArray] at the specified position. The
+     * `ByteBinding` will hold `0`, if the `index` points behind the `ObservableArray`.
+     *
+     * @param op the `ObservableArray`
+     * @param index the position in the `ObservableArray`
+     *
+     * @return the new `ByteBinding`
+     */
+    fun byteValueAt(op: ObservableByteArray, index: ObservableNumberValue): ByteBinding {
+        return object : ByteBinding() {
+
+            init {
+                super.bind(op, index)
+            }
+
+            override fun dispose() {
+                super.unbind(op, index)
+            }
+
+            override fun computeValue(): Byte {
+                try {
+                    return op[index.intValue]
+                } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, index)
+
+        }
+    }
 
     /**
      * Creates a new [StringBinding] that contains the element of an [ObservableArray] at the specified position. The
@@ -7528,6 +8098,100 @@ object Bindings {
                     val value = op[key.value]
                     if (value != null) {
                         return value.toShort()
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ImmutableObservableList(op, key)
+
+        }
+    }
+
+    /**
+     * Creates a new [ByteBinding] that contains the mapping of a specific key in an [ObservableMap]. The `ByteBinding`
+     * will hold `0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `ByteBinding`
+     */
+    fun <K> byteValueAt(op: ObservableMap<K, out Number?>, key: K): ByteBinding {
+        return object : ByteBinding() {
+
+            init {
+                super.bind(op)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Byte {
+                try {
+                    val value = op[key]
+                    if (value != null) {
+                        return value.toByte()
+                    } else {
+                        Logging.getLogger().fine("Element not found in map, returning default value instead.",
+                                NullPointerException())
+                    }
+                } catch (ex: ClassCastException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                } catch (ex: NullPointerException) {
+                    Logging.getLogger().warning("Exception while evaluating binding", ex)
+                    // ignore
+                }
+                return 0
+            }
+
+            @get:ReturnsUnmodifiableCollection
+            override val dependencies: ObservableList<*>
+                get() = ObservableCollections.singletonObservableList(op)
+
+        }
+    }
+
+    /**
+     * Creates a new [ByteBinding] that contains the mapping of a specific key in an [ObservableMap]. The `ByteBinding`
+     * will hold `0`, if the `key` cannot be found in the `ObservableMap`.
+     *
+     * @param op the `ObservableMap`
+     * @param key the key in the `Map`
+     * @param K type of the key elements of the `Map`
+     *
+     * @return the new `ByteBinding`
+     */
+    fun <K> byteValueAt(op: ObservableMap<K, out Number?>, key: ObservableValue<K>): ByteBinding {
+        return object : ByteBinding() {
+
+            init {
+                super.bind(op, key)
+            }
+
+            override fun dispose() {
+                super.unbind(op)
+            }
+
+            override fun computeValue(): Byte {
+                try {
+                    val value = op[key.value]
+                    if (value != null) {
+                        return value.toByte()
                     } else {
                         Logging.getLogger().fine("Element not found in map, returning default value instead.",
                                 NullPointerException())

@@ -1,19 +1,19 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import io.github.vinccool96.observationskt.beans.value.ObservableShortValue
+import io.github.vinccool96.observationskt.beans.value.ObservableByteValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 
 /**
- * A `ShortExpression` is a [ObservableShortValue] plus additional convenience methods to generate bindings in a fluent
+ * A `ByteExpression` is a [ObservableByteValue] plus additional convenience methods to generate bindings in a fluent
  * style.
  *
- * A concrete sub-class of `ShortExpression` has to implement the method [get], which provides the actual value of this
+ * A concrete sub-class of `ByteExpression` has to implement the method [get], which provides the actual value of this
  * expression.
  */
-abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
+abstract class ByteExpression : NumberExpressionBase(), ObservableByteValue {
 
     override val intValue: Int
         get() = this.get().toInt()
@@ -28,10 +28,10 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
         get() = this.get().toDouble()
 
     override val shortValue: Short
-        get() = this.get()
+        get() = this.get().toShort()
 
     override val byteValue: Byte
-        get() = this.get().toByte()
+        get() = this.get()
 
     override val value: Number?
         get() = this.get()
@@ -137,24 +137,24 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
     }
 
     /**
-     * Creates an [ObjectExpression] that holds the value of this `ShortExpression`. If the value of this
-     * `ShortExpression` changes, the value of the `ObjectExpression` will be updated automatically.
+     * Creates an [ObjectExpression] that holds the value of this `ByteExpression`. If the value of this
+     * `ByteExpression` changes, the value of the `ObjectExpression` will be updated automatically.
      *
      * @return the new `ObjectExpression`
      */
-    open fun asObject(): ObjectExpression<Short> {
-        return object : ObjectBinding<Short>() {
+    open fun asObject(): ObjectExpression<Byte> {
+        return object : ObjectBinding<Byte>() {
 
             init {
-                super.bind(this@ShortExpression)
+                super.bind(this@ByteExpression)
             }
 
             override fun dispose() {
-                super.unbind(this@ShortExpression)
+                super.unbind(this@ByteExpression)
             }
 
-            override fun computeValue(): Short {
-                return this@ShortExpression.shortValue
+            override fun computeValue(): Byte {
+                return this@ByteExpression.byteValue
             }
 
         }
@@ -163,16 +163,16 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
     companion object {
 
         /**
-         * Returns a `ShortExpression` that wraps a [ObservableShortValue]. If the `ObservableShortValue` is already a
-         * `ShortExpression`, it will be returned. Otherwise, a new [ShortBinding] is created that is bound to the
-         * `ObservableShortValue`.
+         * Returns a `ByteExpression` that wraps a [ObservableByteValue]. If the `ObservableByteValue` is already a
+         * `ByteExpression`, it will be returned. Otherwise, a new [ByteBinding] is created that is bound to the
+         * `ObservableByteValue`.
          *
-         * @param value The source `ObservableShortValue`
+         * @param value The source `ObservableByteValue`
          *
-         * @return A `ShortExpression` that wraps the `ObservableShortValue` if necessary
+         * @return A `ByteExpression` that wraps the `ObservableByteValue` if necessary
          */
-        fun shortExpression(value: ObservableShortValue): ShortExpression {
-            return if (value is ShortExpression) value else object : ShortBinding() {
+        fun byteExpression(value: ObservableByteValue): ByteExpression {
+            return if (value is ByteExpression) value else object : ByteBinding() {
 
                 init {
                     super.bind(value)
@@ -182,7 +182,7 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
                     super.unbind(value)
                 }
 
-                override fun computeValue(): Short {
+                override fun computeValue(): Byte {
                     return value.get()
                 }
 
@@ -194,18 +194,18 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
         }
 
         /**
-         * Returns a `ShortExpression` that wraps an [ObservableValue]. If the `ObservableValue` is already a
-         * `ShortExpression`, it will be returned. Otherwise, a new [ShortBinding] is created that is bound to the
+         * Returns a `ByteExpression` that wraps an [ObservableValue]. If the `ObservableValue` is already a
+         * `ByteExpression`, it will be returned. Otherwise, a new [ByteBinding] is created that is bound to the
          * `ObservableValue`.
          *
          * Note: this method can be used to convert an [ObjectExpression] or
          * [io.github.vinccool96.observationskt.beans.property.ObjectProperty] of specific number type to
-         * `ShortExpression`, which is essentially an `ObservableValue<Number>`. See sample below.
+         * `ByteExpression`, which is essentially an `ObservableValue<Number>`. See sample below.
          *
          * ```
-         * val shortProperty: ShortProperty = SimpleShortProperty(1)
-         * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty(2)
-         * val binding: BooleanBinding = shortProperty.greaterThan(Short.shortExpression(objectProperty))
+         * val byteProperty: ByteProperty = SimpleByteProperty(1)
+         * val objectProperty: ObjectProperty<Byte> = SimpleObjectProperty(2)
+         * val binding: BooleanBinding = byteProperty.greaterThan(Byte.byteExpression(objectProperty))
          * ```
          *
          * Note: null values will be interpreted as `0`
@@ -213,10 +213,10 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
          * @param value The source `ObservableValue`
          * @param T The type of the wrapped number
          *
-         * @return A `ShortExpression` that wraps the `ObservableValue` if necessary
+         * @return A `ByteExpression` that wraps the `ObservableValue` if necessary
          */
-        fun <T : Number?> shortExpression(value: ObservableValue<T>): ShortExpression {
-            return if (value is ShortExpression) value else object : ShortBinding() {
+        fun <T : Number?> byteExpression(value: ObservableValue<T>): ByteExpression {
+            return if (value is ByteExpression) value else object : ByteBinding() {
 
                 init {
                     super.bind(value)
@@ -226,9 +226,9 @@ abstract class ShortExpression : NumberExpressionBase(), ObservableShortValue {
                     super.unbind(value)
                 }
 
-                override fun computeValue(): Short {
+                override fun computeValue(): Byte {
                     val v: T = value.value
-                    return v?.toShort() ?: 0
+                    return v?.toByte() ?: 0
                 }
 
                 @get:ReturnsUnmodifiableCollection

@@ -369,6 +369,13 @@ class BindingsNumberTest(private val op: NumberExpression) {
     }
 
     @Test
+    fun testMin_Byte() {
+        this.binding = Bindings.min(this.op, BYTE)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
+        assertEquals(min(this.op.value, BYTE), this.binding.value)
+    }
+
+    @Test
     fun testMax_Double() {
         this.binding = Bindings.max(this.op, DOUBLE)
         DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
@@ -401,6 +408,13 @@ class BindingsNumberTest(private val op: NumberExpression) {
         this.binding = Bindings.max(this.op, SHORT)
         DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
         assertEquals(max(this.op.value, SHORT), this.binding.value)
+    }
+
+    @Test
+    fun testMax_Byte() {
+        this.binding = Bindings.max(this.op, BYTE)
+        DependencyUtils.checkDependencies(this.binding.dependencies, this.op)
+        assertEquals(max(this.op.value, BYTE), this.binding.value)
     }
 
     private fun negate(value: Number?): Number? {
@@ -521,7 +535,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
             value1 is Float || value2 is Float -> kotlin.math.min(value1.toFloat(), value2.toFloat())
             value1 is Long || value2 is Long -> kotlin.math.min(value1.toLong(), value2.toLong())
             value1 is Int || value2 is Int -> kotlin.math.min(value1.toInt(), value2.toInt())
-            else -> minOf(value1.toShort(), value2.toShort())
+            value1 is Short || value2 is Short -> minOf(value1.toShort(), value2.toShort())
+            else -> minOf(value1.toByte(), value2.toByte())
         }
     }
 
@@ -532,7 +547,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
             value1 is Float || value2 is Float -> kotlin.math.max(value1.toFloat(), value2.toFloat())
             value1 is Long || value2 is Long -> kotlin.math.max(value1.toLong(), value2.toLong())
             value1 is Int || value2 is Int -> kotlin.math.max(value1.toInt(), value2.toInt())
-            else -> maxOf(value1.toShort(), value2.toShort())
+            value1 is Short || value2 is Short -> maxOf(value1.toShort(), value2.toShort())
+            else -> maxOf(value1.toByte(), value2.toByte())
         }
     }
 
@@ -546,7 +562,9 @@ class BindingsNumberTest(private val op: NumberExpression) {
 
         private const val LONG: Long = 42L
 
-        private const val SHORT: Short = 4
+        private const val SHORT: Short = 13
+
+        private const val BYTE: Byte = 4
 
         private const val EPSILON: Double = 1e-12
 
@@ -558,7 +576,8 @@ class BindingsNumberTest(private val op: NumberExpression) {
                     arrayOf(SimpleFloatProperty(FLOAT)),
                     arrayOf(SimpleIntProperty(INT)),
                     arrayOf(SimpleLongProperty(LONG)),
-                    arrayOf(SimpleShortProperty(SHORT))
+                    arrayOf(SimpleShortProperty(SHORT)),
+                    arrayOf(SimpleByteProperty(BYTE))
             )
         }
 

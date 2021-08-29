@@ -27,6 +27,8 @@ class LongExpressionTest {
 
     private var short1: Short = 0
 
+    private var byte1: Byte = 0
+
     @Before
     fun setUp() {
         this.data = 34258L
@@ -36,6 +38,7 @@ class LongExpressionTest {
         this.long1 = 2009234L
         this.int1 = -234734
         this.short1 = 9824
+        this.byte1 = 42
     }
 
     @Test
@@ -70,6 +73,9 @@ class LongExpressionTest {
 
         val binding5: LongBinding = this.op1 + this.short1
         assertEquals(this.data + this.short1, binding5.longValue)
+
+        val binding6: LongBinding = this.op1 + this.byte1
+        assertEquals(this.data + this.byte1, binding6.longValue)
     }
 
     @Test
@@ -88,6 +94,9 @@ class LongExpressionTest {
 
         val binding5: LongBinding = this.op1 - this.short1
         assertEquals(this.data - this.short1, binding5.longValue)
+
+        val binding6: LongBinding = this.op1 - this.byte1
+        assertEquals(this.data - this.byte1, binding6.longValue)
     }
 
     @Test
@@ -106,6 +115,9 @@ class LongExpressionTest {
 
         val binding5: LongBinding = this.op1 * this.short1
         assertEquals(this.data * this.short1, binding5.longValue)
+
+        val binding6: LongBinding = this.op1 * this.byte1
+        assertEquals(this.data * this.byte1, binding6.longValue)
     }
 
     @Test
@@ -124,6 +136,9 @@ class LongExpressionTest {
 
         val binding5: LongBinding = this.op1 / this.short1
         assertEquals(this.data / this.short1, binding5.longValue)
+
+        val binding6: LongBinding = this.op1 / this.byte1
+        assertEquals(this.data / this.byte1, binding6.longValue)
     }
 
     @Test
@@ -159,7 +174,7 @@ class LongExpressionTest {
     }
 
     @Test
-    fun testObjectToFloat() {
+    fun testObjectToLong() {
         val valueModel: ObservableValueStub<Long?> = ObservableValueStub(null)
         val exp: LongExpression = LongExpression.longExpression(valueModel)
 

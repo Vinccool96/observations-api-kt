@@ -60,6 +60,10 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
         return Bindings.add(this, other) as LongBinding
     }
 
+    override operator fun plus(other: Byte): LongBinding {
+        return Bindings.add(this, other) as LongBinding
+    }
+
     override operator fun minus(other: Double): DoubleBinding {
         return Bindings.subtract(this, other)
     }
@@ -77,6 +81,10 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
     }
 
     override operator fun minus(other: Short): LongBinding {
+        return Bindings.subtract(this, other) as LongBinding
+    }
+
+    override operator fun minus(other: Byte): LongBinding {
         return Bindings.subtract(this, other) as LongBinding
     }
 
@@ -100,6 +108,10 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
         return Bindings.multiply(this, other) as LongBinding
     }
 
+    override operator fun times(other: Byte): LongBinding {
+        return Bindings.multiply(this, other) as LongBinding
+    }
+
     override operator fun div(other: Double): DoubleBinding {
         return Bindings.divide(this, other)
     }
@@ -117,6 +129,10 @@ abstract class LongExpression : NumberExpressionBase(), ObservableLongValue {
     }
 
     override operator fun div(other: Short): LongBinding {
+        return Bindings.divide(this, other) as LongBinding
+    }
+
+    override operator fun div(other: Byte): LongBinding {
         return Bindings.divide(this, other) as LongBinding
     }
 

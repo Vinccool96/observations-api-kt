@@ -77,6 +77,14 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.equal(this, other, epsilon)
     }
 
+    override fun isEqualTo(other: Byte): BooleanBinding {
+        return Bindings.equal(this, other)
+    }
+
+    override fun isEqualTo(other: Byte, epsilon: Double): BooleanBinding {
+        return Bindings.equal(this, other, epsilon)
+    }
+
     // ===============================================================
     // IsNotEqualTo
 
@@ -120,6 +128,14 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.notEqual(this, other, epsilon)
     }
 
+    override fun isNotEqualTo(other: Byte): BooleanBinding {
+        return Bindings.notEqual(this, other)
+    }
+
+    override fun isNotEqualTo(other: Byte, epsilon: Double): BooleanBinding {
+        return Bindings.notEqual(this, other, epsilon)
+    }
+
     // ===============================================================
     // IsGreaterThan
 
@@ -144,6 +160,10 @@ abstract class NumberExpressionBase : NumberExpression {
     }
 
     override fun greaterThan(other: Short): BooleanBinding {
+        return Bindings.greaterThan(this, other)
+    }
+
+    override fun greaterThan(other: Byte): BooleanBinding {
         return Bindings.greaterThan(this, other)
     }
 
@@ -174,6 +194,10 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.lessThan(this, other)
     }
 
+    override fun lessThan(other: Byte): BooleanBinding {
+        return Bindings.lessThan(this, other)
+    }
+
     // ===============================================================
     // IsGreaterThanOrEqualTo
 
@@ -201,6 +225,10 @@ abstract class NumberExpressionBase : NumberExpression {
         return Bindings.greaterThanOrEqual(this, other)
     }
 
+    override fun greaterThanOrEqualTo(other: Byte): BooleanBinding {
+        return Bindings.greaterThanOrEqual(this, other)
+    }
+
     // ===============================================================
     // IsLessThanOrEqualTo
 
@@ -225,6 +253,10 @@ abstract class NumberExpressionBase : NumberExpression {
     }
 
     override fun lessThanOrEqualTo(other: Short): BooleanBinding {
+        return Bindings.lessThanOrEqual(this, other)
+    }
+
+    override fun lessThanOrEqualTo(other: Byte): BooleanBinding {
         return Bindings.lessThanOrEqual(this, other)
     }
 

@@ -60,6 +60,10 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
         return Bindings.add(this, other) as FloatBinding
     }
 
+    override operator fun plus(other: Byte): FloatBinding {
+        return Bindings.add(this, other) as FloatBinding
+    }
+
     override operator fun minus(other: Double): DoubleBinding {
         return Bindings.subtract(this, other)
     }
@@ -77,6 +81,10 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
     }
 
     override operator fun minus(other: Short): FloatBinding {
+        return Bindings.subtract(this, other) as FloatBinding
+    }
+
+    override operator fun minus(other: Byte): FloatBinding {
         return Bindings.subtract(this, other) as FloatBinding
     }
 
@@ -100,6 +108,10 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
         return Bindings.multiply(this, other) as FloatBinding
     }
 
+    override operator fun times(other: Byte): FloatBinding {
+        return Bindings.multiply(this, other) as FloatBinding
+    }
+
     override operator fun div(other: Double): DoubleBinding {
         return Bindings.divide(this, other)
     }
@@ -117,6 +129,10 @@ abstract class FloatExpression : NumberExpressionBase(), ObservableFloatValue {
     }
 
     override operator fun div(other: Short): FloatBinding {
+        return Bindings.divide(this, other) as FloatBinding
+    }
+
+    override operator fun div(other: Byte): FloatBinding {
         return Bindings.divide(this, other) as FloatBinding
     }
 

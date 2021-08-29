@@ -27,6 +27,8 @@ class DoubleExpressionTest {
 
     private var short1: Short = 0
 
+    private var byte1: Byte = 0
+
     @Before
     fun setUp() {
         this.data = -67.0975
@@ -36,6 +38,7 @@ class DoubleExpressionTest {
         this.long1 = 2009234L
         this.int1 = -234734
         this.short1 = 9824
+        this.byte1 = 42
     }
 
     @Test
@@ -70,6 +73,9 @@ class DoubleExpressionTest {
 
         val binding5: DoubleBinding = this.op1 + this.short1
         assertEquals(this.data + this.short1, binding5.doubleValue, EPSILON)
+
+        val binding6: DoubleBinding = this.op1 + this.byte1
+        assertEquals(this.data + this.byte1, binding6.doubleValue, EPSILON)
     }
 
     @Test
@@ -88,6 +94,9 @@ class DoubleExpressionTest {
 
         val binding5: DoubleBinding = this.op1 - this.short1
         assertEquals(this.data - this.short1, binding5.doubleValue, EPSILON)
+
+        val binding6: DoubleBinding = this.op1 - this.byte1
+        assertEquals(this.data - this.byte1, binding6.doubleValue, EPSILON)
     }
 
     @Test
@@ -106,6 +115,9 @@ class DoubleExpressionTest {
 
         val binding5: DoubleBinding = this.op1 * this.short1
         assertEquals(this.data * this.short1, binding5.doubleValue, EPSILON)
+
+        val binding6: DoubleBinding = this.op1 * this.byte1
+        assertEquals(this.data * this.byte1, binding6.doubleValue, EPSILON)
     }
 
     @Test
@@ -124,6 +136,9 @@ class DoubleExpressionTest {
 
         val binding5: DoubleBinding = this.op1 / this.short1
         assertEquals(this.data / this.short1, binding5.doubleValue, EPSILON)
+
+        val binding6: DoubleBinding = this.op1 / this.byte1
+        assertEquals(this.data / this.byte1, binding6.doubleValue, EPSILON)
     }
 
     @Test

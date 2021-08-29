@@ -1,7 +1,7 @@
 package io.github.vinccool96.observationskt.beans.value
 
 /**
- * An observable double value.
+ * An observable short value.
  *
  * @see ObservableValue
  *

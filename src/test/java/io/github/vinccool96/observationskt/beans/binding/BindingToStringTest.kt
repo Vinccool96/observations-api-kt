@@ -175,6 +175,33 @@ class BindingToStringTest {
     }
 
     @Test
+    fun testByteToString() {
+        val value1: Byte = -98
+        val value2: Byte = 123
+
+        val v: ByteProperty = SimpleByteProperty(value1)
+        val binding: ByteBinding = object : ByteBinding() {
+
+            init {
+                super.bind(v)
+            }
+
+            override fun computeValue(): Byte {
+                return v.get()
+            }
+
+        }
+
+        assertEquals("ByteBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ByteBinding [value: $value1]", binding.toString())
+        v.set(value2)
+        assertEquals("ByteBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ByteBinding [value: $value2]", binding.toString())
+    }
+
+    @Test
     fun testObjectToString() {
         val value1 = Any()
         val value2 = Any()

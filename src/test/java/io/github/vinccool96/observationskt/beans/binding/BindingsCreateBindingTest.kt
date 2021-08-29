@@ -185,6 +185,20 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
 
                             }, Short.MAX_VALUE, Short.MIN_VALUE, (0).toShort()),
                     arrayOf(
+                            SimpleByteProperty(), SimpleByteProperty(),
+                            object : Functions<Number?> {
+
+                                override fun create(func: Callable<Number?>,
+                                        vararg dependencies: Observable): Binding<Number?> {
+                                    return Bindings.createByteBinding(func as Callable<Byte>, *dependencies)
+                                }
+
+                                override fun check(value0: Number?, value1: Any?) {
+                                    assertEquals(value0!!.toByte(), (value1 as Number).toByte())
+                                }
+
+                            }, Byte.MAX_VALUE, Byte.MIN_VALUE, (0).toByte()),
+                    arrayOf(
                             SimpleObjectProperty<Any?>(null), SimpleObjectProperty<Any?>(null),
                             object : Functions<Any?> {
 

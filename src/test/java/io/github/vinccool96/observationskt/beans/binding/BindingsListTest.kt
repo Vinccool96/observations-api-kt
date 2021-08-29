@@ -1143,6 +1143,160 @@ class BindingsListTest {
     }
 
     @Test
+    fun testByteValueAt_Constant() {
+        val defaultData: Byte = 0
+        val localData1: Byte = 123
+        val localData2: Byte = -98
+        val localProperty: ListProperty<Byte?> = SimpleListProperty()
+        val localList1: ObservableList<Byte?> = ObservableCollections.observableArrayList(localData1, localData2)
+        val localList2: ObservableList<Byte?> = ObservableCollections.observableArrayList()
+
+        val binding0 = Bindings.byteValueAt(localProperty, 0)
+        val binding1 = Bindings.byteValueAt(localProperty, 1)
+        val binding2 = Bindings.byteValueAt(localProperty, 2)
+        DependencyUtils.checkDependencies(binding0.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding1.dependencies, localProperty)
+        DependencyUtils.checkDependencies(binding2.dependencies, localProperty)
+
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.set(localList1)
+        assertEquals(localData1, binding0.get())
+        assertEquals(localData2, binding1.get())
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.removeAt(1)
+        assertEquals(localData1, binding0.get())
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty[0] = null
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(NullPointerException::class.java)
+
+        localProperty.set(localList2)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.addAll(localData2, localData2)
+        assertEquals(localData2, binding0.get())
+        assertEquals(localData2, binding1.get())
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.set(null)
+        assertEquals(defaultData, binding0.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding1.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        assertEquals(defaultData, binding2.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        binding0.dispose()
+        binding1.dispose()
+        binding2.dispose()
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun testByteValueAt_Constant_NegativeIndex() {
+        val localProperty: ListProperty<Byte?> = SimpleListProperty()
+        Bindings.byteValueAt(localProperty, -1)
+    }
+
+    @Test
+    fun testByteValueAt_Variable() {
+        val defaultData: Byte = 0
+        val localData1: Byte = 123
+        val localData2: Byte = -98
+        val localProperty: ListProperty<Byte?> = SimpleListProperty()
+        val localList1: ObservableList<Byte?> = ObservableCollections.observableArrayList(localData1, localData2)
+        val localList2: ObservableList<Byte?> = ObservableCollections.observableArrayList()
+
+        val binding = Bindings.byteValueAt(localProperty, this.index)
+        DependencyUtils.checkDependencies(binding.dependencies, localProperty, this.index)
+
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.set(localList1)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(localData1, binding.get())
+        this.index.set(1)
+        assertEquals(localData2, binding.get())
+        this.index.set(2)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.removeAt(1)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(localData1, binding.get())
+        this.index.set(1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty[0] = null
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(NullPointerException::class.java)
+        this.index.set(1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.set(localList2)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.addAll(localData2, localData2)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(localData2, binding.get())
+        this.index.set(1)
+        assertEquals(localData2, binding.get())
+        this.index.set(2)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+
+        localProperty.set(null)
+        this.index.set(-1)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        this.index.set(0)
+        assertEquals(defaultData, binding.get())
+        log.checkFine(IndexOutOfBoundsException::class.java)
+        binding.dispose()
+    }
+
+    @Test
     fun testStringValueAt_Constant() {
         val defaultData: String? = null
         val localData1: String? = "Hello World"

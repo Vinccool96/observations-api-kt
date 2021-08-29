@@ -165,7 +165,11 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
 
             val short1: ShortProperty = SimpleShortProperty()
             val short2: ShortProperty = SimpleShortProperty()
-            val shortData = arrayOf((-1).toShort(), (0).toShort(), (1).toShort())
+            val shortData: Array<Short> = arrayOf(-1, 0, 1)
+
+            val byte1: ByteProperty = SimpleByteProperty()
+            val byte2: ByteProperty = SimpleByteProperty()
+            val byteData: Array<Byte> = arrayOf(-1, 0, 1)
 
             val string1: StringProperty = SimpleStringProperty()
             val string2: StringProperty = SimpleStringProperty()
@@ -176,1526 +180,1869 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
             val object2: ObjectProperty<Any?> = SimpleObjectProperty(null)
             val objectData = arrayOf(Any(), Any(), Any())
 
-            return listOf(arrayOf(
-                    float1, float2,
-                    object : Functions<Float> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
-                                    EPSILON_FLOAT.toDouble())
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2, EPSILON_FLOAT.toDouble())
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue, EPSILON_FLOAT.toDouble())
-                        }
-
-                        override fun setOp1(value: Float) {
-                            float1.set(value)
-                        }
-
-                        override fun setOp2(value: Float) {
-                            float2.set(value)
-                        }
-
-                        override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) <= EPSILON_FLOAT, exp.get())
-                        }
-
-                    },
-                    floatData
-            ), arrayOf(
-                    float1, float2,
-                    object : Functions<Float> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
-                                    EPSILON_FLOAT.toDouble())
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2, EPSILON_FLOAT.toDouble())
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue, EPSILON_FLOAT.toDouble())
-                        }
-
-                        override fun setOp1(value: Float) {
-                            float1.set(value)
-                        }
-
-                        override fun setOp2(value: Float) {
-                            float2.set(value)
-                        }
-
-                        override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) > EPSILON_FLOAT, exp.get())
-                        }
-
-                    },
-                    floatData
-            ), arrayOf(
-                    float1, float2,
-                    object : Functions<Float> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Float) {
-                            float1.set(value)
-                        }
-
-                        override fun setOp2(value: Float) {
-                            float2.set(value)
-                        }
-
-                        override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
-                            assertEquals(op1 > op2, exp.get())
-                        }
-
-                    },
-                    floatData
-            ), arrayOf(
-                    float1, float2,
-                    object : Functions<Float> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Float) {
-                            float1.set(value)
-                        }
-
-                        override fun setOp2(value: Float) {
-                            float2.set(value)
-                        }
-
-                        override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
-                            assertEquals(op1 < op2, exp.get())
-                        }
-
-                    },
-                    floatData
-            ), arrayOf(
-                    float1, float2,
-                    object : Functions<Float> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .greaterThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Float) {
-                            float1.set(value)
-                        }
-
-                        override fun setOp2(value: Float) {
-                            float2.set(value)
-                        }
-
-                        override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
-                            assertEquals(op1 >= op2, exp.get())
-                        }
-
-                    },
-                    floatData
-            ), arrayOf(
-                    float1, float2,
-                    object : Functions<Float> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Float) {
-                            float1.set(value)
-                        }
-
-                        override fun setOp2(value: Float) {
-                            float2.set(value)
-                        }
-
-                        override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
-                            assertEquals(op1 <= op2, exp.get())
-                        }
-
-                    },
-                    floatData
-            ), arrayOf(
-                    double1, double2,
-                    object : Functions<Double> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
-                                    EPSILON_DOUBLE)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2, EPSILON_DOUBLE)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue, EPSILON_DOUBLE)
-                        }
-
-                        override fun setOp1(value: Double) {
-                            double1.set(value)
-                        }
-
-                        override fun setOp2(value: Double) {
-                            double2.set(value)
-                        }
-
-                        override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) <= EPSILON_DOUBLE, exp.get())
-                        }
-
-                    },
-                    doubleData
-            ), arrayOf(
-                    double1, double2,
-                    object : Functions<Double> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
-                                    EPSILON_DOUBLE)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2, EPSILON_DOUBLE)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue, EPSILON_DOUBLE)
-                        }
-
-                        override fun setOp1(value: Double) {
-                            double1.set(value)
-                        }
-
-                        override fun setOp2(value: Double) {
-                            double2.set(value)
-                        }
-
-                        override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) > EPSILON_DOUBLE, exp.get())
-                        }
-
-                    },
-                    doubleData
-            ), arrayOf(
-                    double1, double2,
-                    object : Functions<Double> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Double) {
-                            double1.set(value)
-                        }
-
-                        override fun setOp2(value: Double) {
-                            double2.set(value)
-                        }
-
-                        override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
-                            assertEquals(op1 > op2, exp.get())
-                        }
-
-                    },
-                    doubleData
-            ), arrayOf(
-                    double1, double2,
-                    object : Functions<Double> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Double) {
-                            double1.set(value)
-                        }
-
-                        override fun setOp2(value: Double) {
-                            double2.set(value)
-                        }
-
-                        override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
-                            assertEquals(op1 < op2, exp.get())
-                        }
-
-                    },
-                    doubleData
-            ), arrayOf(
-                    double1, double2,
-                    object : Functions<Double> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .greaterThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Double) {
-                            double1.set(value)
-                        }
-
-                        override fun setOp2(value: Double) {
-                            double2.set(value)
-                        }
-
-                        override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
-                            assertEquals(op1 >= op2, exp.get())
-                        }
-
-                    },
-                    doubleData
-            ), arrayOf(
-                    double1, double2,
-                    object : Functions<Double> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Double) {
-                            double1.set(value)
-                        }
-
-                        override fun setOp2(value: Double) {
-                            double2.set(value)
-                        }
-
-                        override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
-                            assertEquals(op1 <= op2, exp.get())
-                        }
-
-                    },
-                    doubleData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(op1 == op2, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) <= 1, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(op1 != op2, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) > 1, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(op1 > op2, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(op1 < op2, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .greaterThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(op1 >= op2, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    int1, int2,
-                    object : Functions<Int> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Int) {
-                            int1.set(value)
-                        }
-
-                        override fun setOp2(value: Int) {
-                            int2.set(value)
-                        }
-
-                        override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
-                            assertEquals(op1 <= op2, exp.get())
-                        }
-
-                    },
-                    intData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(op1 == op2, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) <= 1, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(op1 != op2, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) > 1, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(op1 > op2, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(op1 < op2, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .greaterThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(op1 >= op2, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    long1, long2,
-                    object : Functions<Long> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Long) {
-                            long1.set(value)
-                        }
-
-                        override fun setOp2(value: Long) {
-                            long2.set(value)
-                        }
-
-                        override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
-                            assertEquals(op1 <= op2, exp.get())
-                        }
-
-                    },
-                    longData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(op1 == op2, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) <= 1, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(op1 != op2, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(abs(op1 - op2) > 1, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(op1 > op2, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(op1 < op2, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .greaterThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(op1 >= op2, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    short1, short2,
-                    object : Functions<Short> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
-                        }
-
-                        override fun setOp1(value: Short) {
-                            short1.set(value)
-                        }
-
-                        override fun setOp2(value: Short) {
-                            short2.set(value)
-                        }
-
-                        override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
-                            assertEquals(op1 <= op2, exp.get())
-                        }
-
-                    },
-                    shortData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) == makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) == makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    ciStringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .equalIgnoreCase(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.equalIgnoreCase(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.equalIgnoreCase(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .equalIgnoreCase(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.equalIgnoreCase(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.equalIgnoreCase(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
-                        }
-
-                    },
-                    ciStringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) != makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) != makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    ciStringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .notEqualIgnoreCase(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.notEqualIgnoreCase(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.notEqualIgnoreCase(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(!makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .notEqualIgnoreCase(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.notEqualIgnoreCase(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.notEqualIgnoreCase(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(!makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
-                        }
-
-                    },
-                    ciStringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.greaterThan(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.greaterThan(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) > makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.lessThan(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.lessThan(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) < makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .greaterThanOrEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.greaterThanOrEqual(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) >= makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    string1, string2,
-                    object : Functions<String?> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings
-                                    .lessThanOrEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1 as ObservableStringValue, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
-                            return Bindings.lessThanOrEqual(op1, op2 as ObservableStringValue)
-                        }
-
-                        override fun setOp1(value: String?) {
-                            string1.set(value)
-                        }
-
-                        override fun setOp2(value: String?) {
-                            string2.set(value)
-                        }
-
-                        override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
-                            assertEquals(makeSafe(op1) <= makeSafe(op2), exp.get())
-                        }
-
-                    },
-                    stringData
-            ), arrayOf(
-                    object1, object2,
-                    object : Functions<Any> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableObjectValue<Any>,
-                                    op2 as ObservableObjectValue<Any>)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1 as ObservableObjectValue<Any>, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.equal(op1, op2 as ObservableObjectValue<Any>)
-                        }
-
-                        override fun setOp1(value: Any) {
-                            object1.set(value)
-                        }
-
-                        override fun setOp2(value: Any) {
-                            object2.set(value)
-                        }
-
-                        override fun check(op1: Any, op2: Any, exp: BooleanBinding) {
-                            assertEquals(op1 == op2, exp.get())
-                        }
-
-                    },
-                    objectData
-            ), arrayOf(
-                    object1, object2,
-                    object : Functions<Any> {
-
-                        override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableObjectValue<Any>,
-                                    op2 as ObservableObjectValue<Any>)
-                        }
-
-                        override fun generateExpressionPrimitive(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1 as ObservableObjectValue<Any>, op2)
-                        }
-
-                        override fun generatePrimitiveExpression(op1: Any, op2: Any): BooleanBinding {
-                            return Bindings.notEqual(op1, op2 as ObservableObjectValue<Any>)
-                        }
-
-                        override fun setOp1(value: Any) {
-                            object1.set(value)
-                        }
-
-                        override fun setOp2(value: Any) {
-                            object2.set(value)
-                        }
-
-                        override fun check(op1: Any, op2: Any, exp: BooleanBinding) {
-                            assertEquals(op1 != op2, exp.get())
-                        }
-
-                    },
-                    objectData
-            ))
+            return listOf(
+
+                    // double
+                    arrayOf(
+                            double1, double2,
+                            object : Functions<Double> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            EPSILON_DOUBLE)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2, EPSILON_DOUBLE)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue, EPSILON_DOUBLE)
+                                }
+
+                                override fun setOp1(value: Double) {
+                                    double1.set(value)
+                                }
+
+                                override fun setOp2(value: Double) {
+                                    double2.set(value)
+                                }
+
+                                override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) <= EPSILON_DOUBLE, exp.get())
+                                }
+
+                            },
+                            doubleData
+                    ),
+                    arrayOf(
+                            double1, double2,
+                            object : Functions<Double> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            EPSILON_DOUBLE)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2, EPSILON_DOUBLE)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue, EPSILON_DOUBLE)
+                                }
+
+                                override fun setOp1(value: Double) {
+                                    double1.set(value)
+                                }
+
+                                override fun setOp2(value: Double) {
+                                    double2.set(value)
+                                }
+
+                                override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) > EPSILON_DOUBLE, exp.get())
+                                }
+
+                            },
+                            doubleData
+                    ),
+                    arrayOf(
+                            double1, double2,
+                            object : Functions<Double> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Double) {
+                                    double1.set(value)
+                                }
+
+                                override fun setOp2(value: Double) {
+                                    double2.set(value)
+                                }
+
+                                override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
+                                    assertEquals(op1 > op2, exp.get())
+                                }
+
+                            },
+                            doubleData
+                    ),
+                    arrayOf(
+                            double1, double2,
+                            object : Functions<Double> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Double) {
+                                    double1.set(value)
+                                }
+
+                                override fun setOp2(value: Double) {
+                                    double2.set(value)
+                                }
+
+                                override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
+                                    assertEquals(op1 < op2, exp.get())
+                                }
+
+                            },
+                            doubleData
+                    ),
+                    arrayOf(
+                            double1, double2,
+                            object : Functions<Double> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableNumberValue,
+                                                    op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Double) {
+                                    double1.set(value)
+                                }
+
+                                override fun setOp2(value: Double) {
+                                    double2.set(value)
+                                }
+
+                                override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
+                                    assertEquals(op1 >= op2, exp.get())
+                                }
+
+                            },
+                            doubleData
+                    ),
+                    arrayOf(
+                            double1, double2,
+                            object : Functions<Double> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Double): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Double, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Double) {
+                                    double1.set(value)
+                                }
+
+                                override fun setOp2(value: Double) {
+                                    double2.set(value)
+                                }
+
+                                override fun check(op1: Double, op2: Double, exp: BooleanBinding) {
+                                    assertEquals(op1 <= op2, exp.get())
+                                }
+
+                            },
+                            doubleData
+                    ),
+
+                    // float
+                    arrayOf(
+                            float1, float2,
+                            object : Functions<Float> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            EPSILON_FLOAT.toDouble())
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2, EPSILON_FLOAT.toDouble())
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue, EPSILON_FLOAT.toDouble())
+                                }
+
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
+                                }
+
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
+                                }
+
+                                override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) <= EPSILON_FLOAT, exp.get())
+                                }
+
+                            },
+                            floatData
+                    ),
+                    arrayOf(
+                            float1, float2,
+                            object : Functions<Float> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            EPSILON_FLOAT.toDouble())
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2,
+                                            EPSILON_FLOAT.toDouble())
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue,
+                                            EPSILON_FLOAT.toDouble())
+                                }
+
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
+                                }
+
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
+                                }
+
+                                override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) > EPSILON_FLOAT, exp.get())
+                                }
+
+                            },
+                            floatData
+                    ),
+                    arrayOf(
+                            float1, float2,
+                            object : Functions<Float> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
+                                }
+
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
+                                }
+
+                                override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
+                                    assertEquals(op1 > op2, exp.get())
+                                }
+
+                            },
+                            floatData
+                    ),
+                    arrayOf(
+                            float1, float2,
+                            object : Functions<Float> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
+                                }
+
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
+                                }
+
+                                override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
+                                    assertEquals(op1 < op2, exp.get())
+                                }
+
+                            },
+                            floatData
+                    ),
+                    arrayOf(
+                            float1, float2,
+                            object : Functions<Float> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableNumberValue,
+                                                    op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
+                                }
+
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
+                                }
+
+                                override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
+                                    assertEquals(op1 >= op2, exp.get())
+                                }
+
+                            },
+                            floatData
+                    ),
+                    arrayOf(
+                            float1, float2,
+                            object : Functions<Float> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
+                                }
+
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
+                                }
+
+                                override fun check(op1: Float, op2: Float, exp: BooleanBinding) {
+                                    assertEquals(op1 <= op2, exp.get())
+                                }
+
+                            },
+                            floatData
+                    ),
+
+                    // int
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(op1 == op2, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) <= 1, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(op1 != op2, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) > 1, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(op1 > op2, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(op1 < op2, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableNumberValue,
+                                                    op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(op1 >= op2, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .lessThanOrEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: BooleanBinding) {
+                                    assertEquals(op1 <= op2, exp.get())
+                                }
+
+                            },
+                            intData
+                    ),
+
+                    // long
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(op1 == op2, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) <= 1, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(op1 != op2, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) > 1, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(op1 > op2, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(op1 < op2, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableNumberValue,
+                                                    op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(op1 >= op2, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+                    arrayOf(
+                            long1, long2,
+                            object : Functions<Long> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Long): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Long, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Long) {
+                                    long1.set(value)
+                                }
+
+                                override fun setOp2(value: Long) {
+                                    long2.set(value)
+                                }
+
+                                override fun check(op1: Long, op2: Long, exp: BooleanBinding) {
+                                    assertEquals(op1 <= op2, exp.get())
+                                }
+
+                            },
+                            longData
+                    ),
+
+                    // short
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(op1 == op2, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) <= 1, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(op1 != op2, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) > 1, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(op1 > op2, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(op1 < op2, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableNumberValue,
+                                                    op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(op1 >= op2, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+                    arrayOf(
+                            short1, short2,
+                            object : Functions<Short> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Short): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Short, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Short) {
+                                    short1.set(value)
+                                }
+
+                                override fun setOp2(value: Short) {
+                                    short2.set(value)
+                                }
+
+                                override fun check(op1: Short, op2: Short, exp: BooleanBinding) {
+                                    assertEquals(op1 <= op2, exp.get())
+                                }
+
+                            },
+                            shortData
+                    ),
+
+                    // byte
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(op1 == op2, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) <= 1, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(op1 != op2, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2 as ObservableNumberValue,
+                                            1.0)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableNumberValue, op2, 1.0)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableNumberValue, 1.0)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(abs(op1 - op2) > 1, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(op1 > op2, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(op1 < op2, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableNumberValue,
+                                                    op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(op1 >= op2, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+                    arrayOf(
+                            byte1, byte2,
+                            object : Functions<Byte> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue,
+                                            op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Byte): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Byte, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Byte) {
+                                    byte1.set(value)
+                                }
+
+                                override fun setOp2(value: Byte) {
+                                    byte2.set(value)
+                                }
+
+                                override fun check(op1: Byte, op2: Byte, exp: BooleanBinding) {
+                                    assertEquals(op1 <= op2, exp.get())
+                                }
+
+                            },
+                            byteData
+                    ),
+
+                    // string
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) == makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) == makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            ciStringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .equalIgnoreCase(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.equalIgnoreCase(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.equalIgnoreCase(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .equalIgnoreCase(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.equalIgnoreCase(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.equalIgnoreCase(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
+                                }
+
+                            },
+                            ciStringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) != makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) != makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            ciStringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .notEqualIgnoreCase(op1 as ObservableStringValue,
+                                                    op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.notEqualIgnoreCase(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.notEqualIgnoreCase(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(!makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .notEqualIgnoreCase(op1 as ObservableStringValue,
+                                                    op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.notEqualIgnoreCase(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.notEqualIgnoreCase(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(!makeSafe(op1).equals(makeSafe(op2), ignoreCase = true), exp.get())
+                                }
+
+                            },
+                            ciStringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableStringValue,
+                                            op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.greaterThan(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThan(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) > makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.lessThan(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.lessThan(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) < makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .greaterThanOrEqual(op1 as ObservableStringValue,
+                                                    op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.greaterThanOrEqual(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) >= makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            string1, string2,
+                            object : Functions<String?> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings
+                                            .lessThanOrEqual(op1 as ObservableStringValue, op2 as ObservableStringValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: String?): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1 as ObservableStringValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: String?, op2: Any): BooleanBinding {
+                                    return Bindings.lessThanOrEqual(op1, op2 as ObservableStringValue)
+                                }
+
+                                override fun setOp1(value: String?) {
+                                    string1.set(value)
+                                }
+
+                                override fun setOp2(value: String?) {
+                                    string2.set(value)
+                                }
+
+                                override fun check(op1: String?, op2: String?, exp: BooleanBinding) {
+                                    assertEquals(makeSafe(op1) <= makeSafe(op2), exp.get())
+                                }
+
+                            },
+                            stringData
+                    ),
+                    arrayOf(
+                            object1, object2,
+                            object : Functions<Any> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableObjectValue<Any>,
+                                            op2 as ObservableObjectValue<Any>)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1 as ObservableObjectValue<Any>, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.equal(op1, op2 as ObservableObjectValue<Any>)
+                                }
+
+                                override fun setOp1(value: Any) {
+                                    object1.set(value)
+                                }
+
+                                override fun setOp2(value: Any) {
+                                    object2.set(value)
+                                }
+
+                                override fun check(op1: Any, op2: Any, exp: BooleanBinding) {
+                                    assertEquals(op1 == op2, exp.get())
+                                }
+
+                            },
+                            objectData
+                    ),
+                    arrayOf(
+                            object1, object2,
+                            object : Functions<Any> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableObjectValue<Any>,
+                                            op2 as ObservableObjectValue<Any>)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1 as ObservableObjectValue<Any>, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Any, op2: Any): BooleanBinding {
+                                    return Bindings.notEqual(op1, op2 as ObservableObjectValue<Any>)
+                                }
+
+                                override fun setOp1(value: Any) {
+                                    object1.set(value)
+                                }
+
+                                override fun setOp2(value: Any) {
+                                    object2.set(value)
+                                }
+
+                                override fun check(op1: Any, op2: Any, exp: BooleanBinding) {
+                                    assertEquals(op1 != op2, exp.get())
+                                }
+
+                            },
+                            objectData
+                    ))
         }
 
     }
