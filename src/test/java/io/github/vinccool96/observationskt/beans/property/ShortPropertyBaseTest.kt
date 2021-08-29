@@ -2,8 +2,8 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
-import io.github.vinccool96.observationskt.beans.value.ObservableLongValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableShortValueStub
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -11,9 +11,9 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @Suppress("BooleanLiteralArgument")
-class LongPropertyBaseTest {
+class ShortPropertyBaseTest {
 
-    private lateinit var property: LongPropertyMock
+    private lateinit var property: ShortPropertyMock
 
     private lateinit var invalidationListener: InvalidationListenerMock
 
@@ -21,7 +21,7 @@ class LongPropertyBaseTest {
 
     @Before
     fun setUp() {
-        this.property = LongPropertyMock()
+        this.property = ShortPropertyMock()
         this.invalidationListener = InvalidationListenerMock()
         this.changeListener = ChangeListenerMock(UNDEFINED)
     }
@@ -40,14 +40,14 @@ class LongPropertyBaseTest {
 
     @Test
     fun testConstructor() {
-        val p1: LongProperty = SimpleLongProperty()
-        assertEquals(0L, p1.get())
-        assertEquals(0L, p1.value)
+        val p1: ShortProperty = SimpleShortProperty()
+        assertEquals(0, p1.get())
+        assertEquals(0, p1.value!!.toShort())
         assertFalse(p1.bound)
 
-        val p2: LongProperty = SimpleLongProperty(VALUE_1)
+        val p2: ShortProperty = SimpleShortProperty(VALUE_1)
         assertEquals(VALUE_1, p2.get())
-        assertEquals(VALUE_1, p2.value)
+        assertEquals(VALUE_1, p2.value!!.toShort())
         assertFalse(p2.bound)
     }
 
@@ -66,7 +66,7 @@ class LongPropertyBaseTest {
     fun testChangeListener() {
         attachChangeListener()
         this.property.set(VALUE_1)
-        this.changeListener.check(this.property, 0L, VALUE_1, 1)
+        this.changeListener.check(this.property, DEFAULT_VALUE, VALUE_1, 1)
         this.property.removeListener(this.changeListener)
         this.changeListener.reset()
         this.property.set(VALUE_2)
@@ -105,7 +105,7 @@ class LongPropertyBaseTest {
         this.property.set(VALUE_1)
         assertEquals(VALUE_1, this.property.get())
         this.property.check(1)
-        this.changeListener.check(this.property, 0L, VALUE_1, 1)
+        this.changeListener.check(this.property, DEFAULT_VALUE, VALUE_1, 1)
 
         // set same value again
         this.property.set(VALUE_1)
@@ -153,7 +153,7 @@ class LongPropertyBaseTest {
         this.property.value = VALUE_1
         assertEquals(VALUE_1, this.property.value)
         this.property.check(1)
-        this.changeListener.check(this.property, 0L, VALUE_1, 1)
+        this.changeListener.check(this.property, DEFAULT_VALUE, VALUE_1, 1)
 
         // set same value again
         this.property.value = VALUE_1
@@ -171,14 +171,14 @@ class LongPropertyBaseTest {
 
     @Test(expected = RuntimeException::class)
     fun testSetBound() {
-        val v: LongProperty = SimpleLongProperty(VALUE_1)
+        val v: ShortProperty = SimpleShortProperty(VALUE_1)
         this.property.bind(v)
         this.property.set(VALUE_1)
     }
 
     @Test(expected = RuntimeException::class)
     fun testValueSetBound() {
-        val v: LongProperty = SimpleLongProperty(VALUE_1)
+        val v: ShortProperty = SimpleShortProperty(VALUE_1)
         this.property.bind(v)
         this.property.value = VALUE_1
     }
@@ -186,7 +186,7 @@ class LongPropertyBaseTest {
     @Test
     fun testLazyBind_primitive() {
         attachInvalidationListener()
-        val v = ObservableLongValueStub(VALUE_1)
+        val v = ObservableShortValueStub(VALUE_1)
         this.property.bind(v)
 
         assertEquals(VALUE_1, this.property.get())
@@ -218,13 +218,13 @@ class LongPropertyBaseTest {
     @Test
     fun testEagerBind_primitive() {
         attachChangeListener()
-        val v = ObservableLongValueStub(VALUE_1)
+        val v = ObservableShortValueStub(VALUE_1)
         this.property.bind(v)
 
         assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
-        this.changeListener.check(this.property, 0L, VALUE_1, 1)
+        this.changeListener.check(this.property, DEFAULT_VALUE, VALUE_1, 1)
 
         // change binding once
         v.set(VALUE_2)
@@ -250,7 +250,7 @@ class LongPropertyBaseTest {
     @Test
     fun testLazyBind_generic() {
         attachInvalidationListener()
-        val v: ObservableObjectValueStub<Long> = ObservableObjectValueStub(VALUE_1)
+        val v: ObservableObjectValueStub<Short> = ObservableObjectValueStub(VALUE_1)
         this.property.bind(v)
 
         assertEquals(VALUE_1, this.property.get())
@@ -282,13 +282,13 @@ class LongPropertyBaseTest {
     @Test
     fun testEagerBind_generic() {
         attachChangeListener()
-        val v: ObservableObjectValueStub<Long> = ObservableObjectValueStub(VALUE_1)
+        val v: ObservableObjectValueStub<Short> = ObservableObjectValueStub(VALUE_1)
         this.property.bind(v)
 
         assertEquals(VALUE_1, this.property.get())
         assertTrue(this.property.bound)
         this.property.check(1)
-        this.changeListener.check(this.property, 0L, VALUE_1, 1)
+        this.changeListener.check(this.property, DEFAULT_VALUE, VALUE_1, 1)
 
         // change binding once
         v.set(VALUE_2)
@@ -314,8 +314,8 @@ class LongPropertyBaseTest {
     @Test
     fun testRebind() {
         attachInvalidationListener()
-        val v1 = ObservableLongValueStub(VALUE_2)
-        val v2 = ObservableLongValueStub(VALUE_1)
+        val v1 = ObservableShortValueStub(VALUE_2)
+        val v2 = ObservableShortValueStub(VALUE_1)
         this.property.bind(v1)
         this.property.get()
         this.property.reset()
@@ -352,7 +352,7 @@ class LongPropertyBaseTest {
     @Test
     fun testUnbind() {
         attachInvalidationListener()
-        val v = ObservableLongValueStub(VALUE_2)
+        val v = ObservableShortValueStub(VALUE_2)
         this.property.bind(v)
         this.property.unbind()
         assertEquals(VALUE_2, this.property.get())
@@ -376,8 +376,8 @@ class LongPropertyBaseTest {
     @Test
     @Suppress("UNUSED_VALUE")
     fun testBindNull() {
-        var property: LongPropertyMock? = LongPropertyMock()
-        val v = ObservableLongValueStub(VALUE_1)
+        var property: ShortPropertyMock? = ShortPropertyMock()
+        val v = ObservableShortValueStub(VALUE_1)
         val publicListener = InvalidationListenerMock()
         val privateListener = InvalidationListenerMock()
         property!!.addListener(publicListener)
@@ -402,7 +402,7 @@ class LongPropertyBaseTest {
 
     @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
-        val v = ObservableLongValueStub(VALUE_2)
+        val v = ObservableShortValueStub(VALUE_2)
         val listener2 = InvalidationListenerMock()
         val listener3 = InvalidationListenerMock()
 
@@ -425,44 +425,44 @@ class LongPropertyBaseTest {
 
     @Test
     fun testToString() {
-        val v: LongProperty = SimpleLongProperty(VALUE_1)
+        val v: ShortProperty = SimpleShortProperty(VALUE_1)
 
         this.property.set(VALUE_1)
-        assertEquals("LongProperty [value: $VALUE_1]", this.property.toString())
+        assertEquals("ShortProperty [value: $VALUE_1]", this.property.toString())
 
         this.property.bind(v)
-        assertEquals("LongProperty [bound, invalid]", this.property.toString())
+        assertEquals("ShortProperty [bound, invalid]", this.property.toString())
         this.property.get()
-        assertEquals("LongProperty [bound, value: $VALUE_1]", this.property.toString())
+        assertEquals("ShortProperty [bound, value: $VALUE_1]", this.property.toString())
         v.set(VALUE_2)
-        assertEquals("LongProperty [bound, invalid]", this.property.toString())
+        assertEquals("ShortProperty [bound, invalid]", this.property.toString())
         this.property.get()
-        assertEquals("LongProperty [bound, value: ${VALUE_2}]", this.property.toString())
+        assertEquals("ShortProperty [bound, value: ${VALUE_2}]", this.property.toString())
 
         val bean = Any()
         val name = "My name"
-        val v1: LongPropertyBase = LongPropertyMock(bean, name)
-        assertEquals("LongProperty [bean: $bean, name: My name, value: 0]", v1.toString())
+        val v1: ShortPropertyBase = ShortPropertyMock(bean, name)
+        assertEquals("ShortProperty [bean: $bean, name: My name, value: 0]", v1.toString())
         v1.set(VALUE_1)
-        assertEquals("LongProperty [bean: $bean, name: My name, value: $VALUE_1]", v1.toString())
+        assertEquals("ShortProperty [bean: $bean, name: My name, value: $VALUE_1]", v1.toString())
 
-        val v2: LongPropertyBase = LongPropertyMock(bean, NO_NAME_1)
-        assertEquals("LongProperty [bean: $bean, value: 0]", v2.toString())
+        val v2: ShortPropertyBase = ShortPropertyMock(bean, NO_NAME_1)
+        assertEquals("ShortProperty [bean: $bean, value: 0]", v2.toString())
         v2.set(VALUE_1)
-        assertEquals("LongProperty [bean: $bean, value: $VALUE_1]", v2.toString())
+        assertEquals("ShortProperty [bean: $bean, value: $VALUE_1]", v2.toString())
 
-        val v3: LongPropertyBase = LongPropertyMock(bean, NO_NAME_2)
-        assertEquals("LongProperty [bean: $bean, value: 0]", v3.toString())
+        val v3: ShortPropertyBase = ShortPropertyMock(bean, NO_NAME_2)
+        assertEquals("ShortProperty [bean: $bean, value: 0]", v3.toString())
         v3.set(VALUE_1)
-        assertEquals("LongProperty [bean: $bean, value: $VALUE_1]", v3.toString())
+        assertEquals("ShortProperty [bean: $bean, value: $VALUE_1]", v3.toString())
 
-        val v4: LongPropertyBase = LongPropertyMock(NO_BEAN, name)
-        assertEquals("LongProperty [name: My name, value: 0]", v4.toString())
+        val v4: ShortPropertyBase = ShortPropertyMock(NO_BEAN, name)
+        assertEquals("ShortProperty [name: My name, value: 0]", v4.toString())
         v4.set(VALUE_1)
-        assertEquals("LongProperty [name: My name, value: $VALUE_1]", v4.toString())
+        assertEquals("ShortProperty [name: My name, value: $VALUE_1]", v4.toString())
     }
 
-    private class LongPropertyMock(override val bean: Any?, override val name: String?) : LongPropertyBase(0L) {
+    private class ShortPropertyMock(override val bean: Any?, override val name: String?) : ShortPropertyBase(0) {
 
         private var counter: Int = 0
 
@@ -491,11 +491,13 @@ class LongPropertyBaseTest {
 
         private const val NO_NAME_2: String = ""
 
-        private const val UNDEFINED: Long = Long.MAX_VALUE
+        private const val UNDEFINED: Short = Short.MAX_VALUE
 
-        private const val VALUE_1: Long = 42L
+        private const val DEFAULT_VALUE: Short = 0
 
-        private const val VALUE_2: Long = 1234567890123456789L
+        private const val VALUE_1: Short = 42
+
+        private const val VALUE_2: Short = 12345
 
     }
 
