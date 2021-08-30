@@ -34,7 +34,7 @@ class BindingsArrayTest {
         this.index = SimpleIntProperty()
     }
 
-    private fun <T : ObservableArray<T>> setAs(array: ObservableArray<T>, value: ObservableArray<T>?) {
+    private fun <T> setAs(array: ObservableArray<T>, value: ObservableArray<T>?) {
         array.clear()
         if (value != null) {
             when {
@@ -281,7 +281,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = booleanArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get())
         assertEquals(localData2, binding1.get())
         assertEquals(defaultData, binding2.get())
@@ -354,7 +355,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = booleanArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
@@ -420,7 +422,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get(), EPSILON_DOUBLE)
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = doubleArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get(), EPSILON_DOUBLE)
         assertEquals(localData2, binding1.get(), EPSILON_DOUBLE)
         assertEquals(defaultData, binding2.get(), EPSILON_DOUBLE)
@@ -493,7 +496,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get(), EPSILON_DOUBLE)
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = doubleArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get(), EPSILON_DOUBLE)
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
@@ -559,7 +563,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get(), EPSILON_FLOAT)
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = floatArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get(), EPSILON_FLOAT)
         assertEquals(localData2, binding1.get(), EPSILON_FLOAT)
         assertEquals(defaultData, binding2.get(), EPSILON_FLOAT)
@@ -632,7 +637,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get(), EPSILON_FLOAT)
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = floatArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get(), EPSILON_FLOAT)
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
@@ -698,7 +704,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = intArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get())
         assertEquals(localData2, binding1.get())
         assertEquals(defaultData, binding2.get())
@@ -771,7 +778,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = intArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
@@ -837,7 +845,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = longArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get())
         assertEquals(localData2, binding1.get())
         assertEquals(defaultData, binding2.get())
@@ -910,7 +919,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = longArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
@@ -976,7 +986,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = shortArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get())
         assertEquals(localData2, binding1.get())
         assertEquals(defaultData, binding2.get())
@@ -1049,7 +1060,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = shortArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
@@ -1115,7 +1127,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding2.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = byteArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         assertEquals(localData2, binding0.get())
         assertEquals(localData2, binding1.get())
         assertEquals(defaultData, binding2.get())
@@ -1188,7 +1201,8 @@ class BindingsArrayTest {
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
-        localProperty.addAll(localData2, localData2)
+        val data = byteArrayOf(localData2, localData2)
+        localProperty.addAll(*data)
         this.index.set(-1)
         assertEquals(defaultData, binding.get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)

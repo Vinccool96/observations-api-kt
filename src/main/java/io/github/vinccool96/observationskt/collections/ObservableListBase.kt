@@ -42,8 +42,8 @@ import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
  * The `try`/`finally` blocks in the example are needed only if there's a possibility for an exception to occur
  * inside a `beginChange` / `endChange` block
  *
- * Note: If you want to create modifiable [ObservableList] implementation, consider
- * using [ModifiableObservableListBase] as a superclass.
+ * Note: If you want to create modifiable [ObservableList] implementation, consider using [ModifiableObservableListBase]
+ * as a superclass.
  *
  * Note: In order to create list with sequential access, you should override [listIterator], [iterator] methods and use
  * them in [get], [size] and other methods accordingly.

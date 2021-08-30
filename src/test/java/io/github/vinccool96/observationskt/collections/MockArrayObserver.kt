@@ -6,13 +6,13 @@ import kotlin.test.*
  * A mock observer that tracks calls to its [onChanged] method, combined with utility methods to make assertions on the
  * calls made.
  */
-class MockArrayObserver<T : ObservableArray<T>> : ArrayChangeListener<T> {
+class MockArrayObserver<T> : ArrayChangeListener<T> {
 
     private var tooManyCalls: Boolean = false
 
     private var call: Call<T>? = null
 
-    private class Call<T>(val array: T, val sizeChanged: Boolean, val from: Int, val to: Int) {
+    private class Call<T>(val array: ObservableArray<T>, val sizeChanged: Boolean, val from: Int, val to: Int) {
 
         override fun toString(): String {
             return "sizeChanged: $sizeChanged, from: $from, to: $to"
@@ -20,7 +20,7 @@ class MockArrayObserver<T : ObservableArray<T>> : ArrayChangeListener<T> {
 
     }
 
-    override fun onChanged(observableArray: T, sizeChanged: Boolean, from: Int, to: Int) {
+    override fun onChanged(observableArray: ObservableArray<T>, sizeChanged: Boolean, from: Int, to: Int) {
         if (this.call == null) {
             this.call = Call(observableArray, sizeChanged, from, to)
 
@@ -40,13 +40,13 @@ class MockArrayObserver<T : ObservableArray<T>> : ArrayChangeListener<T> {
         assertNull(this.call)
     }
 
-    fun checkOnlySizeChanged(array: T) {
+    fun checkOnlySizeChanged(array: ObservableArray<T>) {
         assertFalse(this.tooManyCalls, "Too many array change events")
         assertSame(array, this.call!!.array)
         assertEquals(true, this.call!!.sizeChanged)
     }
 
-    fun checkOnlyElementsChanged(array: T, from: Int, to: Int) {
+    fun checkOnlyElementsChanged(array: ObservableArray<T>, from: Int, to: Int) {
         assertFalse(this.tooManyCalls, "Too many array change events")
         assertSame(array, this.call!!.array)
         assertEquals(false, this.call!!.sizeChanged)
@@ -54,7 +54,7 @@ class MockArrayObserver<T : ObservableArray<T>> : ArrayChangeListener<T> {
         assertEquals(to, this.call!!.to)
     }
 
-    fun check(array: T, sizeChanged: Boolean, from: Int, to: Int) {
+    fun check(array: ObservableArray<T>, sizeChanged: Boolean, from: Int, to: Int) {
         assertFalse(this.tooManyCalls, "Too many array change events")
         assertSame(array, this.call!!.array)
         assertEquals(sizeChanged, this.call!!.sizeChanged)

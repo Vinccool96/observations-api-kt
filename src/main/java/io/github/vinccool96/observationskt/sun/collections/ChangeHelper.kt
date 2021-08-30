@@ -1,6 +1,7 @@
 package io.github.vinccool96.observationskt.sun.collections
 
 object ChangeHelper {
+
     fun addRemoveChangeToString(from: Int, to: Int, list: List<*>, removed: List<*>): String {
         val stringBuilder = StringBuilder()
 
@@ -28,4 +29,5 @@ object ChangeHelper {
     fun updateChangeToString(from: Int, to: Int): String {
         return "updated at range [$from, $to]"
     }
+
 }

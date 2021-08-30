@@ -6,10 +6,11 @@ import io.github.vinccool96.observationskt.collections.ObservableListBase
 import io.github.vinccool96.observationskt.util.Callback
 import java.util.*
 
+@Suppress("unused")
 class ElementObserver<E>(private val extractor: Callback<E, Array<Observable>>,
         private val listenerGenerator: Callback<E, InvalidationListener>, private val list: ObservableListBase<E>) {
 
-    private class ElementsMapElement(internal val listener: InvalidationListener) {
+    private class ElementsMapElement(val listener: InvalidationListener) {
 
         private var counter: Int = 1
 

@@ -1,5 +1,6 @@
 package io.github.vinccool96.observationskt.sun.collections
 
+import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.collections.ObservableArrayBase
 import io.github.vinccool96.observationskt.collections.ObservableObjectArray
 import kotlin.math.min
@@ -10,7 +11,7 @@ import kotlin.math.min
  * @constructor Creates empty observable double array
  */
 @Suppress("UNCHECKED_CAST")
-class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : ObservableArrayBase<ObservableObjectArray<T>>(),
+class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : ObservableArrayBase<T>(),
         ObservableObjectArray<T> {
 
     private val initialArray: Array<T> = this.baseArray.copyOfRange(0, 0)
@@ -41,7 +42,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
      *
      * @param src observable double array to copy
      */
-    constructor(baseArray: Array<T>, src: ObservableObjectArray<T>) : this(baseArray) {
+    constructor(baseArray: Array<T>, src: ObservableArray<T>) : this(baseArray) {
         setAll(src)
     }
 
@@ -56,7 +57,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
     override val size: Int
         get() = this.sizeState
 
-    private fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+    override fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
         copyIntoWrapped(src, this.array, this.sizeState, startIndex, endIndex)
@@ -64,34 +65,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         fireChange(length != 0, this.sizeState - length, this.sizeState)
     }
 
-    private fun addAllInternal(src: ObservableObjectArray<T>, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        growCapacity(length)
-        copyIntoWrapped(src, this.array, this.sizeState, startIndex, endIndex)
-        this.sizeState += length
-        fireChange(length != 0, this.sizeState - length, this.sizeState)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    override fun addAll(vararg elements: T) {
-        addAllInternal(elements as Array<T>, 0, elements.size)
-    }
-
-    override fun addAll(src: ObservableObjectArray<T>) {
-        addAllInternal(src, 0, src.size)
-    }
-
-    override fun addAll(src: Array<T>, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        addAllInternal(src, startIndex, endIndex)
-    }
-
-    override fun addAll(src: ObservableObjectArray<T>, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        addAllInternal(src, startIndex, endIndex)
-    }
-
-    private fun setAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+    override fun setAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         val sizeChanged = this.size != length
         this.sizeState = 0
@@ -101,7 +75,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         fireChange(sizeChanged, 0, this.sizeState)
     }
 
-    private fun setAllInternal(src: ObservableObjectArray<T>, startIndex: Int, endIndex: Int) {
+    override fun setAllInternal(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         val sizeChanged = this.size != length
         if (src === this) {
@@ -120,32 +94,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         }
     }
 
-    override fun setAll(vararg elements: T) {
-        setAllInternal(elements as Array<T>, 0, elements.size)
-    }
-
-    override fun setAll(src: ObservableObjectArray<T>) {
-        setAllInternal(src, 0, src.size)
-    }
-
-    override fun setAll(src: Array<T>, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        setAllInternal(src, startIndex, endIndex)
-    }
-
-    override fun setAll(src: ObservableObjectArray<T>, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        setAllInternal(src, startIndex, endIndex)
-    }
-
     override fun set(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        rangeCheck(destinationOffset + length)
-        copyIntoWrapped(src, this.array, destinationOffset, startIndex, endIndex)
-        fireChange(false, destinationOffset, destinationOffset + length)
-    }
-
-    override fun set(src: ObservableObjectArray<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         rangeCheck(destinationOffset + length)
         copyIntoWrapped(src, this.array, destinationOffset, startIndex, endIndex)
@@ -185,7 +134,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         this.toTypedArray().copyInto(destination, destinationOffset, startIndex, endIndex)
     }
 
-    override fun copyInto(destination: ObservableObjectArray<T>, destinationOffset: Int, startIndex: Int,
+    override fun copyInto(destination: ObservableArray<T>, destinationOffset: Int, startIndex: Int,
             endIndex: Int) {
         rangeCheck(endIndex)
         destination.set(toTypedArray(), destinationOffset, startIndex, endIndex)
@@ -203,7 +152,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         fireChange(sizeChanged, minSize, size)
     }
 
-    private fun growCapacity(length: Int) {
+    override fun growCapacity(length: Int) {
         val minCapacity = this.sizeState + length
         val oldCapacity = this.array.size
         if (minCapacity > this.array.size) {
@@ -229,30 +178,6 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
     override fun trimToSize() {
         if (this.array.size != this.sizeState) {
             this.array = Array(this.sizeState) { i -> this.array[i] }
-        }
-    }
-
-    private fun rangeCheck(size: Int) {
-        if (size > this.sizeState) {
-            throw ArrayIndexOutOfBoundsException(this.sizeState)
-        }
-    }
-
-    private fun rangeCheck(src: Array<T>, startIndex: Int, endIndex: Int) {
-        if (startIndex < 0 || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(src.size)
-        }
-        if (endIndex < startIndex) {
-            throw ArrayIndexOutOfBoundsException(endIndex)
-        }
-    }
-
-    private fun rangeCheck(src: ObservableObjectArray<T>, startIndex: Int, endIndex: Int) {
-        if (startIndex < 0 || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(src.size)
-        }
-        if (endIndex < startIndex) {
-            throw ArrayIndexOutOfBoundsException(endIndex)
         }
     }
 
@@ -284,7 +209,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         }
     }
 
-    private fun copyIntoWrapped(src: ObservableObjectArray<T>, destination: Array<ObjectWrapper<T>?>,
+    private fun copyIntoWrapped(src: ObservableArray<T>, destination: Array<ObjectWrapper<T>?>,
             destinationOffset: Int, startIndex: Int, endIndex: Int) {
         copyIntoWrapped(src.toTypedArray(), destination, destinationOffset, startIndex, endIndex)
     }

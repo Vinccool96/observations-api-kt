@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @RunWith(Parameterized::class)
-class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayWrapper<T, P>) {
+class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayWrapper<T, P>) {
 
     private var initialSize: Int = 0
 
@@ -19,7 +19,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
 
     private lateinit var array: T
 
-    private lateinit var mao: MockArrayObserver<T>
+    private lateinit var mao: MockArrayObserver<P>
 
     @Before
     fun setUp() {
@@ -82,7 +82,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
 
     @Test
     fun testAddRemoveListener() {
-        val mao2 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.removeListener(this.mao)
         this.wrapper[0] = this.wrapper.nextValue
@@ -92,7 +92,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
 
     @Test
     fun testAddTwoListenersElementChange() {
-        val mao2 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.wrapper[0] = this.wrapper.nextValue
         this.mao.check(this.array, false, 0, 1)
@@ -101,7 +101,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
 
     @Test
     fun testAddTwoListenersSizeChange() {
-        val mao2 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.resize(3)
         this.mao.checkOnlySizeChanged(this.array)
@@ -110,8 +110,8 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
 
     @Test
     fun testAddThreeListeners() {
-        val mao2 = MockArrayObserver<T>()
-        val mao3 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
+        val mao3 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.addListener(mao3)
         this.wrapper[0] = this.wrapper.nextValue
@@ -122,8 +122,8 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
 
     @Test
     fun testAddThreeListenersSizeChange() {
-        val mao2 = MockArrayObserver<T>()
-        val mao3 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
+        val mao3 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.addListener(mao3)
         this.array.resize(10)
@@ -823,8 +823,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
     @Test
     fun testAddAllTManyPoints() {
         for (i in 0 until 65_000) {
-            this.wrapper.addAllT(this.wrapper.newInstance().createNotEmptyArray(
-                    this.wrapper.createArray(3)))
+            this.wrapper.addAllT(this.wrapper.newInstance().createNotEmptyArray(this.wrapper.createArray(3)))
         }
     }
 
@@ -999,8 +998,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
     @Test
     fun testPlusAssignTManyPoints() {
         for (i in 0 until 65_000) {
-            this.wrapper += this.wrapper.newInstance().createNotEmptyArray(
-                    this.wrapper.createArray(3))
+            this.wrapper += this.wrapper.newInstance().createNotEmptyArray(this.wrapper.createArray(3))
         }
     }
 
@@ -2552,7 +2550,7 @@ class ObservableArrayTest<T : ObservableArray<T>, P>(private val wrapper: ArrayW
      * @param T ObservableArray subclass
      * @param P corresponding class for boxed elements
      */
-    abstract class ArrayWrapper<T : ObservableArray<T>, P> {
+    abstract class ArrayWrapper<T : ObservableArray<P>, P> {
 
         protected lateinit var array: T
 

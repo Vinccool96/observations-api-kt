@@ -7,7 +7,7 @@ import io.github.vinccool96.observationskt.sun.binding.ExpressionHelperBase
 import io.github.vinccool96.observationskt.util.ArrayUtils
 
 @Suppress("DuplicatedCode", "UNCHECKED_CAST")
-abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observable: T) : ExpressionHelperBase() {
+abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<T>) : ExpressionHelperBase() {
 
     protected abstract fun addListener(listener: InvalidationListener): ArrayListenerHelper<T>
 
@@ -23,7 +23,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
     abstract val arrayChangeListeners: Array<ArrayChangeListener<T>>
 
-    private class SingleInvalidation<T : ObservableArray<T>>(observable: T,
+    private class SingleInvalidation<T>(observable: ObservableArray<T>,
             private val listener: InvalidationListener) :
             ArrayListenerHelper<T>(observable) {
 
@@ -59,7 +59,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
     }
 
-    private class SingleArrayChange<T : ObservableArray<T>>(observable: T,
+    private class SingleArrayChange<T>(observable: ObservableArray<T>,
             private val listener: ArrayChangeListener<T>) : ArrayListenerHelper<T>(observable) {
 
         override fun addListener(listener: InvalidationListener): ArrayListenerHelper<T> {
@@ -94,7 +94,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
     }
 
-    private class Generic<T : ObservableArray<T>> : ArrayListenerHelper<T> {
+    private class Generic<T> : ArrayListenerHelper<T> {
 
         private var invalidationListenerArray: Array<InvalidationListener?>
 
@@ -106,7 +106,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
         private var locked: Boolean = false
 
-        constructor(observable: T, listener0: InvalidationListener, listener1: InvalidationListener) :
+        constructor(observable: ObservableArray<T>, listener0: InvalidationListener, listener1: InvalidationListener) :
                 super(observable) {
             this.invalidationListenerArray = arrayOf(listener0, listener1)
             this.arrayChangeListenerArray = emptyArray()
@@ -114,7 +114,8 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             this.arrayChangeSize = 0
         }
 
-        constructor(observable: T, listener0: ArrayChangeListener<T>, listener1: ArrayChangeListener<T>) :
+        constructor(observable: ObservableArray<T>, listener0: ArrayChangeListener<T>,
+                listener1: ArrayChangeListener<T>) :
                 super(observable) {
             this.invalidationListenerArray = emptyArray()
             this.arrayChangeListenerArray = arrayOf(listener0, listener1)
@@ -122,7 +123,7 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
             this.arrayChangeSize = 2
         }
 
-        constructor(observable: T, invalidationListener: InvalidationListener,
+        constructor(observable: ObservableArray<T>, invalidationListener: InvalidationListener,
                 listChangeListener: ArrayChangeListener<T>) : super(observable) {
             this.invalidationListenerArray = arrayOf(invalidationListener)
             this.arrayChangeListenerArray = arrayOf(listChangeListener)
@@ -275,36 +276,37 @@ abstract class ArrayListenerHelper<T : ObservableArray<T>>(protected val observa
 
     companion object {
 
-        fun <T : ObservableArray<T>> addListener(helper: ArrayListenerHelper<T>?, observable: T,
+        fun <T> addListener(helper: ArrayListenerHelper<T>?, observable: ObservableArray<T>,
                 listener: InvalidationListener): ArrayListenerHelper<T> {
             return helper?.addListener(listener) ?: SingleInvalidation(observable, listener)
         }
 
-        fun <T : ObservableArray<T>> removeListener(helper: ArrayListenerHelper<T>?,
+        fun <T> removeListener(helper: ArrayListenerHelper<T>?,
                 listener: InvalidationListener): ArrayListenerHelper<T>? {
             return helper?.removeListener(listener)
         }
 
-        fun <T : ObservableArray<T>> addListener(helper: ArrayListenerHelper<T>?, observable: T,
+        fun <T> addListener(helper: ArrayListenerHelper<T>?, observable: ObservableArray<T>,
                 listener: ArrayChangeListener<T>): ArrayListenerHelper<T> {
             return helper?.addListener(listener) ?: SingleArrayChange(observable, listener)
         }
 
-        fun <T : ObservableArray<T>> removeListener(helper: ArrayListenerHelper<T>?,
+        fun <T> removeListener(helper: ArrayListenerHelper<T>?,
                 listener: ArrayChangeListener<T>): ArrayListenerHelper<T>? {
             return helper?.removeListener(listener)
         }
 
-        fun <T : ObservableArray<T>> fireValueChangedEvent(helper: ArrayListenerHelper<T>?, sizeChanged: Boolean,
+        fun <T> fireValueChangedEvent(helper: ArrayListenerHelper<T>?, sizeChanged: Boolean,
                 from: Int, to: Int) {
             if (from < to || sizeChanged) {
                 helper?.fireValueChangedEvent(sizeChanged, from, to)
             }
         }
 
-        fun <T : ObservableArray<T>> hasListeners(helper: ArrayListenerHelper<T>?): Boolean {
+        fun <T> hasListeners(helper: ArrayListenerHelper<T>?): Boolean {
             return helper != null
         }
 
     }
+
 }

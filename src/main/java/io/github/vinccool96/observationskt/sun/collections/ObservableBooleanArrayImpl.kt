@@ -1,5 +1,6 @@
 package io.github.vinccool96.observationskt.sun.collections
 
+import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.collections.ObservableArrayBase
 import io.github.vinccool96.observationskt.collections.ObservableBooleanArray
 import kotlin.math.min
@@ -9,7 +10,7 @@ import kotlin.math.min
  *
  * @constructor Creates empty observable boolean array
  */
-class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>(), ObservableBooleanArray {
+class ObservableBooleanArrayImpl() : ObservableArrayBase<Boolean>(), ObservableBooleanArray {
 
     private var array: BooleanArray = INITIAL
 
@@ -38,62 +39,44 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
      *
      * @param src observable boolean array to copy
      */
-    constructor(src: ObservableBooleanArray) : this() {
+    constructor(src: ObservableArray<Boolean>) : this() {
         setAll(src)
-    }
-
-    override fun clear() {
-        resize(0)
     }
 
     override val size: Int
         get() = this.sizeState
 
-    private fun addAllInternal(src: BooleanArray, startIndex: Int, endIndex: Int) {
+    override fun addAllInternal(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
-        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
-        this.sizeState += length
-        fireChange(length != 0, this.sizeState - length, this.sizeState)
-    }
-
-    private fun addAllInternal(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        growCapacity(length)
-        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
+        src.toBooleanArray().copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
         fireChange(length != 0, this.sizeState - length, this.sizeState)
     }
 
     override fun addAll(vararg elements: Boolean) {
-        addAllInternal(elements, 0, elements.size)
-    }
-
-    override fun addAll(src: ObservableBooleanArray) {
-        addAllInternal(src, 0, src.size)
+        addAll(*elements.toTypedArray())
     }
 
     override fun addAll(src: BooleanArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        addAllInternal(src, startIndex, endIndex)
+        addAll(src.toTypedArray(), startIndex, endIndex)
     }
 
-    override fun addAll(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        addAllInternal(src, startIndex, endIndex)
+    override operator fun plusAssign(booleans: BooleanArray) {
+        addAll(*booleans.toTypedArray())
     }
 
-    private fun setAllInternal(src: BooleanArray, startIndex: Int, endIndex: Int) {
+    override fun setAllInternal(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         val sizeChanged = this.size != length
         this.sizeState = 0
         ensureCapacity(endIndex)
-        src.copyInto(this.array, 0, startIndex, endIndex)
+        src.toBooleanArray().copyInto(this.array, 0, startIndex, endIndex)
         this.sizeState = length
         fireChange(sizeChanged, 0, this.sizeState)
     }
 
-    private fun setAllInternal(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
+    override fun setAllInternal(src: ObservableArray<Boolean>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         val sizeChanged = this.size != length
         if (src === this) {
@@ -106,28 +89,18 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
             }
         } else {
             ensureCapacity(length)
-            src.copyInto(this.array, 0, startIndex, endIndex)
+            src.toTypedArray().toBooleanArray().copyInto(this.array, 0, startIndex, endIndex)
             this.sizeState = length
             fireChange(sizeChanged, 0, this.sizeState)
         }
     }
 
     override fun setAll(vararg elements: Boolean) {
-        setAllInternal(elements, 0, elements.size)
-    }
-
-    override fun setAll(src: ObservableBooleanArray) {
-        setAllInternal(src, 0, src.size)
+        setAll(*elements.toTypedArray())
     }
 
     override fun setAll(src: BooleanArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        setAllInternal(src, startIndex, endIndex)
-    }
-
-    override fun setAll(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        setAllInternal(src, startIndex, endIndex)
+        setAll(src.toTypedArray(), startIndex, endIndex)
     }
 
     override fun set(src: BooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
@@ -137,10 +110,10 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
         fireChange(false, destinationOffset, destinationOffset + length)
     }
 
-    override fun set(src: ObservableBooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+    override fun set(src: Array<Boolean>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         rangeCheck(destinationOffset + length)
-        src.copyInto(this.array, destinationOffset, startIndex, endIndex)
+        src.toBooleanArray().copyInto(this.array, destinationOffset, startIndex, endIndex)
         fireChange(false, destinationOffset, destinationOffset + length)
     }
 
@@ -165,6 +138,14 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
         return BooleanArray(length) { i: Int -> this.array[i + startIndex] }
     }
 
+    override fun toTypedArray(): Array<Boolean> {
+        return this.toBooleanArray().toTypedArray()
+    }
+
+    override fun toTypedArray(startIndex: Int, endIndex: Int): Array<Boolean> {
+        return this.toBooleanArray(startIndex, endIndex).toTypedArray()
+    }
+
     override fun copyInto(destination: BooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         rangeCheck(endIndex)
         this.array.copyInto(destination, destinationOffset, startIndex, endIndex)
@@ -175,9 +156,10 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
         this.array.toTypedArray().copyInto(destination, destinationOffset, startIndex, endIndex)
     }
 
-    override fun copyInto(destination: ObservableBooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+    override fun copyInto(destination: ObservableArray<Boolean>, destinationOffset: Int, startIndex: Int,
+            endIndex: Int) {
         rangeCheck(endIndex)
-        destination.set(this.array, destinationOffset, startIndex, endIndex)
+        destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
     override fun resize(size: Int) {
@@ -192,7 +174,7 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
         fireChange(sizeChanged, minSize, size)
     }
 
-    private fun growCapacity(length: Int) {
+    override fun growCapacity(length: Int) {
         val minCapacity = this.sizeState + length
         val oldCapacity = this.array.size
         if (minCapacity > this.array.size) {
@@ -218,30 +200,6 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<ObservableBooleanArray>
     override fun trimToSize() {
         if (this.array.size != this.sizeState) {
             this.array = BooleanArray(this.size) { i: Int -> this.array[i] }
-        }
-    }
-
-    private fun rangeCheck(size: Int) {
-        if (size > this.sizeState) {
-            throw ArrayIndexOutOfBoundsException(this.sizeState)
-        }
-    }
-
-    private fun rangeCheck(src: BooleanArray, startIndex: Int, endIndex: Int) {
-        if (startIndex < 0 || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(src.size)
-        }
-        if (endIndex < startIndex) {
-            throw ArrayIndexOutOfBoundsException(endIndex)
-        }
-    }
-
-    private fun rangeCheck(src: ObservableBooleanArray, startIndex: Int, endIndex: Int) {
-        if (startIndex < 0 || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(src.size)
-        }
-        if (endIndex < startIndex) {
-            throw ArrayIndexOutOfBoundsException(endIndex)
         }
     }
 

@@ -6475,7 +6475,7 @@ object Bindings {
      *
      * @return the new `IntBinding`
      */
-    fun <T : ObservableArray<T>> size(op: ObservableArray<T>): IntBinding {
+    fun <T> size(op: ObservableArray<T>): IntBinding {
         return object : IntBinding() {
 
             init {
@@ -6505,7 +6505,7 @@ object Bindings {
      *
      * @return the new `BooleanBinding`
      */
-    fun <T : ObservableArray<T>> isEmpty(op: ObservableArray<T>): BooleanBinding {
+    fun <T> isEmpty(op: ObservableArray<T>): BooleanBinding {
         return object : BooleanBinding() {
 
             init {
@@ -6535,7 +6535,7 @@ object Bindings {
      *
      * @return the new `BooleanBinding`
      */
-    fun <T : ObservableArray<T>> isNotEmpty(op: ObservableArray<T>): BooleanBinding {
+    fun <T> isNotEmpty(op: ObservableArray<T>): BooleanBinding {
         return object : BooleanBinding() {
 
             init {

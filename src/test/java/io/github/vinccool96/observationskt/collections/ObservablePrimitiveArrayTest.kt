@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
  * Tests for ObservableArray.
  */
 @RunWith(Parameterized::class)
-class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private val wrapper: ArrayWrapper<T, A, P>) {
+class ObservablePrimitiveArrayTest<T : ObservableArray<P>, A : Any, P>(private val wrapper: ArrayWrapper<T, A, P>) {
 
     private var initialSize: Int = 0
 
@@ -21,7 +21,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     private lateinit var array: T
 
-    private lateinit var mao: MockArrayObserver<T>
+    private lateinit var mao: MockArrayObserver<P>
 
     @Before
     fun setUp() {
@@ -84,7 +84,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test
     fun testAddRemoveListener() {
-        val mao2 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.removeListener(this.mao)
         this.wrapper[0] = this.wrapper.nextValue
@@ -94,7 +94,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test
     fun testAddTwoListenersElementChange() {
-        val mao2 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.wrapper[0] = this.wrapper.nextValue
         this.mao.check(this.array, false, 0, 1)
@@ -103,7 +103,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test
     fun testAddTwoListenersSizeChange() {
-        val mao2 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.resize(3)
         this.mao.checkOnlySizeChanged(this.array)
@@ -112,8 +112,8 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test
     fun testAddThreeListeners() {
-        val mao2 = MockArrayObserver<T>()
-        val mao3 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
+        val mao3 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.addListener(mao3)
         this.wrapper[0] = this.wrapper.nextValue
@@ -124,8 +124,8 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
 
     @Test
     fun testAddThreeListenersSizeChange() {
-        val mao2 = MockArrayObserver<T>()
-        val mao3 = MockArrayObserver<T>()
+        val mao2 = MockArrayObserver<P>()
+        val mao3 = MockArrayObserver<P>()
         this.array.addListener(mao2)
         this.array.addListener(mao3)
         this.array.resize(10)
@@ -3267,7 +3267,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
      * @param A corresponding primitive array
      * @param P corresponding class for boxed elements
      */
-    abstract class ArrayWrapper<T : ObservableArray<T>, A, P> {
+    abstract class ArrayWrapper<T : ObservableArray<P>, A, P> {
 
         protected lateinit var array: T
 
@@ -3399,7 +3399,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Boolean>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableBooleanArray) {
@@ -3423,7 +3423,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Boolean>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableBooleanArray) {
@@ -3592,7 +3592,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Double>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableDoubleArray) {
@@ -3616,7 +3616,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Double>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableDoubleArray) {
@@ -3784,7 +3784,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Float>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableFloatArray) {
@@ -3808,7 +3808,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Float>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableFloatArray) {
@@ -3974,7 +3974,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Int>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableIntArray) {
@@ -3998,7 +3998,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Int>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableIntArray) {
@@ -4159,7 +4159,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Long>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableLongArray) {
@@ -4183,7 +4183,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Long>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableLongArray) {
@@ -4344,7 +4344,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Short>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableShortArray) {
@@ -4368,7 +4368,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Short>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableShortArray) {
@@ -4536,7 +4536,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun setAllP(src: Array<Byte>) {
-            this.array.setAll(src)
+            this.array.setAll(*src)
         }
 
         override fun setAllT(src: ObservableByteArray) {
@@ -4560,7 +4560,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<T>, A : Any, P>(private v
         }
 
         override fun addAllP(src: Array<Byte>) {
-            this.array.addAll(src)
+            this.array.addAll(*src)
         }
 
         override fun addAllT(src: ObservableByteArray) {

@@ -1,5 +1,6 @@
 package io.github.vinccool96.observationskt.sun.collections
 
+import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.collections.ObservableArrayBase
 import io.github.vinccool96.observationskt.collections.ObservableFloatArray
 import kotlin.math.min
@@ -9,7 +10,7 @@ import kotlin.math.min
  *
  * @constructor Creates empty observable float array
  */
-class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), ObservableFloatArray {
+class ObservableFloatArrayImpl() : ObservableArrayBase<Float>(), ObservableFloatArray {
 
     private var array: FloatArray = INITIAL
 
@@ -38,62 +39,44 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
      *
      * @param src observable float array to copy
      */
-    constructor(src: ObservableFloatArray) : this() {
+    constructor(src: ObservableArray<Float>) : this() {
         setAll(src)
-    }
-
-    override fun clear() {
-        resize(0)
     }
 
     override val size: Int
         get() = this.sizeState
 
-    private fun addAllInternal(src: FloatArray, startIndex: Int, endIndex: Int) {
+    override fun addAllInternal(src: Array<Float>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
-        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
-        this.sizeState += length
-        fireChange(length != 0, this.sizeState - length, this.sizeState)
-    }
-
-    private fun addAllInternal(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        growCapacity(length)
-        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
+        src.toFloatArray().copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
         fireChange(length != 0, this.sizeState - length, this.sizeState)
     }
 
     override fun addAll(vararg elements: Float) {
-        addAllInternal(elements, 0, elements.size)
-    }
-
-    override fun addAll(src: ObservableFloatArray) {
-        addAllInternal(src, 0, src.size)
+        addAll(*elements.toTypedArray())
     }
 
     override fun addAll(src: FloatArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        addAllInternal(src, startIndex, endIndex)
+        addAll(src.toTypedArray(), startIndex, endIndex)
     }
 
-    override fun addAll(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        addAllInternal(src, startIndex, endIndex)
+    override operator fun plusAssign(floats: FloatArray) {
+        addAll(*floats.toTypedArray())
     }
 
-    private fun setAllInternal(src: FloatArray, startIndex: Int, endIndex: Int) {
+    override fun setAllInternal(src: Array<Float>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         val sizeChanged = this.size != length
         this.sizeState = 0
         ensureCapacity(endIndex)
-        src.copyInto(this.array, 0, startIndex, endIndex)
+        src.toFloatArray().copyInto(this.array, 0, startIndex, endIndex)
         this.sizeState = length
         fireChange(sizeChanged, 0, this.sizeState)
     }
 
-    private fun setAllInternal(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
+    override fun setAllInternal(src: ObservableArray<Float>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         val sizeChanged = this.size != length
         if (src === this) {
@@ -106,28 +89,18 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
             }
         } else {
             ensureCapacity(length)
-            src.copyInto(this.array, 0, startIndex, endIndex)
+            src.toTypedArray().toFloatArray().copyInto(this.array, 0, startIndex, endIndex)
             this.sizeState = length
             fireChange(sizeChanged, 0, this.sizeState)
         }
     }
 
     override fun setAll(vararg elements: Float) {
-        setAllInternal(elements, 0, elements.size)
-    }
-
-    override fun setAll(src: ObservableFloatArray) {
-        setAllInternal(src, 0, src.size)
+        setAll(*elements.toTypedArray())
     }
 
     override fun setAll(src: FloatArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        setAllInternal(src, startIndex, endIndex)
-    }
-
-    override fun setAll(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        setAllInternal(src, startIndex, endIndex)
+        setAll(src.toTypedArray(), startIndex, endIndex)
     }
 
     override fun set(src: FloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
@@ -137,10 +110,10 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
         fireChange(false, destinationOffset, destinationOffset + length)
     }
 
-    override fun set(src: ObservableFloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+    override fun set(src: Array<Float>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         rangeCheck(destinationOffset + length)
-        src.copyInto(this.array, destinationOffset, startIndex, endIndex)
+        src.toFloatArray().copyInto(this.array, destinationOffset, startIndex, endIndex)
         fireChange(false, destinationOffset, destinationOffset + length)
     }
 
@@ -165,6 +138,14 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
         return FloatArray(length) { i: Int -> this.array[i + startIndex] }
     }
 
+    override fun toTypedArray(): Array<Float> {
+        return this.toFloatArray().toTypedArray()
+    }
+
+    override fun toTypedArray(startIndex: Int, endIndex: Int): Array<Float> {
+        return this.toFloatArray(startIndex, endIndex).toTypedArray()
+    }
+
     override fun copyInto(destination: FloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         rangeCheck(endIndex)
         this.array.copyInto(destination, destinationOffset, startIndex, endIndex)
@@ -175,9 +156,9 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
         this.array.toTypedArray().copyInto(destination, destinationOffset, startIndex, endIndex)
     }
 
-    override fun copyInto(destination: ObservableFloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+    override fun copyInto(destination: ObservableArray<Float>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         rangeCheck(endIndex)
-        destination.set(this.array, destinationOffset, startIndex, endIndex)
+        destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
     override fun resize(size: Int) {
@@ -192,7 +173,7 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
         fireChange(sizeChanged, minSize, size)
     }
 
-    private fun growCapacity(length: Int) {
+    override fun growCapacity(length: Int) {
         val minCapacity = this.sizeState + length
         val oldCapacity = this.array.size
         if (minCapacity > this.array.size) {
@@ -218,30 +199,6 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<ObservableFloatArray>(), 
     override fun trimToSize() {
         if (this.array.size != this.sizeState) {
             this.array = FloatArray(this.size) { i: Int -> this.array[i] }
-        }
-    }
-
-    private fun rangeCheck(size: Int) {
-        if (size > this.sizeState) {
-            throw ArrayIndexOutOfBoundsException(this.sizeState)
-        }
-    }
-
-    private fun rangeCheck(src: FloatArray, startIndex: Int, endIndex: Int) {
-        if (startIndex < 0 || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(src.size)
-        }
-        if (endIndex < startIndex) {
-            throw ArrayIndexOutOfBoundsException(endIndex)
-        }
-    }
-
-    private fun rangeCheck(src: ObservableFloatArray, startIndex: Int, endIndex: Int) {
-        if (startIndex < 0 || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(src.size)
-        }
-        if (endIndex < startIndex) {
-            throw ArrayIndexOutOfBoundsException(endIndex)
         }
     }
 

@@ -26,7 +26,7 @@ open class ObservableListWrapper<E> : ModifiableObservableListBase<E>, Observabl
 
     constructor(list: MutableList<E>, extractor: Callback<E, Array<Observable>>) : super() {
         this.backingList = list
-        this.elementObserver = ElementObserver(extractor, {param ->
+        this.elementObserver = ElementObserver(extractor, { param ->
             InvalidationListener {
                 beginChange()
                 val size = this@ObservableListWrapper.size
@@ -125,7 +125,7 @@ open class ObservableListWrapper<E> : ModifiableObservableListBase<E>, Observabl
         }
         if (!bs.isEmpty) {
             var cur = this.size
-            while (bs.previousSetBit(cur - 1).also {cur = it} >= 0) {
+            while (bs.previousSetBit(cur - 1).also { cur = it } >= 0) {
                 removeAt(cur)
             }
         }
