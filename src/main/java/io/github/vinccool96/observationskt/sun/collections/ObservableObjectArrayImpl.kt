@@ -16,7 +16,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
 
     private val initialArray: Array<T> = this.baseArray.copyOfRange(0, 0)
 
-    private var array: Array<ObjectWrapper<T>?> = arrayOf()
+    private var array: Array<Any?> = arrayOf()
 
     private var sizeState: Int = 0
 
@@ -60,7 +60,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
     override fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
-        copyIntoWrapped(src, this.array, this.sizeState, startIndex, endIndex)
+        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
         fireChange(length != 0, this.sizeState - length, this.sizeState)
     }
@@ -70,7 +70,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         val sizeChanged = this.size != length
         this.sizeState = 0
         ensureCapacity(endIndex)
-        copyIntoWrapped(src, this.array, 0, startIndex, endIndex)
+        src.copyInto(this.array, 0, startIndex, endIndex)
         this.sizeState = length
         fireChange(sizeChanged, 0, this.sizeState)
     }
@@ -88,7 +88,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
             }
         } else {
             ensureCapacity(length)
-            copyIntoWrapped(src, this.array, 0, startIndex, endIndex)
+            src.toTypedArray().copyInto(this.array, 0, startIndex, endIndex)
             this.sizeState = length
             fireChange(sizeChanged, 0, this.sizeState)
         }
@@ -97,25 +97,25 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
     override fun set(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         rangeCheck(destinationOffset + length)
-        copyIntoWrapped(src, this.array, destinationOffset, startIndex, endIndex)
+        src.copyInto(this.array, destinationOffset, startIndex, endIndex)
         fireChange(false, destinationOffset, destinationOffset + length)
     }
 
     override operator fun get(index: Int): T {
         rangeCheck(index + 1)
-        return this.array[index]!!.obj
+        return this.array[index] as T
     }
 
     override operator fun set(index: Int, value: T) {
         rangeCheck(index + 1)
-        this.array[index]!!.obj = value
+        this.array[index] = value
         fireChange(false, index, index + 1)
     }
 
     override fun toTypedArray(): Array<T> {
         var result = this.initialArray
         for (i in 0 until this.sizeState) {
-            result += arrayWith(this.array[i]!!.obj)
+            result += arrayWith(this.array[i] as T)
         }
         return result
     }
@@ -124,7 +124,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         rangeCheck(endIndex)
         var result = this.initialArray
         for (i in startIndex until endIndex) {
-            result += arrayWith(this.array[i]!!.obj)
+            result += arrayWith(this.array[i] as T)
         }
         return result
     }
@@ -148,7 +148,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         val minSize = min(this.sizeState, size)
         val sizeChanged = this.sizeState != size
         this.sizeState = size
-        this.array.fill(ObjectWrapper(this.baseArray[0]), minSize, this.sizeState)
+        this.array.fill(this.baseArray[0], minSize, this.sizeState)
         fireChange(sizeChanged, minSize, size)
     }
 
@@ -187,39 +187,12 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         }
         val b = StringBuilder("[")
         for (i in 0 until this.size) {
-            b.append(this.array[i]!!.obj)
+            b.append(this.array[i])
             if (i != this.size - 1) {
                 b.append(", ")
             }
         }
         return b.append("]").toString()
-    }
-
-    private fun copyIntoWrapped(src: Array<T>, destination: Array<ObjectWrapper<T>?>, destinationOffset: Int,
-            startIndex: Int, endIndex: Int) {
-        if (startIndex > endIndex || endIndex > src.size) {
-            throw ArrayIndexOutOfBoundsException(startIndex)
-        }
-        for (i in 0 until endIndex - startIndex) {
-            if (destination[i + destinationOffset] != null) {
-                destination[i + destinationOffset]?.obj = src[i + startIndex]
-            } else {
-                destination[i + destinationOffset] = ObjectWrapper(src[i + startIndex])
-            }
-        }
-    }
-
-    private fun copyIntoWrapped(src: ObservableArray<T>, destination: Array<ObjectWrapper<T>?>,
-            destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        copyIntoWrapped(src.toTypedArray(), destination, destinationOffset, startIndex, endIndex)
-    }
-
-    private class ObjectWrapper<T>(var obj: T) {
-
-        override fun toString(): String {
-            return "ObjectWrapper($obj)"
-        }
-
     }
 
     companion object {
