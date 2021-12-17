@@ -5,7 +5,7 @@ import io.github.vinccool96.observationskt.beans.property.ObjectProperty
 import io.github.vinccool96.observationskt.beans.property.ObjectPropertyBase
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.sun.collections.NonIterableChange.GenericAddRemoveChange
+import io.github.vinccool96.observationskt.sun.collections.NonIterableListChange.GenericAddRemoveChange
 import io.github.vinccool96.observationskt.sun.collections.SortHelper
 import java.util.function.Predicate
 

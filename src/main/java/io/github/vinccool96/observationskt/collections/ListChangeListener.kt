@@ -17,10 +17,11 @@ fun interface ListChangeListener<E> {
      *
      * * **Permutation change** : [wasPermutated] returns `true` in this case. The permutation happened at range between
      * [from] (inclusive) and [to] (exclusive) and can be queried by calling [getPermutation] method.
+     *
      * * **Add or remove change** : In this case, at least one of the [wasAdded], [wasRemoved] returns `true`. If both
      * methods return `true`, [wasReplaced] will also return `true`.
      *
-     * The [wasRemoved] value returns a list of elements that have been replaced or removed from the list.
+     * The [removed] value returns a list of elements that have been replaced or removed from the list.
      *
      * The range between [from] (inclusive) and [to] (exclusive) denotes the sublist of the list that contain new
      * elements. Note that this is a half-open interval, so if no elements were added, `from` is equal to `to`.
@@ -83,7 +84,9 @@ fun interface ListChangeListener<E> {
      *
      * @constructor Constructs a new change done to a list.
      *
-     * @param list that was changed
+     * @param list the list that was changed
+     *
+     * @property list The source list of the change.
      */
     abstract class Change<E>(val list: ObservableList<E>) {
 
@@ -130,7 +133,7 @@ fun interface ListChangeListener<E> {
          *
          * @throws IllegalStateException if this `Change` is in initial state
          */
-        abstract val removed: MutableList<E>
+        abstract val removed: List<E>
 
         /**
          * Indicates if the change was only a permutation.
@@ -147,8 +150,7 @@ fun interface ListChangeListener<E> {
          *
          * @return `true` if something was added to the list
          *
-         * @throws IllegalStateException
-         * if this Change is in initial state
+         * @throws IllegalStateException if this `Change` is in initial state
          */
         val wasAdded: Boolean
             get() = !this.wasPermutated && !this.wasUpdated && this.from < this.to
@@ -171,7 +173,7 @@ fun interface ListChangeListener<E> {
          * Usually, it's not necessary to use this method directly. Handling remove operation and then add operation, as
          * in the example [above][Change], will effectively handle also set operation.
          *
-         * @return same as `added && removed`
+         * @return same as `wasAdded && wasRemoved`
          *
          * @throws IllegalStateException if this `Change` is in initial state
          */
@@ -179,7 +181,7 @@ fun interface ListChangeListener<E> {
             get() = this.wasAdded && this.wasRemoved
 
         /**
-         * Indicates that the elements between getFrom() (inclusive) to getTo() exclusive has changed. This is the only
+         * Indicates that the elements between [from] (inclusive) to [to] exclusive has changed. This is the only
          * optional event type and may not be fired by all ObservableLists.
          *
          * @return `true` if the current change is an update change.
@@ -188,8 +190,8 @@ fun interface ListChangeListener<E> {
             get() = false
 
         /**
-         * To get a subList view of the list that contains only the elements added, use getAddedSubList() method. This
-         * is actually a shortcut to `c.getList().subList(c.getFrom(), c.getTo());`
+         * To get a subList view of the list that contains only the elements added, use `addedSubList`. This is actually
+         * a shortcut to `c.getList().subList(c.getFrom(), c.getTo());`
          *
          * ```
          * for (n in change.addedSubList) {
@@ -234,7 +236,7 @@ fun interface ListChangeListener<E> {
          * If this change is a permutation, it returns an int array that describes the permutation. This array maps
          * directly from the previous indexes to the new ones. This method is not publicly accessible and therefore can
          * return an array safely. The 0 index of the array corresponds to index [from] of the list. The same applies
-         * for the last index and [to]. The method is used by [wasPermutated] and [getPermutation] methods.
+         * for the last index and [to]. The value is used by [wasPermutated] and [getPermutation] methods.
          *
          * @return empty array if this is not permutation or an int array containing the permutation
          *
@@ -263,6 +265,7 @@ fun interface ListChangeListener<E> {
             check(this.wasPermutated) { "Not a permutation change" }
             return this.permutation[i - this.from]
         }
+
     }
 
     /**

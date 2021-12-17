@@ -3,7 +3,7 @@ package io.github.vinccool96.observationskt.sun.collections
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableList
 
-class SourceAdapterChange<E>(list: ObservableList<E>, private val change: Change<out E>) : Change<E>(list) {
+class SourceAdapterListChange<E>(list: ObservableList<E>, private val change: Change<out E>) : Change<E>(list) {
 
     private var perm: IntArray? = null
 
@@ -16,15 +16,15 @@ class SourceAdapterChange<E>(list: ObservableList<E>, private val change: Change
         this.change.reset()
     }
 
+    override val from: Int
+        get() = this.change.from
+
     override val to: Int
         get() = this.change.to
 
     @Suppress("UNCHECKED_CAST")
-    override val removed: MutableList<E>
-        get() = this.change.removed as MutableList<E>
-
-    override val from: Int
-        get() = this.change.from
+    override val removed: List<E>
+        get() = this.change.removed
 
     override val wasUpdated: Boolean
         get() = this.change.wasUpdated

@@ -5,9 +5,9 @@ import io.github.vinccool96.observationskt.beans.property.ObjectProperty
 import io.github.vinccool96.observationskt.beans.property.ObjectPropertyBase
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.sun.collections.NonIterableChange.SimplePermutationChange
+import io.github.vinccool96.observationskt.sun.collections.NonIterableListChange.SimplePermutationChange
 import io.github.vinccool96.observationskt.sun.collections.SortHelper
-import io.github.vinccool96.observationskt.sun.collections.SourceAdapterChange
+import io.github.vinccool96.observationskt.sun.collections.SourceAdapterListChange
 
 /**
  * Wraps an ObservableList and sorts its content. All changes in the ObservableList are propagated immediately to the
@@ -77,7 +77,7 @@ open class SortedList<E> : TransformationList<E, E> {
             endChange()
         } else {
             updateUnsorted(c)
-            fireChange(SourceAdapterChange(this, c))
+            fireChange(SourceAdapterListChange(this, c))
         }
     }
 

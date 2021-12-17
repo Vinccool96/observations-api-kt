@@ -127,9 +127,8 @@ abstract class ListExpression<E> : ObservableListValue<E> {
     }
 
     /**
-     * Creates a [StringBinding] that holds the value of the `ListExpression` turned into a `String`.
-     * If the value of this `ListExpression` changes, the value of the `StringBinding` will be updated
-     * automatically.
+     * Creates a [StringBinding] that holds the value of the `ListExpression` turned into a `String`. If the value of
+     * this `ListExpression` changes, the value of the `StringBinding` will be updated automatically.
      *
      * @return the new `StringBinding`
      */

@@ -7,53 +7,56 @@ import io.github.vinccool96.observationskt.beans.property.ReadOnlyBooleanPropert
 import io.github.vinccool96.observationskt.beans.property.ReadOnlyIntProperty
 import io.github.vinccool96.observationskt.beans.property.ReadOnlyIntPropertyBase
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
-import io.github.vinccool96.observationskt.collections.MapChangeListener
+import io.github.vinccool96.observationskt.beans.value.ObservableArrayValue
+import io.github.vinccool96.observationskt.collections.ArrayChangeListener
+import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.collections.ObservableMap
+import io.github.vinccool96.observationskt.sun.binding.ArrayExpressionHelper
 import io.github.vinccool96.observationskt.sun.binding.BindingHelperObserver
-import io.github.vinccool96.observationskt.sun.binding.MapExpressionHelper
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 
 /**
- * Base class that provides most of the functionality needed to implement a [Binding] of an [ObservableMap].
+ * Base class that provides most of the functionality needed to implement a [Binding] of an [ObservableArray].
  *
- * `MapBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling
- * [bind]. If one of the registered dependencies becomes invalid, this `MapBinding` is
- * marked as invalid. With [unbind] listening to dependencies can be stopped.
+ * `ArrayBinding` provides a simple invalidation-scheme. An extending class can register dependencies by calling [bind].
+ * If one of the registered dependencies becomes invalid, this `ArrayBinding` is marked as invalid. With [unbind]
+ * listening to dependencies can be stopped.
  *
- * To provide a concrete implementation of this class, the method [computeValue] has to be implemented to
- * calculate the value of this binding based on the current state of the dependencies. It is called when [get]
- * is called for an invalid binding.
+ * To provide a concrete implementation of this class, the method [computeValue] has to be implemented to calculate the
+ * value of this binding based on the current state of the dependencies. It is called when [get] is called for an
+ * invalid binding.
  *
  * See [DoubleBinding] for an example how this base class can be extended.
  *
- * @param K the type of the key elements
- * @param V the type of the value elements
+ * @param T the type of the `Array` elements
  *
  * @see Binding
- * @see MapExpression
+ * @see ArrayExpression
+ *
+ * @constructor The constructor needs a base array that [baseArray] will return when [ObservableArrayValue.get] returns
+ * `null`. Therefore, `baseArray` will return the equivalent of `get()?.baseArray ?: baseArrayOfNull`.
+ *
+ * @param baseArrayOfNull the base array when the value is `null`
  */
-@Suppress("RedundantNullableReturnType")
-abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K, V>?> {
+abstract class ArrayBinding<T>(baseArrayOfNull: Array<T>) : ArrayExpression<T>(baseArrayOfNull),
+        Binding<ObservableArray<T>?> {
 
-    private var valueState: ObservableMap<K, V>? = null
+    private var valueState: ObservableArray<T>? = null
 
     private var validState: Boolean = false
 
     private var observer: BindingHelperObserver? = null
 
-    private var helper: MapExpressionHelper<K, V>? = null
+    private var helper: ArrayExpressionHelper<T>? = null
 
-    private val mapChangeListener: MapChangeListener<K, V> = MapChangeListener { change ->
+    private val arrayChangeListener = ArrayChangeListener<T> { change ->
         invalidateProperties()
         onInvalidating()
-        MapExpressionHelper.fireValueChangedEvent(this.helper, change)
+        ArrayExpressionHelper.fireValueChangedEvent(this.helper, change)
     }
 
     private lateinit var size0: SizeProperty
-
-    private lateinit var empty0: EmptyProperty
 
     override val sizeProperty: ReadOnlyIntProperty
         get() {
@@ -65,19 +68,23 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
 
     private inner class SizeProperty : ReadOnlyIntPropertyBase() {
 
+        override val bean: Any
+            get() = this@ArrayBinding
+
+        override val name: String
+            get() = "size"
+
         override fun get(): Int {
-            return this@MapBinding.size
+            return this@ArrayBinding.size
         }
-
-        override val bean: Any? = this@MapBinding
-
-        override val name: String? = "size"
 
         public override fun fireValueChangedEvent() {
             super.fireValueChangedEvent()
         }
 
     }
+
+    private lateinit var empty0: EmptyProperty
 
     override val emptyProperty: ReadOnlyBooleanProperty
         get() {
@@ -89,13 +96,15 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
 
     private inner class EmptyProperty : ReadOnlyBooleanPropertyBase() {
 
+        override val bean: Any
+            get() = this@ArrayBinding
+
+        override val name: String
+            get() = "empty"
+
         override fun get(): Boolean {
-            return this@MapBinding.isEmpty()
+            return this@ArrayBinding.size == 0
         }
-
-        override val bean: Any? = this@MapBinding
-
-        override val name: String? = "empty"
 
         public override fun fireValueChangedEvent() {
             super.fireValueChangedEvent()
@@ -105,13 +114,13 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
-            this.helper = MapExpressionHelper.addListener(this.helper, this, listener)
+            this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
         if (isInvalidationListenerAlreadyAdded(listener)) {
-            this.helper = MapExpressionHelper.removeListener(this.helper, listener)
+            this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
@@ -120,38 +129,38 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in ObservableMap<K, V>?>) {
+    override fun addListener(listener: ChangeListener<in ObservableArray<T>?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
-            this.helper = MapExpressionHelper.addListener(this.helper, this, listener)
+            this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in ObservableMap<K, V>?>) {
+    override fun removeListener(listener: ChangeListener<in ObservableArray<T>?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
-            this.helper = MapExpressionHelper.removeListener(this.helper, listener)
+            this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableMap<K, V>?>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableArray<T>?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
 
-    override fun addListener(listener: MapChangeListener<in K, in V>) {
-        if (!isMapChangeListenerAlreadyAdded(listener)) {
-            this.helper = MapExpressionHelper.addListener(this.helper, this, listener)
+    override fun addListener(listener: ArrayChangeListener<T>) {
+        if (!isArrayChangeListenerAlreadyAdded(listener)) {
+            this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: MapChangeListener<in K, in V>) {
-        if (isMapChangeListenerAlreadyAdded(listener)) {
-            this.helper = MapExpressionHelper.removeListener(this.helper, listener)
+    override fun removeListener(listener: ArrayChangeListener<T>) {
+        if (isArrayChangeListenerAlreadyAdded(listener)) {
+            this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<T>): Boolean {
         val curHelper = this.helper
-        return curHelper != null && curHelper.mapChangeListeners.contains(listener)
+        return curHelper != null && curHelper.arrayChangeListeners.contains(listener)
     }
 
     /**
@@ -195,11 +204,17 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
     override val dependencies: ObservableList<*>
         get() = ObservableCollections.emptyObservableList<Any>()
 
-    final override fun get(): ObservableMap<K, V>? {
+    /**
+     * Returns the result of [computeValue]. The method `computeValue()` is only called if the binding is invalid. The
+     * result is cached and returned if the binding did not become invalid since the last call of `get`.
+     *
+     * @return the current value
+     */
+    final override fun get(): ObservableArray<T>? {
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
-            this.valueState?.addListener(this.mapChangeListener)
+            this.valueState?.addListener(this.arrayChangeListener)
         }
         return this.valueState
     }
@@ -222,11 +237,11 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
 
     final override fun invalidate() {
         if (this.validState) {
-            this.valueState?.addListener(this.mapChangeListener)
+            this.valueState?.removeListener(this.arrayChangeListener)
             this.validState = false
             invalidateProperties()
             onInvalidating()
-            MapExpressionHelper.fireValueChangedEvent(this.helper)
+            ArrayExpressionHelper.fireValueChangedEvent(this.helper)
         }
     }
 
@@ -236,19 +251,19 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
     /**
      * Calculates the current value of this binding.
      *
-     * Classes extending `MapBinding` have to provide an implementation of `computeValue`.
+     * Classes extending `ArrayBinding` have to provide an implementation of `computeValue`.
      *
      * @return the current value
      */
-    protected abstract fun computeValue(): ObservableMap<K, V>?
+    protected abstract fun computeValue(): ObservableArray<T>?
 
     /**
-     * Returns a string representation of this `MapBinding` object.
+     * Returns a string representation of this `ArrayBinding` object.
      *
-     * @return a string representation of this `MapBinding` object.
+     * @return a string representation of this `ArrayBinding` object.
      */
     override fun toString(): String {
-        return if (this.validState) "MapBinding [value: ${get()}]" else "MapBinding [invalid]"
+        return if (this.validState) "ArrayBinding [value: ${get()}]" else "ArrayBinding [invalid]"
     }
 
 }

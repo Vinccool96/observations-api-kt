@@ -1,15 +1,14 @@
 package io.github.vinccool96.observationskt.collections
 
-import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
-import io.github.vinccool96.observationskt.sun.collections.ChangeHelper.addRemoveChangeToString
-import io.github.vinccool96.observationskt.sun.collections.ChangeHelper.permChangeToString
-import io.github.vinccool96.observationskt.sun.collections.ChangeHelper.updateChangeToString
+import io.github.vinccool96.observationskt.collections.ArrayChangeListener.Change
+import io.github.vinccool96.observationskt.sun.collections.ChangeHelper
 
-@Suppress("UNCHECKED_CAST", "SENSELESS_COMPARISON", "UNNECESSARY_NOT_NULL_ASSERTION")
-internal class ListChangeBuilder<E> internal constructor(private val list: ObservableListBase<E>) : ChangeBuilder<E>() {
+@Suppress("UNCHECKED_CAST")
+internal class ArrayChangeBuilder<T> internal constructor(private val array: ObservableArrayBase<T>) :
+        ChangeBuilder<T>() {
 
     override val size: Int
-        get() = this.list.size
+        get() = this.array.size
 
     override fun commit() {
         val addRemoveNotEmpty = this.addRemoveChanges.isNotEmpty()
@@ -19,25 +18,25 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                     this.updateChanges.size + this.addRemoveChanges.size + if (this.permutationChange != null) 1 else 0
             if (totalSize == 1) {
                 if (addRemoveNotEmpty) {
-                    this.list.fireChanges(SingleChange(finalizeSubChange(this.addRemoveChanges[0])!!, list))
+                    this.array.fireChanges(SingleChange(finalizeSubChange(this.addRemoveChanges[0]), this.array))
                     this.addRemoveChanges.clear()
                 } else if (updateNotEmpty) {
-                    this.list.fireChanges(SingleChange(finalizeSubChange(this.updateChanges[0])!!, list))
+                    this.array.fireChanges(SingleChange(finalizeSubChange(this.updateChanges[0]), this.array))
                     this.updateChanges.clear()
                 } else {
-                    this.list.fireChanges(SingleChange(finalizeSubChange(this.permutationChange!!)!!, list))
+                    this.array.fireChanges(SingleChange(finalizeSubChange(this.permutationChange!!), this.array))
                     this.permutationChange = null
                 }
             } else {
                 if (updateNotEmpty) {
-                    val removed = compress(this.updateChanges as MutableList<SubChange<E>?>)
+                    val removed = compress(this.updateChanges as MutableList<SubChange<T>?>)
                     totalSize -= removed
                 }
                 if (addRemoveNotEmpty) {
-                    val removed = compress(this.addRemoveChanges as MutableList<SubChange<E>?>)
+                    val removed = compress(this.addRemoveChanges as MutableList<SubChange<T>?>)
                     totalSize -= removed
                 }
-                val array: Array<SubChange<E>?> = arrayOfNulls(totalSize)
+                val array: Array<SubChange<T>?> = arrayOfNulls(totalSize)
                 var ptr = 0
                 if (this.permutationChange != null) {
                     array[ptr++] = this.permutationChange
@@ -46,31 +45,25 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                     val sz = this.addRemoveChanges.size
                     for (i in 0 until sz) {
                         val change = this.addRemoveChanges[i]
-                        if (change != null) {
-                            array[ptr++] = change
-                        }
+                        array[ptr++] = change
                     }
                 }
                 if (updateNotEmpty) {
                     val sz = this.updateChanges.size
                     for (i in 0 until sz) {
                         val change = this.updateChanges[i]
-                        if (change != null) {
-                            array[ptr++] = change
-                        }
+                        array[ptr++] = change
                     }
                 }
-                this.list.fireChanges(IterableChange(finalizeSubChangeArray(array as Array<SubChange<E>>), this.list))
+                this.array.fireChanges(IterableChange(finalizeSubChangeArray(array as Array<SubChange<T>>), this.array))
                 this.addRemoveChanges.clear()
-                if (this.updateChanges != null) {
-                    this.updateChanges.clear()
-                }
+                this.updateChanges.clear()
                 this.permutationChange = null
             }
         }
     }
 
-    private class SingleChange<E>(private val change: SubChange<E>, list: ObservableListBase<E>) : Change<E>(list) {
+    private class SingleChange<T>(private val change: SubChange<T>, array: ObservableArrayBase<T>) : Change<T>(array) {
 
         private var onChange: Boolean = false
 
@@ -99,10 +92,10 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 return this.change.to
             }
 
-        override val removed: List<E>
+        override val removed: Array<T>
             get() {
                 checkState()
-                return this.change.removed ?: ArrayList()
+                return toArray(this.array, this.change.removed)
             }
 
         override val permutation: IntArray
@@ -125,19 +118,20 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
 
         override fun toString(): String {
             val ret: String = if (this.change.perm.isNotEmpty()) {
-                permChangeToString(this.change.perm)
+                ChangeHelper.permChangeToString(this.change.perm)
             } else if (this.change.updated) {
-                updateChangeToString(this.change.from, this.change.to)
+                ChangeHelper.updateChangeToString(this.change.from, this.change.to)
             } else {
-                addRemoveChangeToString(this.change.from, this.change.to, this.list, this.change.removed!!)
+                ChangeHelper.addRemoveChangeToString(this.change.from, this.change.to, this.array,
+                        this.change.removed!!)
             }
             return "{ $ret }"
         }
 
     }
 
-    private class IterableChange<E>(private val changes: Array<SubChange<E>>, list: ObservableList<E>) :
-            Change<E>(list) {
+    private class IterableChange<T>(private val changes: Array<SubChange<T>>, array: ObservableArrayBase<T>) :
+            Change<T>(array) {
 
         private var cursor = -1
 
@@ -165,10 +159,10 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
                 return this.changes[cursor].to
             }
 
-        override val removed: List<E>
+        override val removed: Array<T>
             get() {
                 checkState()
-                return this.changes[this.cursor].removed ?: ArrayList()
+                return toArray(this.array, this.changes[this.cursor].removed)
             }
 
         override val permutation: IntArray
@@ -193,11 +187,11 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
             b.append("{ ")
             while (c < this.changes.size) {
                 if (this.changes[c].perm.isNotEmpty()) {
-                    b.append(permChangeToString(this.changes[c].perm))
+                    b.append(ChangeHelper.permChangeToString(this.changes[c].perm))
                 } else if (this.changes[c].updated) {
-                    b.append(updateChangeToString(this.changes[c].from, this.changes[c].to))
+                    b.append(ChangeHelper.updateChangeToString(this.changes[c].from, this.changes[c].to))
                 } else {
-                    b.append(addRemoveChangeToString(this.changes[c].from, this.changes[c].to, this.list,
+                    b.append(ChangeHelper.addRemoveChangeToString(this.changes[c].from, this.changes[c].to, this.array,
                             this.changes[c].removed!!))
                 }
                 if (c != this.changes.size - 1) {
@@ -207,6 +201,23 @@ internal class ListChangeBuilder<E> internal constructor(private val list: Obser
             }
             b.append(" }")
             return b.toString()
+        }
+
+    }
+
+    companion object {
+
+        private fun <T> toArray(array: ObservableArray<T>, removed: MutableList<T>?): Array<T> {
+            val baseArray = array.baseArray
+            var result = baseArray.copyOfRange(0, 0)
+            if (removed != null) {
+                for (elem in removed) {
+                    val part = array.baseArray
+                    part[0] = elem
+                    result += part
+                }
+            }
+            return result
         }
 
     }

@@ -9,6 +9,9 @@ package io.github.vinccool96.observationskt.collections
  */
 interface ObservableShortArray : ObservableArray<Short> {
 
+    override val baseArray: Array<Short>
+        get() = arrayOf(0)
+
     /**
      * Copies specified portion of array into `dest` array. Throws the same exceptions as [Array.copyInto] method.
      *

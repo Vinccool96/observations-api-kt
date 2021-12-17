@@ -4,7 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.sun.binding.ExpressionHelper
 
 /**
- * A convenience class for creating implementations of [ObservableValue]. It contains all of the infrastructure
+ * A convenience class for creating implementations of [ObservableValue]. It contains all theinfrastructure
  * support for value invalidation- and change event notification.
  *
  * This implementation can handle adding and removing listeners while the observers are being notified, but it is not

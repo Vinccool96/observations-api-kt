@@ -3,7 +3,10 @@ package io.github.vinccool96.observationskt.sun.collections
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableList
 
-abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list: ObservableList<E>) : Change<E>(list) {
+abstract class NonIterableListChange<E>(private val f: Int, private val t: Int, list: ObservableList<E>) :
+        Change<E>(list) {
+
+    private var invalid: Boolean = true
 
     override val from: Int
         get() {
@@ -16,8 +19,6 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
             checkState()
             return this.t
         }
-
-    private var invalid: Boolean = true
 
     override val permutation: IntArray
         get() {
@@ -58,10 +59,10 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
         return "{ $ret }"
     }
 
-    class GenericAddRemoveChange<E>(f: Int, t: Int, private val removedList: MutableList<E>, list: ObservableList<E>) :
-            NonIterableChange<E>(f, t, list) {
+    class GenericAddRemoveChange<E>(f: Int, t: Int, private val removedList: List<E>, list: ObservableList<E>) :
+            NonIterableListChange<E>(f, t, list) {
 
-        override val removed: MutableList<E>
+        override val removed: List<E>
             get() {
                 checkState()
                 return this.removedList
@@ -69,7 +70,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
 
     }
 
-    class SimpleRemovedChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableChange<E>(f, t, list) {
+    class SimpleRemovedChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableListChange<E>(f, t, list) {
 
         override val wasRemoved: Boolean
             get() {
@@ -77,7 +78,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
                 return false
             }
 
-        override val removed: MutableList<E>
+        override val removed: List<E>
             get() {
                 checkState()
                 return ArrayList()
@@ -85,7 +86,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
 
     }
 
-    class SimpleAddChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableChange<E>(f, t, list) {
+    class SimpleAddChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableListChange<E>(f, t, list) {
 
         override val wasRemoved: Boolean
             get() {
@@ -93,7 +94,7 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
                 return false
             }
 
-        override val removed: MutableList<E>
+        override val removed: List<E>
             get() {
                 checkState()
                 return ArrayList()
@@ -102,9 +103,9 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
     }
 
     class SimplePermutationChange<E>(f: Int, t: Int, private val perm: IntArray, list: ObservableList<E>) :
-            NonIterableChange<E>(f, t, list) {
+            NonIterableListChange<E>(f, t, list) {
 
-        override val removed: MutableList<E>
+        override val removed: List<E>
             get() {
                 checkState()
                 return ArrayList()
@@ -118,18 +119,20 @@ abstract class NonIterableChange<E>(private val f: Int, private val t: Int, list
 
     }
 
-    class SimpleUpdateChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableChange<E>(f, t, list) {
+    class SimpleUpdateChange<E>(f: Int, t: Int, list: ObservableList<E>) : NonIterableListChange<E>(f, t, list) {
 
         constructor(position: Int, list: ObservableList<E>) : this(position, position + 1, list)
 
-        override val removed: MutableList<E> = ArrayList()
+        override val removed: List<E> = ArrayList()
 
         override val wasUpdated: Boolean = true
 
     }
 
     companion object {
+
         val EMPTY_PERM: IntArray = IntArray(0)
+
     }
 
 }

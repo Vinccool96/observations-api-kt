@@ -209,6 +209,29 @@ object ObservableCollections {
     }
 
     /**
+     * Creates and returns unmodifiable wrapper array on top of provided observable array.
+     *
+     * @param T the type of the objects in the array
+     * @param array an ObservableArray that is to be wrapped
+     *
+     * @return an ObservableArray wrapper that is unmodifiable
+     */
+    fun <T> unmodifiableObservableArray(array: ObservableArray<T>): ObservableArray<T> {
+        return UnmodifiableObservableArrayImpl(array)
+    }
+
+    /**
+     * Creates an empty unmodifiable observable array.
+     *
+     * @param T the type of the objects in the array
+     *
+     * @return An empty unmodifiable observable array
+     */
+    fun <T> emptyObservableArray(baseArray: Array<T>): ObservableArray<T> {
+        return EmptyObservableArray(baseArray)
+    }
+
+    /**
      * Creates a new empty observable boolean array.
      *
      * @return a newly created ObservableBooleanArray
@@ -506,6 +529,7 @@ object ObservableCollections {
      * Creates a new empty observable array.
      *
      * @param baseArray the base array of size `1` containing the base element
+     * @param T the type of the objects in the array
      *
      * @return a newly created ObservableObjectArray
      *
@@ -520,6 +544,7 @@ object ObservableCollections {
      *
      * @param baseArray the base array of size `1` containing the base element
      * @param values the values that will be in the new observable array
+     * @param T the type of the objects in the array
      *
      * @return a newly created ObservableObjectArray
      *
@@ -534,6 +559,7 @@ object ObservableCollections {
      *
      * @param baseArray the base array of size `1` containing the base element
      * @param array observable array to copy
+     * @param T the type of the objects in the array
      *
      * @return a newly created ObservableObjectArray
      *
@@ -1045,7 +1071,7 @@ object ObservableCollections {
 
         init {
             this.listener = ListChangeListener { change ->
-                fireChange(SourceAdapterChange(this@UnmodifiableObservableListImpl, change))
+                fireChange(SourceAdapterListChange(this@UnmodifiableObservableListImpl, change))
             }
             this.backingList.addListener(this.listener)
         }
@@ -1248,7 +1274,7 @@ object ObservableCollections {
         private val backingList: ObservableList<T> = seq
 
         private val listener: ListChangeListener<T> = ListChangeListener { change ->
-            ListListenerHelper.fireValueChangedEvent(this.helper, SourceAdapterChange(this, change))
+            ListListenerHelper.fireValueChangedEvent(this.helper, SourceAdapterListChange(this, change))
         }
 
         init {
@@ -1341,7 +1367,7 @@ object ObservableCollections {
             ObservableListBase<T>(), ObservableList<T> {
 
         private val listener: ListChangeListener<T> = ListChangeListener { change ->
-            fireChange(SourceAdapterChange(this, change))
+            fireChange(SourceAdapterListChange(this, change))
         }
 
         init {
@@ -2722,6 +2748,170 @@ object ObservableCollections {
             synchronized(this.mutex) {
                 this.backingCollection.clear()
             }
+        }
+
+    }
+
+    private class EmptyObservableArray<T>(override val baseArray: Array<T>) : ObservableArrayBase<T>(),
+            ObservableArray<T> {
+
+        private val initialArray: Array<T> = this.baseArray.copyOfRange(0, 0)
+
+        override fun addListener(listener: InvalidationListener) {
+        }
+
+        override fun removeListener(listener: InvalidationListener) {
+        }
+
+        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+            return false
+        }
+
+        override fun addListener(listener: ArrayChangeListener<T>) {
+        }
+
+        override fun removeListener(listener: ArrayChangeListener<T>) {
+        }
+
+        override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<T>): Boolean {
+            return false
+        }
+
+        override fun resize(size: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override val size: Int
+            get() = 0
+
+        override fun growCapacity(length: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAllInternal(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun copyInto(destination: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun copyInto(destination: ObservableArray<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun ensureCapacity(capacity: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override operator fun get(index: Int): T {
+            throw ArrayIndexOutOfBoundsException()
+        }
+
+        override fun trimToSize() {
+            throw UnsupportedOperationException()
+        }
+
+        override fun toTypedArray(): Array<T> {
+            return this.initialArray.copyOf()
+        }
+
+        override fun toTypedArray(startIndex: Int, endIndex: Int): Array<T> {
+            rangeCheck(endIndex)
+            return this.initialArray.copyOf()
+        }
+
+        override fun setInternal(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun doOperatorSet(index: Int, value: T) {
+            throw UnsupportedOperationException()
+        }
+
+    }
+
+    @Suppress("JoinDeclarationAndAssignment")
+    private class UnmodifiableObservableArrayImpl<T>(private val backingArray: ObservableArray<T>) :
+            ObservableArrayBase<T>() {
+
+        private val listener: ArrayChangeListener<T>
+
+        init {
+            this.listener = ArrayChangeListener { change ->
+                fireChange(SourceAdapterArrayChange(this@UnmodifiableObservableArrayImpl, change))
+            }
+            this.backingArray.addListener(this.listener)
+        }
+
+        override val baseArray: Array<T>
+            get() = this.backingArray.baseArray
+
+        override val size: Int
+            get() = this.backingArray.size
+
+        override fun copyInto(destination: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.backingArray.copyInto(destination, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyInto(destination: ObservableArray<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.backingArray.copyInto(destination, destinationOffset, startIndex, endIndex)
+        }
+
+        override operator fun get(index: Int): T {
+            return this.backingArray[index]
+        }
+
+        override fun resize(size: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun trimToSize() {
+            throw UnsupportedOperationException()
+        }
+
+        override fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAllInternal(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun ensureCapacity(capacity: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun growCapacity(length: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun toTypedArray(): Array<T> {
+            return this.backingArray.toTypedArray()
+        }
+
+        override fun toTypedArray(startIndex: Int, endIndex: Int): Array<T> {
+            return this.backingArray.toTypedArray(startIndex, endIndex)
+        }
+
+        override fun setInternal(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun doOperatorSet(index: Int, value: T) {
+            throw UnsupportedOperationException()
         }
 
     }

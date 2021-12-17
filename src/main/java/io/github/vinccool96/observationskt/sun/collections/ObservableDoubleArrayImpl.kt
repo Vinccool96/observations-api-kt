@@ -51,7 +51,6 @@ class ObservableDoubleArrayImpl() : ObservableArrayBase<Double>(), ObservableDou
         growCapacity(length)
         src.toDoubleArray().copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
-        fireChange(length != 0, this.sizeState - length, this.sizeState)
     }
 
     override fun addAll(vararg elements: Double) {
@@ -68,30 +67,25 @@ class ObservableDoubleArrayImpl() : ObservableArrayBase<Double>(), ObservableDou
 
     override fun setAllInternal(src: Array<Double>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val sizeChanged = this.size != length
         this.sizeState = 0
         ensureCapacity(endIndex)
         src.toDoubleArray().copyInto(this.array, 0, startIndex, endIndex)
         this.sizeState = length
-        fireChange(sizeChanged, 0, this.sizeState)
     }
 
     override fun setAllInternal(src: ObservableArray<Double>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val sizeChanged = this.size != length
         if (src === this) {
             if (startIndex == 0) {
                 resize(length)
             } else {
                 this.array.copyInto(this.array, 0, startIndex, endIndex)
                 this.sizeState = length
-                fireChange(sizeChanged, 0, this.sizeState)
             }
         } else {
             ensureCapacity(length)
             src.toTypedArray().toDoubleArray().copyInto(this.array, 0, startIndex, endIndex)
             this.sizeState = length
-            fireChange(sizeChanged, 0, this.sizeState)
         }
     }
 
@@ -99,22 +93,18 @@ class ObservableDoubleArrayImpl() : ObservableArrayBase<Double>(), ObservableDou
         setAll(*elements.toTypedArray())
     }
 
+    override fun setInternal(src: Array<Double>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        val length = endIndex - startIndex
+        rangeCheck(destinationOffset + length)
+        src.toDoubleArray().copyInto(this.array, destinationOffset, startIndex, endIndex)
+    }
+
     override fun setAll(src: DoubleArray, startIndex: Int, endIndex: Int) {
         setAll(src.toTypedArray(), startIndex, endIndex)
     }
 
     override fun set(src: DoubleArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        rangeCheck(destinationOffset + length)
-        src.copyInto(this.array, destinationOffset, startIndex, endIndex)
-        fireChange(false, destinationOffset, destinationOffset + length)
-    }
-
-    override fun set(src: Array<Double>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        rangeCheck(destinationOffset + length)
-        src.toDoubleArray().copyInto(this.array, destinationOffset, startIndex, endIndex)
-        fireChange(false, destinationOffset, destinationOffset + length)
+        set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
     override operator fun get(index: Int): Double {
@@ -122,10 +112,9 @@ class ObservableDoubleArrayImpl() : ObservableArrayBase<Double>(), ObservableDou
         return this.array[index]
     }
 
-    override operator fun set(index: Int, value: Double) {
+    override fun doOperatorSet(index: Int, value: Double) {
         rangeCheck(index + 1)
         this.array[index] = value
-        fireChange(false, index, index + 1)
     }
 
     override fun toDoubleArray(): DoubleArray {
@@ -168,10 +157,8 @@ class ObservableDoubleArrayImpl() : ObservableArrayBase<Double>(), ObservableDou
         }
         ensureCapacity(size)
         val minSize = min(this.sizeState, size)
-        val sizeChanged = this.sizeState != size
         this.sizeState = size
         this.array.fill(0.0, minSize, this.sizeState)
-        fireChange(sizeChanged, minSize, size)
     }
 
     override fun growCapacity(length: Int) {

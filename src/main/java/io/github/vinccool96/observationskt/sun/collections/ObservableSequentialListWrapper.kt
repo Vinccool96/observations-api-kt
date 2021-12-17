@@ -4,7 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.collections.ModifiableObservableListBase
 import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.sun.collections.NonIterableChange.SimplePermutationChange
+import io.github.vinccool96.observationskt.sun.collections.NonIterableListChange.SimplePermutationChange
 import io.github.vinccool96.observationskt.util.Callback
 
 @Suppress("DuplicatedCode")

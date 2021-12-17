@@ -11,11 +11,17 @@ import io.github.vinccool96.observationskt.beans.Observable
  * Implementations have both `capacity`, which is internal array length, and `size`. If size needs to be increased
  * beyond capacity, the capacity increases to match that new size. Use [trimToSize] method to shrink it.
  *
- * @param T actual array instance type
+ * @param T the type of the `Array` elements
  *
  * @see ArrayChangeListener
  */
 interface ObservableArray<T> : Observable {
+
+    /**
+     * The base array that needs to be provided to fill the array when resizing. It must be of size `1`, and the value
+     * it contains is the base value.
+     */
+    val baseArray: Array<T>
 
     /**
      * Add a listener to this observable array.
@@ -250,5 +256,11 @@ interface ObservableArray<T> : Observable {
      * @return a double array containing the copy of specified portion the observable array
      */
     fun toTypedArray(startIndex: Int, endIndex: Int): Array<T>
+
+    /**
+     * Creates an [Iterator] for iterating over the elements of the array. If the `ObservableArray` linked to the
+     * iterator gets modified, it won't affect the `Iterator`.
+     */
+    operator fun iterator(): Iterator<T>
 
 }

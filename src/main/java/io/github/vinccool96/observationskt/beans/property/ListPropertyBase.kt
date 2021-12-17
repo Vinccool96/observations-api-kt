@@ -38,7 +38,7 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
 
     private var helper: ListExpressionHelper<E>? = null
 
-    private val listChangeListener: ListChangeListener<E> = ListChangeListener {change ->
+    private val listChangeListener: ListChangeListener<E> = ListChangeListener { change ->
         invalidateProperties()
         invalidated()
         fireValueChangedEvent(change)
@@ -49,9 +49,7 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     private lateinit var empty0: EmptyProperty
 
     init {
-        if (this.valueState != null) {
-            this.valueState!!.addListener(this.listChangeListener)
-        }
+        this.valueState?.addListener(this.listChangeListener)
     }
 
     /**
@@ -213,9 +211,7 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
         if (!this.valid) {
             this.valueState = if (this.observable == null) this.valueState else this.observable!!.value
             this.valid = true
-            if (this.valueState != null) {
-                this.valueState!!.addListener(this.listChangeListener)
-            }
+            this.valueState?.addListener(this.listChangeListener)
         }
         return this.valueState
     }

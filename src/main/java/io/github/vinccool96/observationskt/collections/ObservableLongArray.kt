@@ -9,6 +9,9 @@ package io.github.vinccool96.observationskt.collections
  */
 interface ObservableLongArray : ObservableArray<Long> {
 
+    override val baseArray: Array<Long>
+        get() = arrayOf(0L)
+
     /**
      * Copies specified portion of array into `dest` array. Throws the same exceptions as [Array.copyInto] method.
      *

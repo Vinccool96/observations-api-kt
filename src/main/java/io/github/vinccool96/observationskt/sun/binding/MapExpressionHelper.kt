@@ -10,7 +10,7 @@ import io.github.vinccool96.observationskt.util.ArrayUtils
 
 /**
  * A convenience class for creating implementations of [io.github.vinccool96.observationskt.beans.value.ObservableValue].
- * It contains all of the infrastructure support for value invalidation- and change event notification.
+ * It contains all the infrastructure support for value invalidation- and change event notification.
  *
  * This implementation can handle adding and removing listeners while the observers are being notified, but it is not
  * thread-safe.

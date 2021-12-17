@@ -9,6 +9,9 @@ package io.github.vinccool96.observationskt.collections
  */
 interface ObservableBooleanArray : ObservableArray<Boolean> {
 
+    override val baseArray: Array<Boolean>
+        get() = arrayOf(false)
+
     /**
      * Copies specified portion of array into `dest` array. Throws the same exceptions as [Array.copyInto] method.
      *

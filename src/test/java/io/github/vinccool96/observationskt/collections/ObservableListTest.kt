@@ -227,6 +227,12 @@ class ObservableListTest(private val listFactory: Callable<ObservableList<String
     }
 
     @Test
+    fun testSetAll_ElementsAlreadyIn() {
+        this.list.setAll("one", "two")
+        this.mlo.check1AddRemove(this.list, listOf("one", "two", "three"), 0, 2)
+    }
+
+    @Test
     fun testIndexOf() {
         useListData("zero", "one", "two", "three", "four", "five", "two")
         assertEquals(2, this.list.indexOf("two"))

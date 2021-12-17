@@ -50,9 +50,7 @@ abstract class MapPropertyBase<K, V>(initialValue: ObservableMap<K, V>?) : MapPr
     private lateinit var empty0: EmptyProperty
 
     init {
-        if (this.valueState != null) {
-            this.valueState!!.addListener(this.mapChangeListener)
-        }
+        this.valueState?.addListener(this.mapChangeListener)
     }
 
     /**
@@ -214,9 +212,7 @@ abstract class MapPropertyBase<K, V>(initialValue: ObservableMap<K, V>?) : MapPr
         if (!this.validState) {
             this.valueState = if (this.observable != null) this.observable!!.value else this.valueState
             this.validState = true
-            if (this.valueState != null) {
-                this.valueState!!.addListener(this.mapChangeListener)
-            }
+            this.valueState?.addListener(this.mapChangeListener)
         }
         return this.valueState
     }

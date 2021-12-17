@@ -1,6 +1,7 @@
 package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
+import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
 
 /**
@@ -10,9 +11,9 @@ import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
  * * Listener handling by implementing `addListener` and `removeListener` methods. [fireChange] method is provided for
  * notifying the listeners with a `Change` object.
  *
- * * Methods for building up a [ListChangeListener.Change] object. There are various methods called `next*`, like
- * [nextAdd] for new items in the lists or [nextRemove] for an item being removed from the list. **These methods must be
- * always enclosed in [beginChange] and [endChange] block.** See the example below.
+ * * Methods for building up a [Change] object. There are various methods called `next*`, like [nextAdd] for new items
+ * in the lists or [nextRemove] for an item being removed from the list. **These methods must be always enclosed in
+ * [beginChange] and [endChange] block.** See the example below.
  *
  * The following example shows how the Change build-up works:
  *
@@ -51,7 +52,7 @@ import io.github.vinccool96.observationskt.sun.collections.ListListenerHelper
  * @param E the type of the elements contained in the List
  *
  * @see ObservableList
- * @see ListChangeListener.Change
+ * @see Change
  * @see ModifiableObservableListBase
  */
 abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<E> {
@@ -227,18 +228,23 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
         return curHelper != null && curHelper.listChangeListeners.contains(listener)
     }
 
-    internal fun fireChanges(change: ListChangeListener.Change<out E>) {
+    internal fun fireChanges(change: Change<out E>) {
         fireChange(change)
     }
 
     /**
-     * You surely also want an `internal` method to access this method
+     * Notifies all listeners of a change.
+     *
+     * You surely also want an `internal` method to access this method.
+     *
+     * @param change the change to be fired
      */
-    protected fun fireChange(change: ListChangeListener.Change<out E>) {
+    protected fun fireChange(change: Change<out E>) {
         ListListenerHelper.fireValueChangedEvent(this.helper, change)
     }
 
-    protected val hasListeners: Boolean get() = ListListenerHelper.hasListeners(this.helper)
+    protected val hasListeners: Boolean
+        get() = ListListenerHelper.hasListeners(this.helper)
 
     override fun addAll(vararg elements: E): Boolean {
         return addAll(elements.asList())

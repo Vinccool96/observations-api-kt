@@ -43,15 +43,13 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
 
     private var helper: ListExpressionHelper<E>? = null
 
-    private val listChangeListener: ListChangeListener<E> = ListChangeListener {change ->
+    private val listChangeListener = ListChangeListener<E> { change ->
         invalidateProperties()
         onInvalidating()
         ListExpressionHelper.fireValueChangedEvent(this.helper, change)
     }
 
     private lateinit var size0: SizeProperty
-
-    private lateinit var empty0: EmptyProperty
 
     override val sizeProperty: ReadOnlyIntProperty
         get() {
@@ -76,6 +74,8 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
         }
 
     }
+
+    private lateinit var empty0: EmptyProperty
 
     override val emptyProperty: ReadOnlyBooleanProperty
         get() {
@@ -203,9 +203,7 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
         if (!this.validState) {
             this.valueState = computeValue()
             this.validState = true
-            if (this.valueState != null) {
-                this.valueState!!.addListener(this.listChangeListener)
-            }
+            this.valueState?.addListener(this.listChangeListener)
         }
         return this.valueState
     }
@@ -228,9 +226,7 @@ abstract class ListBinding<E> : ListExpression<E>(), Binding<ObservableList<E>?>
 
     final override fun invalidate() {
         if (this.validState) {
-            if (this.valueState != null) {
-                this.valueState!!.removeListener(this.listChangeListener)
-            }
+            this.valueState?.removeListener(this.listChangeListener)
             this.validState = false
             invalidateProperties()
             onInvalidating()

@@ -9,5 +9,6 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
  *
  * @see ObservableSet
  * @see WritableObjectValue
+ * @see WritableValue
  */
 interface WritableSetValue<E> : WritableObjectValue<ObservableSet<E>?>, ObservableSet<E>

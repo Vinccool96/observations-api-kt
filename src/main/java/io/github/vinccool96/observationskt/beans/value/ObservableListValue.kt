@@ -5,7 +5,7 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 /**
  * An observable reference to an [ObservableList].
  *
- * @param E the type of the `List` elements
+ * @param E the type of the `MutableList` elements
  *
  * @see ObservableList
  * @see ObservableObjectValue

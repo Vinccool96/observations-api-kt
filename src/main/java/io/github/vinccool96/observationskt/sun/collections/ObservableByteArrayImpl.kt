@@ -51,7 +51,6 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         growCapacity(length)
         src.toByteArray().copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
-        fireChange(length != 0, this.sizeState - length, this.sizeState)
     }
 
     override fun addAll(vararg elements: Byte) {
@@ -68,30 +67,25 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
 
     override fun setAllInternal(src: Array<Byte>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val sizeChanged = this.size != length
         this.sizeState = 0
         ensureCapacity(endIndex)
         src.toByteArray().copyInto(this.array, 0, startIndex, endIndex)
         this.sizeState = length
-        fireChange(sizeChanged, 0, this.sizeState)
     }
 
     override fun setAllInternal(src: ObservableArray<Byte>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
-        val sizeChanged = this.size != length
         if (src === this) {
             if (startIndex == 0) {
                 resize(length)
             } else {
                 this.array.copyInto(this.array, 0, startIndex, endIndex)
                 this.sizeState = length
-                fireChange(sizeChanged, 0, this.sizeState)
             }
         } else {
             ensureCapacity(length)
             src.toTypedArray().toByteArray().copyInto(this.array, 0, startIndex, endIndex)
             this.sizeState = length
-            fireChange(sizeChanged, 0, this.sizeState)
         }
     }
 
@@ -99,22 +93,18 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         setAll(*elements.toTypedArray())
     }
 
+    override fun setInternal(src: Array<Byte>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+        val length = endIndex - startIndex
+        rangeCheck(destinationOffset + length)
+        src.toByteArray().copyInto(this.array, destinationOffset, startIndex, endIndex)
+    }
+
     override fun setAll(src: ByteArray, startIndex: Int, endIndex: Int) {
         setAll(src.toTypedArray(), startIndex, endIndex)
     }
 
     override fun set(src: ByteArray, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        rangeCheck(destinationOffset + length)
-        src.copyInto(this.array, destinationOffset, startIndex, endIndex)
-        fireChange(false, destinationOffset, destinationOffset + length)
-    }
-
-    override fun set(src: Array<Byte>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        val length = endIndex - startIndex
-        rangeCheck(destinationOffset + length)
-        src.toByteArray().copyInto(this.array, destinationOffset, startIndex, endIndex)
-        fireChange(false, destinationOffset, destinationOffset + length)
+        set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
     override operator fun get(index: Int): Byte {
@@ -122,10 +112,9 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         return this.array[index]
     }
 
-    override operator fun set(index: Int, value: Byte) {
+    override fun doOperatorSet(index: Int, value: Byte) {
         rangeCheck(index + 1)
         this.array[index] = value
-        fireChange(false, index, index + 1)
     }
 
     override fun toByteArray(): ByteArray {
@@ -156,7 +145,8 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         this.array.toTypedArray().copyInto(destination, destinationOffset, startIndex, endIndex)
     }
 
-    override fun copyInto(destination: ObservableArray<Byte>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+    override fun copyInto(destination: ObservableArray<Byte>, destinationOffset: Int, startIndex: Int,
+            endIndex: Int) {
         rangeCheck(endIndex)
         destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
@@ -167,10 +157,8 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         }
         ensureCapacity(size)
         val minSize = min(this.sizeState, size)
-        val sizeChanged = this.sizeState != size
         this.sizeState = size
         this.array.fill(0, minSize, this.sizeState)
-        fireChange(sizeChanged, minSize, size)
     }
 
     override fun growCapacity(length: Int) {

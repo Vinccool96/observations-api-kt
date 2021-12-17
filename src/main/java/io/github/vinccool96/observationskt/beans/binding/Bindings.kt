@@ -6569,7 +6569,7 @@ object Bindings {
      *
      * @throws IllegalArgumentException if `index < 0`
      */
-    fun <T> valueAt(op: ObservableObjectArray<T>, index: Int): ObjectBinding<T?> {
+    fun <T> valueAt(op: ObservableArray<T>, index: Int): ObjectBinding<T?> {
         if (index < 0) {
             throw IllegalArgumentException()
         }
@@ -6610,7 +6610,7 @@ object Bindings {
      *
      * @return the new `ObjectBinding`
      */
-    fun <T> valueAt(op: ObservableObjectArray<T>, index: ObservableIntValue): ObjectBinding<T?> {
+    fun <T> valueAt(op: ObservableArray<T>, index: ObservableIntValue): ObjectBinding<T?> {
         return valueAt(op, index as ObservableNumberValue)
     }
 
@@ -6624,7 +6624,7 @@ object Bindings {
      *
      * @return the new `ObjectBinding`
      */
-    fun <T> valueAt(op: ObservableObjectArray<T>, index: ObservableNumberValue): ObjectBinding<T?> {
+    fun <T> valueAt(op: ObservableArray<T>, index: ObservableNumberValue): ObjectBinding<T?> {
         return object : ObjectBinding<T?>() {
 
             init {
@@ -6662,7 +6662,7 @@ object Bindings {
      *
      * @throws IllegalArgumentException if `index < 0`
      */
-    fun booleanValueAt(op: ObservableBooleanArray, index: Int): BooleanBinding {
+    fun booleanValueAt(op: ObservableArray<out Boolean?>, index: Int): BooleanBinding {
         if (index < 0) {
             throw IllegalArgumentException()
         }
@@ -6679,8 +6679,10 @@ object Bindings {
 
             override fun computeValue(): Boolean {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return false
@@ -6702,7 +6704,7 @@ object Bindings {
      *
      * @return the new `BooleanBinding`
      */
-    fun booleanValueAt(op: ObservableBooleanArray, index: ObservableIntValue): BooleanBinding {
+    fun booleanValueAt(op: ObservableArray<out Boolean?>, index: ObservableIntValue): BooleanBinding {
         return booleanValueAt(op, index as ObservableNumberValue)
     }
 
@@ -6715,7 +6717,7 @@ object Bindings {
      *
      * @return the new `BooleanBinding`
      */
-    fun booleanValueAt(op: ObservableBooleanArray, index: ObservableNumberValue): BooleanBinding {
+    fun booleanValueAt(op: ObservableArray<out Boolean?>, index: ObservableNumberValue): BooleanBinding {
         return object : BooleanBinding() {
 
             init {
@@ -6728,8 +6730,10 @@ object Bindings {
 
             override fun computeValue(): Boolean {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return false
@@ -6770,8 +6774,10 @@ object Bindings {
 
             override fun computeValue(): Double {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0
@@ -6819,8 +6825,10 @@ object Bindings {
 
             override fun computeValue(): Double {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0
@@ -6861,8 +6869,10 @@ object Bindings {
 
             override fun computeValue(): Float {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0f
@@ -6910,8 +6920,10 @@ object Bindings {
 
             override fun computeValue(): Float {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0f
@@ -6952,8 +6964,10 @@ object Bindings {
 
             override fun computeValue(): Int {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7001,8 +7015,10 @@ object Bindings {
 
             override fun computeValue(): Int {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7043,8 +7059,10 @@ object Bindings {
 
             override fun computeValue(): Long {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0L
@@ -7092,8 +7110,10 @@ object Bindings {
 
             override fun computeValue(): Long {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0L
@@ -7134,8 +7154,10 @@ object Bindings {
 
             override fun computeValue(): Short {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7183,8 +7205,10 @@ object Bindings {
 
             override fun computeValue(): Short {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7225,8 +7249,10 @@ object Bindings {
 
             override fun computeValue(): Byte {
                 try {
-                    return op[index]
+                    return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7274,8 +7300,10 @@ object Bindings {
 
             override fun computeValue(): Byte {
                 try {
-                    return op[index.intValue]
+                    return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
+                    Logging.getLogger().fine("Exception while evaluating binding", ex)
+                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7299,7 +7327,7 @@ object Bindings {
      *
      * @throws IllegalArgumentException if `index < 0`
      */
-    fun stringValueAt(op: ObservableObjectArray<String?>, index: Int): StringBinding {
+    fun stringValueAt(op: ObservableArray<String?>, index: Int): StringBinding {
         require(index >= 0) { "Index cannot be negative" }
 
         return object : StringBinding() {
@@ -7337,7 +7365,7 @@ object Bindings {
      *
      * @return the new `StringBinding`
      */
-    fun stringValueAt(op: ObservableObjectArray<String?>, index: ObservableIntValue): StringBinding {
+    fun stringValueAt(op: ObservableArray<String?>, index: ObservableIntValue): StringBinding {
         return stringValueAt(op, index as ObservableNumberValue)
     }
 
@@ -7350,7 +7378,7 @@ object Bindings {
      *
      * @return the new `StringBinding`
      */
-    fun stringValueAt(op: ObservableObjectArray<String?>, index: ObservableNumberValue): StringBinding {
+    fun stringValueAt(op: ObservableArray<String?>, index: ObservableNumberValue): StringBinding {
         return object : StringBinding() {
 
             init {

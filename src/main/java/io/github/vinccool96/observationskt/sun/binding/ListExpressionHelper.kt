@@ -7,13 +7,13 @@ import io.github.vinccool96.observationskt.collections.ListChangeListener
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.sun.collections.NonIterableChange.GenericAddRemoveChange
-import io.github.vinccool96.observationskt.sun.collections.SourceAdapterChange
+import io.github.vinccool96.observationskt.sun.collections.NonIterableListChange.GenericAddRemoveChange
+import io.github.vinccool96.observationskt.sun.collections.SourceAdapterListChange
 import io.github.vinccool96.observationskt.util.ArrayUtils
 
 /**
  * A convenience class for creating implementations of [io.github.vinccool96.observationskt.beans.value.ObservableValue].
- * It contains all of the infrastructure support for value invalidation- and change event notification.
+ * It contains all the infrastructure support for value invalidation- and change event notification.
  *
  * This implementation can handle adding and removing listeners while the observers are being notified, but it is not
  * thread-safe.
@@ -24,6 +24,9 @@ import io.github.vinccool96.observationskt.util.ArrayUtils
 @Suppress("UNCHECKED_CAST", "RedundantNullableReturnType")
 abstract class ListExpressionHelper<E> protected constructor(protected val observable: ObservableListValue<E>) :
         ExpressionHelperBase() {
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Common implementations
 
     protected abstract fun addListener(listener: InvalidationListener): ListExpressionHelper<E>
 
@@ -46,6 +49,9 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
     abstract val changeListeners: Array<ChangeListener<in ObservableList<E>?>>
 
     abstract val listChangeListeners: Array<ListChangeListener<in E>>
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Implementations
 
     private class SingleInvalidation<E>(observable: ObservableListValue<E>,
             private val listener: InvalidationListener) : ListExpressionHelper<E>(observable) {
@@ -178,7 +184,7 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
             val oldValue = this.currentValue
             this.currentValue = this.observable.value
             if (this.currentValue !== oldValue) {
-                val safeSize: Int = if (this.currentValue == null) 0 else this.currentValue!!.size
+                val safeSize: Int = this.currentValue?.size ?: 0
                 val safeOldValue = if (oldValue == null) ObservableCollections.emptyObservableList() else
                     ObservableCollections.unmodifiableObservableList(oldValue)
                 val change: Change<E> = GenericAddRemoveChange(0, safeSize, safeOldValue, this.observable)
@@ -187,7 +193,7 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
         }
 
         override fun fireValueChangedEvent(change: Change<out E>) {
-            this.listener.onChanged(SourceAdapterChange(this.observable, change))
+            this.listener.onChanged(SourceAdapterListChange(this.observable, change))
         }
 
     }
@@ -457,7 +463,7 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
         }
 
         override fun fireValueChangedEvent(change: Change<out E>) {
-            val mappedChange = if (this.listChangeSize != 0) SourceAdapterChange(this.observable, change) else null
+            val mappedChange = if (this.listChangeSize != 0) SourceAdapterListChange(this.observable, change) else null
             notifyListeners(this.currentValue, mappedChange, false)
         }
 
@@ -502,8 +508,8 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
             return helper?.addListener(listener) ?: SingleInvalidation(observable, listener)
         }
 
-        fun <E> removeListener(helper: ListExpressionHelper<E>?,
-                listener: InvalidationListener): ListExpressionHelper<E>? {
+        fun <E> removeListener(helper: ListExpressionHelper<E>?, listener: InvalidationListener):
+                ListExpressionHelper<E>? {
             return helper?.removeListener(listener)
         }
 
@@ -512,8 +518,8 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
             return helper?.addListener(listener) ?: SingleChange(observable, listener)
         }
 
-        fun <E> removeListener(helper: ListExpressionHelper<E>?,
-                listener: ChangeListener<in ObservableList<E>?>): ListExpressionHelper<E>? {
+        fun <E> removeListener(helper: ListExpressionHelper<E>?, listener: ChangeListener<in ObservableList<E>?>):
+                ListExpressionHelper<E>? {
             return helper?.removeListener(listener)
         }
 
@@ -522,8 +528,8 @@ abstract class ListExpressionHelper<E> protected constructor(protected val obser
             return helper?.addListener(listener) ?: SingleListChange(observable, listener)
         }
 
-        fun <E> removeListener(helper: ListExpressionHelper<E>?,
-                listener: ListChangeListener<in E>): ListExpressionHelper<E>? {
+        fun <E> removeListener(helper: ListExpressionHelper<E>?, listener: ListChangeListener<in E>):
+                ListExpressionHelper<E>? {
             return helper?.removeListener(listener)
         }
 

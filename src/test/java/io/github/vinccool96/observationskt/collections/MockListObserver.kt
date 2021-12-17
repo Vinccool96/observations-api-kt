@@ -19,7 +19,7 @@ class MockListObserver<E> : ListChangeListener<E> {
 
         internal val list: ObservableList<out E> = change.list
 
-        internal val removed: MutableList<out E> = change.removed
+        internal val removed: List<E> = change.removed
 
         internal val from: Int = change.from
 
@@ -27,7 +27,7 @@ class MockListObserver<E> : ListChangeListener<E> {
 
         internal val permutation: IntArray =
                 if (change.wasPermutated)
-                    IntArray(change.to - change.from) {i: Int -> change.getPermutation(i + change.from)}
+                    IntArray(change.to - change.from) { i: Int -> change.getPermutation(i + change.from) }
                 else IntArray(0)
 
         internal val update: Boolean = change.wasUpdated

@@ -31,6 +31,8 @@ class ListExpressionTest {
 
     @Test
     fun testSizeGet() {
+        val l = SimpleListProperty<String>()
+        val a = l.toTypedArray()
         assertEquals(0, this.opNull.size)
         assertEquals(0, this.opEmpty.size)
         assertEquals(1, this.op1.size)

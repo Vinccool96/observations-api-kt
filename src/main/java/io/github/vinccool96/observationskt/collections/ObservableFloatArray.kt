@@ -9,6 +9,9 @@ package io.github.vinccool96.observationskt.collections
  */
 interface ObservableFloatArray : ObservableArray<Float> {
 
+    override val baseArray: Array<Float>
+        get() = arrayOf(0.0f)
+
     /**
      * Copies specified portion of array into `dest` array. Throws the same exceptions as [Array.copyInto] method.
      *

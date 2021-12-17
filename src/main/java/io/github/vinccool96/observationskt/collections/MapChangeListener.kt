@@ -10,7 +10,7 @@ fun interface MapChangeListener<K, V> {
 
     /**
      * An elementary change done to an [ObservableMap]. Change contains information about a put or remove operation.
-     * Note  that put operation might remove an element if there was already a value associated with the same key. In
+     * Note that put operation might remove an element if there was already a value associated with the same key. In
      * this case [wasAdded] and [wasRemoved] will both return true.
      *
      * @param K key type

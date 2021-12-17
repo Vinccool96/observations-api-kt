@@ -43,6 +43,16 @@ object BidirectionalContentBinding {
         return binding
     }
 
+    fun <T> bind(array1: ObservableArray<T>, array2: ObservableArray<T>): Any {
+        checkParameters(array1, array2)
+        val binding = ArrayContentBinding(array1, array2)
+        array1.clear()
+        array1.addAll(array2)
+        array1.addListener(binding)
+        array2.addListener(binding)
+        return binding
+    }
+
     fun unbind(obj1: Any, obj2: Any) {
         checkParameters(obj1, obj2)
         if (obj1 is ObservableList<*> && obj2 is ObservableList<*>) {
@@ -63,6 +73,12 @@ object BidirectionalContentBinding {
             val binding: MapContentBinding<Any?, Any?> = MapContentBinding(map1, map2)
             map1.removeListener(binding)
             map2.removeListener(binding)
+        } else if (obj1 is ObservableArray<*> && obj2 is ObservableArray<*>) {
+            val array1: ObservableArray<Any?> = obj1 as ObservableArray<Any?>
+            val array2: ObservableArray<Any?> = obj2 as ObservableArray<Any?>
+            val binding: ArrayContentBinding<Any?> = ArrayContentBinding(array1, array2)
+            array1.removeListener(binding)
+            array2.removeListener(binding)
         }
     }
 
@@ -275,6 +291,94 @@ object BidirectionalContentBinding {
             }
 
             if (other is MapContentBinding<*, *>) {
+                val propertyB1 = other.propertyRef1.get()
+                val propertyB2 = other.propertyRef2.get()
+                if (propertyB1 == null || propertyB2 == null) {
+                    return false
+                }
+
+                if (propertyA1 === propertyB1 && propertyA2 === propertyB2) {
+                    return true
+                }
+                if (propertyA1 === propertyB2 && propertyA2 === propertyB1) {
+                    return true
+                }
+            }
+            return false
+        }
+
+    }
+
+    private class ArrayContentBinding<T>(array1: ObservableArray<T>, array2: ObservableArray<T>) :
+            ArrayChangeListener<T>, WeakListener {
+
+        private val propertyRef1: WeakReference<ObservableArray<T>> = WeakReference(array1)
+
+        private val propertyRef2: WeakReference<ObservableArray<T>> = WeakReference(array2)
+
+        private var updating: Boolean = false
+
+        override fun onChanged(change: ArrayChangeListener.Change<out T>) {
+            if (!this.updating) {
+                val array1 = this.propertyRef1.get()
+                val array2 = this.propertyRef2.get()
+                if (array1 != null && array2 != null) {
+                    try {
+                        this.updating = true
+                        val dest: ObservableArray<T> = if (array1 === change.array) array2 else array1
+                        while (change.next()) {
+                            if (change.wasPermutated) {
+                                dest.set(change.array as ObservableArray<T>, change.from, change.from, change.to)
+                            } else {
+                                if (change.sizeChanged) {
+                                    if (change.wasRemoved) {
+                                        val after = dest.toTypedArray(change.from + change.removedSize, dest.size)
+                                        dest.resize(change.from)
+                                        dest += after
+                                    }
+                                    if (change.wasAdded) {
+                                        val after = dest.toTypedArray(change.from, dest.size)
+                                        dest.resize(change.from)
+                                        dest += change.addedSubArray as Array<T> + after
+                                    }
+                                } else {
+                                    dest.set(change.array as ObservableArray<T>, change.from, change.from, change.to)
+                                }
+                            }
+                        }
+                    } finally {
+                        this.updating = false
+                    }
+                } else {
+                    array1?.removeListener(this)
+                    array2?.removeListener(this)
+                }
+            }
+        }
+
+        override val wasGarbageCollected: Boolean
+            get() = this.propertyRef1.get() != null && this.propertyRef2.get() != null
+
+        override fun hashCode(): Int {
+            val array1 = this.propertyRef1.get()
+            val array2 = this.propertyRef2.get()
+            val hc1 = array1?.hashCode() ?: 0
+            val hc2 = array2?.hashCode() ?: 0
+            return hc1 * hc2
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            val propertyA1 = this.propertyRef1.get()
+            val propertyA2 = this.propertyRef2.get()
+            if (propertyA1 == null || propertyA2 == null) {
+                return false
+            }
+
+            if (other is ArrayContentBinding<*>) {
                 val propertyB1 = other.propertyRef1.get()
                 val propertyB2 = other.propertyRef2.get()
                 if (propertyB1 == null || propertyB2 == null) {

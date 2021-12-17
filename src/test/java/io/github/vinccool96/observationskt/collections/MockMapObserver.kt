@@ -1,5 +1,6 @@
 package io.github.vinccool96.observationskt.collections
 
+import io.github.vinccool96.observationskt.collections.MapChangeListener.Change
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -7,7 +8,7 @@ class MockMapObserver<K, V> : MapChangeListener<K, V> {
 
     private val calls: MutableList<Call<K, V>> = ArrayList()
 
-    override fun onChanged(change: MapChangeListener.Change<out K, out V>) {
+    override fun onChanged(change: Change<out K, out V>) {
         this.calls.add(Call(change.key, change.valueRemoved, change.valueAdded))
     }
 

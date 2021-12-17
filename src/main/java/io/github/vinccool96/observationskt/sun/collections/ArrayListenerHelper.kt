@@ -2,6 +2,7 @@ package io.github.vinccool96.observationskt.sun.collections
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.collections.ArrayChangeListener
+import io.github.vinccool96.observationskt.collections.ArrayChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.sun.binding.ExpressionHelperBase
 import io.github.vinccool96.observationskt.util.ArrayUtils
@@ -13,18 +14,17 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
 
     protected abstract fun removeListener(listener: InvalidationListener): ArrayListenerHelper<T>?
 
-    protected abstract fun addListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T>
+    protected abstract fun addListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T>
 
-    protected abstract fun removeListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T>?
+    protected abstract fun removeListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T>?
 
-    protected abstract fun fireValueChangedEvent(sizeChanged: Boolean, from: Int, to: Int)
+    protected abstract fun fireValueChangedEvent(change: Change<out T>)
 
     abstract val invalidationListeners: Array<InvalidationListener>
 
-    abstract val arrayChangeListeners: Array<ArrayChangeListener<T>>
+    abstract val arrayChangeListeners: Array<ArrayChangeListener<in T>>
 
-    private class SingleInvalidation<T>(observable: ObservableArray<T>,
-            private val listener: InvalidationListener) :
+    private class SingleInvalidation<T>(observable: ObservableArray<T>, private val listener: InvalidationListener) :
             ArrayListenerHelper<T>(observable) {
 
         override fun addListener(listener: InvalidationListener): ArrayListenerHelper<T> {
@@ -35,15 +35,15 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
             return if (this.listener == listener) null else this
         }
 
-        override fun addListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T> {
+        override fun addListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T> {
             return Generic(this.observable, this.listener, listener)
         }
 
-        override fun removeListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T>? {
+        override fun removeListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T> {
             return this
         }
 
-        override fun fireValueChangedEvent(sizeChanged: Boolean, from: Int, to: Int) {
+        override fun fireValueChangedEvent(change: Change<out T>) {
             try {
                 this.listener.invalidated(this.observable)
             } catch (T: Exception) {
@@ -54,33 +54,33 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
         override val invalidationListeners: Array<InvalidationListener>
             get() = arrayOf(this.listener)
 
-        override val arrayChangeListeners: Array<ArrayChangeListener<T>>
+        override val arrayChangeListeners: Array<ArrayChangeListener<in T>>
             get() = emptyArray()
 
     }
 
     private class SingleArrayChange<T>(observable: ObservableArray<T>,
-            private val listener: ArrayChangeListener<T>) : ArrayListenerHelper<T>(observable) {
+            private val listener: ArrayChangeListener<in T>) : ArrayListenerHelper<T>(observable) {
 
         override fun addListener(listener: InvalidationListener): ArrayListenerHelper<T> {
             return Generic(this.observable, listener, this.listener)
         }
 
-        override fun removeListener(listener: InvalidationListener): ArrayListenerHelper<T>? {
+        override fun removeListener(listener: InvalidationListener): ArrayListenerHelper<T> {
             return this
         }
 
-        override fun addListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T> {
+        override fun addListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T> {
             return Generic(this.observable, this.listener, listener)
         }
 
-        override fun removeListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T>? {
+        override fun removeListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T>? {
             return if (this.listener == listener) null else this
         }
 
-        override fun fireValueChangedEvent(sizeChanged: Boolean, from: Int, to: Int) {
+        override fun fireValueChangedEvent(change: Change<out T>) {
             try {
-                this.listener.onChanged(this.observable, sizeChanged, from, to)
+                this.listener.onChanged(change)
             } catch (T: Exception) {
                 Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), T)
             }
@@ -89,7 +89,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
         override val invalidationListeners: Array<InvalidationListener>
             get() = emptyArray()
 
-        override val arrayChangeListeners: Array<ArrayChangeListener<T>>
+        override val arrayChangeListeners: Array<ArrayChangeListener<in T>>
             get() = arrayOf(this.listener)
 
     }
@@ -98,7 +98,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
 
         private var invalidationListenerArray: Array<InvalidationListener?>
 
-        private var arrayChangeListenerArray: Array<ArrayChangeListener<T>?>
+        private var arrayChangeListenerArray: Array<ArrayChangeListener<in T>?>
 
         private var invalidationSize: Int
 
@@ -114,8 +114,8 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
             this.arrayChangeSize = 0
         }
 
-        constructor(observable: ObservableArray<T>, listener0: ArrayChangeListener<T>,
-                listener1: ArrayChangeListener<T>) :
+        constructor(observable: ObservableArray<T>, listener0: ArrayChangeListener<in T>,
+                listener1: ArrayChangeListener<in T>) :
                 super(observable) {
             this.invalidationListenerArray = emptyArray()
             this.arrayChangeListenerArray = arrayOf(listener0, listener1)
@@ -124,7 +124,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
         }
 
         constructor(observable: ObservableArray<T>, invalidationListener: InvalidationListener,
-                listChangeListener: ArrayChangeListener<T>) : super(observable) {
+                listChangeListener: ArrayChangeListener<in T>) : super(observable) {
             this.invalidationListenerArray = arrayOf(invalidationListener)
             this.arrayChangeListenerArray = arrayOf(listChangeListener)
             this.invalidationSize = 1
@@ -152,7 +152,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
             return this
         }
 
-        override fun removeListener(listener: InvalidationListener): ArrayListenerHelper<T>? {
+        override fun removeListener(listener: InvalidationListener): ArrayListenerHelper<T> {
             for (index in 0 until this.invalidationSize) {
                 if (listener == this.invalidationListenerArray[index]) {
                     if (this.invalidationSize == 1) {
@@ -185,7 +185,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
             return this
         }
 
-        override fun addListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T> {
+        override fun addListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T> {
             if (this.arrayChangeListenerArray.isEmpty()) {
                 this.arrayChangeListenerArray = arrayOf(listener)
                 this.arrayChangeSize = 1
@@ -206,7 +206,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
             return this
         }
 
-        override fun removeListener(listener: ArrayChangeListener<T>): ArrayListenerHelper<T>? {
+        override fun removeListener(listener: ArrayChangeListener<in T>): ArrayListenerHelper<T> {
             for (index in 0 until this.arrayChangeSize) {
                 if (listener == this.arrayChangeListenerArray[index]) {
                     if (this.arrayChangeSize == 1) {
@@ -239,7 +239,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
             return this
         }
 
-        override fun fireValueChangedEvent(sizeChanged: Boolean, from: Int, to: Int) {
+        override fun fireValueChangedEvent(change: Change<out T>) {
             val curInvalidationList = this.invalidationListenerArray
             val curInvalidationSize = this.invalidationSize
             val curArrayChangeList = this.arrayChangeListenerArray
@@ -256,7 +256,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
                 }
                 for (i in 0 until curArrayChangeSize) {
                     try {
-                        curArrayChangeList[i]?.onChanged(this.observable, sizeChanged, from, to)
+                        curArrayChangeList[i]?.onChanged(change)
                     } catch (T: Exception) {
                         Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), T)
                     }
@@ -269,7 +269,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
         override val invalidationListeners: Array<InvalidationListener>
             get() = ArrayUtils.copyOfNotNulls(this.invalidationListenerArray)
 
-        override val arrayChangeListeners: Array<ArrayChangeListener<T>>
+        override val arrayChangeListeners: Array<ArrayChangeListener<in T>>
             get() = ArrayUtils.copyOfNotNulls(this.arrayChangeListenerArray)
 
     }
@@ -287,24 +287,17 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
         }
 
         fun <T> addListener(helper: ArrayListenerHelper<T>?, observable: ObservableArray<T>,
-                listener: ArrayChangeListener<T>): ArrayListenerHelper<T> {
+                listener: ArrayChangeListener<in T>): ArrayListenerHelper<T> {
             return helper?.addListener(listener) ?: SingleArrayChange(observable, listener)
         }
 
         fun <T> removeListener(helper: ArrayListenerHelper<T>?,
-                listener: ArrayChangeListener<T>): ArrayListenerHelper<T>? {
+                listener: ArrayChangeListener<in T>): ArrayListenerHelper<T>? {
             return helper?.removeListener(listener)
         }
 
-        fun <T> fireValueChangedEvent(helper: ArrayListenerHelper<T>?, sizeChanged: Boolean,
-                from: Int, to: Int) {
-            if (from < to || sizeChanged) {
-                helper?.fireValueChangedEvent(sizeChanged, from, to)
-            }
-        }
-
-        fun <T> hasListeners(helper: ArrayListenerHelper<T>?): Boolean {
-            return helper != null
+        fun <T> fireValueChangedEvent(helper: ArrayListenerHelper<T>?, change: Change<out T>) {
+            helper?.fireValueChangedEvent(change)
         }
 
     }
