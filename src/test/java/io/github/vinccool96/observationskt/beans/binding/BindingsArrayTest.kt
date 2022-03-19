@@ -5,15 +5,10 @@ import io.github.vinccool96.observationskt.beans.property.SimpleIntProperty
 import io.github.vinccool96.observationskt.collections.*
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
-import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Test
 import kotlin.math.E
 import kotlin.math.PI
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @Suppress("RedundantNullableReturnType", "UNCHECKED_CAST")
 class BindingsArrayTest {
@@ -26,7 +21,7 @@ class BindingsArrayTest {
 
     private lateinit var index: IntProperty
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.array = ObservableCollections.observableObjectArray(arrayOf(Any()))
         this.array1 = ObservableCollections.observableObjectArray(arrayOf(Any()), data1, data2)

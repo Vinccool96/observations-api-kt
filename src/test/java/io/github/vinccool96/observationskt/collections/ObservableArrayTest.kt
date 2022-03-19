@@ -1,8 +1,8 @@
 //package io.github.vinccool96.observationskt.collections
 //
 //import io.github.vinccool96.observationskt.utils.RandomUtils
-//import org.junit.Before
-//import org.junit.Test
+//import kotlin.test.BeforeTest
+//import kotlin.test.Test
 //import org.junit.runner.RunWith
 //import org.junit.runners.Parameterized
 //import org.junit.runners.Parameterized.Parameters
@@ -22,7 +22,7 @@
 //
 //    private lateinit var mao: MockArrayObserver<P>
 //
-//    @Before
+//    @BeforeTest
 //    fun setUp() {
 //        this.initialSize = INITIAL_SIZE
 //        this.initialElements = this.wrapper.createArray(this.initialSize)

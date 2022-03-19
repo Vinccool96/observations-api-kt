@@ -9,9 +9,9 @@ import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import io.github.vinccool96.observationskt.sun.collections.ObservableMapWrapper
 import org.junit.AfterClass
-import org.junit.Before
+import kotlin.test.BeforeTest
 import org.junit.BeforeClass
-import org.junit.Test
+import kotlin.test.Test
 import java.util.logging.Level
 import kotlin.math.E
 import kotlin.math.PI
@@ -30,7 +30,7 @@ class BindingsMapTest {
 
     private lateinit var index: StringProperty
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = SimpleMapProperty()
         this.map1 = ObservableCollections.observableHashMap(key1 to data1, key2 to data2)

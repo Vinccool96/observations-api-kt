@@ -11,7 +11,7 @@ interface SortableList<E> : MutableList<E> {
     /**
      * Sort using default comparator
      *
-     * @throws ClassCastException if some of the elements cannot be cast to Comparable
+     * @throws ClassCastException if some elements cannot be cast to Comparable
      * @throws UnsupportedOperationException if list's iterator doesn't support set
      */
     fun sort()

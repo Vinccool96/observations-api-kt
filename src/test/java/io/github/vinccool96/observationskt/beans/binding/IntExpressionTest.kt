@@ -5,8 +5,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleIntProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableIntValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -29,7 +29,7 @@ class IntExpressionTest {
 
     private var byte1: Byte = 0
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.data = 3425
         this.op1 = SimpleIntProperty(this.data)

@@ -6,9 +6,9 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
-import org.junit.Before
+import kotlin.test.BeforeTest
 import org.junit.BeforeClass
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.*
 
 class ListExpressionTest {
@@ -21,7 +21,7 @@ class ListExpressionTest {
 
     private lateinit var op2: ListProperty<Int>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.opNull = SimpleListProperty()
         this.opEmpty = SimpleListProperty(ObservableCollections.observableArrayList())

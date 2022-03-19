@@ -2,7 +2,7 @@ package io.github.vinccool96.observationskt.beans
 
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -66,6 +66,7 @@ class WeakInvalidationListenerTest {
             // not used
             return false
         }
+
     }
 
 }

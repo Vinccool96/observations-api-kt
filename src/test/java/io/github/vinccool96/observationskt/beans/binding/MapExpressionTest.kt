@@ -7,8 +7,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleMapProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableMapValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import kotlin.test.*
 
@@ -23,7 +23,7 @@ class MapExpressionTest {
 
     private lateinit var op2: MapProperty<Number?, Int>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.opNull = SimpleMapProperty()
         this.opEmpty = SimpleMapProperty(ObservableCollections.observableMap(Collections.emptyMap()))

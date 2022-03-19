@@ -6,8 +6,8 @@ import io.github.vinccool96.observationskt.collections.*
 import io.github.vinccool96.observationskt.sun.collections.NonIterableListChange.SimplePermutationChange
 import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
 import io.github.vinccool96.observationskt.util.Callback
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.*
 
 class SortedListTest {
@@ -18,7 +18,7 @@ class SortedListTest {
 
     private lateinit var sortedList: SortedList<String>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.list = ObservableCollections.observableArrayList()
         this.list.addAll("a", "c", "d", "c")

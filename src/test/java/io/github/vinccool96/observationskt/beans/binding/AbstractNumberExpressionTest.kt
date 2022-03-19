@@ -4,15 +4,10 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.*
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import org.junit.Before
-import org.junit.Test
 import java.util.*
 import kotlin.math.E
 import kotlin.math.PI
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import kotlin.test.fail
+import kotlin.test.*
 
 class AbstractNumberExpressionTest {
 
@@ -36,7 +31,7 @@ class AbstractNumberExpressionTest {
 
     private var byte1: Byte = 0
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.data1 = 90224.8923
         this.data2 = -13

@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableShortValueStub
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -19,7 +19,7 @@ class ShortPropertyBaseTest {
 
     private lateinit var changeListener: ChangeListenerMock<Number?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = ShortPropertyMock()
         this.invalidationListener = InvalidationListenerMock()
@@ -497,7 +497,7 @@ class ShortPropertyBaseTest {
 
         private const val VALUE_1: Short = 42
 
-        private const val VALUE_2: Short = 12345
+        private const val VALUE_2: Short = 1234
 
     }
 

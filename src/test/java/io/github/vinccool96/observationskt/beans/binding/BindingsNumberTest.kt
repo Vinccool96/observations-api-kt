@@ -1,8 +1,8 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.*
-import org.junit.After
-import org.junit.Test
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -15,7 +15,7 @@ class BindingsNumberTest(private val op: NumberExpression) {
 
     private lateinit var binding: NumberBinding
 
-    @After
+    @AfterTest
     fun tearDown() {
         if (this::binding.isInitialized) {
             this.binding.dispose()

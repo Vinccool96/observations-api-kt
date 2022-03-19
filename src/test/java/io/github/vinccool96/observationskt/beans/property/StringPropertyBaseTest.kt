@@ -3,8 +3,8 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableStringValueStub
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -17,7 +17,7 @@ class StringPropertyBaseTest {
 
     private lateinit var changeListener: ChangeListenerMock<String?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = StringPropertyMock()
         this.invalidationListener = InvalidationListenerMock()

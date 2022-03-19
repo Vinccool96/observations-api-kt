@@ -6,8 +6,8 @@ import io.github.vinccool96.observationskt.beans.value.ObservableBooleanValueStu
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -19,7 +19,7 @@ class BooleanExpressionTest {
 
     private lateinit var op2: BooleanProperty
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.op1 = SimpleBooleanProperty(true)
         this.op2 = SimpleBooleanProperty(false)

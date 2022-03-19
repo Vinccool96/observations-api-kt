@@ -2,7 +2,7 @@ package io.github.vinccool96.observationskt.sun.binding
 
 import io.github.vinccool96.observationskt.beans.WeakListener
 import org.junit.Assert.assertArrayEquals
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ExpressionHelperBaseTest : ExpressionHelperBase() {

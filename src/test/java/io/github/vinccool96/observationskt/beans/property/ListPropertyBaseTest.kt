@@ -8,8 +8,8 @@ import io.github.vinccool96.observationskt.collections.MockListObserver
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.Person
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
@@ -25,7 +25,7 @@ class ListPropertyBaseTest {
 
     private lateinit var listChangeListener: MockListObserver<Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = ListPropertyMock()
         this.invalidationListener = InvalidationListenerMock()

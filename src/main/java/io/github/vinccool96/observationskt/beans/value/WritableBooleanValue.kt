@@ -4,7 +4,6 @@ package io.github.vinccool96.observationskt.beans.value
  * A writable `Boolean` value.
  *
  * @see WritableValue
- * @see WritableNumberValue
  */
 interface WritableBooleanValue : WritableValue<Boolean?> {
 

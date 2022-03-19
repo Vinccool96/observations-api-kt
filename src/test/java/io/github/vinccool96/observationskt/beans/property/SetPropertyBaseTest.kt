@@ -9,8 +9,8 @@ import io.github.vinccool96.observationskt.collections.MockSetObserver.Call
 import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
@@ -26,7 +26,7 @@ class SetPropertyBaseTest {
 
     private lateinit var setChangeListener: MockSetObserver<Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = SetPropertyMock()
         this.invalidationListener = InvalidationListenerMock()

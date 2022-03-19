@@ -9,7 +9,7 @@ package io.github.vinccool96.observationskt.beans
  *
  * Implementations of this class should strive to generate as few events as possible to avoid wasting too much time in
  * event handlers. Implementations in this library mark themselves as invalid when the first invalidation event occurs.
- * They do not generate anymore invalidation events until their value is recomputed and valid again.
+ * They do not generate any more invalidation events until their value is recomputed and valid again.
  *
  * @see io.github.vinccool96.observationskt.beans.value.ObservableValue
  * @see io.github.vinccool96.observationskt.collections.ObservableList

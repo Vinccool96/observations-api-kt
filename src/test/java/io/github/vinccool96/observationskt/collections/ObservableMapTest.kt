@@ -5,8 +5,8 @@ import io.github.vinccool96.observationskt.collections.MockMapObserver.Call.Comp
 import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple.Companion.tup
 import io.github.vinccool96.observationskt.collections.TestedObservableMaps.CallableConcurrentHashMapImpl
 import io.github.vinccool96.observationskt.collections.TestedObservableMaps.CallableTreeMapImpl
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -22,7 +22,7 @@ class ObservableMapTest(private val mapFactory: Callable<ObservableMap<String?, 
 
     private lateinit var observer: MockMapObserver<String?, String?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.map = this.mapFactory.call()
         this.observer = MockMapObserver()

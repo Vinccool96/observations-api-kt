@@ -2,8 +2,8 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class ReadOnlyShortPropertyBaseTest {
 
@@ -13,7 +13,7 @@ class ReadOnlyShortPropertyBaseTest {
 
     private lateinit var changeListener: ChangeListenerMock<Number?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = ReadOnlyPropertyMock()
         this.invalidationListener = InvalidationListenerMock()

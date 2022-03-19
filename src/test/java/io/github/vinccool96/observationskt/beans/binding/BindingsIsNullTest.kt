@@ -5,8 +5,8 @@ import io.github.vinccool96.observationskt.beans.property.ObjectProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleObjectProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleStringProperty
 import io.github.vinccool96.observationskt.beans.property.StringProperty
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.BeforeTest
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -18,7 +18,7 @@ class BindingsIsNullTest {
 
     private lateinit var observer: InvalidationListenerMock
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.oo = SimpleObjectProperty(null)
         this.os = SimpleStringProperty()

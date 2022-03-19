@@ -6,8 +6,6 @@ import io.github.vinccool96.observationskt.beans.property.BooleanProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleBooleanProperty
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.beans.value.ObservableBooleanValue
-import org.junit.Before
-import org.junit.Test
 import kotlin.test.*
 
 @Suppress("SimplifyBooleanWithConstants", "UNUSED_VALUE", "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
@@ -19,7 +17,7 @@ class BindingsBooleanTest {
 
     private lateinit var observer: InvalidationListenerMock
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.op1 = SimpleBooleanProperty(true)
         this.op2 = SimpleBooleanProperty(false)

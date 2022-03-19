@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.WeakInvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.*
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.lang.Thread.UncaughtExceptionHandler
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -23,7 +23,7 @@ class ExpressionHelperTest {
 
     private lateinit var changeListeners: Array<ChangeListenerMock<Any>>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.helper = null
         this.observable = ObservableObjectValueStub(DATA_1)

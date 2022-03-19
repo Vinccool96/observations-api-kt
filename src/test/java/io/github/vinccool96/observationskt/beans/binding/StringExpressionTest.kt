@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleIntProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleStringProperty
 import io.github.vinccool96.observationskt.beans.property.StringProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableIntValueStub
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -22,7 +22,7 @@ class StringExpressionTest {
 
     private lateinit var op2: StringProperty
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.data1 = "Hello"
         this.data1Ic = "HeLlO"

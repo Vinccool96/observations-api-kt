@@ -5,7 +5,7 @@ import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.collections.MapChangeListener
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.fail

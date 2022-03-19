@@ -11,8 +11,8 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import kotlin.test.*
 
@@ -37,7 +37,7 @@ class MapBindingTest {
 
     private lateinit var listener: MockMapObserver<Any, Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.dependency1 = ObservableStub()
         this.dependency2 = ObservableStub()

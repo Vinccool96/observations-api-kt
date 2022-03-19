@@ -11,8 +11,8 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.*
 
 class SetBindingTest {
@@ -35,7 +35,7 @@ class SetBindingTest {
 
     private lateinit var listener: MockSetObserver<Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.dependency1 = ObservableStub()
         this.dependency2 = ObservableStub()

@@ -7,8 +7,8 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.Person
 import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import java.util.function.Predicate
 import kotlin.test.assertEquals
@@ -21,7 +21,7 @@ class FilteredListTest {
 
     private lateinit var filteredList: FilteredList<String>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.list = ObservableCollections.observableArrayList()
         this.list.addAll("a", "c", "d", "c")

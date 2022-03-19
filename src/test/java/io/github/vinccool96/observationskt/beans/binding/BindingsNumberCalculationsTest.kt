@@ -3,8 +3,8 @@ package io.github.vinccool96.observationskt.beans.binding
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.*
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -35,7 +35,7 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
 
     }
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.func.setOp1(this.v[0])
         this.func.setOp2(this.v[1])
@@ -128,8 +128,8 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
 
             val float1: FloatProperty = SimpleFloatProperty()
             val float2: FloatProperty = SimpleFloatProperty()
-            val floatData = arrayOf(-3592.9f, 234872.8347f, 3897.274f, 3958.938745f, -8347.3478f, 217.902874f,
-                    -28723.7824f, 82.8274f, -12.23478f, 0.92874f)
+            val floatData = arrayOf(-3592.9f, 234872.83f, 3897.274f, 3958.9387f, -8347.347f, 217.9028f,
+                    -8723.782f, 82.8274f, -12.23478f, 0.92874f)
 
             val double1: DoubleProperty = SimpleDoubleProperty()
             val double2: DoubleProperty = SimpleDoubleProperty()
@@ -154,194 +154,6 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
             val byteData = arrayOf<Byte>(15, -56, -14, -2, -28, 96, 86, -77, -20, 42)
 
             return listOf(
-                    // float
-                    arrayOf(
-                            float1, float2,
-                            object : Functions<Float> {
-
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
-                                    return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                                }
-
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
-                                    return Bindings.add(op1 as ObservableNumberValue, op2)
-                                }
-
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
-                                    return Bindings.add(op1, op2 as ObservableNumberValue)
-                                }
-
-                                override fun setOp1(value: Float) {
-                                    float1.set(value)
-                                }
-
-                                override fun setOp2(value: Float) {
-                                    float2.set(value)
-                                }
-
-                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    assertEquals(op1 + op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
-                                }
-
-                            },
-                            floatData
-                    ),
-                    arrayOf(
-                            float1, float2,
-                            object : Functions<Float> {
-
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
-                                    return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                                }
-
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
-                                    return Bindings.subtract(op1 as ObservableNumberValue, op2)
-                                }
-
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
-                                    return Bindings.subtract(op1, op2 as ObservableNumberValue)
-                                }
-
-                                override fun setOp1(value: Float) {
-                                    float1.set(value)
-                                }
-
-                                override fun setOp2(value: Float) {
-                                    float2.set(value)
-                                }
-
-                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    assertEquals(op1 - op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
-                                }
-
-                            },
-                            floatData
-                    ),
-                    arrayOf(
-                            float1, float2,
-                            object : Functions<Float> {
-
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
-                                    return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                                }
-
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
-                                    return Bindings.multiply(op1 as ObservableNumberValue, op2)
-                                }
-
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
-                                    return Bindings.multiply(op1, op2 as ObservableNumberValue)
-                                }
-
-                                override fun setOp1(value: Float) {
-                                    float1.set(value)
-                                }
-
-                                override fun setOp2(value: Float) {
-                                    float2.set(value)
-                                }
-
-                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    assertEquals(op1 * op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
-                                }
-
-                            },
-                            floatData
-                    ),
-                    arrayOf(
-                            float1, float2,
-                            object : Functions<Float> {
-
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
-                                    return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                                }
-
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
-                                    return Bindings.divide(op1 as ObservableNumberValue, op2)
-                                }
-
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
-                                    return Bindings.divide(op1, op2 as ObservableNumberValue)
-                                }
-
-                                override fun setOp1(value: Float) {
-                                    float1.set(value)
-                                }
-
-                                override fun setOp2(value: Float) {
-                                    float2.set(value)
-                                }
-
-                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    assertEquals(op1 / op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
-                                }
-
-                            },
-                            floatData
-                    ),
-                    arrayOf(
-                            float1, float2,
-                            object : Functions<Float> {
-
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
-                                    return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                                }
-
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
-                                    return Bindings.min(op1 as ObservableNumberValue, op2)
-                                }
-
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
-                                    return Bindings.min(op1, op2 as ObservableNumberValue)
-                                }
-
-                                override fun setOp1(value: Float) {
-                                    float1.set(value)
-                                }
-
-                                override fun setOp2(value: Float) {
-                                    float2.set(value)
-                                }
-
-                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    assertEquals(min(op1, op2), (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
-                                }
-
-                            },
-                            floatData
-                    ),
-                    arrayOf(
-                            float1, float2,
-                            object : Functions<Float> {
-
-                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
-                                    return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
-                                }
-
-                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
-                                    return Bindings.max(op1 as ObservableNumberValue, op2)
-                                }
-
-                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
-                                    return Bindings.max(op1, op2 as ObservableNumberValue)
-                                }
-
-                                override fun setOp1(value: Float) {
-                                    float1.set(value)
-                                }
-
-                                override fun setOp2(value: Float) {
-                                    float2.set(value)
-                                }
-
-                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
-                                    assertEquals(max(op1, op2), (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
-                                }
-
-                            },
-                            floatData
-                    ),
-
                     // double
                     arrayOf(
                             double1, double2,
@@ -530,192 +342,192 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
                             doubleData
                     ),
 
-                    // int
+                    // float
                     arrayOf(
-                            int1, int2,
-                            object : Functions<Int> {
+                            float1, float2,
+                            object : Functions<Float> {
 
                                 override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.add(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.add(op1, op2 as ObservableNumberValue)
                                 }
 
-                                override fun setOp1(value: Int) {
-                                    int1.set(value)
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
                                 }
 
-                                override fun setOp2(value: Int) {
-                                    int2.set(value)
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
                                 }
 
-                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
-                                    assertEquals(op1 + op2, (exp as ObservableIntValue).get())
+                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
+                                    assertEquals(op1 + op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
-                            intData
+                            floatData
                     ),
                     arrayOf(
-                            int1, int2,
-                            object : Functions<Int> {
+                            float1, float2,
+                            object : Functions<Float> {
 
                                 override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.subtract(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.subtract(op1, op2 as ObservableNumberValue)
                                 }
 
-                                override fun setOp1(value: Int) {
-                                    int1.set(value)
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
                                 }
 
-                                override fun setOp2(value: Int) {
-                                    int2.set(value)
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
                                 }
 
-                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
-                                    assertEquals(op1 - op2, (exp as ObservableIntValue).get())
+                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
+                                    assertEquals(op1 - op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
-                            intData
+                            floatData
                     ),
                     arrayOf(
-                            int1, int2,
-                            object : Functions<Int> {
+                            float1, float2,
+                            object : Functions<Float> {
 
                                 override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.multiply(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.multiply(op1, op2 as ObservableNumberValue)
                                 }
 
-                                override fun setOp1(value: Int) {
-                                    int1.set(value)
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
                                 }
 
-                                override fun setOp2(value: Int) {
-                                    int2.set(value)
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
                                 }
 
-                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
-                                    assertEquals(op1 * op2, (exp as ObservableIntValue).get())
+                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
+                                    assertEquals(op1 * op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
-                            intData
+                            floatData
                     ),
                     arrayOf(
-                            int1, int2,
-                            object : Functions<Int> {
+                            float1, float2,
+                            object : Functions<Float> {
 
                                 override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.divide(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.divide(op1, op2 as ObservableNumberValue)
                                 }
 
-                                override fun setOp1(value: Int) {
-                                    int1.set(value)
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
                                 }
 
-                                override fun setOp2(value: Int) {
-                                    int2.set(value)
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
                                 }
 
-                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
-                                    assertEquals(op1 / op2, (exp as ObservableIntValue).get())
+                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
+                                    assertEquals(op1 / op2, (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
-                            intData
+                            floatData
                     ),
                     arrayOf(
-                            int1, int2,
-                            object : Functions<Int> {
+                            float1, float2,
+                            object : Functions<Float> {
 
                                 override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.min(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.min(op1, op2 as ObservableNumberValue)
                                 }
 
-                                override fun setOp1(value: Int) {
-                                    int1.set(value)
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
                                 }
 
-                                override fun setOp2(value: Int) {
-                                    int2.set(value)
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
                                 }
 
-                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
-                                    assertEquals(min(op1, op2), (exp as ObservableIntValue).get())
+                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
+                                    assertEquals(min(op1, op2), (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
-                            intData
+                            floatData
                     ),
                     arrayOf(
-                            int1, int2,
-                            object : Functions<Int> {
+                            float1, float2,
+                            object : Functions<Float> {
 
                                 override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
                                 }
 
-                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                override fun generateExpressionPrimitive(op1: Any, op2: Float): Binding<Number?> {
                                     return Bindings.max(op1 as ObservableNumberValue, op2)
                                 }
 
-                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                override fun generatePrimitiveExpression(op1: Float, op2: Any): Binding<Number?> {
                                     return Bindings.max(op1, op2 as ObservableNumberValue)
                                 }
 
-                                override fun setOp1(value: Int) {
-                                    int1.set(value)
+                                override fun setOp1(value: Float) {
+                                    float1.set(value)
                                 }
 
-                                override fun setOp2(value: Int) {
-                                    int2.set(value)
+                                override fun setOp2(value: Float) {
+                                    float2.set(value)
                                 }
 
-                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
-                                    assertEquals(max(op1, op2), (exp as ObservableIntValue).get())
+                                override fun check(op1: Float, op2: Float, exp: ObservableValue<in Float>) {
+                                    assertEquals(max(op1, op2), (exp as ObservableFloatValue).get(), EPSILON_FLOAT)
                                 }
 
                             },
-                            intData
+                            floatData
                     ),
 
                     // long
@@ -904,6 +716,194 @@ class BindingsNumberCalculationsTest<T>(private val op1: ObservableValue<T>, pri
 
                             },
                             longData
+                    ),
+
+                    // int
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.add(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                    return Bindings.add(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                    return Bindings.add(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
+                                    assertEquals(op1 + op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.subtract(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                    return Bindings.subtract(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                    return Bindings.subtract(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
+                                    assertEquals(op1 - op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.multiply(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                    return Bindings.multiply(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                    return Bindings.multiply(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
+                                    assertEquals(op1 * op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.divide(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                    return Bindings.divide(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                    return Bindings.divide(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
+                                    assertEquals(op1 / op2, (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.min(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                    return Bindings.min(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                    return Bindings.min(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
+                                    assertEquals(min(op1, op2), (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            intData
+                    ),
+                    arrayOf(
+                            int1, int2,
+                            object : Functions<Int> {
+
+                                override fun generateExpressionExpression(op1: Any, op2: Any): Binding<Number?> {
+                                    return Bindings.max(op1 as ObservableNumberValue, op2 as ObservableNumberValue)
+                                }
+
+                                override fun generateExpressionPrimitive(op1: Any, op2: Int): Binding<Number?> {
+                                    return Bindings.max(op1 as ObservableNumberValue, op2)
+                                }
+
+                                override fun generatePrimitiveExpression(op1: Int, op2: Any): Binding<Number?> {
+                                    return Bindings.max(op1, op2 as ObservableNumberValue)
+                                }
+
+                                override fun setOp1(value: Int) {
+                                    int1.set(value)
+                                }
+
+                                override fun setOp2(value: Int) {
+                                    int2.set(value)
+                                }
+
+                                override fun check(op1: Int, op2: Int, exp: ObservableValue<in Int>) {
+                                    assertEquals(max(op1, op2), (exp as ObservableIntValue).get())
+                                }
+
+                            },
+                            intData
                     ),
 
                     // short

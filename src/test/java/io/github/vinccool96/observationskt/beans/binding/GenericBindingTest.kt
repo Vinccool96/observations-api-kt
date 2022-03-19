@@ -9,10 +9,10 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
-import org.junit.After
+import kotlin.test.AfterTest
 import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import kotlin.test.assertEquals
@@ -27,7 +27,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     private lateinit var changeListener: ChangeListenerMock<Any?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.invalidationListener = InvalidationListenerMock()
         this.changeListener = ChangeListenerMock(UNDEFINED)
@@ -36,7 +36,7 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
         this.binding2.value = this.value2
     }
 
-    @After
+    @AfterTest
     fun tearDown() {
         this.binding0.removeListener(this.invalidationListener)
         this.binding0.removeListener(this.changeListener)

@@ -1,6 +1,6 @@
 package io.github.vinccool96.observationskt.beans.property
 
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SimpleIntPropertyTest {

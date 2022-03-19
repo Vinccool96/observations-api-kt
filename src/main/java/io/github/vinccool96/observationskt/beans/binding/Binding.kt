@@ -38,7 +38,7 @@ interface Binding<T> : ObservableValue<T> {
 
     /**
      * Returns the dependencies of a binding in an unmodifiable [ObservableList]. The implementation is optional. The
-     * main purpose of this method is to support developers during development. It allows to explore and monitor
+     * main purpose of this method is to support developers during development. It allows exploring and monitoring
      * dependencies of a binding during runtime.
      *
      * Because this method should not be used in production code, it is recommended to implement this functionality as

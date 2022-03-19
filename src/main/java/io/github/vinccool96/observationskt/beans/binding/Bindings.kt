@@ -16,7 +16,7 @@ import java.util.concurrent.Callable
 import kotlin.math.abs
 
 /**
- * Bindings is a helper class with a lot of utility functions to create simple bindings.
+ * Bindings is a helper object with a lot of utility functions to create simple bindings.
  *
  * Usually there are two possibilities to define the same operation: the Fluent API and the factory methods in this
  * class. This allows a developer to define complex expression in a way that is most easy to understand. For instance

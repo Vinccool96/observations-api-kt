@@ -9,7 +9,6 @@ import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -17,6 +16,7 @@ import java.util.concurrent.Callable
 import java.util.logging.Level
 import kotlin.math.E
 import kotlin.math.PI
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

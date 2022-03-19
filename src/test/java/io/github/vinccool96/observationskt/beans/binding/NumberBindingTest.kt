@@ -1,6 +1,6 @@
 package io.github.vinccool96.observationskt.beans.binding
 
-import org.junit.Test
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters

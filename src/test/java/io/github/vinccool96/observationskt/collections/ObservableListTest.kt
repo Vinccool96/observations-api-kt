@@ -1,8 +1,8 @@
 package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -18,7 +18,7 @@ class ObservableListTest(private val listFactory: Callable<ObservableList<String
 
     private lateinit var mlo: MockListObserver<String?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.list = this.listFactory.call()
         this.mlo = MockListObserver()

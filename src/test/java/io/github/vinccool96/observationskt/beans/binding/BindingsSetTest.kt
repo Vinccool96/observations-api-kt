@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.property.SetProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleSetProperty
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -18,7 +18,7 @@ class BindingsSetTest {
 
     private lateinit var set2: ObservableSet<Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = SimpleSetProperty()
         this.set1 = ObservableCollections.observableSet(data1, data2)

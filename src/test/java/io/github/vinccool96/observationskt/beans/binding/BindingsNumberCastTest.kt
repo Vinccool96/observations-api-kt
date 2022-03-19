@@ -2,8 +2,8 @@ package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -41,7 +41,7 @@ class BindingsNumberCastTest(private val func: Functions) {
 
     }
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.double0 = 3.1415
         this.float0 = 2.71f

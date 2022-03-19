@@ -9,8 +9,8 @@ import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -31,7 +31,7 @@ class ReadOnlyMapWrapperTest {
 
     private lateinit var publicChangeListener: ChangeListenerMock<ObservableMap<Any, Any>?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = ReadOnlyMapWrapperMock()
         this.readOnlyProperty = this.property.readOnlyProperty

@@ -5,7 +5,7 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import io.github.vinccool96.observationskt.collections.ObservableSet
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.math.E
 import kotlin.math.PI
 import kotlin.test.assertEquals

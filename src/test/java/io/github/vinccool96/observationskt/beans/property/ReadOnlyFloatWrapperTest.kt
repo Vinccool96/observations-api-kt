@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableFloatValueStub
 import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.math.E
 import kotlin.math.PI
 import kotlin.test.assertEquals
@@ -26,7 +26,7 @@ class ReadOnlyFloatWrapperTest {
 
     private lateinit var publicChangeListener: ChangeListenerMock<Number?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = ReadOnlyFloatWrapperMock()
         this.readOnlyProperty = this.property.readOnlyProperty

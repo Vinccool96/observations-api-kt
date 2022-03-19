@@ -1,7 +1,7 @@
 package io.github.vinccool96.observationskt.beans.value
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

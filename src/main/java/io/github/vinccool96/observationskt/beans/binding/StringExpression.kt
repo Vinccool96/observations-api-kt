@@ -8,7 +8,7 @@ import io.github.vinccool96.observationskt.sun.binding.StringFormatter
  * A `StringExpression` is a [ObservableStringValue] plus additional convenience methods to generate
  * bindings in a fluent style.
  *
- * A concrete sub-class of `StringExpression` has to implement the method [get], which provides the actual value of this
+ * A concrete subclass of `StringExpression` has to implement the method [get], which provides the actual value of this
  * expression.
  *
  * Note: all implementation of [BooleanBinding] returned by the comparisons in this class consider a `String` that is

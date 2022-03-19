@@ -6,8 +6,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleObjectProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleStringProperty
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.util.StringConverter
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.text.DateFormat
@@ -45,7 +45,7 @@ class BidirectionalBindingWithConversionTest<S, T>(private val func: Functions<S
 
     private val op1: PropertyMock<T> = this.func.create1()
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.op0.value = this.v0[0]
         this.op1.value = this.v1[1]

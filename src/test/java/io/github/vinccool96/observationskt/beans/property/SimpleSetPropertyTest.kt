@@ -2,7 +2,7 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SimpleSetPropertyTest {

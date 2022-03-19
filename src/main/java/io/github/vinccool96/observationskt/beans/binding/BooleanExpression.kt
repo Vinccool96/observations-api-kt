@@ -11,7 +11,7 @@ import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCo
  * A `BooleanExpression` is a [ObservableBooleanValue] plus additional convenience methods to generate
  * bindings in a fluent style.
  *
- * A concrete sub-class of `BooleanExpression` has to implement the method [ObservableBooleanValue.get],
+ * A concrete subclass of `BooleanExpression` has to implement the method [ObservableBooleanValue.get],
  * which provides the actual value of this expression.
  *
  * @constructor Sole constructor

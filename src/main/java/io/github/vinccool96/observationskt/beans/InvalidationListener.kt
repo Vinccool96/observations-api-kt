@@ -20,7 +20,7 @@ fun interface InvalidationListener {
      * This method needs to be provided by an implementation of `InvalidationListener`. It is called if an [Observable]
      * becomes invalid.
      *
-     * In general is is considered bad practice to modify the observed value in this method.
+     * In general, it is considered bad practice to modify the observed value in this method.
      *
      * @param observable The `Observable` that became invalid
      */

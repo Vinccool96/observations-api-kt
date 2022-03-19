@@ -3,8 +3,8 @@ package io.github.vinccool96.observationskt.collections.transformation
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -19,7 +19,7 @@ class TransformationListTest {
 
     private lateinit var list4: ObservableList<String>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.list4 = ObservableCollections.observableArrayList()
         this.list3 = ObservableCollections.observableArrayList()

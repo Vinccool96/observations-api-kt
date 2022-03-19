@@ -11,8 +11,8 @@ import java.util.*
  * An `ObjectExpression` is a [ObservableObjectValue] plus additional convenience methods to generate bindings in a
  * fluent style.
  *
- * A concrete sub-class of `ObjectExpression` has to implement the method [ObservableObjectValue.get], which provides
- * the actual value of this expression.
+ * A concrete subclass of `ObjectExpression` has to implement the method [ObservableObjectValue.get], which provides the
+ * actual value of this expression.
  *
  * @param T The type of the wrapped value
  */

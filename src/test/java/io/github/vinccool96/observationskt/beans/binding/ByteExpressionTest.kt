@@ -5,8 +5,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleByteProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableByteValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -29,7 +29,7 @@ class ByteExpressionTest {
 
     private var byte1: Byte = 0
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.data = 25
         this.op1 = SimpleByteProperty(this.data)

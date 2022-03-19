@@ -4,7 +4,7 @@ import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple
 import io.github.vinccool96.observationskt.collections.SetChangeListener.Change
 import io.github.vinccool96.observationskt.sun.binding.SetExpressionHelper.SimpleChange
 import io.github.vinccool96.observationskt.sun.collections.ObservableSetWrapper
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

@@ -5,8 +5,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleSetProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableSetValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import kotlin.test.*
 
@@ -20,7 +20,7 @@ class SetExpressionTest {
 
     private lateinit var op2: SetProperty<Int>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.opNull = SimpleSetProperty()
         this.opEmpty = SimpleSetProperty(ObservableCollections.observableSet())

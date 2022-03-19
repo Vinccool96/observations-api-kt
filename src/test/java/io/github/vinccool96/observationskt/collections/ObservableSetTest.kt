@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.collections.MockSetObserver.Call.Comp
 import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple.Companion.tup
 import io.github.vinccool96.observationskt.collections.SetChangeListener.Change
 import io.github.vinccool96.observationskt.collections.TestedObservableSets.CallableTreeSetImpl
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -21,7 +21,7 @@ class ObservableSetTest(val setFactory: Callable<ObservableSet<String?>>) {
 
     private lateinit var observer: MockSetObserver<String?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.set = this.setFactory.call()
         this.observer = MockSetObserver()

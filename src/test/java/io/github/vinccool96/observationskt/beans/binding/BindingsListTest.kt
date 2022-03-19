@@ -8,9 +8,9 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
-import org.junit.Before
+import kotlin.test.BeforeTest
 import org.junit.BeforeClass
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.math.E
 import kotlin.math.PI
 import kotlin.test.assertEquals
@@ -29,7 +29,7 @@ class BindingsListTest {
 
     private lateinit var index: IntProperty
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = SimpleListProperty()
         this.list1 = ObservableCollections.observableArrayList(data1, data2)

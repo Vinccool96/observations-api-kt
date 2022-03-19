@@ -6,7 +6,7 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.collections.SetChangeListener
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 

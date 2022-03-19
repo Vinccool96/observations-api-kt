@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.fail
 
 class ReadOnlyListPropertyBaseTest {
@@ -16,7 +16,7 @@ class ReadOnlyListPropertyBaseTest {
 
     private lateinit var changeListener: ChangeListenerMock<ObservableList<Any>?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = ReadOnlyPropertyMock()
         this.invalidationListener = InvalidationListenerMock()

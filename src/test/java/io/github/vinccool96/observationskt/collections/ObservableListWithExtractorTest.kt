@@ -3,8 +3,8 @@ package io.github.vinccool96.observationskt.collections
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.sun.collections.ElementObservableListDecorator
 import io.github.vinccool96.observationskt.util.Callback
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
@@ -21,7 +21,7 @@ class ObservableListWithExtractorTest(private val mode: Mode) {
 
     private lateinit var p0: Person
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.p0 = Person()
         this.obs = MockListObserver()

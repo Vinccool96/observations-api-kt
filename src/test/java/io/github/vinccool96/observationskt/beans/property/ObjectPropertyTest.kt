@@ -6,7 +6,7 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 

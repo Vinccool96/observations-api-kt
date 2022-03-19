@@ -5,8 +5,8 @@ import io.github.vinccool96.observationskt.beans.property.SimpleDoubleProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableDoubleValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -29,7 +29,7 @@ class DoubleExpressionTest {
 
     private var byte1: Byte = 0
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.data = -67.0975
         this.op1 = SimpleDoubleProperty(this.data)

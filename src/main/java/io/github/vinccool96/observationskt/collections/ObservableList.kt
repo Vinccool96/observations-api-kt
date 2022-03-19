@@ -25,7 +25,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
     fun addListener(listener: ListChangeListener<in E>)
 
     /**
-     * Tries to removed a listener from this observable list. If the listener is not attached to this list, nothing
+     * Tries to remove a listener from this observable list. If the listener is not attached to this list, nothing
      * happens.
      *
      * @param listener a listener to remove

@@ -2,8 +2,8 @@ package io.github.vinccool96.observationskt.beans.value
 
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.Observable
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class ObservableValueBaseTest {
 
@@ -13,7 +13,7 @@ class ObservableValueBaseTest {
 
     private lateinit var changeListener: ChangeListenerMock<Any?>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.valueModel = ObservableObjectValueStub(DEFAULT_VALUE)
         this.invalidationListener = InvalidationListenerMock()

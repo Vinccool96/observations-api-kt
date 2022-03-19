@@ -3,8 +3,8 @@ package io.github.vinccool96.observationskt.sun.binding
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import kotlin.test.assertEquals
@@ -38,7 +38,7 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
 
     private lateinit var v: Array<T>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.op1 = this.factory.createProperty()
         this.op2 = this.factory.createProperty()

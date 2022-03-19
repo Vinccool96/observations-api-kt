@@ -9,8 +9,8 @@ import io.github.vinccool96.observationskt.collections.MockMapObserver.Call
 import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import kotlin.test.*
 
@@ -24,7 +24,7 @@ class MapPropertyBaseTest {
 
     private lateinit var mapChangeListener: MockMapObserver<Any, Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.property = MapPropertyMock()
         this.invalidationListener = InvalidationListenerMock()

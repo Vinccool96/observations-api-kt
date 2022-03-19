@@ -1,8 +1,8 @@
 package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -16,7 +16,7 @@ class ListChangeBuilderTest {
 
     private lateinit var observer: MockListObserver<String>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.observer = MockListObserver()
         this.list = arrayListOf("a", "b", "c", "d")

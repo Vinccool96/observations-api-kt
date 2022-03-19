@@ -8,7 +8,6 @@ import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
 import io.github.vinccool96.observationskt.util.ArrayUtils
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Suppress("UNCHECKED_CAST")
 abstract class StringFormatter : StringBinding() {
@@ -56,8 +55,7 @@ abstract class StringFormatter : StringBinding() {
         @get:ReturnsUnmodifiableCollection
         override val dependencies: ObservableList<*>
             get() {
-                return ObservableCollections.unmodifiableObservableList(
-                        ObservableCollections.observableArrayList(*dep))
+                return ObservableCollections.unmodifiableObservableList(ObservableCollections.observableArrayList(*dep))
             }
     }
 
@@ -86,11 +84,11 @@ abstract class StringFormatter : StringBinding() {
 
     companion object {
 
-        internal fun extractValue(obj: Any): Any? {
+        private fun extractValue(obj: Any): Any? {
             return if (ObservableValue::class.isInstance(obj)) (obj as ObservableValue<*>).value else obj
         }
 
-        fun extractValues(objs: Array<Any>): Array<Any> {
+        private fun extractValues(objs: Array<Any>): Array<Any> {
             val n: Int = objs.size
             val values: Array<Any?> = arrayOfNulls(n)
             for (i in 0 until n) {

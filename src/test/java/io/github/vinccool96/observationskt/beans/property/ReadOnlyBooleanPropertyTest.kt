@@ -2,7 +2,7 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull

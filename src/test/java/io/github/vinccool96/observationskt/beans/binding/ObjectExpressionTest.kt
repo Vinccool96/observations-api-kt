@@ -4,8 +4,8 @@ import io.github.vinccool96.observationskt.beans.property.ObjectProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleObjectProperty
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -22,7 +22,7 @@ class ObjectExpressionTest {
 
     private lateinit var op2: ObjectProperty<Any>
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.data1 = Any()
         this.data2 = Any()

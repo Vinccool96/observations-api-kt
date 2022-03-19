@@ -21,9 +21,9 @@ import io.github.vinccool96.observationskt.beans.Observable
  *
  * Implementations of this class should strive to generate as few events as possible to avoid wasting too much time in
  * event handlers. Implementations in this library mark themselves as invalid when the first invalidation event occurs.
- * They do not generate anymore invalidation events until their value is recomputed and valid again.
+ * They do not generate any more invalidation events until their value is recomputed and valid again.
  *
- * Two types of listeners can be attached to an `ObservableValue`: InvalidationListener to listen to invalidation events
+ * Two types of listeners can be attached to an `ObservableValue`: [InvalidationListener] to listen to invalidation events
  * and [ChangeListener] to listen to change events.
  *
  * Important note: attaching a `ChangeListener` enforces eager computation even if the implementation of the
@@ -58,7 +58,7 @@ interface ObservableValue<T> : Observable {
      *
      * The `ObservableValue` stores a strong reference to the listener which will prevent the listener from being
      * garbage collected and may result in a memory leak. It is recommended to either unregister a listener by calling
-     * [removeListener][removeListener] after use or to use an instance of [WeakChangeListener] avoid this situation.
+     * [removeListener] after use or to use an instance of [WeakChangeListener] avoid this situation.
      *
      * @param listener The listener to register
      *

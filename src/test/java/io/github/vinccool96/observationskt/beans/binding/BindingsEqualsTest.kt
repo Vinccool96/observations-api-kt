@@ -6,13 +6,13 @@ import io.github.vinccool96.observationskt.beans.value.ObservableNumberValue
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValue
 import io.github.vinccool96.observationskt.beans.value.ObservableStringValue
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 import kotlin.math.abs
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Suppress("UNCHECKED_CAST")
@@ -40,14 +40,14 @@ class BindingsEqualsTest<T>(private val op1: ObservableValue<T>, private val op2
 
     }
 
-    @Before
+    @BeforeTest
     fun setUp() {
         this.func.setOp1(this.v[0])
         this.func.setOp2(this.v[1])
         this.observer = InvalidationListenerMock()
     }
 
-    @After
+    @AfterTest
     fun tearDown() {
         this.binding.dispose()
     }
