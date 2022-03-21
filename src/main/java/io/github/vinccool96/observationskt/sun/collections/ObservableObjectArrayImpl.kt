@@ -132,10 +132,22 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         if (size < 0) {
             throw NegativeArraySizeException("Can't resize to negative value: $size")
         }
-        ensureCapacity(size)
-        val minSize = min(this.sizeState, size)
-        this.sizeState = size
-        this.array.fill(this.baseArray[0], minSize, this.sizeState)
+        try {
+            beginChange()
+            ensureCapacity(size)
+            val minSize = min(this.sizeState, size)
+            this.sizeState = size
+            val removedList= mutableListOf(this.baseArray[0])
+            removedList.clear()
+            val removedArray = this.array.copyOfRange(size, this.array.size)
+            for (e in removedArray) {
+                removedList.add(e as T)
+            }
+            this.array.fill(this.baseArray[0], minSize, this.sizeState)
+            nextRemove(size, removedList)
+        } finally {
+            endChange()
+        }
     }
 
     override fun growCapacity(length: Int) {

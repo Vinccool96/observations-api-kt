@@ -155,10 +155,17 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         if (size < 0) {
             throw NegativeArraySizeException("Can't resize to negative value: $size")
         }
-        ensureCapacity(size)
-        val minSize = min(this.sizeState, size)
-        this.sizeState = size
-        this.array.fill(0, minSize, this.sizeState)
+        try {
+            beginChange()
+            ensureCapacity(size)
+            val minSize = min(this.sizeState, size)
+            this.sizeState = size
+            val removed = this.array.copyOfRange(size, this.array.size).toMutableList()
+            this.array.fill(0, minSize, this.sizeState)
+            nextRemove(size, removed)
+        } finally {
+            endChange()
+        }
     }
 
     override fun growCapacity(length: Int) {
