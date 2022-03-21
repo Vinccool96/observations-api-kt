@@ -2,65 +2,66 @@ package io.github.vinccool96.observationskt.sun.binding
 
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableMap
+import io.github.vinccool96.observationskt.collections.ObservableSet
 import kotlin.test.*
 
 @Suppress("ReplaceAssertBooleanWithAssertEquality", "KotlinConstantConditions")
-class BidirectionalContentBindingMapTest {
+class BidirectionalContentBindingSetTest {
 
-    private lateinit var op1: ObservableMap<String, Int>
+    private lateinit var op1: ObservableSet<Int>
 
-    private lateinit var op2: ObservableMap<String, Int>
+    private lateinit var op2: ObservableSet<Int>
 
-    private lateinit var op3: ObservableMap<String, Int>
+    private lateinit var op3: ObservableSet<Int>
 
-    private lateinit var map0: Map<String, Int>
+    private lateinit var set0: Set<Int>
 
-    private lateinit var map1: Map<String, Int>
+    private lateinit var set1: Set<Int>
 
-    private lateinit var map2: Map<String, Int>
+    private lateinit var set2: Set<Int>
 
     @BeforeTest
     fun setUp() {
-        this.map0 = hashMapOf()
-        this.map1 = hashMapOf(key1 to -1)
-        this.map2 = hashMapOf(key2_1 to 2, key2_2 to 1)
+        this.set0 = hashSetOf()
+        this.set1 = hashSetOf(-1)
+        this.set2 = hashSetOf(2, 1)
 
-        this.op1 = ObservableCollections.observableMap(this.map1)
-        this.op2 = ObservableCollections.observableMap(this.map2)
-        this.op3 = ObservableCollections.observableMap(this.map0)
+        this.op1 = ObservableCollections.observableSet(this.set1)
+        this.op2 = ObservableCollections.observableSet(this.set2)
+        this.op3 = ObservableCollections.observableSet(this.set0)
     }
 
     @Test
     fun testBind() {
         Bindings.bindContentBidirectional(this.op1, this.op2)
         System.gc() // making sure we did not overdo weak references
-        assertEquals(this.map2, this.op1)
-        assertEquals(this.map2, this.op2)
 
-        this.op1.setAll(this.map1)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map1, this.op2)
+        assertEquals(this.set2, this.op1)
+        assertEquals(this.set2, this.op2)
 
-        this.op1.setAll(this.map0)
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
+        this.op1.setAll(this.set1)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set1, this.op2)
 
-        this.op1.setAll(this.map2)
-        assertEquals(this.map2, this.op1)
-        assertEquals(this.map2, this.op2)
+        this.op1.setAll(this.set0)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
 
-        this.op2.setAll(this.map1)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map1, this.op2)
+        this.op1.setAll(this.set2)
+        assertEquals(this.set2, this.op1)
+        assertEquals(this.set2, this.op2)
 
-        this.op2.setAll(this.map0)
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
+        this.op2.setAll(this.set1)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set1, this.op2)
 
-        this.op2.setAll(this.map2)
-        assertEquals(this.map2, this.op1)
-        assertEquals(this.map2, this.op2)
+        this.op2.setAll(this.set0)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
+
+        this.op2.setAll(this.set2)
+        assertEquals(this.set2, this.op1)
+        assertEquals(this.set2, this.op2)
     }
 
     @Test
@@ -78,41 +79,41 @@ class BidirectionalContentBindingMapTest {
         Bindings.bindContentBidirectional(this.op1, this.op2)
         System.gc() // making sure we did not overdo weak references
 
-        assertEquals(this.map2, this.op1)
-        assertEquals(this.map2, this.op2)
+        assertEquals(this.set2, this.op1)
+        assertEquals(this.set2, this.op2)
 
         Bindings.unbindContentBidirectional(this.op1, this.op2)
         System.gc()
-        assertEquals(this.map2, this.op1)
-        assertEquals(this.map2, this.op2)
+        assertEquals(this.set2, this.op1)
+        assertEquals(this.set2, this.op2)
 
-        this.op1.setAll(this.map1)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map2, this.op2)
+        this.op1.setAll(this.set1)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set2, this.op2)
 
-        this.op2.setAll(this.map0)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map0, this.op2)
+        this.op2.setAll(this.set0)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set0, this.op2)
 
         // unbind in flipped order
         Bindings.bindContentBidirectional(this.op1, this.op2)
         System.gc() // making sure we did not overdo weak references
 
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
 
         Bindings.unbindContentBidirectional(this.op2, this.op1)
         System.gc()
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
 
-        this.op1.setAll(this.map1)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map0, this.op2)
+        this.op1.setAll(this.set1)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set0, this.op2)
 
-        this.op2.setAll(this.map2)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map2, this.op2)
+        this.op2.setAll(this.set2)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set2, this.op2)
     }
 
     @Test
@@ -127,40 +128,40 @@ class BidirectionalContentBindingMapTest {
         Bindings.bindContentBidirectional(this.op1, this.op2)
         Bindings.bindContentBidirectional(this.op2, this.op3)
         System.gc() // making sure we did not overdo weak references
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
-        assertEquals(this.map0, this.op3)
-        this.op1.putAll(this.map1)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map1, this.op2)
-        assertEquals(this.map1, this.op3)
-        this.op2.putAll(this.map2)
-        assertEquals(this.map2, this.op1)
-        assertEquals(this.map2, this.op2)
-        assertEquals(this.map2, this.op3)
-        this.op3.putAll(this.map0)
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
-        assertEquals(this.map0, this.op3)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
+        assertEquals(this.set0, this.op3)
+        this.op1.setAll(this.set1)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set1, this.op2)
+        assertEquals(this.set1, this.op3)
+        this.op2.setAll(this.set2)
+        assertEquals(this.set2, this.op1)
+        assertEquals(this.set2, this.op2)
+        assertEquals(this.set2, this.op3)
+        this.op3.setAll(this.set0)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
+        assertEquals(this.set0, this.op3)
 
         // now unbind
         Bindings.unbindContentBidirectional(this.op1, this.op2)
         System.gc() // making sure we did not overdo weak references
-        assertEquals(this.map0, this.op1)
-        assertEquals(this.map0, this.op2)
-        assertEquals(this.map0, this.op3)
-        this.op1.putAll(this.map1)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map0, this.op2)
-        assertEquals(this.map0, this.op3)
-        this.op2.putAll(this.map2)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map2, this.op2)
-        assertEquals(this.map2, this.op3)
-        this.op3.putAll(this.map0)
-        assertEquals(this.map1, this.op1)
-        assertEquals(this.map0, this.op2)
-        assertEquals(this.map0, this.op3)
+        assertEquals(this.set0, this.op1)
+        assertEquals(this.set0, this.op2)
+        assertEquals(this.set0, this.op3)
+        this.op1.setAll(this.set1)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set0, this.op2)
+        assertEquals(this.set0, this.op3)
+        this.op2.setAll(this.set2)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set2, this.op2)
+        assertEquals(this.set2, this.op3)
+        this.op3.setAll(this.set0)
+        assertEquals(this.set1, this.op1)
+        assertEquals(this.set0, this.op2)
+        assertEquals(this.set0, this.op3)
     }
 
     @Test
@@ -196,7 +197,7 @@ class BidirectionalContentBindingMapTest {
     @Test
     @Suppress("UNUSED_VALUE")
     fun testEqualsWithGCedProperty() {
-        var op: ObservableMap<String, Int>? = ObservableCollections.observableMap(this.map1)
+        var op: ObservableSet<Int>? = ObservableCollections.observableSet(this.set1)
         val binding1 = BidirectionalContentBinding.bind(op!!, this.op2)
         BidirectionalContentBinding.unbind(op, this.op2)
         val binding2 = BidirectionalContentBinding.bind(op, this.op2)
@@ -213,16 +214,6 @@ class BidirectionalContentBindingMapTest {
         assertTrue(binding3 == binding3)
         assertFalse(binding3 == binding1)
         assertFalse(binding3 == binding4)
-    }
-
-    companion object {
-
-        private const val key1 = "Key1"
-
-        private const val key2_1 = "Key2_1"
-
-        private const val key2_2 = "Key2_2"
-
     }
 
 }

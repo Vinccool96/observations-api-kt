@@ -117,12 +117,16 @@ object ObservableCollections {
      * ObservableSet that wraps it.
      *
      * @param E the type of elements maintained by this set
-     * @param set a MutableSet that backs this ObservableSet
+     * @param set a Set that backs this ObservableSet
      *
      * @return a newly created ObservableSet
      */
-    fun <E> observableSet(set: MutableSet<E>): ObservableSet<E> {
-        return ObservableSetWrapper(set)
+    fun <E> observableSet(set: Set<E>): ObservableSet<E> {
+        return if (set is MutableSet<E>) {
+            ObservableSetWrapper(set)
+        } else {
+            ObservableSetWrapper(set.toMutableSet())
+        }
     }
 
     /**
