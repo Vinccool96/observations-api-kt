@@ -112,6 +112,14 @@ class ObservableMapValueStub<K, V>(private var valueState: ObservableMap<K, V>?)
         (get() ?: EMPTY_MAP).clear()
     }
 
+    override fun setAll(vararg pairs: Pair<K, V>) {
+        (get() ?: EMPTY_MAP).setAll(*pairs)
+    }
+
+    override fun setAll(map: Map<out K, V>) {
+        (get() ?: EMPTY_MAP).setAll(map)
+    }
+
     override val keys: MutableSet<K>
         get() = (get() ?: EMPTY_MAP).keys
 
@@ -133,6 +141,14 @@ class ObservableMapValueStub<K, V>(private var valueState: ObservableMap<K, V>?)
         override fun put(key: K, value: V): V? {
             // no-op
             return null
+        }
+
+        override fun setAll(vararg pairs: Pair<K, V>) {
+            // no-op
+        }
+
+        override fun setAll(map: Map<out K, V>) {
+            // no-op
         }
 
         override fun addListener(listener: InvalidationListener) {

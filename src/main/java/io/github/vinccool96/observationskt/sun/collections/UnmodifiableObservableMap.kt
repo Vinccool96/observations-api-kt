@@ -91,6 +91,14 @@ class UnmodifiableObservableMap<K, V>(map: ObservableMap<K, V>) : AbstractMutabl
         throw UnsupportedOperationException()
     }
 
+    override fun setAll(vararg pairs: Pair<K, V>) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setAll(map: Map<out K, V>) {
+        throw UnsupportedOperationException()
+    }
+
     @get:ReturnsUnmodifiableCollection
     override val keys: MutableSet<K>
         get() {

@@ -4,6 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.collections.MapChangeListener
 import io.github.vinccool96.observationskt.collections.MapChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableMap
+import java.util.*
 import kotlin.collections.MutableMap.MutableEntry
 
 /**
@@ -150,6 +151,52 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
             val value = e.value
             i.remove()
             callObservers(SimpleChange(key, value, null, wasAddedState = false, wasRemovedState = true))
+        }
+    }
+
+    override fun setAll(vararg pairs: Pair<K, V>) {
+        val currentEntries = this.entries
+        val toRemove = LinkedList<MutableEntry<K, V>>()
+        val otherEntries = currentEntries.filter { entry ->
+            val toKeep = pairs.any { pair -> pair.first == entry.key }
+            if (!toKeep) {
+                toRemove.add(entry)
+            }
+            toKeep
+        }
+
+        for (entry in toRemove) {
+            remove(entry.key)
+        }
+
+        for (pair in pairs) {
+            if (!otherEntries.any { entry -> entry.toPair() == pair }) {
+                put(pair.first, pair.second)
+            }
+        }
+    }
+
+    override fun setAll(map: Map<out K, V>) {
+        val newEntries = map.entries
+
+        val currentEntries = this.entries
+        val toRemove = LinkedList<MutableEntry<K, V>>()
+        val otherEntries = currentEntries.filter { entry ->
+            val toKeep = newEntries.any { newEntry -> newEntry.key == entry.key }
+            if (!toKeep) {
+                toRemove.add(entry)
+            }
+            toKeep
+        }
+
+        for (entry in toRemove) {
+            remove(entry.key)
+        }
+
+        for (newEntry in newEntries) {
+            if (!otherEntries.any { entry -> entry == newEntry }) {
+                put(newEntry.key, newEntry.value)
+            }
         }
     }
 

@@ -57,16 +57,16 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *
      * @param elements the elements to set
      *
-     * @return true (as specified by [MutableCollection.add])
+     * @return `true` (as specified by [MutableCollection.add])
      */
     fun setAll(vararg elements: E): Boolean
 
     /**
      * Clears the ObservableList and add all elements from the collection.
      *
-     * @param col the collection with elements that will be added to this observableArrayList
+     * @param col the collection with elements that will be added to this ObservableList
      *
-     * @return true (as specified by [MutableCollection.add])
+     * @return `true` (as specified by [MutableCollection.add])
      */
     fun setAll(col: Collection<E>): Boolean
 

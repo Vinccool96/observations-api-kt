@@ -36,4 +36,19 @@ interface ObservableMap<K, V> : MutableMap<K, V>, Observable {
      * @return `true`, if the listener already listens, `false` otherwise.
      */
     fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean
+
+    /**
+     * Clears the ObservableMap and adds all the pairs passed as var-args.
+     *
+     * @param pairs the pairs to set
+     */
+    fun setAll(vararg pairs: Pair<K, V>)
+
+    /**
+     * Clears the ObservableMap and adds all pairs from the map.
+     *
+     * @param map the map with pairs that will be added to this ObservableMap
+     */
+    fun setAll(map: Map<out K, V>)
+
 }

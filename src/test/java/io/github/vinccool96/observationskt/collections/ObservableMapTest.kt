@@ -5,15 +5,11 @@ import io.github.vinccool96.observationskt.collections.MockMapObserver.Call.Comp
 import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple.Companion.tup
 import io.github.vinccool96.observationskt.collections.TestedObservableMaps.CallableConcurrentHashMapImpl
 import io.github.vinccool96.observationskt.collections.TestedObservableMaps.CallableTreeMapImpl
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 import kotlin.collections.MutableMap.MutableEntry
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @RunWith(Parameterized::class)
 class ObservableMapTest(private val mapFactory: Callable<ObservableMap<String?, String?>>) {
@@ -117,6 +113,27 @@ class ObservableMapTest(private val mapFactory: Callable<ObservableMap<String?, 
         assertTrue(this.map.containsKey("oFoo"))
         this.observer.assertMultipleCalls(call("oFoo", null, "OFoo"), call("pFoo", null, "PFoo"),
                 call("foo", "bar", "foofoo"))
+    }
+
+    @Test
+    fun testSetAll_Pairs() {
+        this.map.setAll("bar" to "Bar", "toto" to "Toto")
+        this.observer.assertMultipleCalls(call("one", "1", null), call("two", "2", null), call("foo", "bar", null),
+                call("bar", null, "Bar"), call("toto", null, "Toto"))
+    }
+
+    @Test
+    fun testSetAll_Map() {
+        val map = hashMapOf("bar" to "Bar", "toto" to "Toto")
+        this.map.setAll(map)
+        this.observer.assertMultipleCalls(call("one", "1", null), call("two", "2", null), call("foo", "bar", null),
+                call("bar", null, "Bar"), call("toto", null, "Toto"))
+    }
+
+    @Test
+    fun testSetAll_PairsAlreadyIn() {
+        this.map.setAll("two" to "Two", "bar" to "Bar", "foo" to "bar")
+        this.observer.assertMultipleCalls(call("one", "1", null), call("two", "2", "Two"), call("bar", null, "Bar"))
     }
 
     @Test
@@ -275,7 +292,7 @@ class ObservableMapTest(private val mapFactory: Callable<ObservableMap<String?, 
 
     @Test
     fun testEntries_RemoveAll() {
-        this.map.entries.removeAll(listOf(entry("one", "1"), entry("two", "2"), entry("three", "3")))
+        this.map.entries.removeAll(setOf(entry("one", "1"), entry("two", "2"), entry("three", "3")))
 
         this.observer.assertMultipleRemoved(tup("one", "1"), tup("two", "2"))
         assertEquals(1, this.map.size)
@@ -283,7 +300,7 @@ class ObservableMapTest(private val mapFactory: Callable<ObservableMap<String?, 
 
     @Test
     fun testEntries_RetainAll() {
-        this.map.entries.retainAll(listOf(entry("one", "1"), entry("two", "2"), entry("three", "3")))
+        this.map.entries.retainAll(setOf(entry("one", "1"), entry("two", "2"), entry("three", "3")))
 
         this.observer.assertRemoved(tup("foo", "bar"))
         assertEquals(2, this.map.size)

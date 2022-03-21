@@ -99,8 +99,14 @@ object ObservableCollections {
      *
      * @return a newly created ObservableMap
      */
-    fun <K, V> observableMap(map: MutableMap<K, V>): ObservableMap<K, V> {
-        return ObservableMapWrapper(map)
+    @Suppress("KotlinConstantConditions")
+    fun <K, V> observableMap(map: Map<K, V>): ObservableMap<K, V> {
+        return if (map is MutableMap<*, *>) {
+            ObservableMapWrapper(map as MutableMap<K, V>)
+        } else {
+            val wrappedMap: MutableMap<K, V> = HashMap(map)
+            ObservableMapWrapper(wrappedMap)
+        }
     }
 
     /**
@@ -1665,6 +1671,14 @@ object ObservableCollections {
             throw UnsupportedOperationException()
         }
 
+        override fun setAll(vararg elements: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(elements: Collection<E>): Boolean {
+            throw UnsupportedOperationException()
+        }
+
     }
 
     private class SingletonObservableSet<E>(private val element: E) : AbstractMutableSet<E>(), ObservableSet<E> {
@@ -1705,6 +1719,14 @@ object ObservableCollections {
         }
 
         override fun add(element: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(vararg elements: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(elements: Collection<E>): Boolean {
             throw UnsupportedOperationException()
         }
 
@@ -1796,6 +1818,14 @@ object ObservableCollections {
         }
 
         override fun addAll(elements: Collection<E>): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(vararg elements: E): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(elements: Collection<E>): Boolean {
             throw UnsupportedOperationException()
         }
 
@@ -1956,6 +1986,48 @@ object ObservableCollections {
             return curHelper != null && curHelper.setChangeListeners.contains(listener)
         }
 
+        override fun setAll(vararg elements: E): Boolean {
+            synchronized(this.mutex) {
+                val toRemove = LinkedList<E>()
+                for (e in backingSet) {
+                    if (e !in elements) {
+                        toRemove.add(e)
+                    }
+                }
+
+                for (e in toRemove) {
+                    remove(e)
+                }
+
+                for (element in elements) {
+                    add(element)
+                }
+
+                return true
+            }
+        }
+
+        override fun setAll(elements: Collection<E>): Boolean {
+            synchronized(this.mutex) {
+                val toRemove = LinkedList<E>()
+                for (e in backingSet) {
+                    if (e !in elements) {
+                        toRemove.add(e)
+                    }
+                }
+
+                for (e in toRemove) {
+                    remove(e)
+                }
+
+                for (element in elements) {
+                    add(element)
+                }
+
+                return true
+            }
+        }
+
     }
 
     private class CheckedObservableSet<E>(set: ObservableSet<E>, private val type: KType) :
@@ -2096,6 +2168,44 @@ object ObservableCollections {
             }
         }
 
+        override fun setAll(vararg elements: E): Boolean {
+            val toRemove = LinkedList<E>()
+            for (e in backingSet) {
+                if (e !in elements) {
+                    toRemove.add(e)
+                }
+            }
+
+            for (e in toRemove) {
+                remove(e)
+            }
+
+            for (element in elements) {
+                add(element)
+            }
+
+            return true
+        }
+
+        override fun setAll(elements: Collection<E>): Boolean {
+            val toRemove = LinkedList<E>()
+            for (e in backingSet) {
+                if (e !in elements) {
+                    toRemove.add(e)
+                }
+            }
+
+            for (e in toRemove) {
+                remove(e)
+            }
+
+            for (element in elements) {
+                add(element)
+            }
+
+            return true
+        }
+
     }
 
     private class EmptyObservableMap<K, V> : AbstractMutableMap<K, V>(), ObservableMap<K, V> {
@@ -2128,6 +2238,14 @@ object ObservableCollections {
         }
 
         override fun put(key: K, value: V): V? {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(vararg pairs: Pair<K, V>) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(map: Map<out K, V>) {
             throw UnsupportedOperationException()
         }
 
@@ -2208,6 +2326,14 @@ object ObservableCollections {
             get() = singletonObservable(SimpleImmutableEntry(this.key, this.value))
 
         override fun put(key: K, value: V): V? {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(vararg pairs: Pair<K, V>) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(map: Map<out K, V>) {
             throw UnsupportedOperationException()
         }
 
@@ -2302,6 +2428,52 @@ object ObservableCollections {
         override fun put(key: K, value: V): V? {
             typeCheck(key, value)
             return this.backingMap.put(key, value)
+        }
+
+        override fun setAll(vararg pairs: Pair<K, V>) {
+            val currentEntries = this.entries
+            val toRemove = LinkedList<MutableMap.MutableEntry<K, V>>()
+            val otherEntries = currentEntries.filter { entry ->
+                val toKeep = pairs.any { pair -> pair.first == entry.key }
+                if (!toKeep) {
+                    toRemove.add(entry)
+                }
+                toKeep
+            }
+
+            for (entry in toRemove) {
+                remove(entry.key)
+            }
+
+            for (pair in pairs) {
+                if (!otherEntries.any { entry -> entry.toPair() == pair }) {
+                    put(pair.first, pair.second)
+                }
+            }
+        }
+
+        override fun setAll(map: Map<out K, V>) {
+            val newEntries = map.entries
+
+            val currentEntries = this.entries
+            val toRemove = LinkedList<MutableMap.MutableEntry<K, V>>()
+            val otherEntries = currentEntries.filter { entry ->
+                val toKeep = newEntries.any { newEntry -> newEntry.key == entry.key }
+                if (!toKeep) {
+                    toRemove.add(entry)
+                }
+                toKeep
+            }
+
+            for (entry in toRemove) {
+                remove(entry.key)
+            }
+
+            for (newEntry in newEntries) {
+                if (!otherEntries.any { entry -> entry == newEntry }) {
+                    put(newEntry.key, newEntry.value)
+                }
+            }
         }
 
         override fun remove(key: K): V? {
@@ -2679,6 +2851,56 @@ object ObservableCollections {
         override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.mapChangeListeners.contains(listener)
+        }
+
+        override fun setAll(vararg pairs: Pair<K, V>) {
+            synchronized(this.mutex) {
+                val currentEntries = this.entries
+                val toRemove = LinkedList<MutableMap.MutableEntry<K, V>>()
+                val otherEntries = currentEntries.filter { entry ->
+                    val toKeep = pairs.any { pair -> pair.first == entry.key }
+                    if (!toKeep) {
+                        toRemove.add(entry)
+                    }
+                    toKeep
+                }
+
+                for (entry in toRemove) {
+                    remove(entry.key)
+                }
+
+                for (pair in pairs) {
+                    if (!otherEntries.any { entry -> entry.toPair() == pair }) {
+                        put(pair.first, pair.second)
+                    }
+                }
+            }
+        }
+
+        override fun setAll(map: Map<out K, V>) {
+            synchronized(this.mutex) {
+                val newEntries = map.entries
+
+                val currentEntries = this.entries
+                val toRemove = LinkedList<MutableMap.MutableEntry<K, V>>()
+                val otherEntries = currentEntries.filter { entry ->
+                    val toKeep = newEntries.any { newEntry -> newEntry.key == entry.key }
+                    if (!toKeep) {
+                        toRemove.add(entry)
+                    }
+                    toKeep
+                }
+
+                for (entry in toRemove) {
+                    remove(entry.key)
+                }
+
+                for (newEntry in newEntries) {
+                    if (!otherEntries.any { entry -> entry == newEntry }) {
+                        put(newEntry.key, newEntry.value)
+                    }
+                }
+            }
         }
 
     }

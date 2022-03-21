@@ -4,14 +4,10 @@ import io.github.vinccool96.observationskt.collections.MockSetObserver.Call.Comp
 import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple.Companion.tup
 import io.github.vinccool96.observationskt.collections.SetChangeListener.Change
 import io.github.vinccool96.observationskt.collections.TestedObservableSets.CallableTreeSetImpl
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @RunWith(Parameterized::class)
 @Suppress("MemberVisibilityCanBePrivate")
@@ -73,6 +69,26 @@ class ObservableSetTest(val setFactory: Callable<ObservableSet<String?>>) {
 
         assertTrue(this.set.contains("oFoo"))
         this.observer.assertMultipleCalls(call(null, "oFoo"), call(null, "pFoo"))
+    }
+
+    @Test
+    fun testSetAll_Collection() {
+        this.set.setAll(listOf("three", "bar"))
+        this.observer.assertMultipleCalls(call("one", null), call("two", null), call("foo", null), call(null, "three"),
+                call(null, "bar"))
+    }
+
+    @Test
+    fun testSetAll_Elements() {
+        this.set.setAll("three", "bar")
+        this.observer.assertMultipleCalls(call("one", null), call("two", null), call("foo", null), call(null, "three"),
+                call(null, "bar"))
+    }
+
+    @Test
+    fun testSetAll_ElementsAlreadyIn() {
+        this.set.setAll("one", "bar")
+        this.observer.assertMultipleCalls(call("two", null), call("foo", null), call(null, "bar"))
     }
 
     @Test

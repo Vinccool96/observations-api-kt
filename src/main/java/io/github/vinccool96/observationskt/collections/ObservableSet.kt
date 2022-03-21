@@ -36,6 +36,24 @@ interface ObservableSet<E> : MutableSet<E>, Observable {
      */
     fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean
 
+    /**
+     * Clears the ObservableSet and add all the elements passed as var-args.
+     *
+     * @param elements the elements to set
+     *
+     * @return `true` (as specified by [MutableCollection.add])
+     */
+    fun setAll(vararg elements: E): Boolean
+
+    /**
+     * Clears the ObservableSet and add all elements from the collection.
+     *
+     * @param elements the collection with elements that will be added to this ObservableSet
+     *
+     * @return `true` (as specified by [MutableCollection.add])
+     */
+    fun setAll(elements: Collection<E>): Boolean
+
 }
 
 

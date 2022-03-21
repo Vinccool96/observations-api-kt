@@ -60,6 +60,14 @@ class ObservableSetValueStub<E>(value: ObservableSet<E>?) : ObservableSetValue<E
         return (this.get() ?: EMPTY_SET).addAll(elements)
     }
 
+    override fun setAll(vararg elements: E): Boolean {
+        return (this.get() ?: EMPTY_SET).setAll(*elements)
+    }
+
+    override fun setAll(elements: Collection<E>): Boolean {
+        return (this.get() ?: EMPTY_SET).setAll(elements)
+    }
+
     override fun removeAll(elements: Collection<E>): Boolean {
         return (this.get() ?: EMPTY_SET).removeAll(elements)
     }

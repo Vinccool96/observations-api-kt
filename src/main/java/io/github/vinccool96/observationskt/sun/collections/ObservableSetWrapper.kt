@@ -4,6 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.collections.ObservableSet
 import io.github.vinccool96.observationskt.collections.SetChangeListener
 import io.github.vinccool96.observationskt.collections.SetChangeListener.Change
+import java.util.*
 
 /**
  * A Set wrapper class that implements observability.
@@ -221,6 +222,44 @@ open class ObservableSetWrapper<E>(set: MutableSet<E>) : ObservableSet<E> {
             ret = add(element) || ret
         }
         return ret
+    }
+
+    override fun setAll(vararg elements: E): Boolean {
+        val toRemove = LinkedList<E>()
+        for (e in backingSet) {
+            if (e !in elements) {
+                toRemove.add(e)
+            }
+        }
+
+        for (e in toRemove) {
+            remove(e)
+        }
+
+        for (element in elements) {
+            add(element)
+        }
+
+        return true
+    }
+
+    override fun setAll(elements: Collection<E>): Boolean {
+        val toRemove = LinkedList<E>()
+        for (e in backingSet) {
+            if (e !in elements) {
+                toRemove.add(e)
+            }
+        }
+
+        for (e in toRemove) {
+            remove(e)
+        }
+
+        for (element in elements) {
+            add(element)
+        }
+
+        return true
     }
 
     /**

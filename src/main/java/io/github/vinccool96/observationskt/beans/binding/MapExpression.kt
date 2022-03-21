@@ -148,6 +148,14 @@ abstract class MapExpression<K, V> : ObservableMapValue<K, V> {
         (get() ?: EMPTY_MAP).clear()
     }
 
+    override fun setAll(vararg pairs: Pair<K, V>) {
+        (get() ?: EMPTY_MAP).setAll(*pairs)
+    }
+
+    override fun setAll(map: Map<out K, V>) {
+        (get() ?: EMPTY_MAP).setAll(map)
+    }
+
     override val keys: MutableSet<K>
         get() = (get() ?: EMPTY_MAP).keys
 
