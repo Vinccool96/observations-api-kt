@@ -43,13 +43,23 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<Boolean>(), ObservableB
         setAll(src)
     }
 
-    override val size: Int
+    override var size: Int
         get() = this.sizeState
+        set(value) {
+            this.sizeState = value
+        }
 
     override fun addAllInternal(src: Array<Boolean>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
         src.toBooleanArray().copyInto(this.array, this.sizeState, startIndex, endIndex)
+        this.sizeState += length
+    }
+
+    override fun addAllInternal(src: ObservableArray<Boolean>, startIndex: Int, endIndex: Int) {
+        val length = endIndex - startIndex
+        growCapacity(length)
+        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
     }
 
@@ -148,24 +158,18 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<Boolean>(), ObservableB
     override fun copyInto(destination: ObservableArray<Boolean>, destinationOffset: Int, startIndex: Int,
             endIndex: Int) {
         rangeCheck(endIndex)
-        destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
+        if ((destination !== this || destinationOffset != 0 || startIndex != 0 || endIndex != this.sizeState)
+                && startIndex != endIndex) {
+            destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
+        }
     }
 
-    override fun resize(size: Int) {
-        if (size < 0) {
-            throw NegativeArraySizeException("Can't resize to negative value: $size")
-        }
-        try {
-            beginChange()
-            ensureCapacity(size)
-            val minSize = min(this.sizeState, size)
-            this.sizeState = size
-            val removed = this.array.copyOfRange(size, this.array.size).toMutableList()
-            this.array.fill(false, minSize, this.sizeState)
-            nextRemove(size, removed)
-        } finally {
-            endChange()
-        }
+    override fun fillArray(fromIndex: Int, toIndex: Int) {
+        this.array.fill(false, fromIndex, toIndex)
+    }
+
+    override fun internalArray(fromIndex: Int, toIndex: Int): Array<Boolean> {
+        return this.array.toTypedArray().copyOfRange(fromIndex, toIndex)
     }
 
     override fun growCapacity(length: Int) {
@@ -187,13 +191,13 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<Boolean>(), ObservableB
 
     override fun ensureCapacity(capacity: Int) {
         if (this.array.size < capacity) {
-            this.array = this.array.copyOf(capacity)
+            this.array = copyOfArray(capacity)
         }
     }
 
     override fun trimToSize() {
         if (this.array.size != this.sizeState) {
-            this.array = BooleanArray(this.size) { i: Int -> this.array[i] }
+            this.array = copyOfArray(this.sizeState)
         }
     }
 
@@ -209,6 +213,14 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<Boolean>(), ObservableB
             }
         }
         return b.append("]").toString()
+    }
+
+    private fun copyOfArray(capacity: Int): BooleanArray {
+        var copy = this.array.copyOfRange(0, min(this.array.size, capacity))
+        while (copy.size < capacity) {
+            copy += if (this.array.isNotEmpty()) this.array else booleanArrayOf(false)
+        }
+        return copy
     }
 
     companion object {

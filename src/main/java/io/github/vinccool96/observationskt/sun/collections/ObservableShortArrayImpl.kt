@@ -43,13 +43,23 @@ class ObservableShortArrayImpl() : ObservableArrayBase<Short>(), ObservableShort
         setAll(src)
     }
 
-    override val size: Int
+    override var size: Int
         get() = this.sizeState
+        set(value) {
+            this.sizeState = value
+        }
 
     override fun addAllInternal(src: Array<Short>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
         src.toShortArray().copyInto(this.array, this.sizeState, startIndex, endIndex)
+        this.sizeState += length
+    }
+
+    override fun addAllInternal(src: ObservableArray<Short>, startIndex: Int, endIndex: Int) {
+        val length = endIndex - startIndex
+        growCapacity(length)
+        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
         this.sizeState += length
     }
 
@@ -148,24 +158,18 @@ class ObservableShortArrayImpl() : ObservableArrayBase<Short>(), ObservableShort
     override fun copyInto(destination: ObservableArray<Short>, destinationOffset: Int, startIndex: Int,
             endIndex: Int) {
         rangeCheck(endIndex)
-        destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
+        if ((destination !== this || destinationOffset != 0 || startIndex != 0 || endIndex != this.sizeState)
+                && startIndex != endIndex) {
+            destination.set(this.array.toTypedArray(), destinationOffset, startIndex, endIndex)
+        }
     }
 
-    override fun resize(size: Int) {
-        if (size < 0) {
-            throw NegativeArraySizeException("Can't resize to negative value: $size")
-        }
-        try {
-            beginChange()
-            ensureCapacity(size)
-            val minSize = min(this.sizeState, size)
-            this.sizeState = size
-            val removed = this.array.copyOfRange(size, this.array.size).toMutableList()
-            this.array.fill(0, minSize, this.sizeState)
-            nextRemove(size, removed)
-        } finally {
-            endChange()
-        }
+    override fun fillArray(fromIndex: Int, toIndex: Int) {
+        this.array.fill(0, fromIndex, toIndex)
+    }
+
+    override fun internalArray(fromIndex: Int, toIndex: Int): Array<Short> {
+        return this.array.toTypedArray().copyOfRange(fromIndex, toIndex)
     }
 
     override fun growCapacity(length: Int) {
@@ -187,13 +191,13 @@ class ObservableShortArrayImpl() : ObservableArrayBase<Short>(), ObservableShort
 
     override fun ensureCapacity(capacity: Int) {
         if (this.array.size < capacity) {
-            this.array = this.array.copyOf(capacity)
+            this.array = copyOfArray(capacity)
         }
     }
 
     override fun trimToSize() {
         if (this.array.size != this.sizeState) {
-            this.array = ShortArray(this.size) { i: Int -> this.array[i] }
+            this.array = copyOfArray(this.sizeState)
         }
     }
 
@@ -209,6 +213,14 @@ class ObservableShortArrayImpl() : ObservableArrayBase<Short>(), ObservableShort
             }
         }
         return b.append("]").toString()
+    }
+
+    private fun copyOfArray(capacity: Int): ShortArray {
+        var copy = this.array.copyOfRange(0, min(this.array.size, capacity))
+        while (copy.size < capacity) {
+            copy += if (this.array.isNotEmpty()) this.array else shortArrayOf(0)
+        }
+        return copy
     }
 
     companion object {

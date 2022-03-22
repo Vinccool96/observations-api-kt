@@ -11,12 +11,17 @@ import kotlin.math.min
  * @constructor Creates empty observable double array
  */
 @Suppress("UNCHECKED_CAST")
-class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : ObservableArrayBase<T>(),
+class ObservableObjectArrayImpl<T>(baseArray: Array<T>) : ObservableArrayBase<T>(),
         ObservableObjectArray<T> {
+
+    private val internalBaseArray = baseArray
+
+    override val baseArray: Array<T>
+        get() = this.internalBaseArray.copyOf()
 
     private val initialArray: Array<T> = this.baseArray.copyOfRange(0, 0)
 
-    private var array: Array<Any?> = arrayOf()
+    private var array: Array<T> = this.initialArray
 
     private var sizeState: Int = 0
 
@@ -47,13 +52,23 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
     }
 
     private fun arrayWith(value: T): Array<T> {
-        return this.baseArray.copyOf().apply { this[0] = value }
+        return this.baseArray.apply { this[0] = value }
     }
 
-    override val size: Int
+    override var size: Int
         get() = this.sizeState
+        set(value) {
+            this.sizeState = value
+        }
 
     override fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int) {
+        val length = endIndex - startIndex
+        growCapacity(length)
+        src.copyInto(this.array, this.sizeState, startIndex, endIndex)
+        this.sizeState += length
+    }
+
+    override fun addAllInternal(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
         val length = endIndex - startIndex
         growCapacity(length)
         src.copyInto(this.array, this.sizeState, startIndex, endIndex)
@@ -92,7 +107,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
 
     override operator fun get(index: Int): T {
         rangeCheck(index + 1)
-        return this.array[index] as T
+        return this.array[index]
     }
 
     override fun doOperatorSet(index: Int, value: T) {
@@ -103,7 +118,7 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
     override fun toTypedArray(): Array<T> {
         var result = this.initialArray
         for (i in 0 until this.sizeState) {
-            result += arrayWith(this.array[i] as T)
+            result += arrayWith(this.array[i])
         }
         return result
     }
@@ -112,42 +127,28 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
         rangeCheck(endIndex)
         var result = this.initialArray
         for (i in startIndex until endIndex) {
-            result += arrayWith(this.array[i] as T)
+            result += arrayWith(this.array[i])
         }
         return result
     }
 
     override fun copyInto(destination: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         rangeCheck(endIndex)
-        this.toTypedArray().copyInto(destination, destinationOffset, startIndex, endIndex)
+        this.array.copyInto(destination, destinationOffset, startIndex, endIndex)
     }
 
     override fun copyInto(destination: ObservableArray<T>, destinationOffset: Int, startIndex: Int,
             endIndex: Int) {
         rangeCheck(endIndex)
-        destination.set(toTypedArray(), destinationOffset, startIndex, endIndex)
+        destination.set(this.array, destinationOffset, startIndex, endIndex)
     }
 
-    override fun resize(size: Int) {
-        if (size < 0) {
-            throw NegativeArraySizeException("Can't resize to negative value: $size")
-        }
-        try {
-            beginChange()
-            ensureCapacity(size)
-            val minSize = min(this.sizeState, size)
-            this.sizeState = size
-            val removedList= mutableListOf(this.baseArray[0])
-            removedList.clear()
-            val removedArray = this.array.copyOfRange(size, this.array.size)
-            for (e in removedArray) {
-                removedList.add(e as T)
-            }
-            this.array.fill(this.baseArray[0], minSize, this.sizeState)
-            nextRemove(size, removedList)
-        } finally {
-            endChange()
-        }
+    override fun fillArray(fromIndex: Int, toIndex: Int) {
+        this.array.fill(this.baseArray[0], fromIndex, toIndex)
+    }
+
+    override fun internalArray(fromIndex: Int, toIndex: Int): Array<T> {
+        return this.array.copyOfRange(fromIndex, toIndex)
     }
 
     override fun growCapacity(length: Int) {
@@ -169,13 +170,13 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
 
     override fun ensureCapacity(capacity: Int) {
         if (this.array.size < capacity) {
-            this.array = this.array.copyOf(capacity)
+            this.array = copyOfArray(capacity)
         }
     }
 
     override fun trimToSize() {
         if (this.array.size != this.sizeState) {
-            this.array = Array(this.sizeState) { i -> this.array[i] }
+            this.array = copyOfArray(this.sizeState)
         }
     }
 
@@ -191,6 +192,14 @@ class ObservableObjectArrayImpl<T>(override val baseArray: Array<T>) : Observabl
             }
         }
         return b.append("]").toString()
+    }
+
+    private fun copyOfArray(capacity: Int): Array<T> {
+        var copy = this.array.copyOfRange(0, min(this.array.size, capacity))
+        while (copy.size < capacity) {
+            copy += if (this.array.isNotEmpty()) this.array else this.baseArray
+        }
+        return copy
     }
 
     companion object {

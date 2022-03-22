@@ -255,6 +255,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
                     }
                 }
                 for (i in 0 until curArrayChangeSize) {
+                    change.reset()
                     try {
                         curArrayChangeList[i]?.onChanged(change)
                     } catch (T: Exception) {
@@ -297,6 +298,7 @@ abstract class ArrayListenerHelper<T>(protected val observable: ObservableArray<
         }
 
         fun <T> fireValueChangedEvent(helper: ArrayListenerHelper<T>?, change: Change<out T>) {
+            change.reset()
             helper?.fireValueChangedEvent(change)
         }
 

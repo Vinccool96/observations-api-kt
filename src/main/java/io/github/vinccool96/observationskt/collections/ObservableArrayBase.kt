@@ -3,6 +3,7 @@ package io.github.vinccool96.observationskt.collections
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.collections.ArrayChangeListener.Change
 import io.github.vinccool96.observationskt.sun.collections.ArrayListenerHelper
+import kotlin.math.min
 
 /**
  * Abstract class that serves as a base class for [ObservableArray] implementations. The base class provides listener
@@ -16,6 +17,9 @@ import io.github.vinccool96.observationskt.sun.collections.ArrayListenerHelper
  */
 @Suppress("UNCHECKED_CAST")
 abstract class ObservableArrayBase<T> : ObservableArray<T> {
+
+    abstract override var size: Int
+        protected set
 
     private var helper: ArrayListenerHelper<T>? = null
 
@@ -203,15 +207,37 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
         ArrayListenerHelper.fireValueChangedEvent(this.helper, change)
     }
 
-    override fun clear() {
-        try {
-            beginChange()
-            val removed = this.toTypedArray().toMutableList()
-            resize(0)
-            nextRemove(0, removed)
-        } finally {
-            endChange()
+    override fun resize(size: Int) {
+        if (size < 0) {
+            throw NegativeArraySizeException("Can't resize to negative value: $size")
         }
+        if (this.size != size) {
+            try {
+                beginChange()
+                ensureCapacity(size)
+                val minSize = min(this.size, size)
+                val oldSize = this.size
+                this.size = size
+                if (oldSize > this.size) {
+                    val removedList = mutableListOf(this.baseArray[0])
+                    removedList.clear()
+                    val removedArray = this.internalArray(size, oldSize)
+                    for (e in removedArray) {
+                        removedList.add(e)
+                    }
+                    nextRemove(size, removedList)
+                } else {
+                    nextAdd(oldSize, this.size)
+                }
+                fillArray(minSize, this.size)
+            } finally {
+                endChange()
+            }
+        }
+    }
+
+    override fun clear() {
+        resize(0)
     }
 
     override operator fun set(index: Int, value: T) {
@@ -226,95 +252,128 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
     }
 
     override fun addAll(vararg elements: T) {
-        try {
-            beginChange()
-            val start = this.size
-            addAllInternal(elements as Array<T>, 0, elements.size)
-            nextAdd(start, this.size)
-        } finally {
-            endChange()
+        if (elements.isNotEmpty()) {
+            try {
+                beginChange()
+                val start = this.size
+                addAllInternal(elements as Array<T>, 0, elements.size)
+                nextAdd(start, this.size)
+            } finally {
+                endChange()
+            }
         }
     }
 
     override fun addAll(src: ObservableArray<T>) {
-        addAll(*src.toTypedArray())
+        if (src.size != 0) {
+            try {
+                beginChange()
+                val start = this.size
+                addAllInternal(src, 0, src.size)
+                nextAdd(start, this.size)
+            } finally {
+                endChange()
+            }
+        }
     }
 
     override fun addAll(src: Array<T>, startIndex: Int, endIndex: Int) {
         rangeCheck(src, startIndex, endIndex)
-        try {
-            beginChange()
-            val start = this.size
-            addAllInternal(src, startIndex, endIndex)
-            nextAdd(start, this.size)
-        } finally {
-            endChange()
+        if (endIndex - startIndex != 0) {
+            try {
+                beginChange()
+                val start = this.size
+                addAllInternal(src, startIndex, endIndex)
+                nextAdd(start, this.size)
+            } finally {
+                endChange()
+            }
         }
     }
 
     override fun addAll(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
-        addAll(src.toTypedArray(), startIndex, endIndex)
+        rangeCheck(src, startIndex, endIndex)
+        if (endIndex - startIndex != 0) {
+            try {
+                beginChange()
+                val start = this.size
+                addAllInternal(src, startIndex, endIndex)
+                nextAdd(start, this.size)
+            } finally {
+                endChange()
+            }
+        }
     }
 
     override fun setAll(vararg elements: T) {
-        try {
-            beginChange()
-            val removed = this.toTypedArray().toMutableList()
-            setAllInternal(elements as Array<T>, 0, elements.size)
-            nextRemove(0, removed)
-            nextAdd(0, this.size)
-        } finally {
-            endChange()
+        if (!(this.size == 0 && elements.isEmpty())) {
+            try {
+                beginChange()
+                val removed = this.toTypedArray().toMutableList()
+                setAllInternal(elements as Array<T>, 0, elements.size)
+                nextRemove(0, removed)
+                nextAdd(0, this.size)
+            } finally {
+                endChange()
+            }
         }
     }
 
     override fun setAll(src: ObservableArray<T>) {
-        try {
-            beginChange()
-            val removed = this.toTypedArray().toMutableList()
-            setAllInternal(src, 0, src.size)
-            nextRemove(0, removed)
-            nextAdd(0, this.size)
-        } finally {
-            endChange()
+        if (src !== this && !(this.size == 0 && src.size == 0)) {
+            try {
+                beginChange()
+                val removed = this.toTypedArray().toMutableList()
+                setAllInternal(src, 0, src.size)
+                nextRemove(0, removed)
+                nextAdd(0, this.size)
+            } finally {
+                endChange()
+            }
         }
     }
 
     override fun setAll(src: Array<T>, startIndex: Int, endIndex: Int) {
-        rangeCheck(src, startIndex, endIndex)
-        try {
-            beginChange()
-            val removed = this.toTypedArray().toMutableList()
-            setAllInternal(src, startIndex, endIndex)
-            nextRemove(0, removed)
-            nextAdd(0, this.size)
-        } finally {
-            endChange()
+        if (!(this.size == 0 && endIndex - startIndex == 0)) {
+            rangeCheck(src, startIndex, endIndex)
+            try {
+                beginChange()
+                clear()
+                addAll(*src.copyOfRange(startIndex, endIndex))
+            } finally {
+                endChange()
+            }
         }
     }
 
     override fun setAll(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
-        rangeCheck(src.toTypedArray(), startIndex, endIndex)
-        try {
-            beginChange()
-            val removed = this.toTypedArray().toMutableList()
-            setAllInternal(src, startIndex, endIndex)
-            nextRemove(0, removed)
-            nextAdd(0, this.size)
-        } finally {
-            endChange()
+        if (src !== this || startIndex != 0 || endIndex != this.size) {
+            if (this.size != 0 || endIndex - startIndex != 0) {
+                rangeCheck(src.toTypedArray(), startIndex, endIndex)
+                try {
+                    beginChange()
+                    val before = src.toTypedArray()
+                    clear()
+                    addAll(*before.copyOfRange(startIndex, endIndex))
+                } finally {
+                    endChange()
+                }
+            }
         }
     }
 
     override fun set(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        try {
-            beginChange()
-            val length = endIndex - startIndex
-            val removed = this.toTypedArray(destinationOffset, destinationOffset + length).toMutableList()
-            setInternal(src, destinationOffset, startIndex, endIndex)
-            nextReplace(destinationOffset, destinationOffset + length, removed)
-        } finally {
-            endChange()
+        require(endIndex >= startIndex)
+        if (!(this.size == 0 && endIndex - startIndex == 0)) {
+            try {
+                beginChange()
+                val length = endIndex - startIndex
+                val removed = this.toTypedArray(destinationOffset, destinationOffset + length).toMutableList()
+                setInternal(src, destinationOffset, startIndex, endIndex)
+                nextReplace(destinationOffset, destinationOffset + length, removed)
+            } finally {
+                endChange()
+            }
         }
     }
 
@@ -342,6 +401,10 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
 
     protected abstract fun addAllInternal(src: Array<T>, startIndex: Int, endIndex: Int)
 
+    protected open fun addAllInternal(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
+        throw NotImplementedError()
+    }
+
     protected abstract fun setAllInternal(src: Array<T>, startIndex: Int, endIndex: Int)
 
     protected abstract fun setAllInternal(src: ObservableArray<T>, startIndex: Int, endIndex: Int)
@@ -350,6 +413,14 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
 
     protected abstract fun setInternal(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
+    protected open fun fillArray(fromIndex: Int, toIndex: Int) {
+        throw NotImplementedError()
+    }
+
+    protected open fun internalArray(fromIndex: Int, toIndex: Int): Array<T> {
+        throw NotImplementedError()
+    }
+
     protected fun rangeCheck(size: Int) {
         if (size > this.size) {
             throw ArrayIndexOutOfBoundsException(this.size)
@@ -357,6 +428,15 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
     }
 
     protected fun rangeCheck(src: Array<T>, startIndex: Int, endIndex: Int) {
+        if (startIndex < 0 || endIndex > src.size) {
+            throw ArrayIndexOutOfBoundsException(src.size)
+        }
+        if (endIndex < startIndex) {
+            throw ArrayIndexOutOfBoundsException(endIndex)
+        }
+    }
+
+    protected fun rangeCheck(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
         if (startIndex < 0 || endIndex > src.size) {
             throw ArrayIndexOutOfBoundsException(src.size)
         }

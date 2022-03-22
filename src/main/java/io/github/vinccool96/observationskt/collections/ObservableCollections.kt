@@ -3011,8 +3011,9 @@ object ObservableCollections {
             throw UnsupportedOperationException()
         }
 
-        override val size: Int
+        override var size: Int
             get() = 0
+            set(value) {}
 
         override fun growCapacity(length: Int) {
             throw UnsupportedOperationException()
@@ -3081,8 +3082,9 @@ object ObservableCollections {
         override val baseArray: Array<T>
             get() = this.backingArray.baseArray
 
-        override val size: Int
+        override var size: Int
             get() = this.backingArray.size
+            set(value) {}
 
         override fun copyInto(destination: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
             this.backingArray.copyInto(destination, destinationOffset, startIndex, endIndex)
