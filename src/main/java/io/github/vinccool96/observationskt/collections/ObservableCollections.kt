@@ -567,6 +567,18 @@ object ObservableCollections {
     /**
      * Creates a new observable array with copy of elements in given `array`.
      *
+     * @param array observable array to copy
+     * @param T the type of the objects in the array
+     *
+     * @return a newly created ObservableObjectArray
+     */
+    fun <T> observableObjectArray(array: ObservableArray<T>): ObservableObjectArray<T> {
+        return ObservableObjectArrayImpl(array.baseArray.copyOf(), array)
+    }
+
+    /**
+     * Creates a new observable array with copy of elements in given `array`.
+     *
      * @param baseArray the base array of size `1` containing the base element
      * @param array observable array to copy
      * @param T the type of the objects in the array
@@ -575,7 +587,7 @@ object ObservableCollections {
      *
      * @throws IllegalArgumentException if [baseArray] isn't of size `1`
      */
-    fun <T> observableObjectArray(baseArray: Array<T>, array: ObservableObjectArray<T>): ObservableObjectArray<T> {
+    fun <T> observableObjectArray(baseArray: Array<T>, array: ObservableArray<T>): ObservableObjectArray<T> {
         return ObservableObjectArrayImpl(baseArray, array)
     }
 
@@ -2993,13 +3005,13 @@ object ObservableCollections {
             return false
         }
 
-        override fun addListener(listener: ArrayChangeListener<T>) {
+        override fun addListener(listener: ArrayChangeListener<in T>) {
         }
 
-        override fun removeListener(listener: ArrayChangeListener<T>) {
+        override fun removeListener(listener: ArrayChangeListener<in T>) {
         }
 
-        override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<T>): Boolean {
+        override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean {
             return false
         }
 
@@ -3070,7 +3082,7 @@ object ObservableCollections {
     private class UnmodifiableObservableArrayImpl<T>(private val backingArray: ObservableArray<T>) :
             ObservableArrayBase<T>() {
 
-        private val listener: ArrayChangeListener<T>
+        private val listener: ArrayChangeListener<in T>
 
         init {
             this.listener = ArrayChangeListener { change ->

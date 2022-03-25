@@ -1,30 +1,30 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.*
-import io.github.vinccool96.observationskt.beans.value.ObservableListValueStub
+import io.github.vinccool96.observationskt.beans.value.ObservableArrayValueStub
+import io.github.vinccool96.observationskt.collections.ObservableArray
 import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import kotlin.test.*
 
-class ListExpressionTest {
+class ArrayExpressionTest {
 
-    private lateinit var opNull: ListProperty<Int>
+    private lateinit var opNull: ArrayProperty<Int>
 
-    private lateinit var opEmpty: ListProperty<Int>
+    private lateinit var opEmpty: ArrayProperty<Int>
 
-    private lateinit var op1: ListProperty<Int>
+    private lateinit var op1: ArrayProperty<Int>
 
-    private lateinit var op2: ListProperty<Int>
+    private lateinit var op2: ArrayProperty<Int>
 
     @BeforeTest
     fun setUp() {
-        this.opNull = SimpleListProperty()
-        this.opEmpty = SimpleListProperty(ObservableCollections.observableArrayList())
-        this.op1 = SimpleListProperty(ObservableCollections.observableArrayList(data1_0))
-        this.op2 = SimpleListProperty(ObservableCollections.observableArrayList(data2_0, data2_1))
+        this.opNull = SimpleArrayProperty(arrayOf(1))
+        this.opEmpty = SimpleArrayProperty(ObservableCollections.observableIntArray(), arrayOf(0))
+        this.op1 = SimpleArrayProperty(ObservableCollections.observableIntArray(data1_0), arrayOf(0))
+        this.op2 = SimpleArrayProperty(ObservableCollections.observableIntArray(data2_0, data2_1), arrayOf(0))
     }
 
     @Test
@@ -38,18 +38,18 @@ class ListExpressionTest {
     @Test
     fun testValueAt_Constant() {
         assertNull(this.opNull.valueAt(0).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(0).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
         assertEquals(data1_0, this.op1.valueAt(0).get())
         assertNull(this.op1.valueAt(1).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
 
         assertEquals(data2_0, this.op2.valueAt(0).get())
         assertEquals(data2_1, this.op2.valueAt(1).get())
         assertNull(this.op2.valueAt(2).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -62,7 +62,7 @@ class ListExpressionTest {
         val index: IntProperty = SimpleIntProperty(-1)
 
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op1.valueAt(index).get())
@@ -72,30 +72,30 @@ class ListExpressionTest {
 
         index.set(0)
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertEquals(data1_0, this.op1.valueAt(index).get())
         assertEquals(data2_0, this.op2.valueAt(index).get())
 
         index.set(1)
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op1.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertEquals(data2_1, this.op2.valueAt(index).get())
 
         index.set(2)
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op1.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op2.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
     }
 
     @Test
@@ -103,7 +103,7 @@ class ListExpressionTest {
         val index: DoubleProperty = SimpleDoubleProperty(-1.1)
 
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
         log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op1.valueAt(index).get())
@@ -113,72 +113,72 @@ class ListExpressionTest {
 
         index.set(0.5)
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertEquals(data1_0, this.op1.valueAt(index).get())
         assertEquals(data2_0, this.op2.valueAt(index).get())
 
         index.set(1.8)
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op1.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertEquals(data2_1, this.op2.valueAt(index).get())
 
         index.set(2.0000001)
         assertNull(this.opNull.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.opEmpty.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op1.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
         assertNull(this.op2.valueAt(index).get())
-        log.checkFine(IndexOutOfBoundsException::class.java)
+        log.checkFine(ArrayIndexOutOfBoundsException::class.java)
     }
 
     @Test
     fun testIsEqualTo() {
-        val emptyList: ObservableList<Int> = ObservableCollections.emptyObservableList()
-        val list1: ObservableList<Int> = ObservableCollections.observableArrayList(data1_0)
-        val list2: ObservableList<Int> = ObservableCollections.observableArrayList(data2_0, data2_1)
+        val emptyArray: ObservableArray<Int> = ObservableCollections.emptyObservableArray(arrayOf(0))
+        val array1: ObservableArray<Int> = ObservableCollections.observableIntArray(data1_0)
+        val array2: ObservableArray<Int> = ObservableCollections.observableIntArray(data2_0, data2_1)
 
-        var binding: BooleanBinding = this.opNull.isEqualTo(emptyList)
+        var binding: BooleanBinding = this.opNull.isEqualTo(emptyArray)
         assertEquals(false, binding.get())
-        binding = this.opNull.isEqualTo(list1)
+        binding = this.opNull.isEqualTo(array1)
         assertEquals(false, binding.get())
-        binding = this.opNull.isEqualTo(list2)
+        binding = this.opNull.isEqualTo(array2)
         assertEquals(false, binding.get())
 
-        binding = this.opEmpty.isEqualTo(emptyList)
+        binding = this.opEmpty.isEqualTo(emptyArray)
         assertEquals(true, binding.get())
-        binding = this.opEmpty.isEqualTo(list1)
+        binding = this.opEmpty.isEqualTo(array1)
         assertEquals(false, binding.get())
-        binding = this.opEmpty.isEqualTo(list2)
+        binding = this.opEmpty.isEqualTo(array2)
         assertEquals(false, binding.get())
 
-        binding = this.op1.isEqualTo(emptyList)
+        binding = this.op1.isEqualTo(emptyArray)
         assertEquals(false, binding.get())
-        binding = this.op1.isEqualTo(list1)
+        binding = this.op1.isEqualTo(array1)
         assertEquals(true, binding.get())
-        binding = this.op1.isEqualTo(list2)
+        binding = this.op1.isEqualTo(array2)
         assertEquals(false, binding.get())
 
-        binding = this.op2.isEqualTo(emptyList)
+        binding = this.op2.isEqualTo(emptyArray)
         assertEquals(false, binding.get())
-        binding = this.op2.isEqualTo(list1)
+        binding = this.op2.isEqualTo(array1)
         assertEquals(false, binding.get())
-        binding = this.op2.isEqualTo(list2)
+        binding = this.op2.isEqualTo(array2)
         assertEquals(true, binding.get())
     }
 
     @Test
     fun testIsNotEqualTo() {
-        val emptyList: ObservableList<Int> = ObservableCollections.emptyObservableList()
-        val list1: ObservableList<Int> = ObservableCollections.observableArrayList(data1_0)
-        val list2: ObservableList<Int> = ObservableCollections.observableArrayList(data2_0, data2_1)
+        val emptyList: ObservableArray<Int> = ObservableCollections.emptyObservableArray(arrayOf(0))
+        val list1: ObservableArray<Int> = ObservableCollections.observableIntArray(data1_0)
+        val list2: ObservableArray<Int> = ObservableCollections.observableIntArray(data2_0, data2_1)
 
         var binding: BooleanBinding = this.opNull.isNotEqualTo(emptyList)
         assertEquals(true, binding.get())
@@ -318,26 +318,26 @@ class ListExpressionTest {
     }
 
     @Test
-    fun testObservableListValueToExpression() {
-        val valueModel: ObservableListValueStub<Any> = ObservableListValueStub()
-        val exp: ListExpression<Any> = ListExpression.listExpression(valueModel)
+    fun testObservableArrayValueToExpression() {
+        val valueModel: ObservableArrayValueStub<Any> = ObservableArrayValueStub(arrayOf(Any()))
+        val exp: ArrayExpression<Any> = ArrayExpression.arrayExpression(valueModel)
         val o1 = Any()
         val o2 = Any()
         val o3 = Any()
 
-        assertTrue(exp is ListBinding)
+        assertTrue(exp is ArrayBinding)
         assertEquals(ObservableCollections.singletonObservableList(valueModel), exp.dependencies)
 
         assertEquals(null, exp.get())
-        valueModel.set(ObservableCollections.observableArrayList(o1))
-        assertEquals(ObservableCollections.singletonObservableList(o1), exp.get())
-        valueModel.get()!!.add(o2)
-        assertEquals(ObservableCollections.observableList(mutableListOf(o1, o2)), exp.get())
-        exp.get()!!.add(o3)
-        assertEquals(ObservableCollections.observableList(mutableListOf(o1, o2, o3)), valueModel.get())
+        valueModel.set(ObservableCollections.observableObjectArray(arrayOf(Any()), o1))
+        assertContentEquals(ObservableCollections.observableObjectArray(arrayOf(Any()), o1), exp.get())
+        valueModel.get()!! += arrayOf(o2)
+        assertContentEquals(ObservableCollections.observableObjectArray(arrayOf(Any()), o1, o2), exp.get())
+        exp.get()!! += arrayOf(o3)
+        assertContentEquals(ObservableCollections.observableObjectArray(arrayOf(Any()), o1, o2, o3), valueModel.get())
 
         // make sure we do not create unnecessary bindings
-        assertSame(this.op1, ListExpression.listExpression(this.op1))
+        assertSame(this.op1, ArrayExpression.arrayExpression(this.op1))
         exp.dispose()
     }
 
@@ -364,5 +364,4 @@ class ListExpressionTest {
         }
 
     }
-
 }

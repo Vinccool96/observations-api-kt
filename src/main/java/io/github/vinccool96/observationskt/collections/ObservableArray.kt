@@ -15,7 +15,7 @@ import io.github.vinccool96.observationskt.beans.Observable
  *
  * @see ArrayChangeListener
  */
-interface ObservableArray<T> : Observable {
+interface ObservableArray<T> : Observable, Iterable<T> {
 
     /**
      * The base array that needs to be provided to fill the array when resizing. It must be of size `1`, and the value
@@ -28,7 +28,7 @@ interface ObservableArray<T> : Observable {
      *
      * @param listener the listener for listening to the array changes
      */
-    fun addListener(listener: ArrayChangeListener<T>)
+    fun addListener(listener: ArrayChangeListener<in T>)
 
     /**
      * Tries to remove a listener from this observable array. If the listener is not attached to this array, nothing
@@ -36,7 +36,7 @@ interface ObservableArray<T> : Observable {
      *
      * @param listener a listener to remove
      */
-    fun removeListener(listener: ArrayChangeListener<T>)
+    fun removeListener(listener: ArrayChangeListener<in T>)
 
     /**
      * Verify if a `ArrayChangeListener` already exist for this `ObservableArray`.
@@ -45,7 +45,7 @@ interface ObservableArray<T> : Observable {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<T>): Boolean
+    fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean
 
     /**
      * Sets new length of data in this array. This method grows capacity if necessary but never shrinks it. Resulting
@@ -77,6 +77,13 @@ interface ObservableArray<T> : Observable {
      * @see trimToSize
      */
     fun clear()
+
+    /**
+     * Returns `true` if the collection is empty (contains no elements), `false` otherwise.
+     *
+     * @return if the collection is empty
+     */
+    fun isEmpty(): Boolean
 
     /**
      * Retrieves length of data in this array.
@@ -240,6 +247,14 @@ interface ObservableArray<T> : Observable {
      */
     operator fun set(index: Int, value: T)
 
+    operator fun contains(element: T): Boolean
+
+    fun containsAll(elements: ObservableArray<T>): Boolean
+
+    fun containsAll(elements: Collection<T>): Boolean
+
+    fun containsAll(vararg elements: T): Boolean
+
     /**
      * Returns an array containing copy of the observable array.
      *
@@ -256,11 +271,5 @@ interface ObservableArray<T> : Observable {
      * @return a double array containing the copy of specified portion the observable array
      */
     fun toTypedArray(startIndex: Int, endIndex: Int): Array<T>
-
-    /**
-     * Creates an [Iterator] for iterating over the elements of the array. If the `ObservableArray` linked to the
-     * iterator gets modified, it won't affect the `Iterator`.
-     */
-    operator fun iterator(): Iterator<T>
 
 }

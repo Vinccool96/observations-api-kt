@@ -146,19 +146,19 @@ abstract class ArrayBinding<T>(baseArrayOfNull: Array<T>) : ArrayExpression<T>(b
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
 
-    override fun addListener(listener: ArrayChangeListener<T>) {
+    override fun addListener(listener: ArrayChangeListener<in T>) {
         if (!isArrayChangeListenerAlreadyAdded(listener)) {
             this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ArrayChangeListener<T>) {
+    override fun removeListener(listener: ArrayChangeListener<in T>) {
         if (isArrayChangeListenerAlreadyAdded(listener)) {
             this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<T>): Boolean {
+    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.arrayChangeListeners.contains(listener)
     }

@@ -11,6 +11,8 @@ import io.github.vinccool96.observationskt.sun.binding.ListExpressionHelper
  * Base class for all readonly properties wrapping a [ObservableList]. This class provides a default implementation to
  * attach listeners.
  *
+ * @param E the type of the `List` elements
+ *
  * @see ReadOnlyListProperty
  */
 abstract class ReadOnlyListPropertyBase<E> : ReadOnlyListProperty<E>() {

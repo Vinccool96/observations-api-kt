@@ -74,6 +74,8 @@ interface ObservableBooleanArray : ObservableArray<Boolean> {
      */
     fun set(src: BooleanArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
+    fun containsAll(vararg elements: Boolean): Boolean
+
     /**
      * Returns an array containing copy of the observable array.
      *

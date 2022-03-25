@@ -554,9 +554,7 @@ abstract class ArrayExpressionHelper<T> protected constructor(protected val obse
         }
 
         fun <T> fireValueChangedEvent(helper: ArrayExpressionHelper<T>?, change: Change<out T>) {
-            if (change.from < change.to || change.sizeChanged) {
-                helper?.fireValueChangedEvent(change)
-            }
+            helper?.fireValueChangedEvent(change)
         }
 
     }

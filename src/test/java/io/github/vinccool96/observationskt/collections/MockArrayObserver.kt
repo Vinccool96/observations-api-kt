@@ -46,14 +46,9 @@ class MockArrayObserver<T> : ArrayChangeListener<T> {
                 this.calls.add(Call(change))
 
                 // Check generic change assertions
-                assertFalse(change.from < 0, "Negative from index")
-                assertFalse(change.to < 0, "Negative to index")
-                assertFalse(change.from > change.to, "from index is greater then to index")
-                assertFalse(change.from == change.to && !change.sizeChanged, "No change in both elements and size")
-                assertFalse(change.from < change.to && change.from >= change.array.size,
-                        "from index is greater than array size")
-                assertFalse(change.from < change.to && change.to > change.array.size,
-                        "to index is greater than array size")
+                assertFalse(change.wasPermutated && change.wasUpdated)
+                assertFalse((change.wasAdded || change.wasRemoved) && change.wasUpdated)
+                assertFalse((change.wasAdded || change.wasRemoved) && change.wasPermutated)
             }
         } else {
             this.tooManyCalls = true

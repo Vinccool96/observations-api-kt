@@ -129,7 +129,7 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
      * @return the new `BooleanBinding`
      */
     fun isNotNull(): BooleanBinding {
-        return Bindings.isNull(this)
+        return Bindings.isNotNull(this)
     }
 
     /**
@@ -147,6 +147,10 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
 
     override fun clear() {
         (this.get() ?: EMPTY_ARRAY).clear()
+    }
+
+    override fun isEmpty(): Boolean {
+        return (this.get() ?: EMPTY_ARRAY).isEmpty()
     }
 
     override operator fun get(index: Int): T {
@@ -195,6 +199,22 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
 
     override fun set(src: ObservableArray<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
         (this.get() ?: EMPTY_ARRAY).set(src, destinationOffset, startIndex, endIndex)
+    }
+
+    override fun contains(element: T): Boolean {
+        return (this.get() ?: EMPTY_ARRAY).contains(element)
+    }
+
+    override fun containsAll(elements: ObservableArray<T>): Boolean {
+        return (this.get() ?: EMPTY_ARRAY).containsAll(elements)
+    }
+
+    override fun containsAll(elements: Collection<T>): Boolean {
+        return (this.get() ?: EMPTY_ARRAY).containsAll(elements)
+    }
+
+    override fun containsAll(vararg elements: T): Boolean {
+        return (this.get() ?: EMPTY_ARRAY).containsAll(*elements)
     }
 
     override fun trimToSize() {

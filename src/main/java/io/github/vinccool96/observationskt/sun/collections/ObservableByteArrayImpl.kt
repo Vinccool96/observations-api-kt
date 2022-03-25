@@ -117,6 +117,10 @@ class ObservableByteArrayImpl() : ObservableArrayBase<Byte>(), ObservableByteArr
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Byte): Boolean {
+        return elements.all { element: Byte -> element in this@ObservableByteArrayImpl }
+    }
+
     override operator fun get(index: Int): Byte {
         rangeCheck(index + 1)
         return this.array[index]

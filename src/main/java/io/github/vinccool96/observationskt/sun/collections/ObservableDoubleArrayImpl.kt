@@ -117,6 +117,10 @@ class ObservableDoubleArrayImpl() : ObservableArrayBase<Double>(), ObservableDou
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Double): Boolean {
+        return elements.all { element: Double -> element in this@ObservableDoubleArrayImpl }
+    }
+
     override operator fun get(index: Int): Double {
         rangeCheck(index + 1)
         return this.array[index]

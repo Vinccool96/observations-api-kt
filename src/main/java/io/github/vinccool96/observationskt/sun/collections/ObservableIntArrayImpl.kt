@@ -117,6 +117,10 @@ class ObservableIntArrayImpl() : ObservableArrayBase<Int>(), ObservableIntArray 
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Int): Boolean {
+        return elements.all { element: Int -> element in this@ObservableIntArrayImpl }
+    }
+
     override operator fun get(index: Int): Int {
         rangeCheck(index + 1)
         return this.array[index]

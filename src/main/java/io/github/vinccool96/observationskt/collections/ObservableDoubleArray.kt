@@ -74,6 +74,8 @@ interface ObservableDoubleArray : ObservableArray<Double> {
      */
     fun set(src: DoubleArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
+    fun containsAll(vararg elements: Double): Boolean
+
     /**
      * Returns an array containing copy of the observable array.
      *

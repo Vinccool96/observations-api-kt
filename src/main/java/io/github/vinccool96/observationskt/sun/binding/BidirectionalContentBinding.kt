@@ -46,6 +46,7 @@ object BidirectionalContentBinding {
     fun <T> bind(array1: ObservableArray<T>, array2: ObservableArray<T>): Any {
         checkParameters(array1, array2)
         val binding = ArrayContentBinding(array1, array2)
+        array1.baseArray[0] = array2.baseArray[0]
         array1.clear()
         array1.addAll(array2)
         array1.addListener(binding)

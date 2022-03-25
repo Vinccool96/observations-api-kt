@@ -478,6 +478,43 @@ object Bindings {
         }
     }
 
+    /**
+     * Helper function to create a custom [ArrayBinding].
+     *
+     * @param func The function that calculates the value of this binding
+     * @param baseArrayOfNull the base array when the value is `null`
+     * @param dependencies The dependencies of this binding
+     *
+     * @return The generated binding
+     */
+    fun <T> createArrayBinding(func: Callable<ObservableArray<T>?>, baseArrayOfNull: Array<T>,
+            vararg dependencies: Observable): ArrayBinding<T> {
+        return object : ArrayBinding<T>(baseArrayOfNull) {
+
+            init {
+                super.bind(*dependencies)
+            }
+
+            override fun dispose() {
+                super.unbind(*dependencies)
+            }
+
+            override fun computeValue(): ObservableArray<T>? {
+                return try {
+                    func.call()
+                } catch (e: Exception) {
+                    Logging.getLogger().warning("Exception while evaluating binding", e)
+                    null
+                }
+            }
+
+            override val dependencies: ObservableList<*>
+                get() = if (dependencies.size == 1) ObservableCollections.singletonObservableList(dependencies[0])
+                else ImmutableObservableList(*dependencies)
+
+        }
+    }
+
     // Bidirectional Bindings
     // =================================================================================================================
 
@@ -663,6 +700,33 @@ object Bindings {
      */
     fun <K, V> bindContentBidirectional(map1: ObservableMap<K, V>, map2: ObservableMap<K, V>) {
         BidirectionalContentBinding.bind(map1, map2)
+    }
+
+    /**
+     * Generates a bidirectional binding (or "bind with inverse") between two instances of [ObservableArray].
+     *
+     * A bidirectional binding is a binding that works in both directions. If two properties `a` and `b` are linked with
+     * a bidirectional binding and the value of `a` changes, `b` is set to the same value automatically. And vice versa,
+     * if `b` changes, `a` is set to the same value.
+     *
+     * Only the content of the two arrays and the value contained in `baseArray[0]` is synchronized, which means that
+     * both arrays are different, but they contain the same elements.
+     *
+     * A bidirectional content-binding can be removed with [unbindContentBidirectional].
+     *
+     * Note: this implementation of a bidirectional binding behaves differently from all other bindings here in two
+     * important aspects. A property that is linked to another property with a bidirectional binding can still be set
+     * (usually bindings would throw an exception). Secondly bidirectional bindings are calculated eagerly, i.e. a bound
+     * property is updated immediately.
+     *
+     * @param T the type of the array elements
+     * @param array1 the first `ObservableArray<E>`
+     * @param array2 the second `ObservableArray<E>`
+     *
+     * @throws IllegalArgumentException if `array1 === list2`
+     */
+    fun <T> bindContentBidirectional(array1: ObservableArray<T>, array2: ObservableArray<T>) {
+        BidirectionalContentBinding.bind(array1, array2)
     }
 
     /**
@@ -6774,7 +6838,7 @@ object Bindings {
 
             override fun computeValue(): Double {
                 try {
-                    return op[index] ?: throw NullPointerException()
+                    return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -6825,7 +6889,7 @@ object Bindings {
 
             override fun computeValue(): Double {
                 try {
-                    return op[index.intValue] ?: throw NullPointerException()
+                    return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -6869,7 +6933,7 @@ object Bindings {
 
             override fun computeValue(): Float {
                 try {
-                    return op[index] ?: throw NullPointerException()
+                    return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -6920,7 +6984,7 @@ object Bindings {
 
             override fun computeValue(): Float {
                 try {
-                    return op[index.intValue] ?: throw NullPointerException()
+                    return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -6964,7 +7028,7 @@ object Bindings {
 
             override fun computeValue(): Int {
                 try {
-                    return op[index] ?: throw NullPointerException()
+                    return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7015,7 +7079,7 @@ object Bindings {
 
             override fun computeValue(): Int {
                 try {
-                    return op[index.intValue] ?: throw NullPointerException()
+                    return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7059,7 +7123,7 @@ object Bindings {
 
             override fun computeValue(): Long {
                 try {
-                    return op[index] ?: throw NullPointerException()
+                    return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7110,7 +7174,7 @@ object Bindings {
 
             override fun computeValue(): Long {
                 try {
-                    return op[index.intValue] ?: throw NullPointerException()
+                    return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7154,7 +7218,7 @@ object Bindings {
 
             override fun computeValue(): Short {
                 try {
-                    return op[index] ?: throw NullPointerException()
+                    return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7205,7 +7269,7 @@ object Bindings {
 
             override fun computeValue(): Short {
                 try {
-                    return op[index.intValue] ?: throw NullPointerException()
+                    return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7249,7 +7313,7 @@ object Bindings {
 
             override fun computeValue(): Byte {
                 try {
-                    return op[index] ?: throw NullPointerException()
+                    return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {
@@ -7300,7 +7364,7 @@ object Bindings {
 
             override fun computeValue(): Byte {
                 try {
-                    return op[index.intValue] ?: throw NullPointerException()
+                    return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 } catch (ex: NullPointerException) {

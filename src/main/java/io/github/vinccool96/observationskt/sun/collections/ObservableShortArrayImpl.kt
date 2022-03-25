@@ -117,6 +117,10 @@ class ObservableShortArrayImpl() : ObservableArrayBase<Short>(), ObservableShort
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Short): Boolean {
+        return elements.all { element: Short -> element in this@ObservableShortArrayImpl }
+    }
+
     override operator fun get(index: Int): Short {
         rangeCheck(index + 1)
         return this.array[index]

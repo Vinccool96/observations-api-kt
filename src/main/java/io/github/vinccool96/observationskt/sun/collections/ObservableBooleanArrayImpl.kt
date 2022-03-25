@@ -117,6 +117,10 @@ class ObservableBooleanArrayImpl() : ObservableArrayBase<Boolean>(), ObservableB
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Boolean): Boolean {
+        return elements.all { element: Boolean -> element in this@ObservableBooleanArrayImpl }
+    }
+
     override operator fun get(index: Int): Boolean {
         rangeCheck(index + 1)
         return this.array[index]

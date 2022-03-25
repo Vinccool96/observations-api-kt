@@ -117,6 +117,10 @@ class ObservableFloatArrayImpl() : ObservableArrayBase<Float>(), ObservableFloat
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Float): Boolean {
+        return elements.all { element: Float -> element in this@ObservableFloatArrayImpl }
+    }
+
     override operator fun get(index: Int): Float {
         rangeCheck(index + 1)
         return this.array[index]

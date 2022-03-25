@@ -74,6 +74,8 @@ interface ObservableLongArray : ObservableArray<Long> {
      */
     fun set(src: LongArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
+    fun containsAll(vararg elements: Long): Boolean
+
     /**
      * Returns an array containing copy of the observable array.
      *

@@ -4,41 +4,42 @@ import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
-import io.github.vinccool96.observationskt.collections.ListChangeListener
-import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
-import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.sun.binding.ListExpressionHelper
+import io.github.vinccool96.observationskt.collections.ArrayChangeListener
+import io.github.vinccool96.observationskt.collections.ArrayChangeListener.Change
+import io.github.vinccool96.observationskt.collections.ObservableArray
+import io.github.vinccool96.observationskt.sun.binding.ArrayExpressionHelper
 import java.lang.ref.WeakReference
 
 /**
- * The class `ListPropertyBase` is the base class for a property wrapping an [ObservableList].
+ * The class `ArrayPropertyBase` is the base class for a property wrapping an [ObservableArray].
  *
  * It provides all the functionality required for a property except for the [bean] and [name] values, which must be
  * implemented by extending classes.
  *
- * @param E the type of the `List` elements
+ * @param T the type of the `Array` elements
  *
- * @see ObservableList
- * @see ListProperty
+ * @see ObservableArray
+ * @see ArrayProperty
  *
- * @constructor The constructor of the `ListPropertyBase`.
+ * @constructor The constructor of the `ArrayPropertyBase`.
  *
  * @param initialValue the initial value of the wrapped value
+ * @param baseArrayOfNull the base array when the value is `null`
  */
-@Suppress("RedundantNullableReturnType")
-abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListProperty<E>() {
+abstract class ArrayPropertyBase<T>(initialValue: ObservableArray<T>?, baseArrayOfNull: Array<T>) :
+        ArrayProperty<T>(baseArrayOfNull) {
 
-    private var valueState: ObservableList<E>? = initialValue
+    private var valueState: ObservableArray<T>? = initialValue
 
     private var valid: Boolean = true
 
-    private var observable: ObservableValue<out ObservableList<E>?>? = null
+    private var observable: ObservableValue<out ObservableArray<T>?>? = null
 
     private var listener: InvalidationListener? = null
 
-    private var helper: ListExpressionHelper<E>? = null
+    private var helper: ArrayExpressionHelper<T>? = null
 
-    private val listChangeListener: ListChangeListener<E> = ListChangeListener { change ->
+    private val arrayChangeListener: ArrayChangeListener<T> = ArrayChangeListener { change ->
         invalidateProperties()
         invalidated()
         fireValueChangedEvent(change)
@@ -49,13 +50,13 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     private lateinit var empty0: EmptyProperty
 
     init {
-        this.valueState?.addListener(this.listChangeListener)
+        this.valueState?.addListener(this.arrayChangeListener)
     }
 
     /**
      * The constructor of `ListPropertyBase`
      */
-    constructor() : this(null)
+    constructor(baseArrayOfNull: Array<T>) : this(null, baseArrayOfNull)
 
     override val sizeProperty: ReadOnlyIntProperty
         get() {
@@ -68,12 +69,12 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     private inner class SizeProperty : ReadOnlyIntPropertyBase() {
 
         override fun get(): Int {
-            return this@ListPropertyBase.size
+            return this@ArrayPropertyBase.size
         }
 
-        override val bean: Any? = this@ListPropertyBase
+        override val bean: Any = this@ArrayPropertyBase
 
-        override val name: String? = "size"
+        override val name: String = "size"
 
         public override fun fireValueChangedEvent() {
             super.fireValueChangedEvent()
@@ -92,12 +93,12 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     private inner class EmptyProperty : ReadOnlyBooleanPropertyBase() {
 
         override fun get(): Boolean {
-            return this@ListPropertyBase.isEmpty()
+            return this@ArrayPropertyBase.isEmpty()
         }
 
-        override val bean: Any? = this@ListPropertyBase
+        override val bean: Any = this@ArrayPropertyBase
 
-        override val name: String? = "empty"
+        override val name: String = "empty"
 
         public override fun fireValueChangedEvent() {
             super.fireValueChangedEvent()
@@ -107,13 +108,13 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
 
     override fun addListener(listener: InvalidationListener) {
         if (!isInvalidationListenerAlreadyAdded(listener)) {
-            this.helper = ListExpressionHelper.addListener(this.helper, this, listener)
+            this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
         if (isInvalidationListenerAlreadyAdded(listener)) {
-            this.helper = ListExpressionHelper.removeListener(this.helper, listener)
+            this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
@@ -122,61 +123,64 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ChangeListener<in ObservableList<E>?>) {
+    override fun addListener(listener: ChangeListener<in ObservableArray<T>?>) {
         if (!isChangeListenerAlreadyAdded(listener)) {
-            this.helper = ListExpressionHelper.addListener(this.helper, this, listener)
+            this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ChangeListener<in ObservableList<E>?>) {
+    override fun removeListener(listener: ChangeListener<in ObservableArray<T>?>) {
         if (isChangeListenerAlreadyAdded(listener)) {
-            this.helper = ListExpressionHelper.removeListener(this.helper, listener)
+            this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableList<E>?>): Boolean {
+    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableArray<T>?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
 
-    override fun addListener(listener: ListChangeListener<in E>) {
-        if (!isListChangeListenerAlreadyAdded(listener)) {
-            this.helper = ListExpressionHelper.addListener(this.helper, this, listener)
+    override fun addListener(listener: ArrayChangeListener<in T>) {
+        if (!isArrayChangeListenerAlreadyAdded(listener)) {
+            this.helper = ArrayExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
-    override fun removeListener(listener: ListChangeListener<in E>) {
-        if (isListChangeListenerAlreadyAdded(listener)) {
-            this.helper = ListExpressionHelper.removeListener(this.helper, listener)
+    override fun removeListener(listener: ArrayChangeListener<in T>) {
+        if (isArrayChangeListenerAlreadyAdded(listener)) {
+            this.helper = ArrayExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean {
         val curHelper = this.helper
-        return curHelper != null && curHelper.listChangeListeners.contains(listener)
+        return curHelper != null && curHelper.arrayChangeListeners.contains(listener)
     }
 
     /**
-     * Sends notifications to all attached [InvalidationListeners][InvalidationListener],
-     * [ChangeListeners][ChangeListener], and [ListChangeListeners][ListChangeListener].
+     * This method needs to be called if the reference to the [ObservableArray] changes.
      *
-     * This method is called when the value is changed, either manually by calling [set] or in case of a bound property,
-     * if the binding becomes invalid.
+     * It sends notifications to all attached [InvalidationListeners][InvalidationListener],
+     * [ChangeListeners][ChangeListener], and [ArrayChangeListeners][ArrayChangeListener].
+     *
+     * This method needs to be called, if the value of this property changes.
      */
     protected open fun fireValueChangedEvent() {
-        ListExpressionHelper.fireValueChangedEvent(this.helper)
+        ArrayExpressionHelper.fireValueChangedEvent(this.helper)
     }
 
     /**
-     * Sends notifications to all attached [InvalidationListeners][InvalidationListener],
-     * [ChangeListeners][ChangeListener], and [ListChangeListeners][ListChangeListener].
+     * This method needs to be called if the content of the referenced [ObservableArray] changes.
      *
-     * This method is called when the content of the list changes.
+     * It sends notifications to all attached [InvalidationListeners][InvalidationListener],
+     * [ChangeListeners][ChangeListener], and [ArrayChangeListeners][ArrayChangeListener].
+     *
+     * This method is called when the content of the array changes.
      *
      * @param change the change that needs to be propagated
      */
-    protected open fun fireValueChangedEvent(change: Change<out E>) {
-        ListExpressionHelper.fireValueChangedEvent(this.helper, change)
+    protected open fun fireValueChangedEvent(change: Change<out T>) {
+        ArrayExpressionHelper.fireValueChangedEvent(this.helper, change)
     }
 
     private fun invalidateProperties() {
@@ -188,9 +192,9 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
         }
     }
 
-    private fun markInvalid(oldValue: ObservableList<E>?) {
+    private fun markInvalid(oldValue: ObservableArray<T>?) {
         if (this.valid) {
-            oldValue?.removeListener(this.listChangeListener)
+            oldValue?.removeListener(this.arrayChangeListener)
             this.valid = false
             invalidateProperties()
             invalidated()
@@ -207,16 +211,16 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     protected open fun invalidated() {
     }
 
-    override fun get(): ObservableList<E>? {
+    override fun get(): ObservableArray<T>? {
         if (!this.valid) {
             this.valueState = if (this.observable == null) this.valueState else this.observable!!.value
             this.valid = true
-            this.valueState?.addListener(this.listChangeListener)
+            this.valueState?.addListener(this.arrayChangeListener)
         }
         return this.valueState
     }
 
-    override fun set(value: ObservableList<E>?) {
+    override fun set(value: ObservableArray<T>?) {
         if (this.bound) {
             val curBean = this.bean
             throw RuntimeException((if (curBean != null) "${curBean.javaClass.simpleName}.$name : " else "") +
@@ -232,7 +236,7 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     override val bound: Boolean
         get() = this.observable != null
 
-    override fun bind(observable: ObservableValue<out ObservableList<E>?>) {
+    override fun bind(observable: ObservableValue<out ObservableArray<T>?>) {
         if (observable != this.observable) {
             unbind()
             this.observable = observable
@@ -253,14 +257,14 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
     }
 
     /**
-     * Returns a string representation of this `ListPropertyBase` object.
+     * Returns a string representation of this `ArrayPropertyBase` object.
      *
-     * @return a string representation of this `ListPropertyBase` object.
+     * @return a string representation of this `ArrayPropertyBase` object.
      */
     override fun toString(): String {
         val bean = this.bean
         val name = this.name
-        val result = StringBuilder("ListProperty [")
+        val result = StringBuilder("ArrayProperty [")
         if (bean != null) {
             result.append("bean: ").append(bean).append(", ")
         }
@@ -281,9 +285,9 @@ abstract class ListPropertyBase<E>(initialValue: ObservableList<E>?) : ListPrope
         return result.toString()
     }
 
-    private class Listener<E>(ref: ListPropertyBase<E>) : InvalidationListener {
+    private class Listener<T>(ref: ArrayPropertyBase<T>) : InvalidationListener {
 
-        private val wref: WeakReference<ListPropertyBase<E>> = WeakReference(ref)
+        private val wref: WeakReference<ArrayPropertyBase<T>> = WeakReference(ref)
 
         override fun invalidated(observable: Observable) {
             val ref = this.wref.get()

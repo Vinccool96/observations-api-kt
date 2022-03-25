@@ -175,19 +175,19 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
-    override fun addListener(listener: ArrayChangeListener<T>) {
+    override fun addListener(listener: ArrayChangeListener<in T>) {
         if (!isArrayChangeListenerAlreadyAdded(listener)) {
             this.helper = ArrayListenerHelper.addListener(this.helper, this as ObservableArray<T>, listener)
         }
     }
 
-    override fun removeListener(listener: ArrayChangeListener<T>) {
+    override fun removeListener(listener: ArrayChangeListener<in T>) {
         if (isArrayChangeListenerAlreadyAdded(listener)) {
             this.helper = ArrayListenerHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<T>): Boolean {
+    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.arrayChangeListeners.contains(listener)
     }
@@ -240,6 +240,10 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
         resize(0)
     }
 
+    override fun isEmpty(): Boolean {
+        return this.size == 0
+    }
+
     override operator fun set(index: Int, value: T) {
         try {
             beginChange()
@@ -249,6 +253,22 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
         } finally {
             endChange()
         }
+    }
+
+    override operator fun contains(element: T): Boolean {
+        return element in this.toTypedArray()
+    }
+
+    override fun containsAll(elements: ObservableArray<T>): Boolean {
+        return elements.all { element: T -> element in this@ObservableArrayBase }
+    }
+
+    override fun containsAll(elements: Collection<T>): Boolean {
+        return elements.all { element: T -> element in this@ObservableArrayBase }
+    }
+
+    override fun containsAll(vararg elements: T): Boolean {
+        return elements.all { element: T -> element in this@ObservableArrayBase }
     }
 
     override fun addAll(vararg elements: T) {
@@ -443,6 +463,28 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
         if (endIndex < startIndex) {
             throw ArrayIndexOutOfBoundsException(endIndex)
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (super.equals(other)) {
+            return true
+        }
+        if (other == null) {
+            return false
+        }
+        if (other !is ObservableArray<*>) {
+            return false
+        }
+        val ob = other as ObservableArray<T>
+        return this.containsAll(ob) && ob.containsAll(this)
+    }
+
+    override fun hashCode(): Int {
+        var hash = 0
+        for (e in this) {
+            hash = 31 * hash + (e?.hashCode() ?: 0)
+        }
+        return hash
     }
 
 }

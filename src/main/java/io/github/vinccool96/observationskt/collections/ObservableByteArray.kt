@@ -74,6 +74,8 @@ interface ObservableByteArray : ObservableArray<Byte> {
      */
     fun set(src: ByteArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
+    fun containsAll(vararg elements: Byte): Boolean
+
     /**
      * Returns an array containing copy of the observable array.
      *

@@ -117,6 +117,10 @@ class ObservableLongArrayImpl() : ObservableArrayBase<Long>(), ObservableLongArr
         set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
+    override fun containsAll(vararg elements: Long): Boolean {
+        return elements.all { element: Long -> element in this@ObservableLongArrayImpl }
+    }
+
     override operator fun get(index: Int): Long {
         rangeCheck(index + 1)
         return this.array[index]

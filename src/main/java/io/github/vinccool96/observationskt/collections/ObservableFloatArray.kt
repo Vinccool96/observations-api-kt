@@ -74,6 +74,8 @@ interface ObservableFloatArray : ObservableArray<Float> {
      */
     fun set(src: FloatArray, destinationOffset: Int, startIndex: Int, endIndex: Int)
 
+    fun containsAll(vararg elements: Float): Boolean
+
     /**
      * Returns an array containing copy of the observable array.
      *

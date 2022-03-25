@@ -2,10 +2,7 @@ package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.property.*
-import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.collections.ObservableMap
-import io.github.vinccool96.observationskt.collections.ObservableSet
+import io.github.vinccool96.observationskt.collections.*
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -274,6 +271,22 @@ class BindingsCreateBindingTest<T>(private val p0: Property<T>, private val p1: 
 
                             }, ObservableCollections.observableSet("Hello World"),
                             ObservableCollections.observableSet("Goodbye World"), null
+                    ),
+                    arrayOf(
+                            SimpleArrayProperty<String>(arrayOf()), SimpleArrayProperty<String>(arrayOf()),
+                            object : Functions<ObservableArray<String>?> {
+
+                                override fun create(func: Callable<ObservableArray<String>?>,
+                                        vararg dependencies: Observable): Binding<ObservableArray<String>?> {
+                                    return Bindings.createArrayBinding(func, arrayOf(), *dependencies)
+                                }
+
+                                override fun check(value0: ObservableArray<String>?, value1: Any?) {
+                                    assertEquals(value0, value1)
+                                }
+
+                            }, ObservableCollections.observableObjectArray(arrayOf("foo"), "Hello World"),
+                            ObservableCollections.observableObjectArray(arrayOf("bar"), "Goodbye World"), null
                     )
             )
         }
