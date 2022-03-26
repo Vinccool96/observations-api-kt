@@ -2,11 +2,7 @@ package io.github.vinccool96.observationskt.beans.property
 
 import io.github.vinccool96.observationskt.beans.InvalidationListener
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertSame
+import kotlin.test.*
 
 class ReadOnlyBooleanPropertyTest {
 
@@ -75,7 +71,7 @@ class ReadOnlyBooleanPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -85,7 +81,7 @@ class ReadOnlyBooleanPropertyTest {
         override fun removeListener(listener: ChangeListener<in Boolean?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Boolean?>): Boolean {
             return false
         }
 

@@ -6,13 +6,9 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import kotlin.test.Test
 import kotlin.math.E
 import kotlin.math.PI
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertSame
-import kotlin.test.fail
+import kotlin.test.*
 
 class FloatPropertyTest {
 
@@ -137,7 +133,7 @@ class FloatPropertyTest {
             fail("Not in use")
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             fail("Not in use")
         }
 
@@ -149,7 +145,7 @@ class FloatPropertyTest {
             fail("Not in use")
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Number?>): Boolean {
             fail("Not in use")
         }
 

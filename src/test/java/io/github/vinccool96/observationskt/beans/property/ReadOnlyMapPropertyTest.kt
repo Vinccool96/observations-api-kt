@@ -126,7 +126,7 @@ class ReadOnlyMapPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -136,7 +136,7 @@ class ReadOnlyMapPropertyTest {
         override fun removeListener(listener: ChangeListener<in ObservableMap<Any, Any>?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableMap<Any, Any>?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in ObservableMap<Any, Any>?>): Boolean {
             return false
         }
 
@@ -146,7 +146,7 @@ class ReadOnlyMapPropertyTest {
         override fun removeListener(listener: MapChangeListener<in Any, in Any>) {
         }
 
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in Any, in Any>): Boolean {
+        override fun hasListener(listener: MapChangeListener<in Any, in Any>): Boolean {
             return false
         }
 

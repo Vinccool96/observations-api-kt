@@ -30,52 +30,52 @@ class ObservableListValueStub<E>(value: ObservableList<E>?) : ObservableListValu
         get() = this.valueState
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ListExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ListExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ChangeListener<in ObservableList<E>?>) {
-        if (!isChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ListExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: ChangeListener<in ObservableList<E>?>) {
-        if (isChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ListExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableList<E>?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in ObservableList<E>?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
 
     override fun addListener(listener: ListChangeListener<in E>) {
-        if (!isListChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ListExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: ListChangeListener<in E>) {
-        if (isListChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ListExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+    override fun hasListener(listener: ListChangeListener<in E>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.listChangeListeners.contains(listener)
     }

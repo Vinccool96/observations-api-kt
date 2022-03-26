@@ -91,7 +91,7 @@ class StringPropertyTest {
             fail("Not in use")
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             fail("Not in use")
         }
 
@@ -103,7 +103,7 @@ class StringPropertyTest {
             fail("Not in use")
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in String?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in String?>): Boolean {
             fail("Not in use")
         }
 

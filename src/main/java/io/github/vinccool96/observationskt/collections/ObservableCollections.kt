@@ -946,7 +946,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -956,7 +956,7 @@ object ObservableCollections {
         override fun removeListener(listener: ListChangeListener<in E>) {
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in E>): Boolean {
             return false
         }
 
@@ -1051,7 +1051,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -1061,7 +1061,7 @@ object ObservableCollections {
         override fun removeListener(listener: ListChangeListener<in E>) {
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in E>): Boolean {
             return false
         }
 
@@ -1343,7 +1343,7 @@ object ObservableCollections {
 
         override fun addListener(listener: InvalidationListener) {
             synchronized(this.mutex) {
-                if (!isInvalidationListenerAlreadyAdded(listener)) {
+                if (!hasListener(listener)) {
                     this.helper = ListListenerHelper.addListener(this.helper, listener)
                 }
             }
@@ -1351,20 +1351,20 @@ object ObservableCollections {
 
         override fun removeListener(listener: InvalidationListener) {
             synchronized(this.mutex) {
-                if (isInvalidationListenerAlreadyAdded(listener)) {
+                if (hasListener(listener)) {
                     this.helper = ListListenerHelper.removeListener(this.helper, listener)
                 }
             }
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             val curHelper = this.helper
             return curHelper != null && curHelper.invalidationListeners.contains(listener)
         }
 
         override fun addListener(listener: ListChangeListener<in T>) {
             synchronized(this.mutex) {
-                if (!isListChangeListenerAlreadyAdded(listener)) {
+                if (!hasListener(listener)) {
                     this.helper = ListListenerHelper.addListener(this.helper, listener)
                 }
             }
@@ -1372,13 +1372,13 @@ object ObservableCollections {
 
         override fun removeListener(listener: ListChangeListener<in T>) {
             synchronized(this.mutex) {
-                if (isListChangeListenerAlreadyAdded(listener)) {
+                if (hasListener(listener)) {
                     this.helper = ListListenerHelper.removeListener(this.helper, listener)
                 }
             }
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in T>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in T>): Boolean {
             val curHelper = this.helper
             return curHelper != null && curHelper.listChangeListeners.contains(listener)
         }
@@ -1625,7 +1625,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -1635,7 +1635,7 @@ object ObservableCollections {
         override fun removeListener(listener: SetChangeListener<in E>) {
         }
 
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+        override fun hasListener(listener: SetChangeListener<in E>): Boolean {
             return false
         }
 
@@ -1705,7 +1705,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -1715,7 +1715,7 @@ object ObservableCollections {
         override fun removeListener(listener: SetChangeListener<in E>) {
         }
 
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+        override fun hasListener(listener: SetChangeListener<in E>): Boolean {
             return false
         }
 
@@ -1790,37 +1790,37 @@ object ObservableCollections {
             get() = this.backingSet.size
 
         override fun addListener(listener: InvalidationListener) {
-            if (!isInvalidationListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 initListener()
                 this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
             }
         }
 
         override fun removeListener(listener: InvalidationListener) {
-            if (isInvalidationListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
             }
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.invalidationListeners.contains(listener)
         }
 
         override fun addListener(listener: SetChangeListener<in E>) {
-            if (!isSetChangeListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 initListener()
                 this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
             }
         }
 
         override fun removeListener(listener: SetChangeListener<in E>) {
-            if (isSetChangeListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
             }
         }
 
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+        override fun hasListener(listener: SetChangeListener<in E>): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.setChangeListeners.contains(listener)
         }
@@ -1962,7 +1962,7 @@ object ObservableCollections {
 
         override fun addListener(listener: InvalidationListener) {
             synchronized(this.mutex) {
-                if (!isInvalidationListenerAlreadyAdded(listener)) {
+                if (!hasListener(listener)) {
                     this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
                 }
             }
@@ -1970,20 +1970,20 @@ object ObservableCollections {
 
         override fun removeListener(listener: InvalidationListener) {
             synchronized(this.mutex) {
-                if (isInvalidationListenerAlreadyAdded(listener)) {
+                if (hasListener(listener)) {
                     this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
                 }
             }
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.invalidationListeners.contains(listener)
         }
 
         override fun addListener(listener: SetChangeListener<in E>) {
             synchronized(this.mutex) {
-                if (!isSetChangeListenerAlreadyAdded(listener)) {
+                if (!hasListener(listener)) {
                     this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
                 }
             }
@@ -1991,13 +1991,13 @@ object ObservableCollections {
 
         override fun removeListener(listener: SetChangeListener<in E>) {
             synchronized(this.mutex) {
-                if (isSetChangeListenerAlreadyAdded(listener)) {
+                if (hasListener(listener)) {
                     this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
                 }
             }
         }
 
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+        override fun hasListener(listener: SetChangeListener<in E>): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.setChangeListeners.contains(listener)
         }
@@ -2074,35 +2074,35 @@ object ObservableCollections {
         }
 
         override fun addListener(listener: InvalidationListener) {
-            if (!isInvalidationListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
             }
         }
 
         override fun removeListener(listener: InvalidationListener) {
-            if (isInvalidationListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
             }
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.invalidationListeners.contains(listener)
         }
 
         override fun addListener(listener: SetChangeListener<in E>) {
-            if (!isSetChangeListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
             }
         }
 
         override fun removeListener(listener: SetChangeListener<in E>) {
-            if (isSetChangeListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
             }
         }
 
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+        override fun hasListener(listener: SetChangeListener<in E>): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.setChangeListeners.contains(listener)
         }
@@ -2232,7 +2232,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -2242,7 +2242,7 @@ object ObservableCollections {
         override fun removeListener(listener: MapChangeListener<in K, in V>) {
         }
 
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+        override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
             return false
         }
 
@@ -2305,7 +2305,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -2315,7 +2315,7 @@ object ObservableCollections {
         override fun removeListener(listener: MapChangeListener<in K, in V>) {
         }
 
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+        override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
             return false
         }
 
@@ -2389,35 +2389,35 @@ object ObservableCollections {
         }
 
         override fun addListener(listener: InvalidationListener) {
-            if (!isInvalidationListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
             }
         }
 
         override fun removeListener(listener: InvalidationListener) {
-            if (isInvalidationListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
             }
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.invalidationListeners.contains(listener)
         }
 
         override fun addListener(listener: MapChangeListener<in K, in V>) {
-            if (!isMapChangeListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
             }
         }
 
         override fun removeListener(listener: MapChangeListener<in K, in V>) {
-            if (isMapChangeListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
             }
         }
 
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+        override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.mapChangeListeners.contains(listener)
         }
@@ -2829,7 +2829,7 @@ object ObservableCollections {
 
         override fun addListener(listener: InvalidationListener) {
             synchronized(this.mutex) {
-                if (!isInvalidationListenerAlreadyAdded(listener)) {
+                if (!hasListener(listener)) {
                     this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
                 }
             }
@@ -2837,20 +2837,20 @@ object ObservableCollections {
 
         override fun removeListener(listener: InvalidationListener) {
             synchronized(this.mutex) {
-                if (isInvalidationListenerAlreadyAdded(listener)) {
+                if (hasListener(listener)) {
                     this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
                 }
             }
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.invalidationListeners.contains(listener)
         }
 
         override fun addListener(listener: MapChangeListener<in K, in V>) {
             synchronized(this.mutex) {
-                if (!isMapChangeListenerAlreadyAdded(listener)) {
+                if (!hasListener(listener)) {
                     this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
                 }
             }
@@ -2858,13 +2858,13 @@ object ObservableCollections {
 
         override fun removeListener(listener: MapChangeListener<in K, in V>) {
             synchronized(this.mutex) {
-                if (isMapChangeListenerAlreadyAdded(listener)) {
+                if (hasListener(listener)) {
                     this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
                 }
             }
         }
 
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+        override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
             val curHelper = this.listenerHelper
             return curHelper != null && curHelper.mapChangeListeners.contains(listener)
         }
@@ -3001,7 +3001,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -3011,7 +3011,7 @@ object ObservableCollections {
         override fun removeListener(listener: ArrayChangeListener<in T>) {
         }
 
-        override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean {
+        override fun hasListener(listener: ArrayChangeListener<in T>): Boolean {
             return false
         }
 

@@ -45,7 +45,7 @@ interface ObservableArray<T> : Observable, Iterable<T> {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean
+    fun hasListener(listener: ArrayChangeListener<in T>): Boolean
 
     /**
      * Sets new length of data in this array. This method grows capacity if necessary but never shrinks it. Resulting

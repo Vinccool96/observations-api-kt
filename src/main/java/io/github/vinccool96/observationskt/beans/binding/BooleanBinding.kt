@@ -36,34 +36,34 @@ abstract class BooleanBinding : BooleanExpression(), Binding<Boolean?> {
     private var helper: ExpressionHelper<Boolean?>? = null
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         return helper != null && this.helper!!.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ChangeListener<in Boolean?>) {
-        if (!isChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: ChangeListener<in Boolean?>) {
-        if (isChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in Boolean?>): Boolean {
         return helper != null && this.helper!!.changeListeners.contains(listener)
     }
 

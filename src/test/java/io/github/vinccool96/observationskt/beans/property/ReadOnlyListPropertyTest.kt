@@ -87,7 +87,7 @@ class ReadOnlyListPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -97,7 +97,7 @@ class ReadOnlyListPropertyTest {
         override fun removeListener(listener: ChangeListener<in ObservableList<Any>?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableList<Any>?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in ObservableList<Any>?>): Boolean {
             return false
         }
 
@@ -107,7 +107,7 @@ class ReadOnlyListPropertyTest {
         override fun removeListener(listener: ListChangeListener<in Any>) {
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in Any>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in Any>): Boolean {
             return false
         }
 

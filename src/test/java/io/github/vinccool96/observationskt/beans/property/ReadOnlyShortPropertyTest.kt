@@ -74,7 +74,7 @@ class ReadOnlyShortPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -84,7 +84,7 @@ class ReadOnlyShortPropertyTest {
         override fun removeListener(listener: ChangeListener<in Number?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Number?>): Boolean {
             return false
         }
 

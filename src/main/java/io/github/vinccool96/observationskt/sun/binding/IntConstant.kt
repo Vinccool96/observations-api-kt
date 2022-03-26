@@ -18,7 +18,7 @@ class IntConstant private constructor(override val value: Int) : ObservableIntVa
         // no-op
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         // no-op
         return false
     }
@@ -31,7 +31,7 @@ class IntConstant private constructor(override val value: Int) : ObservableIntVa
         // no-op
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in Number?>): Boolean {
         // no-op
         return false
     }

@@ -58,35 +58,35 @@ open class ObservableSetWrapper<E>(set: MutableSet<E>) : ObservableSet<E> {
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.listenerHelper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: SetChangeListener<in E>) {
-        if (!isSetChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.listenerHelper = SetListenerHelper.addListener(this.listenerHelper, listener)
         }
     }
 
     override fun removeListener(listener: SetChangeListener<in E>) {
-        if (isSetChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.listenerHelper = SetListenerHelper.removeListener(this.listenerHelper, listener)
         }
     }
 
-    override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+    override fun hasListener(listener: SetChangeListener<in E>): Boolean {
         val curHelper = this.listenerHelper
         return curHelper != null && curHelper.setChangeListeners.contains(listener)
     }

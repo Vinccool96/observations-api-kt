@@ -39,7 +39,7 @@ interface ObservableList<E> : MutableList<E>, Observable {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean
+    fun hasListener(listener: ListChangeListener<in E>): Boolean
 
     // Convenience methods
 

@@ -64,34 +64,34 @@ open class ObservableMapWrapper<K, V>(private val backingMap: MutableMap<K, V>) 
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         return this.listenerHelper != null && this.listenerHelper!!.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: MapChangeListener<in K, in V>) {
-        if (!isMapChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
         }
     }
 
     override fun removeListener(listener: MapChangeListener<in K, in V>) {
-        if (isMapChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
         }
     }
 
-    override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+    override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
         return this.listenerHelper != null && this.listenerHelper!!.mapChangeListeners.contains(listener)
     }
 

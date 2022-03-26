@@ -113,7 +113,7 @@ class ReadOnlySetPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -123,7 +123,7 @@ class ReadOnlySetPropertyTest {
         override fun removeListener(listener: ChangeListener<in ObservableSet<Any>?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableSet<Any>?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in ObservableSet<Any>?>): Boolean {
             return false
         }
 
@@ -133,7 +133,7 @@ class ReadOnlySetPropertyTest {
         override fun removeListener(listener: SetChangeListener<in Any>) {
         }
 
-        override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in Any>): Boolean {
+        override fun hasListener(listener: SetChangeListener<in Any>): Boolean {
             return false
         }
 

@@ -428,20 +428,20 @@ class BindingsBooleanTest {
         }
 
         override fun addListener(listener: InvalidationListener) {
-            if (isInvalidationListenerAlreadyAdded(listener)) {
+            if (hasListener(listener)) {
                 fail("More than one listener set in mock.")
             }
             this.listener = listener
         }
 
         override fun removeListener(listener: InvalidationListener) {
-            if (!isInvalidationListenerAlreadyAdded(listener)) {
+            if (!hasListener(listener)) {
                 fail("Attempt to remove unknown listener")
             }
             this.listener = null
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return this.listener == listener
         }
 
@@ -453,7 +453,7 @@ class BindingsBooleanTest {
             // not used
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Boolean?>): Boolean {
             // not used
             return false
         }

@@ -103,7 +103,7 @@ class ListPropertyTest {
             fail("Not in use")
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             fail("Not in use")
         }
 
@@ -115,7 +115,7 @@ class ListPropertyTest {
             fail("Not in use")
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableList<Any>?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in ObservableList<Any>?>): Boolean {
             fail("Not in use")
         }
 
@@ -127,7 +127,7 @@ class ListPropertyTest {
             fail("Not in use")
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in Any>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in Any>): Boolean {
             fail("Not in use")
         }
 

@@ -87,6 +87,6 @@ interface ObservableValue<T> : Observable {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isChangeListenerAlreadyAdded(listener: ChangeListener<in T>): Boolean
+    fun hasListener(listener: ChangeListener<in T>): Boolean
 
 }

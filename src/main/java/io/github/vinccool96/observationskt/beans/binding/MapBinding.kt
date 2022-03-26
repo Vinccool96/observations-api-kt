@@ -104,52 +104,52 @@ abstract class MapBinding<K, V> : MapExpression<K, V>(), Binding<ObservableMap<K
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = MapExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = MapExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ChangeListener<in ObservableMap<K, V>?>) {
-        if (!isChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = MapExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: ChangeListener<in ObservableMap<K, V>?>) {
-        if (isChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = MapExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableMap<K, V>?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in ObservableMap<K, V>?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
 
     override fun addListener(listener: MapChangeListener<in K, in V>) {
-        if (!isMapChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = MapExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: MapChangeListener<in K, in V>) {
-        if (isMapChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = MapExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+    override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.mapChangeListeners.contains(listener)
     }

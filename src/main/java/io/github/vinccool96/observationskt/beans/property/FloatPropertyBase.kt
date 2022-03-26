@@ -39,35 +39,35 @@ abstract class FloatPropertyBase(initialValue: Float) : FloatProperty() {
     constructor() : this(0.0F)
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ChangeListener<in Number?>) {
-        if (!isChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: ChangeListener<in Number?>) {
-        if (isChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in Number?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }

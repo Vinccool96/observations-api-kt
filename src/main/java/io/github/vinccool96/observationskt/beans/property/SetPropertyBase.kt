@@ -109,52 +109,52 @@ abstract class SetPropertyBase<E>(initialValue: ObservableSet<E>?) : SetProperty
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = SetExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = SetExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ChangeListener<in ObservableSet<E>?>) {
-        if (!isChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = SetExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: ChangeListener<in ObservableSet<E>?>) {
-        if (isChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = SetExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableSet<E>?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in ObservableSet<E>?>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.changeListeners.contains(listener)
     }
 
     override fun addListener(listener: SetChangeListener<in E>) {
-        if (!isSetChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = SetExpressionHelper.addListener(this.helper, this, listener)
         }
     }
 
     override fun removeListener(listener: SetChangeListener<in E>) {
-        if (isSetChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = SetExpressionHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean {
+    override fun hasListener(listener: SetChangeListener<in E>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.setChangeListeners.contains(listener)
     }

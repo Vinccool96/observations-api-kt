@@ -34,7 +34,7 @@ interface ObservableSet<E> : MutableSet<E>, Observable {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isSetChangeListenerAlreadyAdded(listener: SetChangeListener<in E>): Boolean
+    fun hasListener(listener: SetChangeListener<in E>): Boolean
 
     /**
      * Clears the ObservableSet and add all the elements passed as var-args.

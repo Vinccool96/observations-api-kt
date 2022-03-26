@@ -68,7 +68,7 @@ class ReadOnlyArrayPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -78,7 +78,7 @@ class ReadOnlyArrayPropertyTest {
         override fun removeListener(listener: ChangeListener<in ObservableArray<Any>?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableArray<Any>?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in ObservableArray<Any>?>): Boolean {
             return false
         }
 
@@ -88,7 +88,7 @@ class ReadOnlyArrayPropertyTest {
         override fun removeListener(listener: ArrayChangeListener<in Any>) {
         }
 
-        override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in Any>): Boolean {
+        override fun hasListener(listener: ArrayChangeListener<in Any>): Boolean {
             return false
         }
 

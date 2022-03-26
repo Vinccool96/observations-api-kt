@@ -195,35 +195,35 @@ abstract class ObservableListBase<E> : AbstractMutableList<E>(), ObservableList<
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ListListenerHelper.addListener(this.helper, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ListListenerHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ListChangeListener<in E>) {
-        if (!isListChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ListListenerHelper.addListener(this.helper, listener)
         }
     }
 
     override fun removeListener(listener: ListChangeListener<in E>) {
-        if (isListChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ListListenerHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+    override fun hasListener(listener: ListChangeListener<in E>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.listChangeListeners.contains(listener)
     }

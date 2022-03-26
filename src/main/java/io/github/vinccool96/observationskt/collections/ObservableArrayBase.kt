@@ -159,35 +159,35 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ArrayListenerHelper.addListener(this.helper, this as ObservableArray<T>, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ArrayListenerHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: ArrayChangeListener<in T>) {
-        if (!isArrayChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.helper = ArrayListenerHelper.addListener(this.helper, this as ObservableArray<T>, listener)
         }
     }
 
     override fun removeListener(listener: ArrayChangeListener<in T>) {
-        if (isArrayChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.helper = ArrayListenerHelper.removeListener(this.helper, listener)
         }
     }
 
-    override fun isArrayChangeListenerAlreadyAdded(listener: ArrayChangeListener<in T>): Boolean {
+    override fun hasListener(listener: ArrayChangeListener<in T>): Boolean {
         val curHelper = this.helper
         return curHelper != null && curHelper.arrayChangeListeners.contains(listener)
     }

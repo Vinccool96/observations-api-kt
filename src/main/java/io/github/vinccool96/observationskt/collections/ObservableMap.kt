@@ -35,7 +35,7 @@ interface ObservableMap<K, V> : MutableMap<K, V>, Observable {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean
+    fun hasListener(listener: MapChangeListener<in K, in V>): Boolean
 
     /**
      * Clears the ObservableMap and adds all the pairs passed as var-args.

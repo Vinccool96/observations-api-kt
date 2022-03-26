@@ -58,7 +58,7 @@ class WeakChangeListenerTest {
             // not used
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             // not used
             return false
         }
@@ -67,7 +67,7 @@ class WeakChangeListenerTest {
             // not used
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Any?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Any?>): Boolean {
             // not used
             return false
         }

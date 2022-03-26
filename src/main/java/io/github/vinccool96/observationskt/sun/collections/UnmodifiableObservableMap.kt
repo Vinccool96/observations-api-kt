@@ -35,35 +35,35 @@ class UnmodifiableObservableMap<K, V>(map: ObservableMap<K, V>) : AbstractMutabl
     }
 
     override fun addListener(listener: InvalidationListener) {
-        if (!isInvalidationListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
         }
     }
 
     override fun removeListener(listener: InvalidationListener) {
-        if (isInvalidationListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
         }
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         val curHelper = this.listenerHelper
         return curHelper != null && curHelper.invalidationListeners.contains(listener)
     }
 
     override fun addListener(listener: MapChangeListener<in K, in V>) {
-        if (!isMapChangeListenerAlreadyAdded(listener)) {
+        if (!hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.addListener(this.listenerHelper, listener)
         }
     }
 
     override fun removeListener(listener: MapChangeListener<in K, in V>) {
-        if (isMapChangeListenerAlreadyAdded(listener)) {
+        if (hasListener(listener)) {
             this.listenerHelper = MapListenerHelper.removeListener(this.listenerHelper, listener)
         }
     }
 
-    override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in K, in V>): Boolean {
+    override fun hasListener(listener: MapChangeListener<in K, in V>): Boolean {
         val curHelper = this.listenerHelper
         return curHelper != null && curHelper.mapChangeListeners.contains(listener)
     }

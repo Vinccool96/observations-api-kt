@@ -43,7 +43,7 @@ class ReadOnlyStringPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -53,7 +53,7 @@ class ReadOnlyStringPropertyTest {
         override fun removeListener(listener: ChangeListener<in String?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in String?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in String?>): Boolean {
             return false
         }
 

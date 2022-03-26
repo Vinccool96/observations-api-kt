@@ -55,6 +55,6 @@ interface Observable {
      *
      * @return `true`, if the listener already listens, `false` otherwise.
      */
-    fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean
+    fun hasListener(listener: InvalidationListener): Boolean
 
 }

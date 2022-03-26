@@ -18,7 +18,7 @@ class StringConstant private constructor(override val value: String?) : StringEx
         // no-op
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         // no-op
         return false
     }
@@ -31,7 +31,7 @@ class StringConstant private constructor(override val value: String?) : StringEx
         // no-op
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in String?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in String?>): Boolean {
         // no-op
         return false
     }

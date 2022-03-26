@@ -672,7 +672,7 @@ class AbstractNumberExpressionTest {
             fail("Not in use")
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             fail("Not in use")
         }
 
@@ -684,7 +684,7 @@ class AbstractNumberExpressionTest {
             fail("Not in use")
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Number?>): Boolean {
             fail("Not in use")
         }
 

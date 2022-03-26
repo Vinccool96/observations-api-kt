@@ -6,8 +6,8 @@ import io.github.vinccool96.observationskt.beans.value.ObservableValue
 import io.github.vinccool96.observationskt.collections.MapChangeListener
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
-import kotlin.test.Test
 import java.util.*
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
@@ -103,7 +103,7 @@ class MapPropertyTest {
             fail("Not in use")
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             fail("Not in use")
         }
 
@@ -115,7 +115,7 @@ class MapPropertyTest {
             fail("Not in use")
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in ObservableMap<Any, Any>?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in ObservableMap<Any, Any>?>): Boolean {
             fail("Not in use")
         }
 
@@ -127,7 +127,7 @@ class MapPropertyTest {
             fail("Not in use")
         }
 
-        override fun isMapChangeListenerAlreadyAdded(listener: MapChangeListener<in Any, in Any>): Boolean {
+        override fun hasListener(listener: MapChangeListener<in Any, in Any>): Boolean {
             fail("Not in use")
         }
 
