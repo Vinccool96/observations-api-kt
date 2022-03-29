@@ -166,7 +166,7 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
     }
 
     override fun addAll(src: ObservableArray<T>) {
-        (this.get() ?: EMPTY_ARRAY).addAll(src)
+        (this.get() ?: EMPTY_ARRAY).addAll(*src.toTypedArray())
     }
 
     override fun addAll(src: Array<T>, startIndex: Int, endIndex: Int) {
@@ -174,7 +174,7 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
     }
 
     override fun addAll(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
-        (this.get() ?: EMPTY_ARRAY).addAll(src, startIndex, endIndex)
+        (this.get() ?: EMPTY_ARRAY).addAll(src.toTypedArray(), startIndex, endIndex)
     }
 
     override fun setAll(vararg elements: T) {
@@ -190,7 +190,7 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
     }
 
     override fun setAll(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
-        (this.get() ?: EMPTY_ARRAY).setAll(src, startIndex, endIndex)
+        (this.get() ?: EMPTY_ARRAY).setAll(src.toTypedArray(), startIndex, endIndex)
     }
 
     override fun set(src: Array<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
@@ -198,7 +198,7 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
     }
 
     override fun set(src: ObservableArray<T>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
-        (this.get() ?: EMPTY_ARRAY).set(src, destinationOffset, startIndex, endIndex)
+        (this.get() ?: EMPTY_ARRAY).set(src.toTypedArray(), destinationOffset, startIndex, endIndex)
     }
 
     override fun contains(element: T): Boolean {

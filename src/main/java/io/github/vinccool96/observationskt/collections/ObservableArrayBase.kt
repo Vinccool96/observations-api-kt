@@ -326,16 +326,12 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
     }
 
     override fun setAll(vararg elements: T) {
-        if (!(this.size == 0 && elements.isEmpty())) {
-            try {
-                beginChange()
-                val removed = this.toTypedArray().toMutableList()
-                setAllInternal(elements as Array<T>, 0, elements.size)
-                nextRemove(0, removed)
-                nextAdd(0, this.size)
-            } finally {
-                endChange()
-            }
+        beginChange()
+        try {
+            clear()
+            addAll(*elements)
+        } finally {
+            endChange()
         }
     }
 

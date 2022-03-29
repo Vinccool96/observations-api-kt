@@ -353,7 +353,7 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<P>, A : Any, P>(private v
     fun testSetAllTSelf() {
         this.wrapper.setAllT(this.array)
 
-        this.mao.check0()
+        this.mao.check1AddRemove(this.array, this.array.toTypedArray(), 0, this.array.size)
         val actual = this.wrapper.toArray()
         assertEquals(this.initialSize, this.array.size)
         assertEquals(this.initialSize, this.wrapper.arraySize(actual))
@@ -718,10 +718,10 @@ class ObservablePrimitiveArrayTest<T : ObservableArray<P>, A : Any, P>(private v
         val length = endIndex - startIndex
         this.wrapper.setAllT(this.array, startIndex, endIndex)
 
-        if (startIndex == 0 && length == this.initialSize) {
+        if (removed.isEmpty()) {
             this.mao.check0()
         } else {
-            this.mao.check1AddRemove(this.array, removed, 0, length)
+            this.mao.check1AddRemove(this.array, removed, 0, this.array.size)
         }
         val actual = this.wrapper.toArray()
         assertEquals(length, this.array.size)
