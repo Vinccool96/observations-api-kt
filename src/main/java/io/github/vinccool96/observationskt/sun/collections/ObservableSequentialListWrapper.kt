@@ -62,7 +62,7 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
             private val backingIt: MutableListIterator<E> =
                     this@ObservableSequentialListWrapper.backingList.listIterator(index)
 
-            private var lastReturned: E? = null
+            private var lastReturned: Any? = null
 
             override fun hasNext(): Boolean {
                 return this.backingIt.hasNext()
@@ -92,7 +92,7 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
                 beginChange()
                 val idx: Int = previousIndex()
                 this.backingIt.remove()
-                nextRemove(idx, this.lastReturned!!)
+                nextRemove(idx, this.lastReturned as E)
                 endChange()
             }
 
@@ -100,7 +100,7 @@ class ObservableSequentialListWrapper<E> : ModifiableObservableListBase<E>, Obse
                 beginChange()
                 val idx: Int = previousIndex()
                 this.backingIt.set(element)
-                nextSet(idx, this.lastReturned!!)
+                nextSet(idx, this.lastReturned as E)
                 endChange()
             }
 

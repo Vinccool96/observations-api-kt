@@ -164,11 +164,11 @@ abstract class ListExpression<E> : ObservableListValue<E> {
     }
 
     override fun addAll(elements: Collection<E>): Boolean {
-        return (this.get() ?: EMPTY_LIST).addAll(elements)
+        return (this.get() ?: EMPTY_LIST).addAll(elements.toList())
     }
 
     override fun addAll(index: Int, elements: Collection<E>): Boolean {
-        return (this.get() ?: EMPTY_LIST).addAll(index, elements)
+        return (this.get() ?: EMPTY_LIST).addAll(index, elements.toList())
     }
 
     override fun removeAll(elements: Collection<E>): Boolean {
@@ -228,7 +228,7 @@ abstract class ListExpression<E> : ObservableListValue<E> {
     }
 
     override fun setAll(col: Collection<E>): Boolean {
-        return (this.get() ?: EMPTY_LIST).setAll(col)
+        return (this.get() ?: EMPTY_LIST).setAll(col.toList())
     }
 
     override fun removeAll(vararg elements: E): Boolean {

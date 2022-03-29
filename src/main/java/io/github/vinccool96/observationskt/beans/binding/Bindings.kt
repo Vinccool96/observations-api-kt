@@ -6746,8 +6746,6 @@ object Bindings {
                     return op[index] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return false
             }
@@ -6797,8 +6795,6 @@ object Bindings {
                     return op[index.intValue] ?: throw NullPointerException()
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return false
             }
@@ -6840,8 +6836,6 @@ object Bindings {
                 try {
                     return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0
@@ -6892,8 +6886,6 @@ object Bindings {
                     return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0
             }
@@ -6935,8 +6927,6 @@ object Bindings {
                 try {
                     return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0f
@@ -6987,8 +6977,6 @@ object Bindings {
                     return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0.0f
             }
@@ -7030,8 +7018,6 @@ object Bindings {
                 try {
                     return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7082,8 +7068,6 @@ object Bindings {
                     return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
             }
@@ -7125,8 +7109,6 @@ object Bindings {
                 try {
                     return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0L
@@ -7177,8 +7159,6 @@ object Bindings {
                     return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0L
             }
@@ -7220,8 +7200,6 @@ object Bindings {
                 try {
                     return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7272,8 +7250,6 @@ object Bindings {
                     return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
             }
@@ -7315,8 +7291,6 @@ object Bindings {
                 try {
                     return op[index]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0
@@ -7366,8 +7340,6 @@ object Bindings {
                 try {
                     return op[index.intValue]
                 } catch (ex: IndexOutOfBoundsException) {
-                    Logging.getLogger().fine("Exception while evaluating binding", ex)
-                } catch (ex: NullPointerException) {
                     Logging.getLogger().fine("Exception while evaluating binding", ex)
                 }
                 return 0

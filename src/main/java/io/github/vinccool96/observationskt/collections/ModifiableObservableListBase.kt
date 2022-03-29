@@ -51,6 +51,9 @@ package io.github.vinccool96.observationskt.collections
 abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
 
     override fun setAll(col: Collection<E>): Boolean {
+        if (col === this) {
+            return setAll(col.toList())
+        }
         beginChange()
         try {
             clear()
@@ -62,6 +65,9 @@ abstract class ModifiableObservableListBase<E> : ObservableListBase<E>() {
     }
 
     override fun addAll(elements: Collection<E>): Boolean {
+        if (elements === this) {
+            return addAll(elements.toList())
+        }
         beginChange()
         try {
             return super.addAll(elements)

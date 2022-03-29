@@ -292,6 +292,52 @@ class ArrayExpressionTest {
     }
 
     @Test
+    fun testContainsAll_VarArg() {
+        assertTrue(this.opNull.containsAll())
+        assertFalse(this.opNull.containsAll(data1_0))
+        assertFalse(this.opNull.containsAll(data2_0, data2_1))
+        assertFalse(this.opNull.containsAll(data1_0, data2_0, data2_1))
+
+        assertTrue(this.opEmpty.containsAll())
+        assertFalse(this.opEmpty.containsAll(data1_0))
+        assertFalse(this.opEmpty.containsAll(data2_0, data2_1))
+        assertFalse(this.opEmpty.containsAll(data1_0, data2_0, data2_1))
+
+        assertTrue(this.op1.containsAll())
+        assertTrue(this.op1.containsAll(data1_0))
+        assertFalse(this.op1.containsAll(data2_0, data2_1))
+        assertFalse(this.op1.containsAll(data1_0, data2_0, data2_1))
+
+        assertTrue(this.op2.containsAll())
+        assertFalse(this.op2.containsAll(data1_0))
+        assertTrue(this.op2.containsAll(data2_0, data2_1))
+        assertFalse(this.op2.containsAll(data1_0, data2_0, data2_1))
+    }
+
+    @Test
+    fun testContainsAll_ObservableArray() {
+        assertTrue(this.opNull.containsAll(ObservableCollections.observableIntArray()))
+        assertFalse(this.opNull.containsAll(ObservableCollections.observableIntArray(data1_0)))
+        assertFalse(this.opNull.containsAll(ObservableCollections.observableIntArray(data2_0, data2_1)))
+        assertFalse(this.opNull.containsAll(ObservableCollections.observableIntArray(data1_0, data2_0, data2_1)))
+
+        assertTrue(this.opEmpty.containsAll(ObservableCollections.observableIntArray()))
+        assertFalse(this.opEmpty.containsAll(ObservableCollections.observableIntArray(data1_0)))
+        assertFalse(this.opEmpty.containsAll(ObservableCollections.observableIntArray(data2_0, data2_1)))
+        assertFalse(this.opEmpty.containsAll(ObservableCollections.observableIntArray(data1_0, data2_0, data2_1)))
+
+        assertTrue(this.op1.containsAll(ObservableCollections.observableIntArray()))
+        assertTrue(this.op1.containsAll(ObservableCollections.observableIntArray(data1_0)))
+        assertFalse(this.op1.containsAll(ObservableCollections.observableIntArray(data2_0, data2_1)))
+        assertFalse(this.op1.containsAll(ObservableCollections.observableIntArray(data1_0, data2_0, data2_1)))
+
+        assertTrue(this.op2.containsAll(ObservableCollections.observableIntArray()))
+        assertFalse(this.op2.containsAll(ObservableCollections.observableIntArray(data1_0)))
+        assertTrue(this.op2.containsAll(ObservableCollections.observableIntArray(data2_0, data2_1)))
+        assertFalse(this.op2.containsAll(ObservableCollections.observableIntArray(data1_0, data2_0, data2_1)))
+    }
+
+    @Test
     fun testIterator() {
         assertFalse(this.opNull.iterator().hasNext())
         assertFalse(this.opEmpty.iterator().hasNext())

@@ -1186,13 +1186,13 @@ object ObservableCollections {
 
         override fun addAll(elements: Collection<T>): Boolean {
             synchronized(this.mutex) {
-                return this.backingList.addAll(elements)
+                return this.backingList.addAll(elements.toList())
             }
         }
 
         override fun addAll(index: Int, elements: Collection<T>): Boolean {
             synchronized(this.mutex) {
-                return this.backingList.addAll(index, elements)
+                return this.backingList.addAll(index, elements.toList())
             }
         }
 
@@ -1337,7 +1337,7 @@ object ObservableCollections {
 
         override fun setAll(col: Collection<T>): Boolean {
             synchronized(this.mutex) {
-                return this.backingList.setAll(col)
+                return this.backingList.setAll(col.toList())
             }
         }
 

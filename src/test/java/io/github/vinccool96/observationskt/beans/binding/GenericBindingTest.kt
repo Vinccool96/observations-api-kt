@@ -4,19 +4,12 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.Observable
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableValueBase
-import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.collections.ObservableMap
-import io.github.vinccool96.observationskt.collections.ObservableSet
+import io.github.vinccool96.observationskt.collections.*
 import io.github.vinccool96.observationskt.sun.collections.ReturnsUnmodifiableCollection
-import kotlin.test.AfterTest
 import org.junit.Assert
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.test.assertEquals
-import kotlin.test.fail
+import kotlin.test.*
 
 @RunWith(Parameterized::class)
 class GenericBindingTest<T>(private val value1: T, private val value2: T, private val dependency1: ObservableStub,
@@ -733,6 +726,45 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
 
     }
 
+    class ArrayBindingImpl(vararg deps: Observable) : ArrayBinding<Any>(arrayOf(Any())),
+            BindingMock<ObservableArray<Any>?> {
+
+        private var computeValueCounterState = 0
+
+        private var valueState: ObservableArray<Any>? = null
+
+        init {
+            super.bind(*deps)
+        }
+
+        override var value: ObservableArray<Any>?
+            get() = this.get()
+            set(value) {
+                this.valueState = value
+            }
+
+        override val computeValueCounter: Int
+            get() {
+                val result = this.computeValueCounterState
+                reset()
+                return result
+            }
+
+        override fun reset() {
+            this.computeValueCounterState = 0
+        }
+
+        override fun computeValue(): ObservableArray<Any>? {
+            this.computeValueCounterState++
+            return this.valueState
+        }
+
+        @get:ReturnsUnmodifiableCollection
+        override val dependencies: ObservableList<*>
+            get() = fail("Should not reach here")
+
+    }
+
     companion object {
 
         private val UNDEFINED: Any? = null
@@ -829,6 +861,14 @@ class GenericBindingTest<T>(private val value1: T, private val value2: T, privat
                             SetBindingImpl(),
                             SetBindingImpl(dependency1),
                             SetBindingImpl(dependency1, dependency2)
+                    ),
+                    arrayOf(
+                            ObservableCollections.observableObjectArray(arrayOf(Any())),
+                            ObservableCollections.observableObjectArray(arrayOf(Any())),
+                            dependency1, dependency2,
+                            ArrayBindingImpl(),
+                            ArrayBindingImpl(dependency1),
+                            ArrayBindingImpl(dependency1, dependency2)
                     )
             )
         }

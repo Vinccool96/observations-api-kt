@@ -1,13 +1,10 @@
 package io.github.vinccool96.observationskt.beans.binding
 
 import io.github.vinccool96.observationskt.beans.property.*
-import io.github.vinccool96.observationskt.collections.ObservableCollections
-import io.github.vinccool96.observationskt.collections.ObservableList
-import io.github.vinccool96.observationskt.collections.ObservableMap
-import io.github.vinccool96.observationskt.collections.ObservableSet
-import kotlin.test.Test
+import io.github.vinccool96.observationskt.collections.*
 import kotlin.math.E
 import kotlin.math.PI
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BindingToStringTest {
@@ -331,6 +328,32 @@ class BindingToStringTest {
         assertEquals("SetBinding [invalid]", binding.toString())
         binding.get()
         assertEquals("SetBinding [value: $value2]", binding.toString())
+    }
+
+    @Test
+    fun testArrayToString() {
+        val value1 = ObservableCollections.observableObjectArray(arrayOf(Any()))
+        val value2 = ObservableCollections.observableObjectArray(arrayOf(Any()), Any())
+        val v: ArrayProperty<Any> = SimpleArrayProperty(value1, arrayOf(Any()))
+        val binding: ArrayBinding<Any> = object : ArrayBinding<Any>(arrayOf(Any())) {
+
+            init {
+                super.bind(v)
+            }
+
+            override fun computeValue(): ObservableArray<Any>? {
+                return v.get()
+            }
+
+        }
+
+        assertEquals("ArrayBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ArrayBinding [value: $value1]", binding.toString())
+        v.set(value2)
+        assertEquals("ArrayBinding [invalid]", binding.toString())
+        binding.get()
+        assertEquals("ArrayBinding [value: $value2]", binding.toString())
     }
 
 }

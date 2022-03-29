@@ -1,5 +1,7 @@
 package io.github.vinccool96.observationskt.collections
 
+import io.github.vinccool96.observationskt.beans.binding.ArrayExpression
+import io.github.vinccool96.observationskt.beans.property.SimpleArrayProperty
 import io.github.vinccool96.observationskt.utils.RandomUtils
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -305,7 +307,7 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
     fun testSetAllTSelf() {
         this.wrapper.setAllT(this.array)
 
-        this.mao.check0()
+        this.mao.check1AddRemove(this.array, this.array.toTypedArray(), 0, this.array.size)
         val actual = this.wrapper.toArray()
         assertEquals(this.initialSize, this.array.size)
         assertEquals(this.initialSize, actual.size)
@@ -565,18 +567,10 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         val before = this.array.toTypedArray()
         this.wrapper.setAllT(this.array, startIndex, endIndex)
 
-        if (startIndex == 0) {
-            if (length == this.initialSize) {
-                this.mao.check0()
-            } else {
-                this.mao.check1AddRemove(this.array, before, 0, 3)
-            }
+        if (before.isEmpty()) {
+            this.mao.check0()
         } else {
-            if (endIndex == INITIAL_SIZE) {
-                this.mao.check1AddRemove(this.array, before, 0, 3)
-            } else {
-                this.mao.check1AddRemove(this.array, before, 0, 2)
-            }
+            this.mao.check1AddRemove(this.array, before, 0, this.array.size)
         }
         val actual = this.wrapper.toArray()
         assertEquals(length, this.array.size)
@@ -2566,9 +2560,10 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
     @Test
     fun testToString() {
         val actual = this.array.toString()
-        val expected = this.wrapper.toArray().contentToString()
+        val content = this.wrapper.toArray().contentToString()
+        val expected = if ("ArrayProperty [" in actual) "ArrayProperty [value: $content]" else content
         assertEquals(expected, actual)
-        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)){${this.initialSize - 1}}]"
+        val regex = "(ArrayProperty \\[value: )?\\[(\\w{16}|null)?(, (\\w{16}|null)){${this.initialSize - 1}}](])?"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -2576,9 +2571,10 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
     fun testToStringAfterResize() {
         this.array.resize(this.initialSize / 2)
         val actual = this.array.toString()
-        val expected = this.wrapper.toArray().contentToString()
+        val content = this.wrapper.toArray().contentToString()
+        val expected = if ("ArrayProperty [" in actual) "ArrayProperty [value: $content]" else content
         assertEquals(expected, actual)
-        val regex = "\\[(\\w{16}|null)?(, (\\w{16}|null)){${this.array.size - 1}}]"
+        val regex = "(ArrayProperty \\[value: )?\\[(\\w{16}|null)?(, (\\w{16}|null)){${this.array.size - 1}}](])?"
         assertTrue(actual.matches(regex.toRegex()), "toString() output matches to regex '$regex'. Actual = '$actual'")
     }
 
@@ -2586,7 +2582,11 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
     fun testToStringAfterClear() {
         this.array.clear()
         val actual = this.array.toString()
-        assertEquals("[]", actual)
+        if ("ArrayProperty [" in actual) {
+            assertEquals("ArrayProperty [value: []]", actual)
+        } else {
+            assertEquals("[]", actual)
+        }
     }
 
     // ========================= implementations for the tests =========================
@@ -2643,11 +2643,7 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
 
         abstract fun toArray(startIndex: Int, endIndex: Int): Array<P>
 
-        fun createArray(size: Int): Array<P> {
-            return createArray(size, true)
-        }
-
-        abstract fun createArray(size: Int, fillWithData: Boolean): Array<P>
+        abstract fun createArray(size: Int, fillWithData: Boolean = true): Array<P>
 
         abstract fun cloneArray(array: Array<P>): Array<P>
 
@@ -2911,6 +2907,135 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
 
     }
 
+    private class BindingWrapper : ArrayWrapper<ObservableArray<String>, String>() {
+
+        private var counter = 0
+
+        override fun createEmptyArray(): ObservableArray<String> {
+            val observable: ObservableArray<String> = ObservableCollections.observableObjectArray(arrayOf("1"))
+            val property = SimpleArrayProperty(observable, arrayOf("1"))
+            return ArrayExpression.arrayExpression(property).also { this.array = it }
+        }
+
+        override fun createNotEmptyArray(src: Array<String>): ObservableArray<String> {
+            val observable: ObservableArray<String> = when (this.counter++ % 2) {
+                0 -> ObservableCollections.observableObjectArray(arrayOf("1"), *src)
+                else -> ObservableCollections.observableObjectArray(arrayOf("1"),
+                        ObservableCollections.observableObjectArray(arrayOf("1"), *src))
+            }
+            val property = SimpleArrayProperty(observable, arrayOf("1"))
+            return ArrayExpression.arrayExpression(property).also { this.array = it }
+        }
+
+        override fun newInstance(): ArrayWrapper<ObservableArray<String>, String> {
+            return BindingWrapper()
+        }
+
+        override val nextValue: String
+            get() {
+                return RandomUtils.randomString(16)
+            }
+
+        override operator fun set(index: Int, value: String) {
+            this.array[index] = value
+        }
+
+        override fun setAllP(src: Array<String>) {
+            this.array.setAll(*src)
+        }
+
+        override fun setAllT(src: ObservableArray<String>) {
+            this.array.setAll(src)
+        }
+
+        override fun setAllP(src: Array<String>, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun setAllT(src: ObservableArray<String>, startIndex: Int, endIndex: Int) {
+            this.array.setAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllP(src: Array<String>) {
+            this.array.addAll(*src)
+        }
+
+        override fun addAllT(src: ObservableArray<String>) {
+            this.array.addAll(src)
+        }
+
+        override operator fun plusAssign(src: Array<String>) {
+            this.array += src
+        }
+
+        override operator fun plusAssign(src: ObservableArray<String>) {
+            this.array += src
+        }
+
+        override fun addAllP(src: Array<String>, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun addAllT(src: ObservableArray<String>, startIndex: Int, endIndex: Int) {
+            this.array.addAll(src, startIndex, endIndex)
+        }
+
+        override fun setP(src: Array<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun setT(src: ObservableArray<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.set(src, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoP(dest: Array<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override fun copyIntoT(dest: ObservableArray<String>, destinationOffset: Int, startIndex: Int, endIndex: Int) {
+            this.array.copyInto(dest, destinationOffset, startIndex, endIndex)
+        }
+
+        override operator fun get(index: Int): String {
+            return this.array[index]
+        }
+
+        override fun toArray(): Array<String> {
+            return this.array.toTypedArray()
+        }
+
+        override fun toArray(startIndex: Int, endIndex: Int): Array<String> {
+            return this.array.toTypedArray(startIndex, endIndex)
+        }
+
+        override fun createArray(size: Int, fillWithData: Boolean): Array<String> {
+            return (if (fillWithData) Array(size) { this.nextValue } else Array(size) { "1" })
+        }
+
+        override fun cloneArray(array: Array<String>): Array<String> {
+            return array.copyOf()
+        }
+
+        override fun assertElementsEqual(actual: Array<String>, from: Int, to: Int, expected: Array<String>,
+                expFrom: Int) {
+            var j = expFrom
+            for (i in from until to) {
+                assertEquals(expected[j], actual[i],
+                        "expected String = ${expected[j]}, actual String = ${actual[i]}")
+                j++
+            }
+        }
+
+        override fun arrayOf(vararg elements: String): Array<String> {
+            return Array(elements.size) { i: Int -> elements[i] }
+        }
+
+        override fun arrayOf(elements: List<String>): Array<String> {
+            return Array(elements.size) { i: Int -> elements[i] }
+        }
+
+    }
+
     companion object {
 
         private const val INITIAL_SIZE: Int = 6
@@ -2920,7 +3045,8 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         fun createParameters(): List<Array<out Any?>> {
             return listOf(
                     arrayOf(StringWrapper()),
-                    arrayOf(NullableStringWrapper())
+                    arrayOf(NullableStringWrapper()),
+                    arrayOf(BindingWrapper())
             )
         }
 

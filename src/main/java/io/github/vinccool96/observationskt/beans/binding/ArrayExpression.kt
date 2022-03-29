@@ -182,7 +182,7 @@ abstract class ArrayExpression<T>(baseArrayOfNull: Array<T>) : ObservableArrayVa
     }
 
     override fun setAll(src: ObservableArray<T>) {
-        (this.get() ?: EMPTY_ARRAY).setAll(src)
+        (this.get() ?: EMPTY_ARRAY).setAll(*src.toTypedArray())
     }
 
     override fun setAll(src: Array<T>, startIndex: Int, endIndex: Int) {

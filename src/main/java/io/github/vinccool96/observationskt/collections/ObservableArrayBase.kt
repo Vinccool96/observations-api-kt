@@ -340,16 +340,16 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
     }
 
     override fun setAll(src: ObservableArray<T>) {
-        if (src !== this && !(this.size == 0 && src.size == 0)) {
-            try {
-                beginChange()
-                val removed = this.toTypedArray().toMutableList()
-                setAllInternal(src, 0, src.size)
-                nextRemove(0, removed)
-                nextAdd(0, this.size)
-            } finally {
-                endChange()
-            }
+        if (src === this) {
+            setAll(*src.toTypedArray())
+            return
+        }
+        beginChange()
+        try {
+            clear()
+            addAll(src)
+        } finally {
+            endChange()
         }
     }
 
@@ -367,18 +367,14 @@ abstract class ObservableArrayBase<T> : ObservableArray<T> {
     }
 
     override fun setAll(src: ObservableArray<T>, startIndex: Int, endIndex: Int) {
-        if (src !== this || startIndex != 0 || endIndex != this.size) {
-            if (this.size != 0 || endIndex - startIndex != 0) {
-                rangeCheck(src.toTypedArray(), startIndex, endIndex)
-                try {
-                    beginChange()
-                    val before = src.toTypedArray()
-                    clear()
-                    addAll(*before.copyOfRange(startIndex, endIndex))
-                } finally {
-                    endChange()
-                }
-            }
+        rangeCheck(src.toTypedArray(), startIndex, endIndex)
+        try {
+            beginChange()
+            val before = src.toTypedArray()
+            clear()
+            addAll(*before.copyOfRange(startIndex, endIndex))
+        } finally {
+            endChange()
         }
     }
 
