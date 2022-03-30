@@ -4,9 +4,6 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableDoubleValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
  * This class defines a [Property] wrapping a `Double` value.
@@ -27,7 +24,7 @@ import java.security.PrivilegedAction
 abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, WritableDoubleValue {
 
     override var value: Number?
-        get() = this.get()
+        get() = super.value
         set(value) {
             if (value == null) {
                 Logging.getLogger().fine("Attempt to set double property to null, using default value instead.",
@@ -64,7 +61,7 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `DoubleProperty`. If the value of this
+     * Creates an [ObjectProperty] that is bidirectionally bound to this `DoubleProperty`. If the value of this
      * `DoubleProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
      * Can be used for binding an ObjectProperty to DoubleProperty.
@@ -81,8 +78,6 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
     override fun asObject(): ObjectProperty<Double> {
         return object : ObjectPropertyBase<Double>(this@DoubleProperty.doubleValue) {
 
-            private val acc: AccessControlContext = AccessController.getContext()
-
             init {
                 BidirectionalBinding.bind(this as Property<Number?>, this@DoubleProperty)
             }
@@ -93,26 +88,16 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
             override val name: String?
                 get() = this@DoubleProperty.name
 
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@DoubleProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
-
         }
     }
 
     companion object {
 
         /**
-         * Returns a `DoubleProperty` that wraps a [Property]. If the `Property` is already a `DoubleProperty`, it will
-         * be returned. Otherwise, a new `DoubleProperty` is created that is bound to the `Property`.
+         * Returns a `DoubleProperty` that wraps a [Property]. If the `Property` is already a `DoubleProperty`, it
+         * will be returned. Otherwise, a new `DoubleProperty` is created that is bound to the `Property`.
          *
-         * This is very useful when bidirectionally binding an ObjectProperty<Double> and a DoubleProperty.
+         * This is very useful when bidirectionally binding an ObjectProperty<Double> and an DoubleProperty.
          * ```
          * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1.0)
          * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0)
@@ -132,8 +117,6 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
         fun doubleProperty(property: Property<Double?>): DoubleProperty {
             return if (property is DoubleProperty) property else object : DoublePropertyBase() {
 
-                private val acc: AccessControlContext = AccessController.getContext()
-
                 init {
                     BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
@@ -143,16 +126,6 @@ abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, Wri
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

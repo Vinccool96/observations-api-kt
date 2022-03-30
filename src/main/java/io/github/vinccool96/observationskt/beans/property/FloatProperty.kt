@@ -4,9 +4,6 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableFloatValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
  * This class defines a [Property] wrapping a `Float` value.
@@ -27,7 +24,7 @@ import java.security.PrivilegedAction
 abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, WritableFloatValue {
 
     override var value: Number?
-        get() = this.get()
+        get() = super.value
         set(value) {
             if (value == null) {
                 Logging.getLogger().fine("Attempt to set float property to null, using default value instead.",
@@ -64,14 +61,14 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, Writa
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `FloatProperty`. If the value of this
+     * Creates an [ObjectProperty] that is bidirectionally bound to this `FloatProperty`. If the value of this
      * `FloatProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
      * Can be used for binding an ObjectProperty to FloatProperty.
      *
      * ```
-     * val floatProperty: FloatProperty = SimpleFloatProperty(1.0F)
-     * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2.0F)
+     * val floatProperty: FloatProperty = SimpleFloatProperty(1.0f)
+     * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2.0f)
      *
      * objectProperty.bind(floatProperty.asObject())
      * ```
@@ -80,8 +77,6 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, Writa
      */
     override fun asObject(): ObjectProperty<Float> {
         return object : ObjectPropertyBase<Float>(this@FloatProperty.floatValue) {
-
-            private val acc: AccessControlContext = AccessController.getContext()
 
             init {
                 BidirectionalBinding.bind(this as Property<Number?>, this@FloatProperty)
@@ -93,34 +88,24 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, Writa
             override val name: String?
                 get() = this@FloatProperty.name
 
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@FloatProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
-
         }
     }
 
     companion object {
 
         /**
-         * Returns a `FloatProperty` that wraps a [Property]. If the `Property` is already a `FloatProperty`, it will be
-         * returned. Otherwise, a new `FloatProperty` is created that is bound to the `Property`.
+         * Returns a `FloatProperty` that wraps a [Property]. If the `Property` is already a `FloatProperty`, it
+         * will be returned. Otherwise, a new `FloatProperty` is created that is bound to the `Property`.
          *
-         * This is very useful when bidirectionally binding an ObjectProperty<Float> and a FloatProperty.
+         * This is very useful when bidirectionally binding an ObjectProperty<Float> and an FloatProperty.
          * ```
-         * val floatProperty: FloatProperty = SimpleFloatProperty(1.0F)
-         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2.0F)
+         * val floatProperty: FloatProperty = SimpleFloatProperty(1.0f)
+         * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2.0f)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
          * val objectAsFloat: FloatProperty = FloatProperty.floatProperty(objectProperty)
          *
-         * doubleProperty.bindBidirectional(objectAsFloat)
+         * floatProperty.bindBidirectional(objectAsFloat)
          * ```
          *
          * Another approach is to convert the FloatProperty to ObjectProperty using [asObject] method.
@@ -132,8 +117,6 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, Writa
         fun floatProperty(property: Property<Float?>): FloatProperty {
             return if (property is FloatProperty) property else object : FloatPropertyBase() {
 
-                private val acc: AccessControlContext = AccessController.getContext()
-
                 init {
                     BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
@@ -143,16 +126,6 @@ abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, Writa
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

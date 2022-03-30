@@ -4,9 +4,6 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableByteValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
  * This class defines a [Property] wrapping a `Byte` value.
@@ -64,7 +61,7 @@ abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, Writabl
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `ByteProperty`. If the value of this
+     * Creates an [ObjectProperty] that is bidirectionally bound to this `ByteProperty`. If the value of this
      * `ByteProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
      * Can be used for binding an ObjectProperty to ByteProperty.
@@ -81,8 +78,6 @@ abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, Writabl
     override fun asObject(): ObjectProperty<Byte> {
         return object : ObjectPropertyBase<Byte>(this@ByteProperty.byteValue) {
 
-            private val acc: AccessControlContext = AccessController.getContext()
-
             init {
                 BidirectionalBinding.bind(this as Property<Number?>, this@ByteProperty)
             }
@@ -92,16 +87,6 @@ abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, Writabl
 
             override val name: String?
                 get() = this@ByteProperty.name
-
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@ByteProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
 
         }
     }
@@ -123,7 +108,7 @@ abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, Writabl
          * byteProperty.bindBidirectional(objectAsByte)
          * ```
          *
-         * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
+         * Another approach is to convert the ByteProperty to ObjectProperty using [asObject] method.
          *
          * @param property The source `Property`
          *
@@ -131,8 +116,6 @@ abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, Writabl
          */
         fun byteProperty(property: Property<Byte?>): ByteProperty {
             return if (property is ByteProperty) property else object : BytePropertyBase() {
-
-                private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
                     BidirectionalBinding.bind(this, property as Property<Number?>)
@@ -143,16 +126,6 @@ abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, Writabl
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

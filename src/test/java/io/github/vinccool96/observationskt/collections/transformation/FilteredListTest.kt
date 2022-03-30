@@ -7,11 +7,9 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.Person
 import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import java.util.*
 import java.util.function.Predicate
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 class FilteredListTest {
 
@@ -25,10 +23,43 @@ class FilteredListTest {
     fun setUp() {
         this.list = ObservableCollections.observableArrayList()
         this.list.addAll("a", "c", "d", "c")
-        val predicate: Predicate<String> = Predicate {e: String -> e != "c"}
+        val predicate: Predicate<String> = Predicate { e: String -> e != "c" }
         this.mlo = MockListObserver()
         this.filteredList = FilteredList(this.list, predicate)
         this.filteredList.addListener(this.mlo)
+    }
+
+    @Test
+    fun testPredicateProperty() {
+        val predicateProperty = this.filteredList.predicateProperty
+        assertSame(this.filteredList, predicateProperty.bean)
+        assertEquals("predicate", predicateProperty.name)
+    }
+
+    @Test
+    fun testGet() {
+        assertEquals("a", this.filteredList[0])
+        assertEquals("d", this.filteredList[1])
+    }
+
+    @Test
+    fun testGetOutOfBound() {
+        assertFailsWith<IndexOutOfBoundsException> {
+            this.filteredList[2]
+        }
+    }
+
+    @Test
+    fun testGetSourceIndex() {
+        assertEquals(0, this.filteredList.getSourceIndex(0))
+        assertEquals(2, this.filteredList.getSourceIndex(1))
+    }
+
+    @Test
+    fun testGetSourceIndexOutOfBound() {
+        assertFailsWith<IndexOutOfBoundsException> {
+            this.filteredList.getSourceIndex(2)
+        }
     }
 
     @Test
@@ -67,20 +98,20 @@ class FilteredListTest {
 
     @Test
     fun testLiveMode_Permutation() {
-        ObservableCollections.sort(this.list) {o1, o2 -> -o1.compareTo(o2)}
+        ObservableCollections.sort(this.list) { o1, o2 -> -o1.compareTo(o2) }
         this.mlo.check1Permutation(this.filteredList, intArrayOf(1, 0))
         assertEquals(listOf("d", "a"), this.filteredList)
     }
 
     @Test
     fun testLiveMode_changeMatcher() {
-        val pProperty: ObjectProperty<Predicate<String>> = SimpleObjectProperty(Predicate {e: String -> e != "c"})
+        val pProperty: ObjectProperty<Predicate<String>> = SimpleObjectProperty(Predicate { e: String -> e != "c" })
         this.filteredList = FilteredList(this.list)
         this.filteredList.predicateProperty.bind(pProperty)
         this.filteredList.addListener(this.mlo)
         assertEquals(listOf("a", "d"), this.filteredList)
         this.mlo.check0()
-        pProperty.set(Predicate {s: String -> s != "d"})
+        pProperty.set(Predicate { s: String -> s != "d" })
         this.mlo.check1AddRemove(this.filteredList, listOf("a", "d"), 0, 3)
     }
 
@@ -91,7 +122,7 @@ class FilteredListTest {
                 Person.createPersonsList(p1, p1, Person("BB"), Person("B"), p1, p1, Person("BC"), p1,
                         Person("C"))
 
-        val filtered: FilteredList<Person> = FilteredList(list) {p: Person -> p.name.get()!!.length > 1}
+        val filtered: FilteredList<Person> = FilteredList(list) { p: Person -> p.name.get()!!.length > 1 }
         val lo: MockListObserver<Person> = MockListObserver()
         filtered.addListener(lo)
 
@@ -139,7 +170,7 @@ class FilteredListTest {
         val list: Updater<Person> =
                 Updater(Person.createPersonsFromNames("A0", "A1", "BB2", "B3", "A4", "A5", "BC6", "A7", "C8"))
 
-        val filtered: FilteredList<Person> = FilteredList(list) {p: Person -> p.name.get()!!.length > 2}
+        val filtered: FilteredList<Person> = FilteredList(list) { p: Person -> p.name.get()!!.length > 2 }
         val lo: MockListObserver<Person> = MockListObserver()
         filtered.addListener(lo)
 

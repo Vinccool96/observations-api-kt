@@ -15,31 +15,31 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     private lateinit var initialElements: List<String?>
 
-    private lateinit var array: ObservableList<String?>
+    private lateinit var list: ObservableList<String?>
 
-    private lateinit var mao: MockListObserver<String?>
+    private lateinit var mlo: MockListObserver<String?>
 
     @BeforeTest
     fun setUp() {
         this.initialSize = INITIAL_SIZE
         this.initialElements = createCollection(this.initialSize).toList()
-        this.array = createNotEmptyList(this.initialElements)
-        this.mao = MockListObserver()
-        this.array.addListener(this.mao)
+        this.list = createNotEmptyList(this.initialElements)
+        this.mlo = MockListObserver()
+        this.list.addListener(this.mlo)
     }
 
     private fun makeEmpty() {
         this.initialSize = 0
         this.initialElements = createCollection(this.initialSize).toList()
-        this.array.clear()
-        this.mao.clear()
+        this.list.clear()
+        this.mlo.clear()
     }
 
     private fun assertUnchanged() {
-        this.mao.check0()
-        assertEquals(this.initialSize, this.array.size)
-        assertEquals(this.initialSize, this.array.size)
-        assertElementsEqual(this.array, 0, this.array.size, this.initialElements)
+        this.mlo.check0()
+        assertEquals(this.initialSize, this.list.size)
+        assertEquals(this.initialSize, this.list.size)
+        assertElementsEqual(this.list, 0, this.list.size, this.initialElements)
     }
 
     private val nextValue: String?
@@ -77,23 +77,23 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     @Test
     fun testSize() {
-        this.mao.check0()
-        assertEquals(INITIAL_SIZE, this.array.size)
+        this.mlo.check0()
+        assertEquals(INITIAL_SIZE, this.list.size)
     }
 
     @Test
     fun testClear() {
-        val removed = this.array.toList()
-        this.array.clear()
-        this.mao.check1AddRemove(this.array, removed, 0, 0)
-        assertEquals(0, this.array.size)
+        val removed = this.list.toList()
+        this.list.clear()
+        this.mlo.check1AddRemove(this.list, removed, 0, 0)
+        assertEquals(0, this.list.size)
     }
 
     @Test
     fun testGet() {
-        for (i in 0 until this.array.size) {
+        for (i in 0 until this.list.size) {
             val expected = this.initialElements[i]
-            val actual = this.array[i]
+            val actual = this.list[i]
             assertEquals(expected, actual)
         }
         assertUnchanged()
@@ -102,9 +102,9 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testToArray() {
         val expected = this.initialElements
-        val actual = this.array.toTypedArray()
+        val actual = this.list.toTypedArray()
         assertEquals(INITIAL_SIZE, actual.size)
-        assertElementsEqual(actual.asList(), 0, this.array.size, expected)
+        assertElementsEqual(actual.asList(), 0, this.list.size, expected)
     }
 
     // ========================= add/remove listener tests =========================
@@ -112,28 +112,28 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testAddRemoveListener() {
         val mao2 = MockListObserver<String?>()
-        this.array.addListener(mao2)
-        this.array.removeListener(this.mao)
-        this.array[0] = this.nextValue
-        this.mao.check0()
+        this.list.addListener(mao2)
+        this.list.removeListener(this.mlo)
+        this.list[0] = this.nextValue
+        this.mlo.check0()
         mao2.check1()
     }
 
     @Test
     fun testAddTwoListenersElementChange() {
         val mao2 = MockListObserver<String?>()
-        this.array.addListener(mao2)
-        this.array[0] = this.nextValue
-        this.mao.check1()
+        this.list.addListener(mao2)
+        this.list[0] = this.nextValue
+        this.mlo.check1()
         mao2.check1()
     }
 
     @Test
     fun testAddTwoListenersSizeChange() {
         val mao2 = MockListObserver<String?>()
-        this.array.addListener(mao2)
-        this.array.clear()
-        this.mao.check1()
+        this.list.addListener(mao2)
+        this.list.clear()
+        this.mlo.check1()
         mao2.check1()
     }
 
@@ -141,10 +141,10 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     fun testAddThreeListeners() {
         val mao2 = MockListObserver<String?>()
         val mao3 = MockListObserver<String?>()
-        this.array.addListener(mao2)
-        this.array.addListener(mao3)
-        this.array[0] = this.nextValue
-        this.mao.check1()
+        this.list.addListener(mao2)
+        this.list.addListener(mao3)
+        this.list[0] = this.nextValue
+        this.mlo.check1()
         mao2.check1()
         mao3.check1()
     }
@@ -153,40 +153,40 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     fun testAddThreeListenersSizeChange() {
         val mao2 = MockListObserver<String?>()
         val mao3 = MockListObserver<String?>()
-        this.array.addListener(mao2)
-        this.array.addListener(mao3)
-        this.array.clear()
-        this.mao.check1()
+        this.list.addListener(mao2)
+        this.list.addListener(mao3)
+        this.list.clear()
+        this.mlo.check1()
         mao2.check1()
         mao3.check1()
     }
 
     @Test
     fun testAddListenerTwice() {
-        this.array.addListener(this.mao) // add it a second time
-        this.array[1] = this.nextValue
-        this.mao.check1()
+        this.list.addListener(this.mlo) // add it a second time
+        this.list[1] = this.nextValue
+        this.mlo.check1()
     }
 
     @Test
     fun testRemoveListenerTwice() {
-        this.array.removeListener(this.mao)
-        this.array.removeListener(this.mao)
-        this.array[1] = this.nextValue
-        this.mao.check0()
+        this.list.removeListener(this.mlo)
+        this.list.removeListener(this.mlo)
+        this.list[1] = this.nextValue
+        this.mlo.check0()
     }
 
     // ========================= setAll(vararg) tests =========================
 
     private fun testSetAllP(newSize: Int) {
         val expected = createCollection(newSize)
-        val removed = this.array.toList()
+        val removed = this.list.toList()
 
-        this.array.setAll(*expected.toTypedArray())
+        this.list.setAll(*expected.toTypedArray())
 
-        this.mao.check1AddRemove(this.array, removed, 0, newSize)
-        val actual = this.array.toList()
-        assertEquals(expected.size, this.array.size)
+        this.mlo.check1AddRemove(this.list, removed, 0, newSize)
+        val actual = this.list.toList()
+        assertEquals(expected.size, this.list.size)
         assertEquals(expected.size, actual.size)
         assertElementsEqual(actual, 0, expected.size, expected.toList())
     }
@@ -215,9 +215,9 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testSetAllPOnEmptyToEmpty() {
         makeEmpty()
-        this.array.setAll(*createCollection(0).toTypedArray())
+        this.list.setAll(*createCollection(0).toTypedArray())
         assertUnchanged()
-        assertEquals(0, this.array.size)
+        assertEquals(0, this.list.size)
     }
 
     // ========================= setAll(collection) tests =========================
@@ -225,13 +225,13 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     private fun testSetAllT(newSize: Int) {
         val expected = createCollection(newSize)
         val src = createNotEmptyList(expected)
-        val removed = this.array.toList()
+        val removed = this.list.toList()
 
-        this.array.setAll(src)
+        this.list.setAll(src)
 
-        this.mao.check1AddRemove(this.array, removed, 0, newSize)
-        val actual = this.array.toList()
-        assertEquals(expected.size, this.array.size)
+        this.mlo.check1AddRemove(this.list, removed, 0, newSize)
+        val actual = this.list.toList()
+        assertEquals(expected.size, this.list.size)
         assertEquals(expected.size, actual.size)
         assertElementsEqual(actual, 0, expected.size, expected.toList())
     }
@@ -260,18 +260,18 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testSetAllTOnEmptyToEmpty() {
         makeEmpty()
-        this.array.setAll(createEmptyList())
+        this.list.setAll(createEmptyList())
         assertUnchanged()
-        assertEquals(0, this.array.size)
+        assertEquals(0, this.list.size)
     }
 
     @Test
     fun testSetAllTSelf() {
-        this.array.setAll(this.array)
+        this.list.setAll(this.list)
 
-        this.mao.check1AddRemove(this.array, this.array.toList(), 0, this.array.size)
-        val actual = this.array.toList()
-        assertEquals(this.initialSize, this.array.size)
+        this.mlo.check1AddRemove(this.list, this.list.toList(), 0, this.list.size)
+        val actual = this.list.toList()
+        assertEquals(this.initialSize, this.list.size)
         assertEquals(this.initialSize, actual.size)
         assertElementsEqual(actual, 0, this.initialSize, this.initialElements)
     }
@@ -280,11 +280,11 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     fun testSetAllTSelfEmpty() {
         makeEmpty()
 
-        this.array.setAll(this.array)
+        this.list.setAll(this.list)
 
-        this.mao.check0()
-        val actual = this.array.toList()
-        assertEquals(0, this.array.size)
+        this.mlo.check0()
+        val actual = this.list.toList()
+        assertEquals(0, this.list.size)
         assertEquals(0, actual.size)
     }
 
@@ -292,19 +292,19 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     private fun testAddAllP(srcSize: Int) {
         val src = createCollection(srcSize)
-        val oldSize = this.array.size
+        val oldSize = this.list.size
 
-        this.array.addAll(*src.toTypedArray())
+        this.list.addAll(*src.toTypedArray())
 
         val newSize = oldSize + srcSize
         val sizeChanged = newSize != oldSize
         if (sizeChanged) {
-            this.mao.check1AddRemove(this.array, listOf(), oldSize, newSize)
+            this.mlo.check1AddRemove(this.list, listOf(), oldSize, newSize)
         } else {
-            this.mao.check0()
+            this.mlo.check0()
         }
-        val actual = this.array.toList()
-        assertEquals(newSize, this.array.size)
+        val actual = this.list.toList()
+        assertEquals(newSize, this.list.size)
         assertEquals(newSize, actual.size)
         assertElementsEqual(actual, 0, oldSize, this.initialElements)
         assertElementsEqual(actual, oldSize, newSize, src.toList())
@@ -312,7 +312,7 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     @Test
     fun testAddAllP0() {
-        this.array.addAll(createCollection(0))
+        this.list.addAll(createCollection(0))
         assertUnchanged()
     }
 
@@ -357,14 +357,14 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testAddAllPOnEmpty0() {
         makeEmpty()
-        this.array.addAll(createCollection(0))
+        this.list.addAll(createCollection(0))
         assertUnchanged()
     }
 
     @Test
     fun testAddAllPManyPoints() {
         for (i in 0 until 65_000) {
-            this.array.addAll(*createCollection(3).toTypedArray())
+            this.list.addAll(*createCollection(3).toTypedArray())
         }
     }
 
@@ -372,19 +372,19 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     private fun testAddAllT(srcSize: Int) {
         val src = createCollection(srcSize)
-        val oldSize = this.array.size
+        val oldSize = this.list.size
 
-        this.array.addAll(src)
+        this.list.addAll(src)
 
         val newSize = oldSize + srcSize
         val sizeChanged = newSize != oldSize
         if (sizeChanged) {
-            this.mao.check1AddRemove(this.array, listOf(), oldSize, newSize)
+            this.mlo.check1AddRemove(this.list, listOf(), oldSize, newSize)
         } else {
-            this.mao.check0()
+            this.mlo.check0()
         }
-        val actual = this.array.toList()
-        assertEquals(newSize, this.array.size)
+        val actual = this.list.toList()
+        assertEquals(newSize, this.list.size)
         assertEquals(newSize, actual.size)
         assertElementsEqual(actual, 0, oldSize, this.initialElements)
         assertElementsEqual(actual, oldSize, newSize, src.toList())
@@ -392,7 +392,7 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     @Test
     fun testAddAllT0() {
-        this.array.addAll(createEmptyList())
+        this.list.addAll(createEmptyList())
         assertUnchanged()
     }
 
@@ -437,17 +437,17 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testAddAllTOnEmpty0() {
         makeEmpty()
-        this.array.addAll(createEmptyList())
+        this.list.addAll(createEmptyList())
         assertUnchanged()
     }
 
     @Test
     fun testAddAllTSelf() {
-        this.array.addAll(this.array)
+        this.list.addAll(this.list)
 
-        this.mao.check1AddRemove(this.array, listOf(), this.initialSize, this.initialSize * 2)
-        assertEquals(this.initialSize * 2, this.array.size)
-        val actual = this.array.toList()
+        this.mlo.check1AddRemove(this.list, listOf(), this.initialSize, this.initialSize * 2)
+        assertEquals(this.initialSize * 2, this.list.size)
+        val actual = this.list.toList()
         assertElementsEqual(actual, 0, this.initialSize, this.initialElements)
         assertElementsEqual(actual, this.initialSize, this.initialSize * 2, this.initialElements)
     }
@@ -456,18 +456,18 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     fun testAddAllTSelfEmpty() {
         makeEmpty()
 
-        this.array.addAll(this.array)
+        this.list.addAll(this.list)
 
-        this.mao.check0()
-        val actual = this.array.toList()
-        assertEquals(0, this.array.size)
+        this.mlo.check0()
+        val actual = this.list.toList()
+        assertEquals(0, this.list.size)
         assertEquals(0, actual.size)
     }
 
     @Test
     fun testAddAllTManyPoints() {
         for (i in 0 until 65_000) {
-            this.array.addAll(createNotEmptyList(createCollection(3)))
+            this.list.addAll(createNotEmptyList(createCollection(3)))
         }
     }
 
@@ -475,19 +475,19 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     private fun testPlusAssignP(srcSize: Int) {
         val src = createCollection(srcSize)
-        val oldSize = this.array.size
+        val oldSize = this.list.size
 
-        this.array += src.toTypedArray()
+        this.list += src.toTypedArray()
 
         val newSize = oldSize + srcSize
         val sizeChanged = newSize != oldSize
         if (sizeChanged) {
-            this.mao.check1AddRemove(this.array, listOf(), oldSize, newSize)
+            this.mlo.check1AddRemove(this.list, listOf(), oldSize, newSize)
         } else {
-            this.mao.check0()
+            this.mlo.check0()
         }
-        val actual = this.array.toList()
-        assertEquals(newSize, this.array.size)
+        val actual = this.list.toList()
+        assertEquals(newSize, this.list.size)
         assertEquals(newSize, actual.size)
         assertElementsEqual(actual, 0, oldSize, this.initialElements)
         assertElementsEqual(actual, oldSize, newSize, src.toList())
@@ -495,7 +495,7 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     @Test
     fun testPlusAssignP0() {
-        this.array += createCollection(0).toTypedArray()
+        this.list += createCollection(0).toTypedArray()
         assertUnchanged()
     }
 
@@ -540,14 +540,14 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testPlusAssignPOnEmpty0() {
         makeEmpty()
-        this.array += createCollection(0).toTypedArray()
+        this.list += createCollection(0).toTypedArray()
         assertUnchanged()
     }
 
     @Test
     fun testPlusAssignPManyPoints() {
         for (i in 0 until 65_000) {
-            this.array += createCollection(3).toTypedArray()
+            this.list += createCollection(3).toTypedArray()
         }
     }
 
@@ -555,19 +555,19 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     private fun testPlusAssignT(srcSize: Int) {
         val src = createCollection(srcSize)
-        val oldSize = this.array.size
+        val oldSize = this.list.size
 
-        this.array += src
+        this.list += src
 
         val newSize = oldSize + srcSize
         val sizeChanged = newSize != oldSize
         if (sizeChanged) {
-            this.mao.check1AddRemove(this.array, listOf(), oldSize, newSize)
+            this.mlo.check1AddRemove(this.list, listOf(), oldSize, newSize)
         } else {
-            this.mao.check0()
+            this.mlo.check0()
         }
-        val actual = this.array.toList()
-        assertEquals(newSize, this.array.size)
+        val actual = this.list.toList()
+        assertEquals(newSize, this.list.size)
         assertEquals(newSize, actual.size)
         assertElementsEqual(actual, 0, oldSize, this.initialElements)
         assertElementsEqual(actual, oldSize, newSize, src.toList())
@@ -575,7 +575,7 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
 
     @Test
     fun testPlusAssignT0() {
-        this.array += createEmptyList()
+        this.list += createEmptyList()
         assertUnchanged()
     }
 
@@ -620,17 +620,17 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     @Test
     fun testPlusAssignTOnEmpty0() {
         makeEmpty()
-        this.array += createEmptyList()
+        this.list += createEmptyList()
         assertUnchanged()
     }
 
     @Test
     fun testPlusAssignTSelf() {
-        this.array += this.array
+        this.list += this.list
 
-        this.mao.check1AddRemove(this.array, listOf(), this.initialSize, this.initialSize * 2)
-        assertEquals(this.initialSize * 2, this.array.size)
-        val actual = this.array.toList()
+        this.mlo.check1AddRemove(this.list, listOf(), this.initialSize, this.initialSize * 2)
+        assertEquals(this.initialSize * 2, this.list.size)
+        val actual = this.list.toList()
         assertElementsEqual(actual, 0, this.initialSize, this.initialElements)
         assertElementsEqual(actual, this.initialSize, this.initialSize * 2, this.initialElements)
     }
@@ -639,18 +639,18 @@ class ExtendedObservableListTest(private val listFactory: Callable<ObservableLis
     fun testPlusAssignTSelfEmpty() {
         makeEmpty()
 
-        this.array += this.array
+        this.list += this.list
 
-        this.mao.check0()
-        val actual = this.array.toList()
-        assertEquals(0, this.array.size)
+        this.mlo.check0()
+        val actual = this.list.toList()
+        assertEquals(0, this.list.size)
         assertEquals(0, actual.size)
     }
 
     @Test
     fun testPlusAssignTManyPoints() {
         for (i in 0 until 65_000) {
-            this.array += createNotEmptyList(createCollection(3))
+            this.list += createNotEmptyList(createCollection(3))
         }
     }
 

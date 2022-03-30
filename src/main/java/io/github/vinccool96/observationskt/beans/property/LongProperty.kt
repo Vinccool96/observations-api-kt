@@ -4,9 +4,6 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableLongValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
  * This class defines a [Property] wrapping a `Long` value.
@@ -27,10 +24,10 @@ import java.security.PrivilegedAction
 abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, WritableLongValue {
 
     override var value: Number?
-        get() = this.get()
+        get() = super.value
         set(value) {
             if (value == null) {
-                Logging.getLogger().fine("Attempt to set double property to null, using default value instead.",
+                Logging.getLogger().fine("Attempt to set long property to null, using default value instead.",
                         NullPointerException())
             }
             this.set(value?.toLong() ?: 0L)
@@ -64,7 +61,7 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, Writabl
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `LongProperty`. If the value of this
+     * Creates an [ObjectProperty] that is bidirectionally bound to this `LongProperty`. If the value of this
      * `LongProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
      * Can be used for binding an ObjectProperty to LongProperty.
@@ -81,8 +78,6 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, Writabl
     override fun asObject(): ObjectProperty<Long> {
         return object : ObjectPropertyBase<Long>(this@LongProperty.longValue) {
 
-            private val acc: AccessControlContext = AccessController.getContext()
-
             init {
                 BidirectionalBinding.bind(this as Property<Number?>, this@LongProperty)
             }
@@ -93,26 +88,16 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, Writabl
             override val name: String?
                 get() = this@LongProperty.name
 
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@LongProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
-
         }
     }
 
     companion object {
 
         /**
-         * Returns a `LongProperty` that wraps a [Property]. If the `Property` is already a `LongProperty`, it will be
-         * returned. Otherwise, a new `LongProperty` is created that is bound to the `Property`.
+         * Returns a `LongProperty` that wraps a [Property]. If the `Property` is already a `LongProperty`, it
+         * will be returned. Otherwise, a new `LongProperty` is created that is bound to the `Property`.
          *
-         * This is very useful when bidirectionally binding an ObjectProperty<Long> and a LongProperty.
+         * This is very useful when bidirectionally binding an ObjectProperty<Long> and an LongProperty.
          * ```
          * val longProperty: LongProperty = SimpleLongProperty(1L)
          * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(2L)
@@ -132,8 +117,6 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, Writabl
         fun longProperty(property: Property<Long?>): LongProperty {
             return if (property is LongProperty) property else object : LongPropertyBase() {
 
-                private val acc: AccessControlContext = AccessController.getContext()
-
                 init {
                     BidirectionalBinding.bind(this, property as Property<Number?>)
                 }
@@ -143,16 +126,6 @@ abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, Writabl
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

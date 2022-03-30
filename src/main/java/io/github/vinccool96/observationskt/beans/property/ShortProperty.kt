@@ -4,9 +4,6 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableShortValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
  * This class defines a [Property] wrapping a `Short` value.
@@ -64,7 +61,7 @@ abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, Writa
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `ShortProperty`. If the value of this
+     * Creates an [ObjectProperty] that is bidirectionally bound to this `ShortProperty`. If the value of this
      * `ShortProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
      * Can be used for binding an ObjectProperty to ShortProperty.
@@ -81,8 +78,6 @@ abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, Writa
     override fun asObject(): ObjectProperty<Short> {
         return object : ObjectPropertyBase<Short>(this@ShortProperty.shortValue) {
 
-            private val acc: AccessControlContext = AccessController.getContext()
-
             init {
                 BidirectionalBinding.bind(this as Property<Number?>, this@ShortProperty)
             }
@@ -92,16 +87,6 @@ abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, Writa
 
             override val name: String?
                 get() = this@ShortProperty.name
-
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@ShortProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
 
         }
     }
@@ -123,7 +108,7 @@ abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, Writa
          * shortProperty.bindBidirectional(objectAsShort)
          * ```
          *
-         * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
+         * Another approach is to convert the ShortProperty to ObjectProperty using [asObject] method.
          *
          * @param property The source `Property`
          *
@@ -131,8 +116,6 @@ abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, Writa
          */
         fun shortProperty(property: Property<Short?>): ShortProperty {
             return if (property is ShortProperty) property else object : ShortPropertyBase() {
-
-                private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
                     BidirectionalBinding.bind(this, property as Property<Number?>)
@@ -143,16 +126,6 @@ abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, Writa
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

@@ -39,7 +39,7 @@ class ArrayPropertyBaseTest {
         this.changeListener.reset()
     }
 
-    private fun attachListChangeListener() {
+    private fun attachArrayChangeListener() {
         this.property.addListener(this.listChangeListener)
         this.property.get()
         this.listChangeListener.reset()
@@ -105,8 +105,8 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testListChangeListener() {
-        attachListChangeListener()
+    fun testArrayChangeListener() {
+        attachArrayChangeListener()
         this.property.set(VALUE_2a)
         this.listChangeListener.check1AddRemove(this.property, EMPTY_ARRAY, 0, 2)
         this.property.removeListener(this.listChangeListener)
@@ -116,7 +116,7 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testSourceList_Invalidation() {
+    fun testSourceArray_Invalidation() {
         val source1: ObservableArray<Any> = ObservableCollections.observableObjectArray(arrayOf(Any()))
         val source2: ObservableArray<Any> = ObservableCollections.observableObjectArray(arrayOf(Any()))
         val value1 = Any()
@@ -159,7 +159,7 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testSourceList_Change() {
+    fun testSourceArray_Change() {
         val source1: ObservableArray<Any> = ObservableCollections.observableObjectArray(arrayOf(Any()))
         val source2: ObservableArray<Any> = ObservableCollections.observableObjectArray(arrayOf(Any()))
         val value1 = Any()
@@ -202,7 +202,7 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testSourceList_ListChange() {
+    fun testSourceArray_ArrayChange() {
         val source1: ObservableArray<Any> = ObservableCollections.observableObjectArray(arrayOf(Any()))
         val source2: ObservableArray<Any> = ObservableCollections.observableObjectArray(arrayOf(Any()))
         val value1 = Any()
@@ -211,7 +211,7 @@ class ArrayPropertyBaseTest {
         // constructor
         this.property = ArrayPropertyMock(source1)
         this.property.reset()
-        attachListChangeListener()
+        attachArrayChangeListener()
 
         // add element
         source1 += arrayOf(value1)
@@ -297,8 +297,8 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testSet_ListChange() {
-        attachListChangeListener()
+    fun testSet_ArrayChange() {
+        attachArrayChangeListener()
 
         // set value once
         this.property.set(VALUE_2a)
@@ -373,8 +373,8 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testValueSet_ListChange() {
-        attachListChangeListener()
+    fun testValueSet_ArrayChange() {
+        attachArrayChangeListener()
 
         // set value once
         this.property.value = VALUE_2a
@@ -474,8 +474,8 @@ class ArrayPropertyBaseTest {
     }
 
     @Test
-    fun testBind_ListChange() {
-        attachListChangeListener()
+    fun testBind_ArrayChange() {
+        attachArrayChangeListener()
         val v: ObservableObjectValueStub<ObservableArray<Any>> =
                 ObservableObjectValueStub(ObservableCollections.observableObjectArray(VALUE_1a))
 
@@ -601,6 +601,8 @@ class ArrayPropertyBaseTest {
 
     @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
+        attachInvalidationListener()
+        attachChangeListener()
         val v = SimpleArrayProperty(VALUE_1a, arrayOf(Any()))
         val listener2 = InvalidationListenerMock()
         val listener3 = InvalidationListenerMock()

@@ -4,9 +4,6 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableBooleanValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
  * This class provides a full implementation of a [Property] wrapping a `Boolean` value.
@@ -72,8 +69,6 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, 
     override fun asObject(): ObjectProperty<Boolean> {
         return object : ObjectPropertyBase<Boolean>(this@BooleanProperty.get()) {
 
-            private val acc: AccessControlContext = AccessController.getContext()
-
             init {
                 BidirectionalBinding.bind(this as Property<Boolean?>, this@BooleanProperty)
             }
@@ -83,16 +78,6 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, 
 
             override val name: String?
                 get() = this@BooleanProperty.name
-
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@BooleanProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
 
         }
     }
@@ -112,8 +97,6 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, 
         fun booleanProperty(property: Property<Boolean?>): BooleanProperty {
             return if (property is BooleanProperty) property else object : BooleanPropertyBase() {
 
-                private val acc: AccessControlContext = AccessController.getContext()
-
                 init {
                     BidirectionalBinding.bind(this as Property<Boolean?>, property)
                 }
@@ -123,16 +106,6 @@ abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, 
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

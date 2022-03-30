@@ -4,12 +4,9 @@ import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.value.WritableIntValue
 import io.github.vinccool96.observationskt.sun.binding.BidirectionalBinding
 import io.github.vinccool96.observationskt.sun.binding.Logging
-import java.security.AccessControlContext
-import java.security.AccessController
-import java.security.PrivilegedAction
 
 /**
- * This class defines a [Property] wrapping an `Int` value.
+ * This class defines a [Property] wrapping a `Int` value.
  *
  * The value of a `IntProperty` can be got and set with [get], [set], and [value].
  *
@@ -27,7 +24,7 @@ import java.security.PrivilegedAction
 abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableIntValue {
 
     override var value: Number?
-        get() = this.get()
+        get() = super.value
         set(value) {
             if (value == null) {
                 Logging.getLogger().fine("Attempt to set int property to null, using default value instead.",
@@ -64,7 +61,7 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
     }
 
     /**
-     * Creates an [ObjectProperty] that bidirectionally bound to this `IntProperty`. If the value of this
+     * Creates an [ObjectProperty] that is bidirectionally bound to this `IntProperty`. If the value of this
      * `IntProperty` changes, the value of the `ObjectProperty` will be updated automatically and vice-versa.
      *
      * Can be used for binding an ObjectProperty to IntProperty.
@@ -81,8 +78,6 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
     override fun asObject(): ObjectProperty<Int> {
         return object : ObjectPropertyBase<Int>(this@IntProperty.intValue) {
 
-            private val acc: AccessControlContext = AccessController.getContext()
-
             init {
                 BidirectionalBinding.bind(this as Property<Number?>, this@IntProperty)
             }
@@ -92,16 +87,6 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
 
             override val name: String?
                 get() = this@IntProperty.name
-
-            @Throws(Throwable::class)
-            protected fun finalize() {
-                try {
-                    AccessController.doPrivileged(PrivilegedAction {
-                        BidirectionalBinding.unbind(this, this@IntProperty)
-                    }, this.acc)
-                } finally {
-                }
-            }
 
         }
     }
@@ -123,7 +108,7 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
          * intProperty.bindBidirectional(objectAsInt)
          * ```
          *
-         * Another approach is to convert the LongProperty to ObjectProperty using [asObject] method.
+         * Another approach is to convert the IntProperty to ObjectProperty using [asObject] method.
          *
          * @param property The source `Property`
          *
@@ -131,8 +116,6 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
          */
         fun intProperty(property: Property<Int?>): IntProperty {
             return if (property is IntProperty) property else object : IntPropertyBase() {
-
-                private val acc: AccessControlContext = AccessController.getContext()
 
                 init {
                     BidirectionalBinding.bind(this, property as Property<Number?>)
@@ -143,16 +126,6 @@ abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableI
 
                 override val name: String?
                     get() = property.name
-
-                @Throws(Throwable::class)
-                protected fun finalize() {
-                    try {
-                        AccessController.doPrivileged(PrivilegedAction {
-                            BidirectionalBinding.unbind(property, this)
-                        }, this.acc)
-                    } finally {
-                    }
-                }
 
             }
         }

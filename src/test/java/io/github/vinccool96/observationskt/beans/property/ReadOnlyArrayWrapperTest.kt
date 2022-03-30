@@ -602,6 +602,9 @@ class ReadOnlyArrayWrapperTest {
 
     @Test
     fun testAddingListenerWillAlwaysReceiveInvalidationEvent() {
+        attachInvalidationListeners()
+        attachInternalChangeListener()
+        attachPublicChangeListener()
         val v: ArrayProperty<Any> = SimpleArrayProperty(VALUE_1, arrayOf(Any()))
         val internalListener2 = InvalidationListenerMock()
         val internalListener3 = InvalidationListenerMock()
