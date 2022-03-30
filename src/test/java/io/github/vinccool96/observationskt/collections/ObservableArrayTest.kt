@@ -8,10 +8,7 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @RunWith(Parameterized::class)
 class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayWrapper<T, P>) {
@@ -204,12 +201,14 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testResize(true, 0, 0)
     }
 
-    @Test(expected = NegativeArraySizeException::class)
+    @Test
     fun testResizeToNegative() {
-        try {
-            this.array.resize(-5)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<NegativeArraySizeException> {
+            try {
+                this.array.resize(-5)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -395,39 +394,47 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         assertUnchanged()
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllPRangeNegative1() {
-        try {
-            testSetAllPRange(INITIAL_SIZE, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllPRange(INITIAL_SIZE, -1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllPRangeNegative2() {
-        try {
-            testSetAllPRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllPRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllPRangeNegative3() {
-        try {
-            testSetAllPRange(INITIAL_SIZE, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllPRange(INITIAL_SIZE, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllPRangeNegative4() {
-        try {
-            testSetAllPRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllPRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -502,63 +509,75 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         assertUnchanged()
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeNegative1() {
-        try {
-            testSetAllTRange(INITIAL_SIZE, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllTRange(INITIAL_SIZE, -1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeNegative2() {
-        try {
-            testSetAllTRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllTRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeNegative3() {
-        try {
-            testSetAllTRange(INITIAL_SIZE, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllTRange(INITIAL_SIZE, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeNegative4() {
-        try {
-            testSetAllTRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetAllTRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeNegativeAfterSrcEnsureCapacity() {
-        val expected = this.wrapper.createArray(INITIAL_SIZE)
-        val src = this.wrapper.newInstance().createNotEmptyArray(expected)
-        src.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper.setAllT(src, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val expected = this.wrapper.createArray(INITIAL_SIZE)
+            val src = this.wrapper.newInstance().createNotEmptyArray(expected)
+            src.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper.setAllT(src, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeNegativeAfterSrcClear() {
-        val expected = this.wrapper.createArray(INITIAL_SIZE)
-        val src = this.wrapper.newInstance().createNotEmptyArray(expected)
-        src.clear()
-        try {
-            this.wrapper.setAllT(src, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val expected = this.wrapper.createArray(INITIAL_SIZE)
+            val src = this.wrapper.newInstance().createNotEmptyArray(expected)
+            src.clear()
+            try {
+                this.wrapper.setAllT(src, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -604,59 +623,71 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testSetAllTRangeSelf(0, 0)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeSelfNegative1() {
-        try {
-            this.wrapper.setAllT(this.array, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setAllT(this.array, -1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeSelfNegative2() {
-        try {
-            this.wrapper.setAllT(this.array, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setAllT(this.array, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeSelfNegative3() {
-        try {
-            this.wrapper.setAllT(this.array, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setAllT(this.array, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeSelfNegative4() {
-        try {
-            this.wrapper.setAllT(this.array, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setAllT(this.array, 0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeSelfNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper.setAllT(this.array, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper.setAllT(this.array, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetAllTRangeSelfNegativeAfterClear() {
-        makeEmpty()
-        try {
-            this.wrapper.setAllT(this.array, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                this.wrapper.setAllT(this.array, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1109,39 +1140,47 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         assertUnchanged()
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllPRangeNegative1() {
-        try {
-            testAddAllPRange(INITIAL_SIZE, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllPRange(INITIAL_SIZE, -1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllPRangeNegative2() {
-        try {
-            testAddAllPRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllPRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllPRangeNegative3() {
-        try {
-            testAddAllPRange(INITIAL_SIZE, 1, -1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllPRange(INITIAL_SIZE, 1, -1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllPRangeNegative4() {
-        try {
-            testAddAllPRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllPRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1229,63 +1268,75 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         assertUnchanged()
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeNegative1() {
-        try {
-            testAddAllTRange(INITIAL_SIZE, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRange(INITIAL_SIZE, -1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeNegative2() {
-        try {
-            testAddAllTRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRange(INITIAL_SIZE, 0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeNegative3() {
-        try {
-            testAddAllTRange(INITIAL_SIZE, 1, -1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRange(INITIAL_SIZE, 1, -1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeNegative4() {
-        try {
-            testAddAllTRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRange(INITIAL_SIZE, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeNegativeAfterSrcEnsureCapacity() {
-        val srcA = this.wrapper.createArray(INITIAL_SIZE)
-        val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
-        src.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper.addAllT(src, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val srcA = this.wrapper.createArray(INITIAL_SIZE)
+            val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
+            src.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper.addAllT(src, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeNegativeAfterSrcClear() {
-        val srcA = this.wrapper.createArray(INITIAL_SIZE)
-        val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
-        src.clear()
-        try {
-            this.wrapper.addAllT(src, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val srcA = this.wrapper.createArray(INITIAL_SIZE)
+            val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
+            src.clear()
+            try {
+                this.wrapper.addAllT(src, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1322,59 +1373,71 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testAddAllTRangeSelf(2, 4)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeSelfNegative1() {
-        try {
-            testAddAllTRangeSelf(-1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRangeSelf(-1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeSelfNegative2() {
-        try {
-            testAddAllTRangeSelf(0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRangeSelf(0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeSelfNegative3() {
-        try {
-            testAddAllTRangeSelf(1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRangeSelf(1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeSelfNegative4() {
-        try {
-            testAddAllTRangeSelf(INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testAddAllTRangeSelf(INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeSelfNegativeAfterSrcEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper.addAllT(this.array, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper.addAllT(this.array, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testAddAllTRangeSelfNegativeAfterSrcClear() {
-        makeEmpty()
-        try {
-            this.wrapper.addAllT(this.array, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                this.wrapper.addAllT(this.array, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1422,86 +1485,104 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testSetPRange(10, 3, 5, 8)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegative1() {
-        try {
-            testSetPRange(10, -1, 0, 3)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetPRange(10, -1, 0, 3)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegative2() {
-        try {
-            testSetPRange(10, 0, -1, 3)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetPRange(10, 0, -1, 3)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testSetPRangeNegative3() {
-        try {
-            testSetPRange(10, 1, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<IllegalArgumentException> {
+            try {
+                testSetPRange(10, 1, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegative4() {
-        try {
-            testSetPRange(10, INITIAL_SIZE, 0, 3)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetPRange(10, INITIAL_SIZE, 0, 3)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegative5() {
-        try {
-            testSetPRange(10, 0, 10, 11)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetPRange(10, 0, 10, 11)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegative6() {
-        try {
-            testSetPRange(3, 0, 1, 5)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetPRange(3, 0, 1, 5)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegative7() {
-        try {
-            testSetPRange(10, INITIAL_SIZE - 3, 0, 4)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetPRange(10, INITIAL_SIZE - 3, 0, 4)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            testSetPRange(10, INITIAL_SIZE, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                testSetPRange(10, INITIAL_SIZE, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetPRangeNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testSetPRange(1, 0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testSetPRange(1, 0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1550,110 +1631,132 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testSetTRange(10, 3, 5, 8)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegative1() {
-        try {
-            testSetTRange(10, -1, 0, 3)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetTRange(10, -1, 0, 3)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegative2() {
-        try {
-            testSetTRange(10, 0, -1, 3)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetTRange(10, 0, -1, 3)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testSetTRangeNegative3() {
-        try {
-            testSetTRange(10, 1, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<IllegalArgumentException> {
+            try {
+                testSetTRange(10, 1, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegative4() {
-        try {
-            testSetTRange(10, INITIAL_SIZE, 0, 3)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetTRange(10, INITIAL_SIZE, 0, 3)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegative5() {
-        try {
-            testSetTRange(10, 0, 10, 11)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetTRange(10, 0, 10, 11)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegative6() {
-        try {
-            testSetTRange(3, 0, 1, 5)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetTRange(3, 0, 1, 5)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegative7() {
-        try {
-            testSetTRange(10, INITIAL_SIZE - 3, 0, 4)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testSetTRange(10, INITIAL_SIZE - 3, 0, 4)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            testSetTRange(10, INITIAL_SIZE, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                testSetTRange(10, INITIAL_SIZE, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testSetTRange(1, 0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testSetTRange(1, 0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegativeAfterSrcEnsureCapacity() {
-        val srcA = this.wrapper.createArray(1)
-        val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
-        src.ensureCapacity(2)
-        try {
-            this.wrapper.setT(src, 0, 1, 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val srcA = this.wrapper.createArray(1)
+            val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
+            src.ensureCapacity(2)
+            try {
+                this.wrapper.setT(src, 0, 1, 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeNegativeAfterSrcClear() {
-        val srcA = this.wrapper.createArray(1)
-        val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
-        src.clear()
-        try {
-            this.wrapper.setT(src, 0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val srcA = this.wrapper.createArray(1)
+            val src = this.wrapper.newInstance().createNotEmptyArray(srcA)
+            src.clear()
+            try {
+                this.wrapper.setT(src, 0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1699,117 +1802,141 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testSetTRangeSelf(INITIAL_SIZE / 2, 0, INITIAL_SIZE / 2)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeSelfNegative1() {
-        try {
-            this.wrapper.setT(this.array, -1, 0, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setT(this.array, -1, 0, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeSelfNegative2() {
-        try {
-            this.wrapper.setT(this.array, 0, -1, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setT(this.array, 0, -1, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeSelfNegative3() {
-        try {
-            this.wrapper.setT(this.array, 0, 0, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setT(this.array, 0, 0, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testSetTRangeSelfNegative4() {
-        try {
-            this.wrapper.setT(this.array, 0, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<IllegalArgumentException> {
+            try {
+                this.wrapper.setT(this.array, 0, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeSelfNegative5() {
-        try {
-            this.wrapper.setT(this.array, INITIAL_SIZE, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper.setT(this.array, INITIAL_SIZE, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testSetTRangeSelfNegative6() {
-        try {
-            this.wrapper.setT(this.array, 0, INITIAL_SIZE, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<IllegalArgumentException> {
+            try {
+                this.wrapper.setT(this.array, 0, INITIAL_SIZE, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeSelfNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper.setT(this.array, 0, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper.setT(this.array, 0, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetTRangeSelfNegativeAfterClear() {
-        makeEmpty()
-        try {
-            this.wrapper.setT(this.array, 0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                this.wrapper.setT(this.array, 0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
     // ========================= negative get(index) tests =========================
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testGetNegative() {
-        try {
-            this.wrapper[-1]
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper[-1]
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testGetOutOfBounds() {
-        try {
-            this.wrapper[this.array.size]
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper[this.array.size]
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testGetAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper[INITIAL_SIZE]
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper[INITIAL_SIZE]
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testGetAfterClear() {
-        makeEmpty()
-        try {
-            this.wrapper[0]
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                this.wrapper[0]
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1831,41 +1958,49 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetValueNegative() {
-        try {
-            this.wrapper[-1] = this.wrapper.nextValue
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper[-1] = this.wrapper.nextValue
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetValueOutOfBounds() {
-        try {
-            this.wrapper[this.array.size] = this.wrapper.nextValue
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                this.wrapper[this.array.size] = this.wrapper.nextValue
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetValueAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            this.wrapper[INITIAL_SIZE] = this.wrapper.nextValue
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                this.wrapper[INITIAL_SIZE] = this.wrapper.nextValue
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testSetValueAfterClear() {
-        makeEmpty()
-        try {
-            this.wrapper[0] = this.wrapper.nextValue
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                this.wrapper[0] = this.wrapper.nextValue
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -1919,60 +2054,72 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testToArrayRange(5, 6)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testToArrayRangeNegative1() {
-        try {
-            testToArrayRange(-1, 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testToArrayRange(-1, 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testToArrayRangeNegative2() {
-        try {
-            testToArrayRange(this.array.size, this.array.size + 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testToArrayRange(this.array.size, this.array.size + 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testToArrayRangeNegative3() {
-        try {
-            testToArrayRange(5, this.array.size + 6)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testToArrayRange(5, this.array.size + 6)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testToArrayRangeNegative4() {
-        makeEmpty()
-        try {
-            testToArrayRange(2, 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testToArrayRange(2, 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testToArrayRangeNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            testToArrayRange(INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                testToArrayRange(INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testToArrayRangeNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testToArrayRange(0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testToArrayRange(0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -2042,95 +2189,115 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testCopyIntoP(0, 0, 0, 0)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative1() {
-        try {
-            testCopyIntoP(this.array.size, 0, -1, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(this.array.size, 0, -1, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative2() {
-        try {
-            testCopyIntoP(this.array.size / 2, 0, 0, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(this.array.size / 2, 0, 0, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative3() {
-        try {
-            testCopyIntoP(this.array.size, 0, this.array.size, this.array.size * 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(this.array.size, 0, this.array.size, this.array.size * 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative4() {
-        try {
-            testCopyIntoP(this.array.size, -1, 0, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(this.array.size, -1, 0, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative5() {
-        try {
-            testCopyIntoP(this.array.size, this.array.size, 0, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(this.array.size, this.array.size, 0, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative6() {
-        try {
-            testCopyIntoP(this.array.size, 0, 0, this.array.size * 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(this.array.size, 0, 0, this.array.size * 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative7() {
-        makeEmpty()
-        try {
-            testCopyIntoP(0, 0, 1, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testCopyIntoP(0, 0, 1, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegative8() {
-        try {
-            testCopyIntoP(0, 1, 0, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(0, 1, 0, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegativeAfterEnsureCapacity() {
-        try {
-            testCopyIntoP(0, 1, 0, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoP(0, 1, 0, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoPNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testCopyIntoP(1, 0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testCopyIntoP(1, 0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -2204,121 +2371,145 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testCopyIntoT(0, 0, 0, 0)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative1() {
-        try {
-            testCopyIntoT(this.array.size, 0, -1, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(this.array.size, 0, -1, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative2() {
-        try {
-            testCopyIntoT(this.array.size / 2, 0, 0, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(this.array.size / 2, 0, 0, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative3() {
-        try {
-            testCopyIntoT(this.array.size, 0, this.array.size, this.array.size * 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(this.array.size, 0, this.array.size, this.array.size * 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative4() {
-        try {
-            testCopyIntoT(this.array.size, -1, 0, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(this.array.size, -1, 0, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative5() {
-        try {
-            testCopyIntoT(this.array.size, this.array.size, 0, this.array.size)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(this.array.size, this.array.size, 0, this.array.size)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative6() {
-        try {
-            testCopyIntoT(this.array.size, 0, 0, this.array.size * 2)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(this.array.size, 0, 0, this.array.size * 2)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative7() {
-        makeEmpty()
-        try {
-            testCopyIntoT(0, 0, 1, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testCopyIntoT(0, 0, 1, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegative8() {
-        try {
-            testCopyIntoT(0, 1, 0, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(0, 1, 0, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegativeAfterEnsureCapacity() {
-        try {
-            testCopyIntoT(0, 1, 0, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoT(0, 1, 0, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testCopyIntoT(1, 0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testCopyIntoT(1, 0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegativeAfterDestEnsureCapacity() {
-        val wrapper2 = this.wrapper.newInstance()
-        val initial = wrapper2.createArray(1)
-        val dest = wrapper2.createNotEmptyArray(initial)
-        dest.ensureCapacity(2)
-        try {
-            this.wrapper.copyIntoT(dest, 1, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val wrapper2 = this.wrapper.newInstance()
+            val initial = wrapper2.createArray(1)
+            val dest = wrapper2.createNotEmptyArray(initial)
+            dest.ensureCapacity(2)
+            try {
+                this.wrapper.copyIntoT(dest, 1, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTNegativeAfterDestClear() {
-        val wrapper2 = this.wrapper.newInstance()
-        val initial = wrapper2.createArray(1)
-        val dest = wrapper2.createNotEmptyArray(initial)
-        dest.clear()
-        try {
-            this.wrapper.copyIntoT(dest, 1, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            val wrapper2 = this.wrapper.newInstance()
+            val initial = wrapper2.createArray(1)
+            val dest = wrapper2.createNotEmptyArray(initial)
+            dest.clear()
+            try {
+                this.wrapper.copyIntoT(dest, 1, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
@@ -2359,86 +2550,104 @@ class ObservableArrayTest<T : ObservableArray<P>, P>(private val wrapper: ArrayW
         testCopyIntoTSelf(0, INITIAL_SIZE / 2, INITIAL_SIZE)
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegative1() {
-        try {
-            testCopyIntoTSelf(0, -1, INITIAL_SIZE - 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoTSelf(0, -1, INITIAL_SIZE - 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegative2() {
-        try {
-            testCopyIntoTSelf(0, INITIAL_SIZE, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoTSelf(0, INITIAL_SIZE, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegative3() {
-        try {
-            testCopyIntoTSelf(-1, 0, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoTSelf(-1, 0, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegative4() {
-        try {
-            testCopyIntoTSelf(INITIAL_SIZE, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoTSelf(INITIAL_SIZE, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testCopyIntoTSelfNegative5() {
-        try {
-            testCopyIntoTSelf(1, 1, 0)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<IllegalArgumentException> {
+            try {
+                testCopyIntoTSelf(1, 1, 0)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegative6() {
-        try {
-            testCopyIntoTSelf(1, 0, INITIAL_SIZE)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoTSelf(1, 0, INITIAL_SIZE)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegative7() {
-        try {
-            testCopyIntoTSelf(0, 1, INITIAL_SIZE + 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            try {
+                testCopyIntoTSelf(0, 1, INITIAL_SIZE + 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegativeAfterEnsureCapacity() {
-        this.array.ensureCapacity(INITIAL_SIZE * 2)
-        try {
-            testCopyIntoTSelf(INITIAL_SIZE, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            this.array.ensureCapacity(INITIAL_SIZE * 2)
+            try {
+                testCopyIntoTSelf(INITIAL_SIZE, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException::class)
+    @Test
     fun testCopyIntoTSelfNegativeAfterClear() {
-        makeEmpty()
-        try {
-            testCopyIntoTSelf(0, 0, 1)
-        } finally {
-            assertUnchanged()
+        assertFailsWith<ArrayIndexOutOfBoundsException> {
+            makeEmpty()
+            try {
+                testCopyIntoTSelf(0, 0, 1)
+            } finally {
+                assertUnchanged()
+            }
         }
     }
 

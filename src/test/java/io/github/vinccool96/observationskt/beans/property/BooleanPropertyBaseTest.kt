@@ -4,11 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableBooleanValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @Suppress("BooleanLiteralArgument")
 class BooleanPropertyBaseTest {
@@ -169,18 +165,22 @@ class BooleanPropertyBaseTest {
         this.changeListener.check(this.property, false, true, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBound() {
-        val v: BooleanProperty = SimpleBooleanProperty(true)
-        this.property.bind(v)
-        this.property.set(true)
+        assertFailsWith<RuntimeException> {
+            val v: BooleanProperty = SimpleBooleanProperty(true)
+            this.property.bind(v)
+            this.property.set(true)
+        }
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testValueSetBound() {
-        val v: BooleanProperty = SimpleBooleanProperty(true)
-        this.property.bind(v)
-        this.property.value = true
+        assertFailsWith<RuntimeException> {
+            val v: BooleanProperty = SimpleBooleanProperty(true)
+            this.property.bind(v)
+            this.property.value = true
+        }
     }
 
     @Test

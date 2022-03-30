@@ -52,9 +52,11 @@ class ListExpressionTest {
         log.checkFine(IndexOutOfBoundsException::class.java)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testValueAt_Constant_NegativeIndex() {
-        this.op1.valueAt(-1)
+        assertFailsWith<IllegalArgumentException> {
+            this.op1.valueAt(-1)
+        }
     }
 
     @Test

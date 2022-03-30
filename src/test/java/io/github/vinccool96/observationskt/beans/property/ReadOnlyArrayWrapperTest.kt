@@ -292,11 +292,13 @@ class ReadOnlyArrayWrapperTest {
         this.publicChangeListener.check(this.readOnlyProperty, VALUE_2, VALUE_1, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBoundValue() {
-        val v: ArrayProperty<Any> = SimpleArrayProperty(VALUE_1, arrayOf(Any()))
-        this.property.bind(v)
-        this.property.set(VALUE_2)
+        assertFailsWith<RuntimeException> {
+            val v: ArrayProperty<Any> = SimpleArrayProperty(VALUE_1, arrayOf(Any()))
+            this.property.bind(v)
+            this.property.set(VALUE_2)
+        }
     }
 
     @Test

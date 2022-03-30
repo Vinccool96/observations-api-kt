@@ -400,11 +400,13 @@ class ArrayPropertyBaseTest {
         this.listChangeListener.reset()
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBoundValue() {
-        val v: ArrayProperty<Any> = SimpleArrayProperty(VALUE_2b, arrayOf(Any()))
-        this.property.bind(v)
-        this.property.set(VALUE_1a)
+        assertFailsWith<RuntimeException> {
+            val v: ArrayProperty<Any> = SimpleArrayProperty(VALUE_2b, arrayOf(Any()))
+            this.property.bind(v)
+            this.property.set(VALUE_1a)
+        }
     }
 
     @Test

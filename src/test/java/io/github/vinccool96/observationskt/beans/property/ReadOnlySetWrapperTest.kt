@@ -9,12 +9,7 @@ import io.github.vinccool96.observationskt.collections.MockSetObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableSet
 import org.junit.Assert
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class ReadOnlySetWrapperTest {
 
@@ -305,11 +300,13 @@ class ReadOnlySetWrapperTest {
         this.publicChangeListener.check(this.readOnlyProperty, VALUE_2, VALUE_1, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBoundValue() {
-        val v: SetProperty<Any> = SimpleSetProperty(VALUE_1)
-        this.property.bind(v)
-        this.property.set(VALUE_2)
+        assertFailsWith<RuntimeException> {
+            val v: SetProperty<Any> = SimpleSetProperty(VALUE_1)
+            this.property.bind(v)
+            this.property.set(VALUE_2)
+        }
     }
 
     @Test

@@ -3,11 +3,7 @@ package io.github.vinccool96.observationskt.beans.property
 import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class ObjectPropertyBaseTest {
 
@@ -167,18 +163,22 @@ class ObjectPropertyBaseTest {
         this.changeListener.check(this.property, VALUE_1a, VALUE_1b, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBound() {
-        val v: ObjectProperty<Any?> = SimpleObjectProperty(VALUE_1a)
-        this.property.bind(v)
-        this.property.set(VALUE_2b)
+        assertFailsWith<RuntimeException> {
+            val v: ObjectProperty<Any?> = SimpleObjectProperty(VALUE_1a)
+            this.property.bind(v)
+            this.property.set(VALUE_2b)
+        }
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testValueSetBound() {
-        val v: ObjectProperty<Any?> = SimpleObjectProperty(VALUE_1a)
-        this.property.bind(v)
-        this.property.value = VALUE_2b
+        assertFailsWith<RuntimeException> {
+            val v: ObjectProperty<Any?> = SimpleObjectProperty(VALUE_1a)
+            this.property.bind(v)
+            this.property.value = VALUE_2b
+        }
     }
 
     @Test

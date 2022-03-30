@@ -624,9 +624,11 @@ class AbstractNumberExpressionTest {
         assertEquals("2.7183", s.get())
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testFactoryOther() {
-        NumberExpressionBase.numberExpression(OtherNumberValue())
+        assertFailsWith<IllegalArgumentException> {
+            NumberExpressionBase.numberExpression(OtherNumberValue())
+        }
     }
 
     private enum class OP {

@@ -4,11 +4,7 @@ import io.github.vinccool96.observationskt.beans.InvalidationListenerMock
 import io.github.vinccool96.observationskt.beans.value.ChangeListenerMock
 import io.github.vinccool96.observationskt.beans.value.ObservableObjectValueStub
 import io.github.vinccool96.observationskt.beans.value.ObservableShortValueStub
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @Suppress("BooleanLiteralArgument")
 class ShortPropertyBaseTest {
@@ -169,18 +165,22 @@ class ShortPropertyBaseTest {
         this.changeListener.check(this.property, VALUE_2, VALUE_1, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBound() {
-        val v: ShortProperty = SimpleShortProperty(VALUE_1)
-        this.property.bind(v)
-        this.property.set(VALUE_1)
+        assertFailsWith<RuntimeException> {
+            val v: ShortProperty = SimpleShortProperty(VALUE_1)
+            this.property.bind(v)
+            this.property.set(VALUE_1)
+        }
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testValueSetBound() {
-        val v: ShortProperty = SimpleShortProperty(VALUE_1)
-        this.property.bind(v)
-        this.property.value = VALUE_1
+        assertFailsWith<RuntimeException> {
+            val v: ShortProperty = SimpleShortProperty(VALUE_1)
+            this.property.bind(v)
+            this.property.value = VALUE_1
+        }
     }
 
     @Test

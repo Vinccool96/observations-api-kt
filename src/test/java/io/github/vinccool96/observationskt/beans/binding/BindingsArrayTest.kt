@@ -163,9 +163,11 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testValueAt_Constant_NegativeIndex() {
-        Bindings.valueAt(this.array, -1)
+        assertFailsWith<IllegalArgumentException> {
+            Bindings.valueAt(this.array, -1)
+        }
     }
 
     @Test
@@ -295,10 +297,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testBooleanValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableBooleanArray = ObservableCollections.observableBooleanArray()
-        Bindings.booleanValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableBooleanArray = ObservableCollections.observableBooleanArray()
+            Bindings.booleanValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -436,10 +440,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testDoubleValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableDoubleArray = ObservableCollections.observableDoubleArray()
-        Bindings.doubleValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableDoubleArray = ObservableCollections.observableDoubleArray()
+            Bindings.doubleValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -577,10 +583,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testFloatValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableFloatArray = ObservableCollections.observableFloatArray()
-        Bindings.floatValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableFloatArray = ObservableCollections.observableFloatArray()
+            Bindings.floatValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -718,10 +726,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testIntValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableIntArray = ObservableCollections.observableIntArray()
-        Bindings.intValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableIntArray = ObservableCollections.observableIntArray()
+            Bindings.intValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -859,10 +869,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testLongValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableLongArray = ObservableCollections.observableLongArray()
-        Bindings.longValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableLongArray = ObservableCollections.observableLongArray()
+            Bindings.longValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -1000,10 +1012,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testShortValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableShortArray = ObservableCollections.observableShortArray()
-        Bindings.shortValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableShortArray = ObservableCollections.observableShortArray()
+            Bindings.shortValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -1141,10 +1155,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testByteValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableByteArray = ObservableCollections.observableByteArray()
-        Bindings.byteValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableByteArray = ObservableCollections.observableByteArray()
+            Bindings.byteValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -1282,10 +1298,12 @@ class BindingsArrayTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testStringValueAt_Constant_NegativeIndex() {
-        val localProperty: ObservableObjectArray<String?> = ObservableCollections.observableObjectArray(arrayOf(""))
-        Bindings.stringValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ObservableObjectArray<String?> = ObservableCollections.observableObjectArray(arrayOf(""))
+            Bindings.stringValueAt(localProperty, -1)
+        }
     }
 
     @Test

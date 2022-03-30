@@ -8,12 +8,7 @@ import io.github.vinccool96.observationskt.collections.MockListObserver
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import org.junit.Assert
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class ReadOnlyListWrapperTest {
 
@@ -298,11 +293,13 @@ class ReadOnlyListWrapperTest {
         this.publicChangeListener.check(this.readOnlyProperty, VALUE_2, VALUE_1, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBoundValue() {
-        val v: ListProperty<Any> = SimpleListProperty(VALUE_1)
-        this.property.bind(v)
-        this.property.set(VALUE_2)
+        assertFailsWith<RuntimeException> {
+            val v: ListProperty<Any> = SimpleListProperty(VALUE_1)
+            this.property.bind(v)
+            this.property.set(VALUE_2)
+        }
     }
 
     @Test

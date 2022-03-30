@@ -1,10 +1,7 @@
 package io.github.vinccool96.observationskt.collections
 
 import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import kotlin.test.*
 
 class ListChangeBuilderTest {
 
@@ -394,39 +391,53 @@ class ListChangeBuilderTest {
         this.observer.checkAddRemove(1, this.observableList, removed, 0, 2)
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextAddWithoutBegin() {
-        this.builder.nextAdd(0, 1)
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextAdd(0, 1)
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextRemoveWithoutBegin() {
-        this.builder.nextRemove(0, "a")
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextRemove(0, "a")
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextRemove2WithoutBegin() {
-        this.builder.nextRemove(0, listOf("a"))
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextRemove(0, listOf("a"))
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextUpdateWithoutBegin() {
-        this.builder.nextUpdate(0)
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextUpdate(0)
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextSetWithoutBegin() {
-        this.builder.nextSet(0, "aa")
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextSet(0, "aa")
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextReplaceWithoutBegin() {
-        this.builder.nextReplace(0, 1, listOf("aa"))
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextReplace(0, 1, listOf("aa"))
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun testNextPermutationWithoutBegin() {
-        this.builder.nextPermutation(0, 2, intArrayOf(1, 0))
+        assertFailsWith<IllegalStateException> {
+            this.builder.nextPermutation(0, 2, intArrayOf(1, 0))
+        }
     }
 
     @Test

@@ -3,11 +3,7 @@ package io.github.vinccool96.observationskt.collections.transformation
 import io.github.vinccool96.observationskt.collections.ListChangeListener.Change
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class TransformationListTest {
 
@@ -40,9 +36,11 @@ class TransformationListTest {
         assertFalse(this.list1.isInTransformationChain(this.list4))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testGetSourceIndexFor_Exception() {
-        this.list1.getSourceIndexFor(this.list4, 0)
+        assertFailsWith<IllegalArgumentException> {
+            this.list1.getSourceIndexFor(this.list4, 0)
+        }
     }
 
     private class TransformationListImpl(list: ObservableList<String>) : TransformationList<String, String>(list) {

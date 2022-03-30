@@ -9,13 +9,8 @@ import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
 import org.junit.Assert
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class ReadOnlyMapWrapperTest {
 
@@ -300,11 +295,13 @@ class ReadOnlyMapWrapperTest {
         this.publicChangeListener.check(this.readOnlyProperty, VALUE_2, VALUE_1, 2)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testMapBoundValue() {
-        val v = SimpleMapProperty(VALUE_1)
-        this.property.bind(v)
-        this.property.set(VALUE_2)
+        assertFailsWith<RuntimeException> {
+            val v = SimpleMapProperty(VALUE_1)
+            this.property.bind(v)
+            this.property.set(VALUE_2)
+        }
     }
 
     @Test

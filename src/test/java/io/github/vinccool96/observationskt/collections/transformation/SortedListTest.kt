@@ -6,8 +6,6 @@ import io.github.vinccool96.observationskt.collections.*
 import io.github.vinccool96.observationskt.sun.collections.NonIterableListChange.SimplePermutationChange
 import io.github.vinccool96.observationskt.sun.collections.ObservableListWrapper
 import io.github.vinccool96.observationskt.util.Callback
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.*
 
 class SortedListTest {
@@ -47,9 +45,11 @@ class SortedListTest {
         compareIndices()
     }
 
-    @Test(expected = IndexOutOfBoundsException::class)
+    @Test
     fun testGet() {
-        this.sortedList[8]
+        assertFailsWith<IndexOutOfBoundsException> {
+            this.sortedList[8]
+        }
     }
 
     @Test

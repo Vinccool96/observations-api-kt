@@ -8,12 +8,7 @@ import io.github.vinccool96.observationskt.collections.MockListObserver
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.collections.Person
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class ListPropertyBaseTest {
 
@@ -444,11 +439,13 @@ class ListPropertyBaseTest {
         this.listChangeListener.clear()
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testSetBoundValue() {
-        val v: ListProperty<Any> = SimpleListProperty(VALUE_2b)
-        this.property.bind(v)
-        this.property.set(VALUE_1a)
+        assertFailsWith<RuntimeException> {
+            val v: ListProperty<Any> = SimpleListProperty(VALUE_2b)
+            this.property.bind(v)
+            this.property.set(VALUE_1a)
+        }
     }
 
     @Test
@@ -704,7 +701,7 @@ class ListPropertyBaseTest {
     }
 
     private fun createPersonsList(): ObservableList<Person> {
-        val list: ObservableList<Person> = ObservableCollections.observableArrayList {param -> arrayOf(param.name)}
+        val list: ObservableList<Person> = ObservableCollections.observableArrayList { param -> arrayOf(param.name) }
         list.addAll(Person("one"), Person("two"), Person("three"), Person("four"), Person("five"))
         return list
     }

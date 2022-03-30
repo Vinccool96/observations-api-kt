@@ -9,8 +9,6 @@ import io.github.vinccool96.observationskt.collections.MockMapObserver.Call
 import io.github.vinccool96.observationskt.collections.MockMapObserver.Tuple
 import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableMap
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import java.util.*
 import kotlin.test.*
 
@@ -441,11 +439,13 @@ class MapPropertyBaseTest {
         this.mapChangeListener.assertAdded(Tuple(KEY_1b, DATA_1b))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun testMapBoundValue() {
-        val v: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1a)
-        this.property.bind(v)
-        this.property.set(VALUE_1b)
+        assertFailsWith<RuntimeException> {
+            val v: MapProperty<Any, Any> = SimpleMapProperty(VALUE_1a)
+            this.property.bind(v)
+            this.property.set(VALUE_1b)
+        }
     }
 
     @Test

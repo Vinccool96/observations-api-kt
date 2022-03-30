@@ -8,15 +8,10 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import io.github.vinccool96.observationskt.sun.binding.ErrorLoggingUtility
 import org.junit.AfterClass
-import kotlin.test.BeforeTest
 import org.junit.BeforeClass
-import kotlin.test.Test
 import kotlin.math.E
 import kotlin.math.PI
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @Suppress("RedundantNullableReturnType")
 class BindingsListTest {
@@ -149,9 +144,11 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testValueAt_Constant_NegativeIndex() {
-        Bindings.valueAt(this.property, -1)
+        assertFailsWith<IllegalArgumentException> {
+            Bindings.valueAt(this.property, -1)
+        }
     }
 
     @Test
@@ -284,10 +281,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testBooleanValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Boolean?> = SimpleListProperty()
-        Bindings.booleanValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Boolean?> = SimpleListProperty()
+            Bindings.booleanValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -438,10 +437,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testDoubleValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Boolean?> = SimpleListProperty()
-        Bindings.booleanValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Boolean?> = SimpleListProperty()
+            Bindings.booleanValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -592,10 +593,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testFloatValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Boolean?> = SimpleListProperty()
-        Bindings.booleanValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Boolean?> = SimpleListProperty()
+            Bindings.booleanValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -746,10 +749,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testIntValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Int?> = SimpleListProperty()
-        Bindings.intValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Int?> = SimpleListProperty()
+            Bindings.intValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -900,10 +905,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testLongValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Long?> = SimpleListProperty()
-        Bindings.longValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Long?> = SimpleListProperty()
+            Bindings.longValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -1054,10 +1061,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testShortValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Short?> = SimpleListProperty()
-        Bindings.shortValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Short?> = SimpleListProperty()
+            Bindings.shortValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -1208,10 +1217,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testByteValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<Byte?> = SimpleListProperty()
-        Bindings.byteValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<Byte?> = SimpleListProperty()
+            Bindings.byteValueAt(localProperty, -1)
+        }
     }
 
     @Test
@@ -1358,10 +1369,12 @@ class BindingsListTest {
         binding2.dispose()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testStringValueAt_Constant_NegativeIndex() {
-        val localProperty: ListProperty<String?> = SimpleListProperty()
-        Bindings.stringValueAt(localProperty, -1)
+        assertFailsWith<IllegalArgumentException> {
+            val localProperty: ListProperty<String?> = SimpleListProperty()
+            Bindings.stringValueAt(localProperty, -1)
+        }
     }
 
     @Test

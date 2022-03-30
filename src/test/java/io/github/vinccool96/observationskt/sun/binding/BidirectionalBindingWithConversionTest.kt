@@ -6,13 +6,14 @@ import io.github.vinccool96.observationskt.beans.property.SimpleObjectProperty
 import io.github.vinccool96.observationskt.beans.property.SimpleStringProperty
 import io.github.vinccool96.observationskt.beans.value.ChangeListener
 import io.github.vinccool96.observationskt.util.StringConverter
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.text.DateFormat
 import java.util.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @Suppress("UNUSED_VALUE")
 @RunWith(Parameterized::class)
@@ -117,9 +118,11 @@ class BidirectionalBindingWithConversionTest<S, T>(private val func: Functions<S
         assertEquals(0, p0.listenerCount)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testUnbind_X_Self() {
-        this.func.unbind(this.op0, this.op0)
+        assertFailsWith<IllegalArgumentException> {
+            this.func.unbind(this.op0, this.op0)
+        }
     }
 
     private class ObjectPropertyMock<T>(initialValue: T) : SimpleObjectProperty<T>(initialValue), PropertyMock<T> {
@@ -167,7 +170,7 @@ class BidirectionalBindingWithConversionTest<S, T>(private val func: Functions<S
         fun parameters(): Collection<Array<Any>> {
             val format: DateFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US)
             val dates: Array<Date> = arrayOf(Date(), Date(0), Date(Int.MIN_VALUE.toLong()), Date(Long.MAX_VALUE))
-            val strings: Array<String> = Array(dates.size) {i: Int -> format.format(dates[i])}
+            val strings: Array<String> = Array(dates.size) { i: Int -> format.format(dates[i]) }
 
             val converter: StringConverter<Date> = object : StringConverter<Date>() {
 

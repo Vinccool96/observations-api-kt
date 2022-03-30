@@ -3,12 +3,9 @@ package io.github.vinccool96.observationskt.sun.binding
 import io.github.vinccool96.observationskt.beans.binding.Bindings
 import io.github.vinccool96.observationskt.beans.property.*
 import io.github.vinccool96.observationskt.beans.value.ObservableValue
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
+import kotlin.test.*
 
 @RunWith(Parameterized::class)
 @Suppress("UNUSED_VALUE")
@@ -213,14 +210,18 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
         assertNotEquals(binding3, binding4)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testBind_X_Self() {
-        Bindings.bindBidirectional(this.op1, this.op1)
+        assertFailsWith<IllegalArgumentException> {
+            Bindings.bindBidirectional(this.op1, this.op1)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testUnbind_X_Self() {
-        Bindings.unbindBidirectional(this.op1, this.op1)
+        assertFailsWith<IllegalArgumentException> {
+            Bindings.unbindBidirectional(this.op1, this.op1)
+        }
     }
 
     @Test
@@ -272,14 +273,14 @@ class BidirectionalBindingTest<T>(private val factory: Factory<T>) {
                     arrayOf(Factory(SimpleFloatProperty::class.java::newInstance, floatData)),
                     arrayOf(Factory(SimpleLongProperty::class.java::newInstance, longData)),
                     arrayOf(Factory(SimpleIntProperty::class.java::newInstance, intData)),
-                    arrayOf(Factory({SimpleObjectProperty(Any())}, objectData)),
+                    arrayOf(Factory({ SimpleObjectProperty(Any()) }, objectData)),
                     arrayOf(Factory(SimpleStringProperty::class.java::newInstance, stringData)),
                     arrayOf(Factory(ReadOnlyBooleanWrapper::class.java::newInstance, booleanData)),
                     arrayOf(Factory(ReadOnlyDoubleWrapper::class.java::newInstance, doubleData)),
                     arrayOf(Factory(ReadOnlyFloatWrapper::class.java::newInstance, floatData)),
                     arrayOf(Factory(ReadOnlyLongWrapper::class.java::newInstance, longData)),
                     arrayOf(Factory(ReadOnlyIntWrapper::class.java::newInstance, intData)),
-                    arrayOf(Factory({ReadOnlyObjectWrapper(Any())}, objectData)),
+                    arrayOf(Factory({ ReadOnlyObjectWrapper(Any()) }, objectData)),
                     arrayOf(Factory(ReadOnlyStringWrapper::class.java::newInstance, stringData)),
             )
         }
