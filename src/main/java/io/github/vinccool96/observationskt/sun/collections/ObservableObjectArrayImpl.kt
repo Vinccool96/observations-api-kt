@@ -155,7 +155,7 @@ class ObservableObjectArrayImpl<T>(baseArray: Array<T>) : ObservableArrayBase<T>
         val minCapacity = this.sizeState + length
         val oldCapacity = this.array.size
         if (minCapacity > this.array.size) {
-            var newCapacity = oldCapacity + (oldCapacity shr 1)
+            var newCapacity = oldCapacity * 2
             if (newCapacity < minCapacity) {
                 newCapacity = minCapacity
             }
