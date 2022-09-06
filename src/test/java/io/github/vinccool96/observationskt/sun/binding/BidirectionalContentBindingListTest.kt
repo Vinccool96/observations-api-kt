@@ -5,8 +5,7 @@ import io.github.vinccool96.observationskt.collections.ObservableCollections
 import io.github.vinccool96.observationskt.collections.ObservableList
 import kotlin.test.*
 
-@Suppress("LocalVariableName", "ReplaceAssertBooleanWithAssertEquality", "KotlinConstantConditions",
-        "SENSELESS_COMPARISON",)
+@Suppress("LocalVariableName", "ReplaceAssertBooleanWithAssertEquality", "SENSELESS_COMPARISON")
 class BidirectionalContentBindingListTest {
 
     private lateinit var op1: ObservableList<Int>
