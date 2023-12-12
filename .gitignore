@@ -1,4 +1,10 @@
 # Created by .ignore support plugin (hsz.mobi)
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 ### Java template
 # Compiled class file
 *.class
